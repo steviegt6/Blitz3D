@@ -402,7 +402,7 @@ void gxCanvas::oval( int x1,int y1,int w,int h,bool solid ){
 	if( solid ){
 		y=dest.top-cy;
 		for( int t=dest.top;t<dest.bottom;++y,++t ){
-			float x=sqrt( rsq-y*y )*ar;
+			float x = sqrtf(rsq - y * y) * ar;
 			int xa=floor( cx-x ),xb=floor( cx+x );
 			if( xb<=xa || xa>=viewport.right || xb<=viewport.left ) continue;
 			Rect dr;dr.top=t;dr.bottom=t+1;
@@ -420,7 +420,7 @@ void gxCanvas::oval( int x1,int y1,int w,int h,bool solid ){
 	t=dest.top;y=t-cy;
 	if( dest.top>y1 ){ --t;--y; }
 	for( ;t<=hh;++y,++t ){
-		float x=sqrt( rsq-y*y )*ar;
+		float x = sqrtf(rsq - y * y) * ar;
 		int xa=floor( cx-x ),xb=floor( cx+x );
 		Rect r1( xa,t,p_xa-xa,1 );if( r1.right<=r1.left ) r1.right=r1.left+1;
 		if( clip( &r1 ) ) surf->Blt( &r1,0,0,DDBLT_WAIT|DDBLT_COLORFILL,&bltfx );
@@ -433,7 +433,7 @@ void gxCanvas::oval( int x1,int y1,int w,int h,bool solid ){
 	t=dest.bottom-1;y=t-cy;
 	if( dest.bottom<y1+h ){ ++t;++y; }
 	for( ;t>hh;--y,--t ){
-		float x=sqrt( rsq-y*y )*ar;
+		float x = sqrtf(rsq - y * y) * ar;
 		int xa=floor( cx-x ),xb=floor( cx+x );
 		Rect r1( xa,t,p_xa-xa,1 );if( r1.right<=r1.left ) r1.right=r1.left+1;
 		if( clip( &r1 ) ) surf->Blt( &r1,0,0,DDBLT_WAIT|DDBLT_COLORFILL,&bltfx );
@@ -669,17 +669,13 @@ void gxCanvas::unlock()const{
 void gxCanvas::setPixel( int x,int y,unsigned argb ){
 	x+=origin_x;if( x<viewport.left || x>=viewport.right ) return;
 	y+=origin_y;if( y<viewport.top || y>=viewport.bottom ) return;
-	lock();
 	setPixelFast( x,y,argb );
-	unlock();
 }
 
 unsigned gxCanvas::getPixel( int x,int y )const{
 	x+=origin_x;if( x<viewport.left || x>=viewport.right ) return format.toARGB( mask_surf );
 	y+=origin_y;if( y<viewport.top || y>=viewport.bottom ) return format.toARGB( mask_surf );
-	lock();
 	unsigned p=getPixelFast( x,y );
-	unlock();
 	return p;
 }
 
@@ -706,11 +702,7 @@ void gxCanvas::copyPixel( int x,int y,gxCanvas *src,int src_x,int src_y ){
 	y+=origin_y;if( y<viewport.top || y>=viewport.bottom ) return;
 	src_x+=src->origin_x;if( src_x<src->viewport.left || src_x>=src->viewport.right ) return;
 	src_y+=src->origin_y;if( src_y<src->viewport.top || src_y>=src->viewport.bottom ) return;
-	lock();
-	src->lock();
 	copyPixelFast( x,y,src,src_x,src_y );
-	src->unlock();
-	unlock();
 }
 
 void gxCanvas::setCubeMode( int mode ){

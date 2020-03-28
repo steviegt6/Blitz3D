@@ -476,7 +476,7 @@ BBStr *_bbReadStr(){
 }
 
 int _bbAbs( int n ){
-	return n>=0 ? n : -n;
+	return n & 0x7FFFFFFF;
 }
 
 int _bbSgn( int n ){
@@ -501,6 +501,10 @@ float _bbFMod( float x,float y ){
 
 float _bbFPow( float x,float y ){
 	return (float)pow( x,y );
+}
+
+int _bbMakeBool(int n) {
+	return n ? 1 : 0;
 }
 
 void bbRuntimeStats(){
@@ -590,5 +594,6 @@ void basic_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "_bbFSgn",_bbFSgn );
 	rtSym( "_bbFMod",_bbFMod );
 	rtSym( "_bbFPow",_bbFPow );
+	rtSym("_bbMakeBool", _bbMakeBool);
 	rtSym( "RuntimeStats",bbRuntimeStats );
 }

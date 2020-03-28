@@ -143,12 +143,13 @@ void Animator::setAnimTime( float time,int seq ){
 	_seq_len=_seqs[_seq].frames;
 
 	//Ok, mod the anim time!
-	_time=fmod( time,_seq_len );
-
-	//if( time<0 || time>_seq_len ) time=fmod( time,_seq_len );
-	//_time=time;
-		
-	if( _time<0 ) _time+=+_seq_len;
+	if (time < 0 || time > _seq_len) {
+		_time = fmod(time, _seq_len);
+		if (time < 0) { _time += +_seq_len; }
+	}
+	else {
+		_time = time;
+	}
 
 	updateAnim();
 }

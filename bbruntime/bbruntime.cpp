@@ -3,6 +3,10 @@
 #include "bbsys.h"
 #include "bbruntime.h"
 
+std::string* ErrorMessagePool::memoryAccessViolation = 0;
+int ErrorMessagePool::size = 0;
+
+
 void  bbEnd(){
 	RTEX( 0 );
 }
@@ -22,6 +26,19 @@ void  bbRuntimeError( BBStr *str ){
 	static char err[256];
 	strcpy( err,t.c_str() );
 	RTEX( err );
+}
+
+void bbInitErrorMsgs(int number) {
+	delete[] ErrorMessagePool::memoryAccessViolation;
+	ErrorMessagePool::memoryAccessViolation = new std::string[number];
+	ErrorMessagePool::size = number;
+}
+
+void bbSetErrorMsg(int pos, BBStr* str) {
+	if (ErrorMessagePool::memoryAccessViolation != 0 && pos < ErrorMessagePool::size) {
+		ErrorMessagePool::memoryAccessViolation[pos] = *str;
+	}
+	delete str;
 }
 
 int   bbExecFile( BBStr *f ){
@@ -126,12 +143,6 @@ bool audio_create();
 bool audio_destroy();
 void audio_link( void (*rtSym)( const char *sym,void *pc ) );
 
-/*
-bool multiplay_create();
-bool multiplay_destroy();
-void multiplay_link( void (*rtSym)( const char *sym,void *pc ) );
-*/
-
 bool userlibs_create();
 void userlibs_destroy();
 void userlibs_link( void (*rtSym)( const char *sym,void *pc ) );
@@ -151,6 +162,8 @@ void bbruntime_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "Stop",bbStop );
 	rtSym( "AppTitle$title$close_prompt=\"\"",bbAppTitle );
 	rtSym( "RuntimeError$message",bbRuntimeError );
+	rtSym("InitErrorMsgs%number", bbInitErrorMsgs);
+	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
 	rtSym( "ExecFile$command",bbExecFile );
 	rtSym( "Delay%millisecs",bbDelay );
 	rtSym( "%MilliSecs",bbMilliSecs );
@@ -178,7 +191,6 @@ void bbruntime_link( void (*rtSym)( const char *sym,void *pc ) ){
 	graphics_link( rtSym );
 	input_link( rtSym );
 	audio_link( rtSym );
-	//multiplay_link( rtSym );
 	blitz3d_link( rtSym );
 	userlibs_link( rtSym );
 }
@@ -200,14 +212,11 @@ bool bbruntime_create(){
 								if( graphics_create() ){
 									if( input_create() ){
 										if( audio_create() ){
-											if( 1 ){//multiplay_create() ){
-												if( blitz3d_create() ){
-													if( userlibs_create() ){
-														return true;
-													}
-												}else sue( "blitz3d_create failed" );
-												//multiplay_destroy();
-											}else sue( "multiplay_create failed" );
+											if (blitz3d_create()) {
+												if (userlibs_create()) {
+													return true;
+												}
+											} else sue("blitz3d_create failed");
 											audio_destroy();
 										}else sue( "audio_create failed" );
 										input_destroy();
@@ -234,7 +243,6 @@ bool bbruntime_create(){
 bool bbruntime_destroy(){
 	userlibs_destroy();
 	blitz3d_destroy();
-	//multiplay_destroy();
 	audio_destroy();
 	input_destroy();
 	graphics_destroy();

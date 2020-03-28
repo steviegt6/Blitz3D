@@ -9,21 +9,10 @@
 char _credits[]=
 "\r\n"
 "Programming and design: Mark Sibly\r\n\r\n"
+"Keeping this thing alive: juanpro\r\n\r\n"
 "Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n\r\n"
 "Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n\r\n"
-"Image loader courtesy of FreeImage by Floris van den berg\r\n\r\n"
-"Please visit www.blitzbasic.com for all your Blitz related needs!";
-
-/*
-char _credits[]=
-"\r\n"
-"Programming and Design: Mark Sibly\r\n\r\n"
-"Documentation: Simon Harrison; Simon Armstrong; Mark Sibly\r\n\r\n"
-"Many thanks to: Claire Foley; Janet Sibly; Rick, Kay and Robbie Keam; "
-"James Boyd; the Blitz Dev Team\r\n\r\n"
-"Image loader courtesy of FreeImage by Floris van den Berg\r\n\r\n"
-"Please visit www.blitzbasic.com for all your Blitz related needs!";
-*/
+"Image loader courtesy of FreeImage by Floris van den berg\r\n\r\n";
 
 class Dialog : public CDialog{
 	bool _quit;
