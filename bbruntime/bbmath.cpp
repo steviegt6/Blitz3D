@@ -1,6 +1,7 @@
 
 #include "std.h"
 #include "bbmath.h"
+#include <algorithm>
 
 static int rnd_state;
 static const int RND_A=48271;
@@ -11,21 +12,29 @@ static const int RND_R=3399;
 static const float dtor=0.0174532925199432957692369076848861f;
 static const float rtod=57.2957795130823208767981548141052f;
 
-float bbSin( float n ){ return (float)sin(n*dtor); }
-float bbCos( float n ){ return (float)cos(n*dtor); }
-float bbTan( float n ){ return (float)tan(n*dtor); }
-float bbASin( float n ){ return (float)asin(n)*rtod; }
-float bbACos( float n ){ return (float)acos(n)*rtod; }
-float bbATan( float n ){ return (float)atan(n)*rtod; }
-float bbATan2( float n,float t ){ return (float)atan2(n,t)*rtod; }
-float bbSqr(float n) { return (float)sqrtf(n); }
-float bbFloor( float n ){ return (float)floor(n); }
-float bbCeil( float n ){ return (float)ceil(n); }
-float bbExp( float n ){ return (float)exp(n); }
-float bbLog( float n ){ return (float)log(n); }
-float bbLog10( float n ){ return (float)log10(n); }
-float bbMin(float n, float m) { return (float)min(n, m); }
-float bbMax(float n, float m) { return (float)max(n, m); }
+float bbSin( float n )				{ return (float)sin(n*dtor);		}
+float bbCos( float n )				{ return (float)cos(n*dtor);		}
+float bbTan( float n )				{ return (float)tan(n*dtor);		}
+float bbASin( float n )				{ return (float)asin(n)*rtod;		}
+float bbACos( float n )				{ return (float)acos(n)*rtod;		}
+float bbATan( float n )				{ return (float)atan(n)*rtod;		}
+float bbATan2( float n,float t )	{ return (float)atan2(n,t)*rtod;	}
+float bbSqr(float n)				{ return (float)sqrtf(n);			}
+float bbFloor( float n )			{ return (float)floor(n);			}
+float bbCeil( float n )				{ return (float)ceil(n);			}
+float bbExp( float n )				{ return (float)exp(n);				}
+float bbLog( float n )				{ return (float)log(n);				}
+float bbLog10( float n )			{ return (float)log10(n);			}
+float bbMin(float n, float m)		{ return (float)min(n, m);			}
+float bbMax(float n, float m)		{ return (float)max(n, m);			}
+float bbPow(float b, float exp)		{ return (float)pow(b, abs(exp));	}
+float bbCbr(float n)				{ return (float)cbrt(n);			}
+float bbHSin(float n)				{ return (float)sinh(n);			}
+float bbHCos(float n)				{ return (float)cosh(n);			}
+float bbHTan(float n)				{ return (float)tanh(n);			}
+float bbHypot(float n, float y)		{ return (float)hypot(n, y);		}
+float bbNtrt(float n, float index)	{ return (float)pow(n, 1. / index); }
+float bbNan(float n)				{ return (float)isnan(n);			}
 
 float bbClamp(float v, float lo, float hi) {
 	if (lo > hi) {
@@ -101,9 +110,17 @@ void math_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym("#Min#n#m", bbMin);
 	rtSym("#Max#n#m", bbMax);
 	rtSym("#Clamp#v#lo#hi", bbClamp);
-	rtSym("%IsNaN#n", bbIsNaN);
+	rtSym("%IsNaN#n", bbNan);
 	rtSym( "#Rnd#from#to=0",bbRnd );
 	rtSym( "%Rand%from%to=1",bbRand );
 	rtSym( "SeedRnd%seed",bbSeedRnd );
 	rtSym( "%RndSeed",bbRndSeed );
+	rtSym("#Pow#floata#floatb", bbPow);
+	rtSym("#Cbr#float", bbCbr);
+	rtSym("#Ntrt#floata#floatb", bbNtrt);
+	rtSym("#HSin#float", bbHSin);
+	rtSym("#HCos#float", bbHCos);
+	rtSym("#HTan#float", bbHTan);
+	rtSym("#Hypot#floata#floatb", bbHypot);
+	rtSym("#Nan#float", bbNan);
 }

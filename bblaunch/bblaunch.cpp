@@ -1,15 +1,16 @@
 
 #include <string>
 #include <windows.h>
+#include <exception>
 
 using namespace std;
 
 static const char *bb_err=
-"Unable to run Blitz Basic";
+"Error when creating Blitz3D process.";
 
-static const char *md_err=
+/*static const char *md_err=
 "Your desktop must be in high-colour mode to use Blitz Basic.\n\n"
-"You can change your display settings from the control panel."; 
+"You can change your display settings from the control panel."; */
 
 static string getAppDir(){
 	char buff[MAX_PATH];
@@ -27,14 +28,7 @@ static void fail( const char *p ){
 	ExitProcess(-1);
 }
 
-static int desktopDepth(){
-	HDC hdc=GetDC( GetDesktopWindow() );
-	return GetDeviceCaps( hdc,BITSPIXEL );
-}
-
 int _stdcall WinMain( HINSTANCE inst,HINSTANCE prev,char *cmd,int show ){
-
-	if( desktopDepth()<16 ) fail( md_err );
 
 	//Ugly hack to get application dir...
 	string t=getAppDir();
