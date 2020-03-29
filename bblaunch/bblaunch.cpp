@@ -1,7 +1,6 @@
 
 #include <string>
 #include <windows.h>
-#include <exception>
 
 using namespace std;
 
