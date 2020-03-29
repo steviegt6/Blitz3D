@@ -8,9 +8,6 @@ using namespace std;
 static const char *bb_err=
 "Error when creating Blitz3D process.";
 
-/*static const char *md_err=
-"Your desktop must be in high-colour mode to use Blitz Basic.\n\n"
-"You can change your display settings from the control panel."; */
 
 static string getAppDir(){
 	char buff[MAX_PATH];

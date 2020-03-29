@@ -27,14 +27,6 @@ float bbLog( float n )				{ return (float)log(n);				}
 float bbLog10( float n )			{ return (float)log10(n);			}
 float bbMin(float n, float m)		{ return (float)min(n, m);			}
 float bbMax(float n, float m)		{ return (float)max(n, m);			}
-float bbPow(float b, float exp)		{ return (float)pow(b, abs(exp));	}
-float bbCbr(float n)				{ return (float)cbrt(n);			}
-float bbHSin(float n)				{ return (float)sinh(n);			}
-float bbHCos(float n)				{ return (float)cosh(n);			}
-float bbHTan(float n)				{ return (float)tanh(n);			}
-float bbHypot(float n, float y)		{ return (float)hypot(n, y);		}
-float bbNtrt(float n, float index)	{ return (float)pow(n, 1. / index); }
-float bbNan(float n)				{ return (float)isnan(n);			}
 
 float bbClamp(float v, float lo, float hi) {
 	if (lo > hi) {
@@ -110,17 +102,9 @@ void math_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym("#Min#n#m", bbMin);
 	rtSym("#Max#n#m", bbMax);
 	rtSym("#Clamp#v#lo#hi", bbClamp);
-	rtSym("%IsNaN#n", bbNan);
+	rtSym("%IsNaN#n", bbIsNaN);
 	rtSym( "#Rnd#from#to=0",bbRnd );
 	rtSym( "%Rand%from%to=1",bbRand );
 	rtSym( "SeedRnd%seed",bbSeedRnd );
 	rtSym( "%RndSeed",bbRndSeed );
-	rtSym("#Pow#floata#floatb", bbPow);
-	rtSym("#Cbr#float", bbCbr);
-	rtSym("#Ntrt#floata#floatb", bbNtrt);
-	rtSym("#HSin#float", bbHSin);
-	rtSym("#HCos#float", bbHCos);
-	rtSym("#HTan#float", bbHTan);
-	rtSym("#Hypot#floata#floatb", bbHypot);
-	rtSym("#Nan#float", bbNan);
 }
