@@ -10,7 +10,7 @@
 //////////////////////////////////
 ExprNode *ExprNode::castTo( Type *ty,Environ *e ){
 	if( !sem_type->canCastTo( ty ) ){
-		ex( "Illegal type conversion" );
+		ex("Illegal type conversion (" + sem_type->name() + " -> " + ty->name() + ")");
 	}
 
 	ExprNode *cast=d_new CastNode( this,ty );
@@ -26,6 +26,7 @@ ExprNode *CastNode::semant( Environ *e ){
 		ExprNode *e;
 		if( type==Type::int_type ) e=d_new IntConstNode( c->intValue() );
 		else if( type==Type::float_type ) e=d_new FloatConstNode( c->floatValue() );
+		else if (type->structType()) e = d_new NullConstNode();
 		else e=d_new StringConstNode( c->stringValue() );
 		delete this;
 		return e;
@@ -120,7 +121,7 @@ void ExprSeqNode::castTo( DeclSeq *decls,Environ *e,bool cfunc ){
 				}else if( exprs[k]->sem_type->intType() ){
 					exprs[k]->sem_type=Type::void_type;
 				}else{
-					ex( "Illegal type conversion" );
+					ex("Illegal type conversion (" + exprs[k]->sem_type->name() + " -> " + d->type->name() + ")");
 				}
 				continue;
 			}
@@ -223,6 +224,32 @@ string IntConstNode::stringValue(){
 	return itoa( value );
 }
 
+///////////////////
+// Null constant //
+///////////////////
+NullConstNode::NullConstNode() {
+	sem_type = Type::null_type;
+}
+
+TNode* NullConstNode::translate(Codegen* g) {
+	return d_new TNode(IR_CONST, 0, 0, 0);
+}
+
+int NullConstNode::intValue() {
+	ex("Can't convert null to int");
+	return 0;
+}
+
+float NullConstNode::floatValue() {
+	ex("Can't convert null to float");
+	return 0.f;
+}
+
+string NullConstNode::stringValue() {
+	ex("Can't convert null to string");
+	return string("");
+}
+
 ////////////////////
 // Float constant //
 ////////////////////
@@ -294,6 +321,7 @@ ExprNode *UniExprNode::semant( Environ *e ){
 			case '-':e=d_new IntConstNode( -c->intValue() );break;
 			case ABS:e=d_new IntConstNode( c->intValue()>=0 ? c->intValue() : -c->intValue() );break;
 			case SGN:e=d_new IntConstNode( c->intValue()>0 ? 1 : (c->intValue()<0 ? -1 : 0) );break;
+			case POWTWO:e = d_new IntConstNode(c->intValue() * c->intValue()); break;
 			}
 		}else{
 			switch( op ){
@@ -301,6 +329,7 @@ ExprNode *UniExprNode::semant( Environ *e ){
 			case '-':e=d_new FloatConstNode( -c->floatValue() );break;
 			case ABS:e=d_new FloatConstNode( c->floatValue()>=0 ? c->floatValue() : -c->floatValue() );break;
 			case SGN:e=d_new FloatConstNode( c->floatValue()>0 ? 1 : (c->floatValue()<0 ? -1 : 0) );break;
+			case POWTWO:e = d_new FloatConstNode(c->floatValue() * c->floatValue()); break;
 			}
 		}
 		delete this;
@@ -318,6 +347,7 @@ TNode *UniExprNode::translate( Codegen *g ){
 		case '-':n=IR_NEG;break;
 		case ABS:return call( "__bbAbs",l );
 		case SGN:return call( "__bbSgn",l );
+		case POWTWO:return d_new TNode(IR_POWTWO, l);
 		}
 	}else{
 		switch( op ){
@@ -325,6 +355,7 @@ TNode *UniExprNode::translate( Codegen *g ){
 		case '-':n=IR_FNEG;break;
 		case ABS:return fcall( "__bbFAbs",l );
 		case SGN:return fcall( "__bbFSgn",l );
+		case POWTWO:return d_new TNode(IR_FPOWTWO, l);
 		}
 	}
 	return d_new TNode( n,l,0 );
@@ -333,22 +364,95 @@ TNode *UniExprNode::translate( Codegen *g ){
 /////////////////////////////////////////////////////
 // boolean expression - accepts ints, returns ints //
 /////////////////////////////////////////////////////
-ExprNode *BinExprNode::semant( Environ *e ){
-	lhs=lhs->semant(e);lhs=lhs->castTo( Type::int_type,e );
-	rhs=rhs->semant(e);rhs=rhs->castTo( Type::int_type,e );
-	ConstNode *lc=lhs->constNode(),*rc=rhs->constNode();
-	if( lc && rc ){
-		ExprNode *expr;
-		switch( op ){
-		case AND:expr=d_new IntConstNode( lc->intValue() & rc->intValue() );break;
-		case OR: expr=d_new IntConstNode( lc->intValue() | rc->intValue() );break;
-		case XOR:expr=d_new IntConstNode( lc->intValue() ^ rc->intValue() );break;
-		case SHL:expr=d_new IntConstNode( lc->intValue()<< rc->intValue() );break;
-		case SHR:expr=d_new IntConstNode( (unsigned)lc->intValue()>>rc->intValue() );break;
-		case SAR:expr=d_new IntConstNode( lc->intValue()>> rc->intValue() );break;
+ExprNode* BinExprNode::semant(Environ* e) {
+	lhs = lhs->semant(e); lhs = lhs->castTo(Type::int_type, e);
+	rhs = rhs->semant(e); rhs = rhs->castTo(Type::int_type, e);
+	ConstNode* lc = lhs->constNode(), * rc;
+	if (lc) {
+		switch (op) {
+		case AND:
+			if (lc->intValue()) { //Only evaluate right expression, if left expression is not false
+				rc = rhs->constNode();
+				if (rc) {
+					ExprNode* expr;
+					expr = d_new IntConstNode(lc->intValue() & rc->intValue());
+					delete this;
+					return expr;
+				}
+			}
+			else { //If left expression is false, the whole expression must be false
+				ExprNode* expr;
+				expr = d_new IntConstNode(lc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
+		case OR:
+			//Short-circuit evaluation cannot be applied to bitwise OR;
+			//implement logical OR with another keyword
+			//It is done ~ Salvage
+			rc = rhs->constNode();
+			if (rc) {
+				ExprNode* expr;
+				expr = d_new IntConstNode(lc->intValue() | rc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
+		case LOR:
+			if (lc->intValue()) { //Only evaluate right expression, if left expression is false
+				rc = rhs->constNode();
+				if (rc) {
+					ExprNode* expr;
+					expr = d_new IntConstNode(lc->intValue() || rc->intValue());
+					delete this;
+					return expr;
+				}
+			}
+			else { //If left expression is true, the whole expression must be true
+				ExprNode* expr;
+				expr = d_new IntConstNode(1);
+				delete this;
+				return expr;
+			}
+			break;
+		case XOR:
+			rc = rhs->constNode();
+			if (rc) {
+				ExprNode* expr;
+				expr = d_new IntConstNode(lc->intValue() ^ rc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
+		case SHL:
+			rc = rhs->constNode();
+			if (rc) {
+				ExprNode* expr;
+				expr = d_new IntConstNode(lc->intValue() << rc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
+		case SHR:
+			rc = rhs->constNode();
+			if (rc) {
+				ExprNode* expr;
+				expr = d_new IntConstNode((unsigned)lc->intValue() >> rc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
+		case SAR:
+			rc = rhs->constNode();
+			if (rc) {
+				ExprNode* expr;
+				expr = d_new IntConstNode(lc->intValue() >> rc->intValue());
+				delete this;
+				return expr;
+			}
+			break;
 		}
-		delete this;
-		return expr;
 	}
 	sem_type=Type::int_type;
 	return this;
@@ -357,12 +461,18 @@ ExprNode *BinExprNode::semant( Environ *e ){
 TNode *BinExprNode::translate( Codegen *g ){
 	TNode *l=lhs->translate( g );
 	TNode *r=rhs->translate( g );
-	int n=0;
+	int n = 0; std::string label;
 	switch( op ){
-	case AND:n=IR_AND;break;case OR:n=IR_OR;break;case XOR:n=IR_XOR;break;
+	case AND:n = IR_AND; label = genLabel(); break;
+	case LOR:
+		n = IR_LOR;
+		label = genLabel();
+		return call("__bbMakeBool", d_new TNode(n, l, r, label));
+		break;
+	case OR:n = IR_OR; break; case XOR:n = IR_XOR; break;
 	case SHL:n=IR_SHL;break;case SHR:n=IR_SHR;break;case SAR:n=IR_SAR;break;
 	}
-	return d_new TNode( n,l,r );
+	return d_new TNode(n, l, r, label);
 }
 
 ///////////////////////////
@@ -579,18 +689,6 @@ TNode *BeforeNode::translate( Codegen *g ){
 	TNode *t=expr->translate( g );
 	if( g->debug ) t=jumpf( t,"__bbNullObjEx" );
 	return call( "__bbObjPrev",t );
-}
-
-/////////////////
-// Null object //
-/////////////////
-ExprNode *NullNode::semant( Environ *e ){
-	sem_type=Type::null_type;
-	return this;
-}
-
-TNode *NullNode::translate( Codegen *g ){
-	return d_new TNode( IR_CONST,0,0,0 );
 }
 
 /////////////////

@@ -544,11 +544,23 @@ ExprNode *Parser::parseExpr( bool opt ){
 
 ExprNode *Parser::parseExpr1( bool opt ){
 
+	a_ptr<ExprNode> lhs(parseExpr1AND(opt));
+	if (!lhs) return 0;
+	for (;;) {
+		int c = toker->curr();
+		if (c != OR && c != LOR && c != XOR) return lhs.release();
+		toker->next(); ExprNode* rhs = parseExpr1AND(false);
+		lhs = d_new BinExprNode(c, lhs.release(), rhs);
+	}
+}
+
+ExprNode* Parser::parseExpr1AND(bool opt) {
+
 	a_ptr<ExprNode> lhs( parseExpr2( opt ) );
 	if( !lhs ) return 0;
 	for(;;){
 		int c=toker->curr();
-		if( c!=AND && c!=OR && c!=XOR ) return lhs.release();
+		if (c != AND) return lhs.release();
 		toker->next();ExprNode *rhs=parseExpr2( false );
 		lhs=d_new BinExprNode( c,lhs.release(),rhs );
 	}
@@ -656,7 +668,7 @@ ExprNode *Parser::parseUniExpr( bool opt ){
 		result=parseUniExpr( false );
 		result=d_new AfterNode( result );
 		break;
-	case '+':case '-':case '~':case ABS:case SGN:
+	case '+':case '-':case '~':case ABS:case SGN:case POWTWO:
 		toker->next();
 		result=parseUniExpr( false );
 		if( c=='~' ){
@@ -698,8 +710,8 @@ ExprNode *Parser::parsePrimary( bool opt ){
 		toker->next();t=parseIdent();
 		result=d_new LastNode( t );
 		break;
-	case BBNULL:
-		result=d_new NullNode();
+	case NULLCONST:
+		result = d_new NullConstNode();
 		toker->next();
 		break;
 	case INTCONST:

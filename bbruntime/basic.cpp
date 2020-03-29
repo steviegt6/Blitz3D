@@ -483,6 +483,11 @@ int _bbSgn( int n ){
 	return n>0 ? 1 : (n<0 ? -1 : 0);
 }
 
+int _bbPowTwo(int n) {
+	return n * n;
+}
+
+
 int _bbMod( int x,int y ){
 	return x%y;
 }
@@ -493,6 +498,10 @@ float _bbFAbs( float n ){
 
 float _bbFSgn( float n ){
 	return n>0 ? 1 : (n<0 ? -1 : 0);
+}
+
+float _bbFPowTwo(float n) {
+	return n * n;
 }
 
 float _bbFMod( float x,float y ){
@@ -589,11 +598,13 @@ void basic_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "_bbReadStr",_bbReadStr );
 	rtSym( "_bbAbs",_bbAbs );
 	rtSym( "_bbSgn",_bbSgn );
+	rtSym("_bbPowTwo", _bbPowTwo);
 	rtSym( "_bbMod",_bbMod );
 	rtSym( "_bbFAbs",_bbFAbs );
 	rtSym( "_bbFSgn",_bbFSgn );
 	rtSym( "_bbFMod",_bbFMod );
 	rtSym( "_bbFPow",_bbFPow );
+	rtSym("_bbFPowTwo", _bbFPowTwo);
 	rtSym("_bbMakeBool", _bbMakeBool);
 	rtSym( "RuntimeStats",bbRuntimeStats );
 }

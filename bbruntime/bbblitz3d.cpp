@@ -279,10 +279,11 @@ void  bbUpdateWorld( float elapsed ){
 	world->update( elapsed );
 	return;
 #endif
-
+#ifdef BETA
 	update_ms=gx_runtime->getMilliSecs();
 	world->update( elapsed );
 	update_ms=gx_runtime->getMilliSecs()-update_ms;
+#endif
 }
 
 void  bbCaptureWorld(){
@@ -299,7 +300,7 @@ void  bbRenderWorld( float tween ){
 	tri_count=gx_scene->getTrianglesDrawn()-tri_count;
 	return;
 #endif
-
+#ifdef BETA
 	int tris=gx_scene->getTrianglesDrawn();
 	int render_ms=gx_runtime->getMilliSecs();
 	world->render( tween );
@@ -337,6 +338,7 @@ void  bbRenderWorld( float tween ){
 	string t="FPS:"+t_fps+" UPS:"+t_ups+" RPS:"+t_rps+" TRIS:"+t_tris;
 
 	bbText( 0,bbGraphicsHeight()-bbFontHeight(),d_new BBStr(t),0,0 );
+#endif
 }
 
 int  bbTrisRendered(){
@@ -922,6 +924,16 @@ void  bbCameraRange( Camera *c,float nr,float fr ){
 	c->setRange( nr,fr );
 }
 
+float bbGetCameraRangeNear(Camera* c) {
+	debugCamera(c);
+	return c->getFrustumNear();
+}
+
+float bbGetCameraRangeFar(Camera* c) {
+	debugCamera(c);
+	return c->getFrustumFar();
+}
+
 void  bbCameraClsColor( Camera *c,float r,float g,float b ){
 	debugCamera(c);
 	c->setClsColor( Vector( r*ctof,g*ctof,b*ctof ) );
@@ -945,6 +957,16 @@ void  bbCameraViewport( Camera *c,int x,int y,int w,int h ){
 void  bbCameraFogRange( Camera *c,float nr,float fr ){
 	debugCamera(c);
 	c->setFogRange( nr,fr );
+}
+
+float bbGetCameraFogRangeNear(Camera* c) {
+	debugCamera(c);
+	return c->getFogNear();
+}
+
+float bbGetCameraFogRangeFar(Camera* c) {
+	debugCamera(c);
+	return c->getFogFar();
 }
 
 void  bbCameraFogDensity(Camera* c, float den) {
@@ -1652,6 +1674,21 @@ float  bbEntityRoll( Entity *e,int global ){
 	return quatRoll( global ? e->getWorldRotation() : e->getLocalRotation() ) * rtod;
 }
 
+float  bbEntityScaleX(Entity* e, int global) {
+	debugEntity(e);
+	return global ? e->getWorldScale().x : e->getLocalScale().x;
+}
+
+float  bbEntityScaleY(Entity* e, int global) {
+	debugEntity(e);
+	return global ? e->getWorldScale().y : e->getLocalScale().y;
+}
+
+float  bbEntityScaleZ(Entity* e, int global) {
+	debugEntity(e);
+	return global ? e->getWorldScale().z : e->getLocalScale().z;
+}
+
 float  bbGetMatElement( Entity *e,int row,int col ){
 	debugEntity(e);
 	return row<3 ? e->getWorldTform().m[row][col] : e->getWorldTform().v[col];
@@ -1861,6 +1898,14 @@ float  bbEntityDistanceSquared(Entity* src, Entity* dest) {
 	return src->getWorldPosition().distanceSqr(dest->getWorldPosition());
 }
 
+float  bbDistance(float x1, float x2, float y1, float y2, float z1, float z2) {
+	float dx = x2 - x1, dy = y2 - y1, dz = z2 - z1; return sqrtf(dx * dx + dy * dy + dz * dz);
+}
+float  bbDistanceSquared(float x1, float x2, float y1, float y2, float z1, float z2) {
+	float dx = x2 - x1, dy = y2 - y1, dz = z2 - z1; return dx * dx + dy * dy + dz * dz;
+}
+
+
 ////////////////////////////////////
 // ENTITY TRANSFORMATION COMMANDS //
 ////////////////////////////////////
@@ -1951,20 +1996,19 @@ BBStr *  bbEntityName( Entity *e ){
 
 BBStr *bbEntityClass( Entity *e ){
 	debugEntity(e);
-	const char *p="Pivot";
-	if( e->getLight() ) p="Light";
-	else if( e->getCamera() ) p="Camera";
-	else if( e->getMirror() ) p="Mirror";
-	else if( e->getListener() ) p="Listener";
-	else if( Model *t=e->getModel() ){
-		if( t->getSprite() ) p="Sprite";
-		else if( t->getTerrain() ) p="Terrain";
-		else if( t->getPlaneModel() ) p="Plane";
-		else if( t->getMeshModel() ) p="Mesh";
-		else if( t->getMD2Model() ) p="MD2";
-		else if( t->getBSPModel() ) p="BSP";
+	if (e->getLight()) return new BBStr("Light");
+	else if (e->getCamera()) return new BBStr("Camera");
+	else if (e->getMirror()) return new BBStr("Mirror");
+	else if (e->getListener()) return new BBStr("Listener");
+	else if (Model* t = e->getModel()) {
+		if (t->getSprite()) return new BBStr("Sprite");
+		else if (t->getTerrain()) return new BBStr("Terrain");
+		else if (t->getPlaneModel()) return new BBStr("Plane");
+		else if (t->getMeshModel()) return new BBStr("Mesh");
+		else if (t->getMD2Model()) return new BBStr("MD2");
+		else if (t->getBSPModel()) return new BBStr("BSP");
 	}
-	return new BBStr(p);
+	return new BBStr("Pivot");
 }
 
 void  bbClearWorld( int e,int b,int t ){
@@ -2137,12 +2181,16 @@ void blitz3d_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "%CreateCamera%parent=0",bbCreateCamera );
 	rtSym( "CameraZoom%camera#zoom",bbCameraZoom );
 	rtSym( "CameraRange%camera#near#far",bbCameraRange );
+	rtSym("#GetCameraRangeNear%camera", bbGetCameraRangeNear);
+	rtSym("#GetCameraRangeFar%camera", bbGetCameraRangeFar);
 	rtSym( "CameraClsColor%camera#red#green#blue",bbCameraClsColor );
 	rtSym( "CameraClsMode%camera%cls_color%cls_zbuffer",bbCameraClsMode );
 	rtSym( "CameraProjMode%camera%mode",bbCameraProjMode );
 	rtSym( "CameraViewport%camera%x%y%width%height",bbCameraViewport );
 	rtSym( "CameraFogColor%camera#red#green#blue",bbCameraFogColor );
 	rtSym( "CameraFogRange%camera#near#far",bbCameraFogRange );
+	rtSym("#GetCameraFogRangeNear%camera", bbGetCameraFogRangeNear);
+	rtSym("#GetCameraFogRangeFar%camera", bbGetCameraFogRangeFar);
 	rtSym("CameraFogDensity%camera#density", bbCameraFogDensity);
 	rtSym( "CameraFogMode%camera%mode",bbCameraFogMode );
 	rtSym( "CameraProject%camera#x#y#z",bbCameraProject );
@@ -2218,6 +2266,9 @@ void blitz3d_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "#EntityPitch%entity%global=0",bbEntityPitch );
 	rtSym( "#EntityYaw%entity%global=0",bbEntityYaw );
 	rtSym( "#EntityRoll%entity%global=0",bbEntityRoll );
+	rtSym("#EntityScaleX%entity%global=0", bbEntityScaleX);
+	rtSym("#EntityScaleY%entity%global=0", bbEntityScaleY);
+	rtSym("#EntityScaleZ%entity%global=0", bbEntityScaleZ);
 	rtSym( "#GetMatElement%entity%row%column",bbGetMatElement );
 	rtSym( "TFormPoint#x#y#z%source_entity%dest_entity",bbTFormPoint );
 	rtSym( "TFormVector#x#y#z%source_entity%dest_entity",bbTFormVector );
@@ -2252,6 +2303,9 @@ void blitz3d_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "%CollisionEntity%entity%collision_index",bbCollisionEntity );
 	rtSym( "%CollisionSurface%entity%collision_index",bbCollisionSurface );
 	rtSym( "%CollisionTriangle%entity%collision_index",bbCollisionTriangle );
+
+	rtSym("#Distance#x1#x2#y1#y2#z1=0#z2=0", bbDistance);
+	rtSym("#DistanceSquared#x1#x2#y1#y2#z1=0#z2=0", bbDistanceSquared);
 
 	rtSym( "MoveEntity%entity#x#y#z",bbMoveEntity );
 	rtSym( "TurnEntity%entity#pitch#yaw#roll%global=0",bbTurnEntity );

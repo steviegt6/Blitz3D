@@ -117,15 +117,34 @@ Tile *Codegen_x86::munchUnary( TNode *t ){
 	string s;
 	switch( t->op ){
 	case IR_NEG:s="\tneg\t%l\n";break;
+	case IR_POWTWO:s = "\timul\t%l,%l\n"; break;
 	default:return 0;
 	}
 	return d_new Tile( s,munchReg( t->l ) );
 }
 
 Tile *Codegen_x86::munchLogical( TNode *t ){
-	string s;
+	string s, s1, s2;
+	Tile* l, * r, * q;
 	switch( t->op ){
-	case IR_AND:s="\tand\t%l,%r\n";break;
+	case IR_AND:
+		s1 = "\tand\t%l,%l\n\tjz\t" + t->sconst + "\n";
+		s2 = "\tand\t%l,%r\n" + t->sconst;
+
+		l = munchReg(t->l); r = munchReg(t->r);
+		q = d_new Tile(s2, d_new Tile(s1, l), r);
+		q->forceOrder = true;
+		return q;
+		break;
+	case IR_LOR:
+		s1 = "\tor\t%l,%l\n\tjnz\t" + t->sconst + "\n";
+		s2 = "\tor\t%l,%r\n" + t->sconst;
+
+		l = munchReg(t->l); r = munchReg(t->r);
+		q = d_new Tile(s2, d_new Tile(s1, l), r);
+		q->forceOrder = true;
+		return q;
+		break;
 	case IR_OR:s="\tor\t%l,%r\n";break;
 	case IR_XOR:s="\txor\t%l,%r\n";break;
 	default:return 0;
@@ -210,6 +229,7 @@ Tile *Codegen_x86::munchFPUnary( TNode *t ){
 	string s;
 	switch( t->op ){
 	case IR_FNEG:s="\tfchs\n";break;
+	case IR_FPOWTWO:s = "\tfmulp\tst(0)\n"; break;
 	default:return 0;
 	}
 	return d_new Tile( s,munchFP( t->l ) );
@@ -350,6 +370,8 @@ Tile *Codegen_x86::munchReg( TNode *t ){
 	string s;
 	Tile *q=0;
 
+	Tile* l, * r;
+
 	switch( t->op ){
 	case IR_JUMPT:
 		q=d_new Tile( "\tand\t%l,%l\n\tjnz\t"+t->sconst+'\n',munchReg( t->l ) );
@@ -379,7 +401,9 @@ Tile *Codegen_x86::munchReg( TNode *t ){
 		}
 		break;
 	case IR_SEQ:
-		q=d_new Tile( "",munch(t->l),munch(t->r) );
+		l = munch(t->l);
+		r = munch(t->r);
+		q = d_new Tile("", l, r);
 		break;
 	case IR_ARG:
 		q=d_new Tile( "\tlea\t%l,[esp"+itoa_sgn(t->iconst)+"]\n" );
@@ -398,10 +422,10 @@ Tile *Codegen_x86::munchReg( TNode *t ){
 	case IR_CONST:
 		q=d_new Tile( "\tmov\t%l,"+itoa(t->iconst)+"\n" );
 		break;
-	case IR_NEG:
+	case IR_NEG:case IR_POWTWO:
 		q=munchUnary( t );
 		break;
-	case IR_AND:case IR_OR:case IR_XOR:
+	case IR_AND:case IR_OR:case IR_LOR:case IR_XOR:
 		q=munchLogical( t );
 		break;
 	case IR_ADD:case IR_SUB:case IR_MUL:case IR_DIV:
@@ -441,7 +465,7 @@ Tile *Codegen_x86::munchFP( TNode *t ){
 		s="\tpush\t%l\n\tfild\t[esp]\n\tpop\t%l\n";
 		q=d_new Tile( s,munchReg( t->l ) );
 		break;
-	case IR_FNEG:
+	case IR_FNEG:case IR_FPOWTWO:
 		q=munchFPUnary( t );
 		break;
 	case IR_FADD:case IR_FSUB:case IR_FMUL:case IR_FDIV:
