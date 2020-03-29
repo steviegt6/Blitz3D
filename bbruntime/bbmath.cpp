@@ -43,8 +43,7 @@ float bbClamp(float v, float lo, float hi) {
 }
 
 int bbIsNaN(float n) {
-	unsigned int i = *((unsigned int*)(void*)&n);
-	return ((i & 0x7F800000) == 0x7F800000) && ((i & (~0xFF800000)) != 0);
+	return isnan(n);
 }
 
 //return rand float from 0...1
