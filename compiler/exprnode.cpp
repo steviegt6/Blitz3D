@@ -319,7 +319,7 @@ ExprNode *UniExprNode::semant( Environ *e ){
 			switch( op ){
 			case '+':e=d_new IntConstNode( +c->intValue() );break;
 			case '-':e=d_new IntConstNode( -c->intValue() );break;
-			case ABS:e=d_new IntConstNode( c->intValue()>=0 ? c->intValue() : -c->intValue() );break;
+			case ABS:e=d_new IntConstNode( abs(c->intValue()) );break;
 			case SGN:e=d_new IntConstNode( c->intValue()>0 ? 1 : (c->intValue()<0 ? -1 : 0) );break;
 			case POWTWO:e = d_new IntConstNode(c->intValue() * c->intValue()); break;
 			}
@@ -327,7 +327,7 @@ ExprNode *UniExprNode::semant( Environ *e ){
 			switch( op ){
 			case '+':e=d_new FloatConstNode( +c->floatValue() );break;
 			case '-':e=d_new FloatConstNode( -c->floatValue() );break;
-			case ABS:e=d_new FloatConstNode( c->floatValue()>=0 ? c->floatValue() : -c->floatValue() );break;
+			case ABS:e=d_new FloatConstNode( abs(c->floatValue()) );break;
 			case SGN:e=d_new FloatConstNode( c->floatValue()>0 ? 1 : (c->floatValue()<0 ? -1 : 0) );break;
 			case POWTWO:e = d_new FloatConstNode(c->floatValue() * c->floatValue()); break;
 			}

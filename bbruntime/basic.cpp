@@ -476,7 +476,7 @@ BBStr *_bbReadStr(){
 }
 
 int _bbAbs( int n ){
-	return n & 0x7FFFFFFF;
+	return abs(n);
 }
 
 int _bbSgn( int n ){
@@ -487,13 +487,12 @@ int _bbPowTwo(int n) {
 	return n * n;
 }
 
-
 int _bbMod( int x,int y ){
 	return x%y;
 }
 
 float _bbFAbs( float n ){
-	return n>=0 ? n : -n;
+	return abs(n);
 }
 
 float _bbFSgn( float n ){
