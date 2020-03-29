@@ -1,6 +1,7 @@
 
 #include "std.h"
 #include "bbmath.h"
+#include <algorithm>
 
 static int rnd_state;
 static const int RND_A = 48271;
