@@ -224,12 +224,12 @@ struct Quat{
 	void normalize(){
 		float l = length();
 		if (l<EPSILON) return;
-		*this = *this / length();
+		*this = *this / l;
 	}
 	Quat normalized()const{
 		float l = length();
 		if (l<EPSILON) return *this;
-		return *this / length();
+		return *this / l;
 	}
 	Quat slerpTo( const Quat &q,float a )const{
 		Quat t=q;
