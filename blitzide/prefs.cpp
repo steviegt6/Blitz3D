@@ -188,7 +188,7 @@ void Prefs::createFonts(){
 	debugFont.Detach();
 	conFont.Detach();
 
-	editFont.CreatePointFont( font_editor_height*15,font_editor.c_str() );
+	editFont.CreatePointFont( font_editor_height*10,font_editor.c_str() );
 	tabsFont.CreatePointFont( font_tabs_height*10,font_tabs.c_str() );
 	debugFont.CreatePointFont( font_debug_height*10,font_debug.c_str() );
 	conFont.CreatePointFont( 80,"courier" );
