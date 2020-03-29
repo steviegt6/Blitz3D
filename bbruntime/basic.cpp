@@ -475,32 +475,36 @@ BBStr *_bbReadStr(){
 	}
 }
 
-int _bbAbs( int n ){
+int _bbAbs( int n ) {
 	return abs(n);
 }
 
-int _bbSgn( int n ){
-	return n>0 ? 1 : (n<0 ? -1 : 0);
+int _bbSgn( int n ) {
+	if (n > 0) return 1;
+	if (n < 0) return -1;
+	return 0;
 }
 
-int _bbMod( int x,int y ){
+int _bbMod( int x,int y ) {
 	return x%y;
 }
 
-float _bbFAbs( float n ){
+float _bbFAbs( float n ) {
 	return abs(n);
 }
 
-float _bbFSgn( float n ){
-	return n>0 ? 1 : (n<0 ? -1 : 0);
+float _bbFSgn( float n ) {
+	if (n > 0) return 1;
+	if (n < 0) return -1;
+	return 0;
 }
 
-float _bbFMod( float x,float y ){
-	return (float)fmod( x,y );
+float _bbFMod( float x,float y ) {
+	return fmod(x, y);
 }
 
-float _bbFPow( float x,float y ){
-	return (float)pow( x,y );
+float _bbFPow( float x,float y ) {
+	return pow( x,y );
 }
 
 int _bbMakeBool(int n) {
