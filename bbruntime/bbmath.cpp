@@ -41,16 +41,15 @@ static inline float rnd() {
 	return (rnd_state&65535)/65536.0f+(.5f/65536.0f);
 }
 
-float bbRnd(float from,float to) {
+float bbRnd(float from, float to) {
 	return rnd()*(to-from)+from;
 }
 
-int bbRand(int from,int to){
-	if( to<from ) std::swap( from,to );
+int bbRand(int from, int to) {
 	return int(rnd()*(to-from+1))+from;
 }
 
-void bbSeedRnd(int seed){
+void bbSeedRnd(int seed) {
 	seed&=0x7fffffff;
 	rnd_state=seed ? seed : 1;
 }
@@ -72,7 +71,7 @@ bool math_destroy() {
 	return true;
 }
 
-void math_link(void (*rtSym)(const char *sym,void *pc)){
+void math_link(void (*rtSym)(const char *sym, void *pc)) {
 	rtSym("#Sin#degrees",bbSin);
 	rtSym("#Cos#degrees",bbCos);
 	rtSym("#Tan#degrees",bbTan);
