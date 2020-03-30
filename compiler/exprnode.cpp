@@ -344,18 +344,18 @@ TNode *UniExprNode::translate( Codegen *g ){
 	if( sem_type==Type::int_type ){
 		switch( op ){
 		case '+':return l;
-		case '-':n=IR_NEG;break;
-		case ABS:return call( "__bbAbs",l );
+		case '-':n = IR_NEG;break;
+		case ABS:n = IR_ABS; break;
 		case SGN:return call( "__bbSgn",l );
-		case POWTWO:n=IR_POWTWO;
+		case POWTWO:n = IR_POWTWO;
 		}
 	}else{
 		switch( op ){
 		case '+':return l;
-		case '-':n=IR_FNEG;break;
-		case ABS:return fcall( "__bbFAbs",l );
+		case '-':n = IR_FNEG;break;
+		case ABS:n = IR_FABS; break;
 		case SGN:return fcall( "__bbFSgn",l );
-		case POWTWO:n=IR_FPOWTWO;
+		case POWTWO:n = IR_FPOWTWO;
 		}
 	}
 	return d_new TNode( n,l,0 );
