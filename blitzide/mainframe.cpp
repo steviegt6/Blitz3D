@@ -734,10 +734,6 @@ void MainFrame::programCompile(){
 }
 
 void MainFrame::programPublish(){
-#ifdef DEMO
-	MessageBox( "Create Executable unavailable in demo version","Sorry!",MB_TOPMOST|MB_SETFOREGROUND|MB_ICONINFORMATION );
-	return;
-#endif
 	Editor *e=getEditor();if( !e ) return;
 	if( prefs.prg_debug ){
 		string t=
@@ -796,7 +792,7 @@ void MainFrame::helpForward(){
 }
 
 void MainFrame::helpAbout(){
-	aboutBlitz( false );
+	aboutBlitz();
 }
 
 void MainFrame::ctrlTab(){

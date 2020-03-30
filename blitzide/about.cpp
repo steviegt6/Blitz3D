@@ -54,7 +54,7 @@ public:
 	}
 };
 
-void aboutBlitz( bool delay ){
+void aboutBlitz(){
 
 	AfxGetMainWnd()->EnableWindow(0);
 
@@ -76,42 +76,13 @@ void aboutBlitz( bool delay ){
 	t+="Blitz2D";
 #endif
 
-#ifdef EDU
-	t+=" - Educational Version";
-#else
-#ifdef DEMO
-	t+=" - Demo Version\n\n";
-	/*
-	int n=shareProtCheck();
-	if( n>1 ) t+=itoa(n)+" runs left";
-	else if( n ) t+=itoa(n)+" run left";
-	else t+="expired";
-	t+=")\n\n";
-	*/
-#else
 	t+=" - Release Version\n\n";
-#endif
-#endif
 
 	about.GetDlgItem( IDC_PRODUCT )->SetWindowText( t.c_str() );
 
 	t = "Runtime V" + itoa((VERSION & 0xffff) / 1000) + "." + itoa((VERSION & 0xffff) % 1000);
 
 	about.GetDlgItem( IDC_VERSION )->SetWindowText( t.c_str() );
-
-#ifdef DEMO
-
-	if( delay ){
-		about.GetDlgItem( IDOK )->ShowWindow( SW_HIDE );
-		about.GetDlgItem( IDC_PROGRESS1 )->ShowWindow( SW_SHOW );
-		for( int k=0;k<100;++k ){
-			((CProgressCtrl*)about.GetDlgItem( IDC_PROGRESS1 ))->SetPos( k+1 );
-			about.wait( 50 );
-		}
-		about.GetDlgItem( IDOK )->ShowWindow( SW_SHOW );
-	}
-
-#endif
 
 	about.GetDlgItem( IDC_PROGRESS1 )->ShowWindow( SW_HIDE );
 	about.wait();

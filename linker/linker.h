@@ -25,7 +25,6 @@ public:
 class Linker{
 public:
 	virtual int version();
-	virtual bool canCreateExe();
 	virtual Module *createModule();
 	virtual void deleteModule( Module *mod );
 };
