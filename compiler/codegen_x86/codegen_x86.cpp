@@ -113,9 +113,6 @@ Tile *Codegen_x86::genCompare( TNode *t,string &func,bool negate ){
 ////////////////////////////////////////////////
 // Integer expressions returned in a register //
 ////////////////////////////////////////////////
-
-static unsigned int lastJump = 0;
-
 Tile *Codegen_x86::munchUnary(TNode *t){
 	string s;
 	Tile *q = 0;
@@ -123,9 +120,8 @@ Tile *Codegen_x86::munchUnary(TNode *t){
 	case IR_NEG: s = "\tneg\t%l\n"; break;
 	case IR_POWTWO: s = "\timul\t%l,%l\n"; break;
 	case IR_ABS:
-		q = d_new Tile("\tmov\tebx,%l\n\tshr\tebx,byte 31\n\tcmp\tebx,byte 0\n\tje\tABSJMPSYM" + to_string(lastJump) + "\n\tneg\t%l\nABSJMPSYM" + to_string(lastJump) + "\n", munchReg(t->l));
-		q->want_l = EBX;
-		lastJump++;
+		q = d_new Tile("\tmov\teax,%l\n\tcdq\n\txor\t%l,edx\n\tsub\t%l,edx\n", munchReg(t->l));
+		q->hits = (1 << EAX) | (1 << EDX);
 		break;
 	default: return 0;
 	}
