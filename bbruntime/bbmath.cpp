@@ -34,7 +34,7 @@ float bbClamp(float v, float lo, float hi) {
 //return rand float from 0...1
 static inline float rnd() {
 	rnd_state=RND_A*(rnd_state%RND_Q)-RND_R*(rnd_state/RND_Q);
-	if( rnd_state<0 ) rnd_state+=RND_M;
+	if(rnd_state<0) rnd_state+=RND_M;
 	if (rnd_state == 0) {
 		rnd_state = RND_R;
 	}
@@ -50,8 +50,8 @@ int bbRand(int from, int to) {
 }
 
 void bbSeedRnd(int seed) {
-	seed&=0x7fffffff;
-	rnd_state=seed ? seed : 1;
+	seed &= 0x7fffffff;
+	rnd_state = seed ? seed : 1;
 }
 
 int  bbRndSeed() {
@@ -72,25 +72,25 @@ bool math_destroy() {
 }
 
 void math_link(void (*rtSym)(const char *sym, void *pc)) {
-	rtSym("#Sin#degrees",bbSin);
-	rtSym("#Cos#degrees",bbCos);
-	rtSym("#Tan#degrees",bbTan);
-	rtSym("#ASin#float",bbASin);
-	rtSym("#ACos#float",bbACos);
-	rtSym("#ATan#float",bbATan);
-	rtSym("#ATan2#floata#floatb",bbATan2);
-	rtSym("#Sqr#float",bbSqr);
-	rtSym("#Floor#float",bbFloor);
-	rtSym("#Ceil#float",bbCeil);
-	rtSym("#Exp#float",bbExp);
-	rtSym("#Log#float",bbLog);
-	rtSym("#Log10#float",bbLog10);
+	rtSym("#Sin#degrees", bbSin);
+	rtSym("#Cos#degrees", bbCos);
+	rtSym("#Tan#degrees", bbTan);
+	rtSym("#ASin#float", bbASin);
+	rtSym("#ACos#float", bbACos);
+	rtSym("#ATan#float", bbATan);
+	rtSym("#ATan2#floata#floatb", bbATan2);
+	rtSym("#Sqr#float", bbSqr);
+	rtSym("#Floor#float", bbFloor);
+	rtSym("#Ceil#float", bbCeil);
+	rtSym("#Exp#float", bbExp);
+	rtSym("#Log#float", bbLog);
+	rtSym("#Log10#float", bbLog10);
 	rtSym("#Min#n#m", bbMin);
 	rtSym("#Max#n#m", bbMax);
 	rtSym("#Clamp#v#lo#hi", bbClamp);
 	rtSym("%IsNaN#n", bbIsNaN);
-	rtSym( "#Rnd#from#to=0",bbRnd);
-	rtSym( "%Rand%from%to=1",bbRand);
-	rtSym( "SeedRnd%seed",bbSeedRnd);
-	rtSym( "%RndSeed",bbRndSeed);
+	rtSym("#Rnd#from#to=0", bbRnd);
+	rtSym("%Rand%from%to=1", bbRand);
+	rtSym("SeedRnd%seed", bbSeedRnd);
+	rtSym("%RndSeed", bbRndSeed);
 }
