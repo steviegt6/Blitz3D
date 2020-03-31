@@ -234,7 +234,7 @@ Tile *Codegen_x86::munchFPUnary( TNode *t ){
 	string s;
 	switch( t->op ){
 	case IR_FNEG:s = "\tfchs\n";break;
-	case IR_FPOWTWO:s = "\tfmulp\tst(0)\n"; break;
+	case IR_FPOWTWO:s = "\tfmul\tst(0)\n"; break;
 	case IR_FABS:s = "\tfabs\n"; break;
 	default:return 0;
 	}
