@@ -475,12 +475,6 @@ BBStr *_bbReadStr(){
 	}
 }
 
-int _bbSgn( int n ) {
-	if (n > 0) return 1;
-	if (n < 0) return -1;
-	return 0;
-}
-
 int _bbMod( int x,int y ) {
 	return x%y;
 }
@@ -583,7 +577,6 @@ void basic_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "_bbReadInt",_bbReadInt );
 	rtSym( "_bbReadFloat",_bbReadFloat );
 	rtSym( "_bbReadStr",_bbReadStr );
-	rtSym( "_bbSgn",_bbSgn );
 	rtSym( "_bbMod",_bbMod );
 	rtSym( "_bbFSgn",_bbFSgn );
 	rtSym( "_bbFMod",_bbFMod );

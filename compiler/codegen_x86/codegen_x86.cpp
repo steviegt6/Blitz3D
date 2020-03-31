@@ -123,6 +123,10 @@ Tile *Codegen_x86::munchUnary(TNode *t){
 		q = d_new Tile("\tmov\teax,%l\n\tcdq\n\txor\t%l,edx\n\tsub\t%l,edx\n", munchReg(t->l));
 		q->hits = (1 << EAX) | (1 << EDX);
 		break;
+	case IR_SGN:
+		q = d_new Tile("\tmov\teax,%l\n\tcdq\n\tcmp\teax,byte 1\n\tsbb\tedx,byte 1\n\tadc\tedx,byte 1\n\tmov\t%l,edx\n", munchReg(t->l));
+		q->hits = (1 << EAX) | (1 << EDX);
+		break;
 	default: return 0;
 	}
 	return q != nullptr ? q : d_new Tile(s, munchReg(t->l));
@@ -238,7 +242,7 @@ Tile *Codegen_x86::munchFPUnary( TNode *t ){
 	case IR_FABS:s = "\tfabs\n"; break;
 	default:return 0;
 	}
-	return d_new Tile( s,munchFP( t->l ) );
+	return d_new Tile(s,munchFP(t->l));
 }
 
 Tile *Codegen_x86::munchFPArith( TNode *t ){
@@ -428,7 +432,7 @@ Tile *Codegen_x86::munchReg( TNode *t ){
 	case IR_CONST:
 		q=d_new Tile( "\tmov\t%l,"+itoa(t->iconst)+"\n" );
 		break;
-	case IR_NEG:case IR_POWTWO:case IR_ABS:
+	case IR_NEG:case IR_ABS:case IR_SGN:case IR_POWTWO:
 		q=munchUnary( t );
 		break;
 	case IR_AND:case IR_OR:case IR_LOR:case IR_XOR:
