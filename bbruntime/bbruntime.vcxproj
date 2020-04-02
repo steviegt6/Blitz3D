@@ -118,6 +118,7 @@
       <AssemblerOutput>NoListing</AssemblerOutput>
       <MinimalRebuild>false</MinimalRebuild>
       <CallingConvention>StdCall</CallingConvention>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
