@@ -46,6 +46,7 @@ float bbRnd(float from, float to) {
 }
 
 int bbRand(int from, int to) {
+	if (to < from) std::swap(from, to);
 	return int(rnd()*(to-from+1))+from;
 }
 
