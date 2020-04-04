@@ -354,7 +354,7 @@ TNode *UniExprNode::translate( Codegen *g ){
 		case '+':return l;
 		case '-':n = IR_FNEG;break;
 		case ABS:n = IR_FABS; break;
-		case SGN:return fcall( "__bbFSgn",l );
+		case SGN:n = IR_FSGN; break;
 		case POWTWO:n = IR_FPOWTWO;
 		}
 	}

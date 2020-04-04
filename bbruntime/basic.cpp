@@ -479,12 +479,6 @@ int _bbMod(int x,int y) {
 	return x%y;
 }
 
-float _bbFSgn(float n) {
-	if (n > 0) return 1;
-	if (n < 0) return -1;
-	return 0;
-}
-
 float _bbFMod(float x,float y) {
 	return fmod(x, y);
 }
@@ -578,7 +572,6 @@ void basic_link(void (*rtSym)(const char *sym,void *pc)) {
 	rtSym("_bbReadFloat",_bbReadFloat);
 	rtSym("_bbReadStr",_bbReadStr);
 	rtSym("_bbMod",_bbMod);
-	rtSym("_bbFSgn",_bbFSgn);
 	rtSym("_bbFMod",_bbFMod);
 	rtSym("_bbFPow",_bbFPow);
 	rtSym("_bbMakeBool", _bbMakeBool);

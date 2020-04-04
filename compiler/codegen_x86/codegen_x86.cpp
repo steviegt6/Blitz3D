@@ -234,15 +234,24 @@ Tile *Codegen_x86::munchRelop( TNode *t ){
 ////////////////////////////////////////////////
 // Float expressions returned on the FP stack //
 ////////////////////////////////////////////////
+
+static unsigned int sgnnum;
+
 Tile *Codegen_x86::munchFPUnary( TNode *t ){
 	string s;
+	Tile* q = 0;
 	switch( t->op ){
 	case IR_FNEG:s = "\tfchs\n";break;
 	case IR_FPOWTWO:s = "\tfmul\tst(0)\n"; break;
 	case IR_FABS:s = "\tfabs\n"; break;
+	case IR_FSGN:
+		q = d_new Tile("\tfldz\n\tfucompp\n\tfnstsw\tax\n\tsahf\n\tje\tSGNZERO" + to_string(sgnnum) + "\n\tfld1\n\tjna\tSGNEND" + to_string(sgnnum) + "\n\tfchs\n\tjmp\tSGNEND" + to_string(sgnnum) + "\nSGNZERO" + to_string(sgnnum) + "\n\tfldz\nSGNEND" + to_string(sgnnum) + "\n", munchFP(t->l));
+		q->want_l = EAX;
+		sgnnum++;
+		break;
 	default:return 0;
 	}
-	return d_new Tile(s,munchFP(t->l));
+	return q != nullptr ? q : d_new Tile(s,munchFP(t->l));
 }
 
 Tile *Codegen_x86::munchFPArith( TNode *t ){
@@ -475,7 +484,7 @@ Tile *Codegen_x86::munchFP( TNode *t ){
 		s="\tpush\t%l\n\tfild\t[esp]\n\tpop\t%l\n";
 		q=d_new Tile( s,munchReg( t->l ) );
 		break;
-	case IR_FNEG:case IR_FPOWTWO:case IR_FABS:
+	case IR_FNEG:case IR_FABS:case IR_FPOWTWO:case IR_FSGN:
 		q=munchFPUnary( t );
 		break;
 	case IR_FADD:case IR_FSUB:case IR_FMUL:case IR_FDIV:
