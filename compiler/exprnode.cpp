@@ -542,13 +542,13 @@ TNode *ArithExprNode::translate( Codegen *g ){
 		switch( op ){
 		case '+':n=IR_ADD;break;case '-':n=IR_SUB;break;
 		case '*':n=IR_MUL;break;case '/':n=IR_DIV;break;
-		case MOD:return call( "__bbMod",l,r );
+		case MOD:n=IR_MOD;break;
 		}
 	}else{
 		switch( op ){
 		case '+':n=IR_FADD;break;case '-':n=IR_FSUB;break;
 		case '*':n=IR_FMUL;break;case '/':n=IR_FDIV;break;
-		case MOD:return fcall( "__bbFMod",l,r );
+		case MOD:return fcall("__bbFMod", l, r);
 		case '^':return fcall( "__bbFPow",l,r );
 		}
 	}

@@ -175,34 +175,42 @@ Tile *Codegen_x86::munchArith(TNode *t){
 		return q;
 	}
 
-	if( t->op==IR_MUL ){
+	if(t->op==IR_MUL) {
 		int shift;
-		if( t->r->op==IR_CONST ){
-			if( getShift( t->r->iconst,shift ) ){
+		if(t->r->op==IR_CONST) {
+			if(getShift(t->r->iconst,shift)) {
 				return d_new Tile( "\tshl\t%l,byte "+itoa(shift)+"\n",munchReg( t->l ) );
 			}
 		}else if( t->l->op==IR_CONST ){
-			if( getShift( t->l->iconst,shift ) ){
+			if(getShift(t->l->iconst,shift)) {
 				return d_new Tile( "\tshl\t%l,byte "+itoa(shift)+"\n",munchReg( t->r ) );
 			}
 		}
 	}
 
+	if (t->op == IR_MOD) {
+		Tile* q;
+		q = d_new Tile("\tmov\tecx,%r\n\tcdq\n\tidiv\tecx\n\tmov\t%l,edx\n", munchReg(t->l), munchReg(t->r));
+		q->want_l = EAX;
+		q->hits = (1 << ECX) | (1 << EDX);
+		return q;
+	}
+
 	string s,op;
-	switch( t->op ){
+	switch(t->op){
 	case IR_ADD:op="\tadd\t";break;
 	case IR_SUB:op="\tsub\t";break;
 	case IR_MUL:op="\timul\t";break;
 	default:return 0;
 	}
 
-	if( matchMEMCONST( t->r,s ) ){
-		return d_new Tile( op+"%l,"+s+"\n",munchReg( t->l ) );
+	if(matchMEMCONST(t->r, s)){
+		return d_new Tile(op+"%l,"+s+"\n", munchReg(t->l));
 	}
-	if( t->op!=IR_SUB && matchMEMCONST( t->l,s ) ){
-		return d_new Tile( op+"%l,"+s+"\n",munchReg( t->r ) );
+	if(t->op!=IR_SUB && matchMEMCONST(t->l, s) ){
+		return d_new Tile(op+"%l,"+s+"\n", munchReg(t->r));
 	}
-	return d_new Tile( op+"%l,%r\n",munchReg( t->l ),munchReg( t->r ) );
+	return d_new Tile(op+"%l,%r\n", munchReg(t->l), munchReg(t->r));
 }
 
 Tile *Codegen_x86::munchShift( TNode *t ){
@@ -447,7 +455,7 @@ Tile *Codegen_x86::munchReg( TNode *t ){
 	case IR_AND:case IR_OR:case IR_LOR:case IR_XOR:
 		q=munchLogical( t );
 		break;
-	case IR_ADD:case IR_SUB:case IR_MUL:case IR_DIV:
+	case IR_ADD:case IR_SUB:case IR_MUL:case IR_DIV:case IR_MOD:
 		q=munchArith( t );
 		break;
 	case IR_SHL:case IR_SHR:case IR_SAR:

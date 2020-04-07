@@ -475,10 +475,6 @@ BBStr *_bbReadStr() {
 	}
 }
 
-int _bbMod(int x,int y) {
-	return x%y;
-}
-
 float _bbFMod(float x,float y) {
 	return fmod(x, y);
 }
@@ -571,7 +567,6 @@ void basic_link(void (*rtSym)(const char *sym,void *pc)) {
 	rtSym("_bbReadInt",_bbReadInt);
 	rtSym("_bbReadFloat",_bbReadFloat);
 	rtSym("_bbReadStr",_bbReadStr);
-	rtSym("_bbMod",_bbMod);
 	rtSym("_bbFMod",_bbFMod);
 	rtSym("_bbFPow",_bbFPow);
 	rtSym("_bbMakeBool", _bbMakeBool);
