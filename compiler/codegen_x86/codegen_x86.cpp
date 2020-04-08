@@ -120,11 +120,13 @@ Tile *Codegen_x86::munchUnary(TNode *t){
 	case IR_NEG: s = "\tneg\t%l\n"; break;
 	case IR_POWTWO: s = "\timul\t%l,%l\n"; break;
 	case IR_ABS:
-		q = d_new Tile("\tmov\teax,%l\n\tcdq\n\txor\t%l,edx\n\tsub\t%l,edx\n", munchReg(t->l));
+		q = d_new Tile("\tcdq\n\txor\t%l,edx\n\tsub\teax,edx\n", munchReg(t->l));
+		q->want_l = EAX;
 		q->hits = (1 << EAX) | (1 << EDX);
 		break;
 	case IR_SGN:
-		q = d_new Tile("\tmov\teax,%l\n\tcdq\n\tcmp\teax,byte 1\n\tsbb\tedx,byte 1\n\tadc\tedx,byte 1\n\tmov\t%l,edx\n", munchReg(t->l));
+		q = d_new Tile("\tcdq\n\tcmp\teax,byte 1\n\tsbb\tedx,byte 1\n\tadc\tedx,byte 1\n\tmov\teax,edx\n", munchReg(t->l));
+		q->want_l = EAX;
 		q->hits = (1 << EAX) | (1 << EDX);
 		break;
 	default: return 0;
@@ -190,9 +192,10 @@ Tile *Codegen_x86::munchArith(TNode *t){
 
 	if (t->op == IR_MOD) {
 		Tile* q;
-		q = d_new Tile("\tmov\tecx,%r\n\tcdq\n\tidiv\tecx\n\tmov\t%l,edx\n", munchReg(t->l), munchReg(t->r));
+		q = d_new Tile("\tcdq\n\tidiv\tecx\n\tmov\teax,edx\n", munchReg(t->l), munchReg(t->r));
 		q->want_l = EAX;
-		q->hits = (1 << ECX) | (1 << EDX);
+		q->want_r = ECX;
+		q->hits = 1 << EDX;
 		return q;
 	}
 
