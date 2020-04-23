@@ -97,7 +97,12 @@ void  bbFreeTimer( gxTimer *t ){
 BBStr* bbGetClipboardContents() {
 	OpenClipboard(nullptr);
 	HANDLE data = GetClipboardData(CF_TEXT);
-	BBStr* str = d_new BBStr(static_cast<const char*>(data));
+	BBStr* str;
+	if (IsClipboardFormatAvailable(CF_TEXT)) {
+		str = d_new BBStr(static_cast<const char*>(data));
+	} else {
+		str = d_new BBStr("");
+	}
 	CloseClipboard();
 	return str;
 }
