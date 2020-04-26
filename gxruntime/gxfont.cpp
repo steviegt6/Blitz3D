@@ -141,6 +141,7 @@ void gxFont::renderAtlas(int chr) {
         }
         newAtlas->unlock();
         newAtlas->setMask( 0xffffff );
+        newAtlas->backup();
         atlases.push_back(newAtlas);
         delete[] buffer;
     }

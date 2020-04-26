@@ -246,7 +246,9 @@ gxFont *gxGraphics::loadFont( const string &f,int height,int flags ){
 		t=f;
 	}
 
-	return new gxFont(ftLibrary, this, f, height, flags);
+	gxFont* newFont = new gxFont(ftLibrary, this, f, height, flags);
+	font_set.emplace(newFont);
+	return newFont;
 }
 
 gxFont *gxGraphics::verifyFont( gxFont *f ){
