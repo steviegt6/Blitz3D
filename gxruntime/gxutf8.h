@@ -7,7 +7,7 @@ private:
     UTF8(const UTF8& o) {}
 public:
     static int measureCodepoint(char chr);
-    static int decodeCharacter(char* buf, int index);
+    static int decodeCharacter(const char* buf, int index);
 };
 
 #endif

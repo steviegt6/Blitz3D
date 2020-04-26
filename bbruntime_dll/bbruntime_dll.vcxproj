@@ -69,6 +69,7 @@
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CallingConvention>StdCall</CallingConvention>
+      <AdditionalIncludeDirectories>..\freetype\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -130,6 +131,7 @@
       <OpenMPSupport>false</OpenMPSupport>
       <MinimalRebuild>false</MinimalRebuild>
       <CallingConvention>StdCall</CallingConvention>
+      <AdditionalIncludeDirectories>..\freetype\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -180,7 +182,6 @@
     </ProjectReference>
     <ProjectReference Include="..\blitz3d\blitz3d.vcxproj">
       <Project>{60bb991f-8721-4a17-9f70-79d0ee5507fa}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\freeimage\FreeImageLib\FreeImageLib.vcxproj">
       <Project>{0c7bd7a8-5a0a-4ced-a18b-db7187c2cf0d}</Project>
@@ -193,6 +194,9 @@
     </ProjectReference>
     <ProjectReference Include="..\freeimage\ZLib\ZLib.vcxproj">
       <Project>{7feb7d92-c789-4a2c-b1f3-06c54ce276ee}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\freetype\builds\windows\vc2010\freetype.vcxproj">
+      <Project>{78b079bd-9fc7-4b9e-b4a6-96da0f00248b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\gxruntime\gxruntime.vcxproj">
       <Project>{a124d746-4a3b-401d-ae99-6a838595bc8c}</Project>

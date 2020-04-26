@@ -1,3 +1,4 @@
+#include "std.h"
 #include "gxutf8.h"
 
 int UTF8::measureCodepoint(char chr) {
@@ -14,7 +15,7 @@ int UTF8::measureCodepoint(char chr) {
     return len;
 }
 
-int UTF8::decodeCharacter(char* buf, int index) {
+int UTF8::decodeCharacter(const char* buf, int index) {
     int codepointLen = measureCodepoint(buf[index]);
 
     if (codepointLen == 1) {
