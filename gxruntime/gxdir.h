@@ -2,8 +2,10 @@
 #ifndef GXDIR_H
 #define GXDIR_H
 
+#define _HAS_STD_BYTE 0
+
 #include <string>
-#include <windows.h>
+#include <Windows.h>
 
 class gxDir{
 public:

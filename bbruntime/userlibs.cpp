@@ -3,7 +3,7 @@
 #include "bbsys.h"
 #include "userlibs.h"
 
-#include <windows.h>
+#include <Windows.h>
 
 static vector<HMODULE> _mods;
 

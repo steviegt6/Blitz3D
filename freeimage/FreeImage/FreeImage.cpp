@@ -19,8 +19,10 @@
 // Use at your own risk!
 // ==========================================================
 
+#define _HAS_STD_BYTE 0
+
 #ifdef WIN32
-#include <windows.h>
+#include <Windows.h>
 #endif
 
 #include "FreeImage.h"

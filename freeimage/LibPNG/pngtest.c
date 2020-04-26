@@ -28,11 +28,13 @@
  * of files at once by typing "pngtest -m file1.png file2.png ..."
  */
 
+#define _HAS_STD_BYTE 0
+
 #if defined(_WIN32_WCE)
 #  if _WIN32_WCE < 211
      __error__ (f|w)printf functions are not supported on old WindowsCE.;
 #  endif
-#  include <windows.h>
+#  include <Windows.h>
 #  include <stdlib.h>
 #  define READFILE(file, data, length, check) \
      if (ReadFile(file, data, length, &check,NULL)) check = 0

@@ -16,6 +16,8 @@
 #ifndef PNGCONF_H
 #define PNGCONF_H
 
+#define _HAS_STD_BYTE 0
+
 /* This is the size of the compression buffer, and thus the size of
  * an IDAT chunk.  Make this whatever size you feel is best for your
  * machine.  One of these will be allocated per png_struct.  When this
@@ -157,7 +159,7 @@
  */
 
 #if defined(_WIN32_WCE)
-#  include <windows.h>
+#  include <Windows.h>
    /* Console I/O functions are not supported on WindowsCE */
 #  define PNG_NO_CONSOLE_IO
 #  ifdef PNG_DEBUG

@@ -8,6 +8,8 @@
 #ifndef _ZCONF_H
 #define _ZCONF_H
 
+#define _HAS_STD_BYTE 0
+
 /*
  * If you *really* need a unique prefix for all types and library functions,
  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
@@ -166,7 +168,7 @@
 #    ifdef FAR
 #      undef FAR
 #    endif
-#    include <windows.h>
+#    include <Windows.h>
 #    define ZEXPORT  WINAPI
 #    ifdef WIN32
 #      define ZEXPORTVA  WINAPIV
@@ -176,7 +178,7 @@
 #  endif
 #  if defined (__BORLANDC__)
 #    if (__BORLANDC__ >= 0x0500) && defined (WIN32)
-#      include <windows.h>
+#      include <Windows.h>
 #      define ZEXPORT __declspec(dllexport) WINAPI
 #      define ZEXPORTRVA __declspec(dllexport) WINAPIV
 #    else

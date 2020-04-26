@@ -4,7 +4,7 @@
 #include <set>
 #include <math.h>
 #include <stdlib.h>
-#include <windows.h>
+#include <Windows.h>
 
 using namespace std;
 

@@ -1,6 +1,8 @@
 
-#include <string>
-#include <windows.h>
+#define _HAS_STD_BYTE 0 //What this does is tell the compiler that there is no std::byte
+#include <string>		//std::byte is a new feature from C++17 that is used to store bytes.
+#include <Windows.h>	//Blitz3D uses the keyword "byte", and as it uses the namespace std,
+						//the compiler thinks its referencing std::byte, giving an error.
 
 using namespace std;
 
