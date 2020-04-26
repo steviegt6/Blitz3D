@@ -44,40 +44,6 @@ gxFont::~gxFont() {
     FT_Done_Face(freeTypeFace);
 }
 
-static unsigned char* unpack_mono_bitmap(FT_Bitmap bitmap)
-{
-    unsigned char* result;
-    int y, x, byte_index, num_bits_done, rowstart, bits, bit_index;
-    unsigned char byte_value;
-
-    result = new unsigned char[bitmap.rows * bitmap.width];
-
-    for (y = 0; y < bitmap.rows; y++) {
-        for (byte_index = 0; byte_index < bitmap.pitch; byte_index++) {
-
-            byte_value = bitmap.buffer[y * bitmap.pitch + byte_index];
-
-            num_bits_done = byte_index * 8;
-
-            rowstart = y * bitmap.width + byte_index * 8;
-
-            bits = 8;
-            if ((bitmap.width - num_bits_done) < 8) {
-                bits = bitmap.width - num_bits_done;
-            }
-
-            for (bit_index = 0; bit_index < bits; bit_index++) {
-                int bit;
-                bit = byte_value & (1 << (7 - bit_index));
-
-                result[rowstart + bit_index] = bit;
-            }
-        }
-    }
-
-    return result;
-}
-
 const int transparentPixel = 0x777777;
 const int opaquePixel = 0xffffff;
 
