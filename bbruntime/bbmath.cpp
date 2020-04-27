@@ -9,28 +9,26 @@ static const int RND_M = 2147483647;
 static const int RND_Q = 44488;
 static const int RND_R = 3399;
 
-static const float dtor = 0.0174532925199432957692369076848861f;
-static const float rtod = 57.2957795130823208767981548141052f;
+static const float dtor = 0.01745329252f; //DEGREES TO RADIANS
+static const float rtod = 57.295779513f;  //RADIANS TO DEGREES
 
-float bbSin(float n)			{ return sin(n*dtor); }
-float bbCos(float n)			{ return cos(n*dtor); }
-float bbTan(float n)			{ return tan(n*dtor); }
-float bbASin(float n)			{ return asin(n)*rtod; }
-float bbACos(float n)			{ return acos(n)*rtod; }
-float bbATan(float n)			{ return atan(n)*rtod; }
-float bbATan2(float n, float t)	{ return atan2(n,t)*rtod; }
-float bbSqr(float n)			{ return sqrtf(n); }
-float bbFloor(float n)			{ return floor(n); }
-float bbCeil(float n)			{ return ceil(n); }
-float bbExp(float n)			{ return exp(n); }
-float bbLog(float n)			{ return log(n); }
-float bbLog10(float n)			{ return log10(n); }
-float bbMin(float n, float m)	{ return fmin(n, m); }
-float bbMax(float n, float m)	{ return fmax(n, m); }
-
-float bbClamp(float v, float lo, float hi) {
-	return v < lo ? lo : (v > hi ? hi : v);
-}
+float bbSin(float n)						{ return sin(n*dtor);			}
+float bbCos(float n)						{ return cos(n*dtor);			}
+float bbTan(float n)						{ return tan(n*dtor);			}
+float bbASin(float n)						{ return asin(n)*rtod;			}
+float bbACos(float n)						{ return acos(n)*rtod;			}
+float bbATan(float n)						{ return atan(n)*rtod;			}
+float bbATan2(float n, float t)				{ return atan2(n,t)*rtod;		}
+float bbSqr(float n)						{ return sqrtf(n);				}
+float bbFloor(float n)						{ return floor(n);				}
+float bbCeil(float n)						{ return ceil(n);				}
+float bbExp(float n)						{ return exp(n);				}
+float bbLog(float n)						{ return log(n);				}
+float bbLog10(float n)						{ return log10(n);				}
+float bbMin(float n, float m)				{ return fmin(n, m);			}
+float bbMax(float n, float m)				{ return fmax(n, m);			}
+float bbClamp(float v, float lo, float hi)  { return clamp(v, lo, hi);		}
+int	bbIsNaN(float n)						{ return isnan(n);				}
 
 //return rand float from 0...1
 static inline float rnd() {
@@ -58,10 +56,6 @@ void bbSeedRnd(int seed){
 
 int  bbRndSeed() {
 	return rnd_state;
-}
-
-int bbIsNaN(float n) {
-	return isnan(n);
 }
 
 bool math_create() {
