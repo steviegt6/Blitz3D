@@ -37,7 +37,7 @@ int bbInstr( BBStr *s,BBStr *t,int from ){
 	CHKOFF( from );--from;
 	int n=UTF8::find( *s,*t,from );
 	delete s;delete t;
-	return n==string::npos ? 0 : n+1;
+	return n<0 ? 0 : n+1;
 }
 
 BBStr *bbMid( BBStr *s,int o,int n ){
