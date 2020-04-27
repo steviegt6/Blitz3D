@@ -20,8 +20,6 @@
 // Use at your own risk!
 // ==================	===================================================
 
-#define _HAS_STD_BYTE 0
-
 #ifdef WIN32
 #pragma warning (disable : 4786)
 #include <Windows.h>

@@ -2,8 +2,6 @@
 #ifndef LIBS_H
 #define LIBS_H
 
-#define _HAS_STD_BYTE 0
-
 #include <map>
 #include <list>
 #include <vector>

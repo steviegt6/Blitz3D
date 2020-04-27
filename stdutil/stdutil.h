@@ -2,8 +2,6 @@
 #ifndef STDUTIL_H
 #define STDUTIL_H
 
-#define _HAS_STD_BYTE 0
-
 #pragma warning(disable:4786)
 
 #include "../config/config.h"

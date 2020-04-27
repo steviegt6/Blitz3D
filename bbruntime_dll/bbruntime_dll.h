@@ -4,8 +4,6 @@
 #ifndef BBRUNTIME_DLL_H
 #define BBRUNTIME_DLL_H
 
-#define _HAS_STD_BYTE 0
-
 #include <Windows.h>
 
 #include "../stdutil/stdutil.h"

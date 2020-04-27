@@ -2,8 +2,6 @@
 #ifndef GXRUNTIME_H
 #define GXRUNTIME_H
 
-#define _HAS_STD_BYTE 0
-
 #include <Windows.h>
 #include <string>
 #include <vector>

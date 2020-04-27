@@ -19,8 +19,6 @@
 // Use at your own risk!
 // ==========================================================
 
-#define _HAS_STD_BYTE 0
-
 #ifdef WIN32
 #include <Windows.h>
 #endif

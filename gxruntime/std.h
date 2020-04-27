@@ -2,8 +2,6 @@
 #ifndef STD_H
 #define STD_H
 
-#define _HAS_STD_BYTE 0
-
 #include "..//fmod375/include/fmod.h"
 
 #include "../config/config.h"

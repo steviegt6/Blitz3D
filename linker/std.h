@@ -2,8 +2,6 @@
 #ifndef STD_LINKER_H
 #define STD_LINKER_H
 
-#define _HAS_STD_BYTE 0
-
 #include "../config/config.h"
 #include "../stdutil/stdutil.h"
 
