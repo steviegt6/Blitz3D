@@ -187,6 +187,18 @@ void gxFont::render(gxCanvas *dest,unsigned color_argb,int x,int y,const std::st
         i+=codepointLen;
     }
 
+    std::map<int,GlyphData>::iterator it = glyphData.find('T');
+    if (it==glyphData.end()) {
+        renderAtlas('T');
+        it = glyphData.find('T');
+    }
+
+    if (it!=glyphData.end()) {
+        const GlyphData& gd = it->second;
+
+        y -= (height*4/10)-gd.drawOffset[1];
+    }
+
     dest->blit( x,y,tempCanvas,0,0,width,height*16/10,false );
 }
 
