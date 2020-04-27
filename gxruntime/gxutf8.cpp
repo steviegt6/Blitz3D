@@ -43,8 +43,7 @@ int UTF8::find(const std::string& str, const std::string& sstr, int from) {
     int utf8Index = 0;
     int bytesFrom = 0;
     for (int i=0;i<str.size();) {
-        if (from == utf8Index)
-        {
+        if (from == utf8Index) {
             bytesFrom = i;
             break;
         }
@@ -54,8 +53,7 @@ int UTF8::find(const std::string& str, const std::string& sstr, int from) {
     int bytesResult = str.find(sstr,bytesFrom );
     int result = -1;
     for (int i=bytesFrom;i<str.size();) {
-        if (bytesResult == i)
-        {
+        if (bytesResult == i) {
             result = utf8Index;
             break;
         }
@@ -70,12 +68,10 @@ std::string UTF8::substr(const std::string& str, int start, int length) {
     int bytesStart = 0;
     int bytesLength = str.size();
     for (int i=0;i<str.size();) {
-        if (start == utf8Index)
-        {
+        if (start == utf8Index) {
             bytesStart = i;
         }
-        if ((start+length) == utf8Index)
-        {
+        if ((start+length) == utf8Index) {
             bytesLength = i - bytesStart;
             break;
         }

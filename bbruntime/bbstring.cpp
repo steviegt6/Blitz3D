@@ -20,8 +20,8 @@ BBStr *bbLeft( BBStr *s,int n ){
 
 BBStr *bbRight( BBStr *s,int n ){
 	CHKPOS( n );
-	n=s->size()-n;if( n<0 ) n=0;
-	*s=UTF8::substr(*s,n,s->size()-n);return s;
+	n=UTF8::length(*s)-n;if( n<0 ) n=0;
+	*s=UTF8::substr(*s,n,s->size());return s;
 }
 
 BBStr *bbReplace( BBStr *s,BBStr *from,BBStr *to ){
@@ -44,7 +44,7 @@ BBStr *bbMid( BBStr *s,int o,int n ){
 	CHKOFF( o );--o;
 	if( o>s->size() ) o=s->size();
 	if( n>=0 ) *s=UTF8::substr( *s,o,n );
-	else *s=UTF8::substr( *s,o,s->size()-o );
+	else *s=UTF8::substr( *s,o,s->size() );
 	return s;
 }
 
