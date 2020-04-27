@@ -129,14 +129,6 @@ int Linker::version(){
 	return VERSION;
 }
 
-bool Linker::canCreateExe(){
-#ifdef DEMO
-	return false;
-#else
-	return true;
-#endif
-}
-
 Module *Linker::createModule(){
 	return d_new BBModule();
 }
@@ -150,11 +142,6 @@ Linker *_cdecl linkerGetLinker(){
 }
 
 bool BBModule::createExe( const char *exe_file,const char *dll_file ){
-
-#ifdef DEMO
-	return false;
-#else
-
 	//find proc address of bbWinMain
 	HMODULE hmod=LoadLibrary( dll_file );if( !hmod ) return false;
 	int proc=(int)GetProcAddress( hmod,"_bbWinMain@0" );
@@ -210,5 +197,4 @@ bool BBModule::createExe( const char *exe_file,const char *dll_file ){
 	closeImage();
 
 	return true;
-#endif
 }

@@ -94,6 +94,31 @@ void  bbFreeTimer( gxTimer *t ){
 	gx_runtime->freeTimer( t );
 }
 
+BBStr* bbGetClipboardContents() {
+	OpenClipboard(nullptr);
+	HANDLE data = GetClipboardData(CF_TEXT);
+	BBStr* str;
+	if (IsClipboardFormatAvailable(CF_TEXT)) {
+		str = d_new BBStr(static_cast<const char*>(data));
+	} else {
+		str = d_new BBStr("");
+	}
+	CloseClipboard();
+	return str;
+}
+
+void bbSetClipboardContents(BBStr* contents) {
+	const char* output = contents->c_str();
+	const size_t len = strlen(output) + 1;
+	HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, len);
+	memcpy(GlobalLock(hMem), output, len);
+	GlobalUnlock(hMem);
+	OpenClipboard(nullptr);
+	EmptyClipboard();
+	SetClipboardData(CF_TEXT, hMem);
+	CloseClipboard();
+}
+
 void  bbDebugLog( BBStr *t ){
 	gx_runtime->debugLog( t->c_str() );
 	delete t;
@@ -175,6 +200,8 @@ void bbruntime_link( void (*rtSym)( const char *sym,void *pc ) ){
 	rtSym( "%CreateTimer%hertz",bbCreateTimer );
 	rtSym( "%WaitTimer%timer",bbWaitTimer );
 	rtSym( "FreeTimer%timer",bbFreeTimer );
+	rtSym("$GetClipboardContents", bbGetClipboardContents);
+	rtSym("SetClipboardContents$contents", bbSetClipboardContents);
 	rtSym( "DebugLog$text",bbDebugLog );
 
 	rtSym( "_bbDebugStmt",_bbDebugStmt );

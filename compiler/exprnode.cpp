@@ -344,18 +344,18 @@ TNode *UniExprNode::translate( Codegen *g ){
 	if( sem_type==Type::int_type ){
 		switch( op ){
 		case '+':return l;
-		case '-':n=IR_NEG;break;
-		case ABS:return call( "__bbAbs",l );
-		case SGN:return call( "__bbSgn",l );
-		case POWTWO:n=IR_POWTWO;
+		case '-':n = IR_NEG;break;
+		case ABS:n = IR_ABS; break;
+		case SGN:n = IR_SGN; break;
+		case POWTWO:n = IR_POWTWO;
 		}
 	}else{
 		switch( op ){
 		case '+':return l;
-		case '-':n=IR_FNEG;break;
-		case ABS:return fcall( "__bbFAbs",l );
-		case SGN:return fcall( "__bbFSgn",l );
-		case POWTWO:n=IR_FPOWTWO;
+		case '-':n = IR_FNEG;break;
+		case ABS:n = IR_FABS; break;
+		case SGN:n = IR_FSGN; break;
+		case POWTWO:n = IR_FPOWTWO;
 		}
 	}
 	return d_new TNode( n,l,0 );
@@ -542,13 +542,13 @@ TNode *ArithExprNode::translate( Codegen *g ){
 		switch( op ){
 		case '+':n=IR_ADD;break;case '-':n=IR_SUB;break;
 		case '*':n=IR_MUL;break;case '/':n=IR_DIV;break;
-		case MOD:return call( "__bbMod",l,r );
+		case MOD:n=IR_MOD;break;
 		}
 	}else{
 		switch( op ){
 		case '+':n=IR_FADD;break;case '-':n=IR_FSUB;break;
 		case '*':n=IR_FMUL;break;case '/':n=IR_FDIV;break;
-		case MOD:return fcall( "__bbFMod",l,r );
+		case MOD:return fcall("__bbFMod", l, r);
 		case '^':return fcall( "__bbFPow",l,r );
 		}
 	}

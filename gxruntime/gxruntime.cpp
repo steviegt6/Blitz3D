@@ -139,7 +139,8 @@ pointer_visible(true),audio(0),input(0),graphics(0),fileSystem(0),use_di(false){
 	}
 
 	memset(&statex, 0, sizeof(statex));
-	GlobalMemoryStatus(&statex);
+	statex.dwLength = sizeof(statex);
+	GlobalMemoryStatusEx(&statex);
 
 	HMODULE ddraw=LoadLibraryA( "ddraw.dll" );
 	if( ddraw ){
@@ -666,19 +667,19 @@ int gxRuntime::getMemoryLoad() {
 }
 
 int gxRuntime::getTotalPhys() {
-	return statex.dwTotalPhys / 1024;
+	return statex.ullTotalPhys / 1024;
 }
 
 int gxRuntime::getAvailPhys() {
-	return statex.dwAvailPhys / 1024;
+	return statex.ullAvailPhys / 1024;
 }
 
 int gxRuntime::getTotalVirtual() {
-	return statex.dwTotalVirtual / 1024;
+	return statex.ullTotalVirtual / 1024;
 }
 
 int gxRuntime::getAvailVirtual() {
-	return statex.dwAvailVirtual / 1024;
+	return statex.ullAvailVirtual / 1024;
 }
 
 /////////////////////

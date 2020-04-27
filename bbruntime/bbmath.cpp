@@ -1,7 +1,6 @@
 
 #include "std.h"
 #include "bbmath.h"
-#include <algorithm>
 
 static int rnd_state;
 static const int RND_A = 48271;
@@ -33,25 +32,25 @@ int	bbIsNaN(float n)						{ return isnan(n);				}
 //return rand float from 0...1
 static inline float rnd() {
 	rnd_state=RND_A*(rnd_state%RND_Q)-RND_R*(rnd_state/RND_Q);
-	if( rnd_state<0 ) rnd_state+=RND_M;
+	if(rnd_state<0) rnd_state+=RND_M;
 	if (rnd_state == 0) {
 		rnd_state = RND_R;
 	}
 	return (rnd_state&65535)/65536.0f+(.5f/65536.0f);
 }
 
-float bbRnd(float from,float to) {
+float bbRnd(float from, float to) {
 	return rnd()*(to-from)+from;
 }
 
-int bbRand(int from,int to){
-	if( to<from ) std::swap( from,to );
+int bbRand(int from, int to) {
+	if (to < from) std::swap(from, to);
 	return int(rnd()*(to-from+1))+from;
 }
 
-void bbSeedRnd(int seed){
-	seed&=0x7fffffff;
-	rnd_state=seed ? seed : 1;
+void bbSeedRnd(int seed) {
+	seed &= 0x7fffffff;
+	rnd_state = seed ? seed : 1;
 }
 
 int  bbRndSeed() {
@@ -67,26 +66,26 @@ bool math_destroy() {
 	return true;
 }
 
-void math_link(void (*rtSym)(const char *sym,void *pc)){
-	rtSym("#Sin#degrees",bbSin);
-	rtSym("#Cos#degrees",bbCos);
-	rtSym("#Tan#degrees",bbTan);
-	rtSym("#ASin#float",bbASin);
-	rtSym("#ACos#float",bbACos);
-	rtSym("#ATan#float",bbATan);
-	rtSym("#ATan2#floata#floatb",bbATan2);
-	rtSym("#Sqr#float",bbSqr);
-	rtSym("#Floor#float",bbFloor);
-	rtSym("#Ceil#float",bbCeil);
-	rtSym("#Exp#float",bbExp);
-	rtSym("#Log#float",bbLog);
-	rtSym("#Log10#float",bbLog10);
+void math_link(void (*rtSym)(const char *sym, void *pc)) {
+	rtSym("#Sin#degrees", bbSin);
+	rtSym("#Cos#degrees", bbCos);
+	rtSym("#Tan#degrees", bbTan);
+	rtSym("#ASin#float", bbASin);
+	rtSym("#ACos#float", bbACos);
+	rtSym("#ATan#float", bbATan);
+	rtSym("#ATan2#floata#floatb", bbATan2);
+	rtSym("#Sqr#float", bbSqr);
+	rtSym("#Floor#float", bbFloor);
+	rtSym("#Ceil#float", bbCeil);
+	rtSym("#Exp#float", bbExp);
+	rtSym("#Log#float", bbLog);
+	rtSym("#Log10#float", bbLog10);
 	rtSym("#Min#n#m", bbMin);
 	rtSym("#Max#n#m", bbMax);
 	rtSym("#Clamp#v#lo#hi", bbClamp);
 	rtSym("%IsNaN#n", bbIsNaN);
-	rtSym( "#Rnd#from#to=0",bbRnd);
-	rtSym( "%Rand%from%to=1",bbRand);
-	rtSym( "SeedRnd%seed",bbSeedRnd);
-	rtSym( "%RndSeed",bbRndSeed);
+	rtSym("#Rnd#from#to=0", bbRnd);
+	rtSym("%Rand%from%to=1", bbRand);
+	rtSym("SeedRnd%seed", bbSeedRnd);
+	rtSym("%RndSeed", bbRndSeed);
 }
