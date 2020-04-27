@@ -1,4 +1,3 @@
-#include "std.h"
 #include "gxutf8.h"
 
 int UTF8::measureCodepoint(char chr) {
@@ -30,3 +29,60 @@ int UTF8::decodeCharacter(const char* buf, int index) {
         return newChar;
     }
 }
+
+int UTF8::length(const std::string& str) {
+    int utf8Len = 0;
+    for (int i=0;i<str.size();) {
+        utf8Len++;
+        i += measureCodepoint(str[i]);
+    }
+    return utf8Len;
+}
+
+int UTF8::find(const std::string& str, const std::string& sstr, int from) {
+    int utf8Index = 0;
+    int bytesFrom = 0;
+    for (int i=0;i<str.size();) {
+        if (from == utf8Index)
+        {
+            bytesFrom = i;
+            break;
+        }
+        utf8Index++;
+        i += measureCodepoint(str[i]);
+    }
+    int bytesResult = str.find(sstr,bytesFrom );
+    int result = -1;
+    for (int i=bytesFrom;i<str.size();) {
+        if (bytesResult == i)
+        {
+            result = utf8Index;
+            break;
+        }
+        utf8Index++;
+        i += measureCodepoint(str[i]);
+    }
+    return result;
+}
+
+std::string UTF8::substr(const std::string& str, int start, int length) {
+    int utf8Index = 0;
+    int bytesStart = 0;
+    int bytesLength = str.size();
+    for (int i=0;i<str.size();) {
+        if (start == utf8Index)
+        {
+            bytesStart = i;
+        }
+        if ((start+length) == utf8Index)
+        {
+            bytesLength = i - bytesStart;
+            break;
+        }
+        utf8Index++;
+        i += measureCodepoint(str[i]);
+    }
+    return str.substr(bytesStart, bytesLength);
+}
+
+
