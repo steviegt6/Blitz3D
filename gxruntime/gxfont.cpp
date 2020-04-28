@@ -31,7 +31,19 @@ gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int
     glyphData.clear();
     atlases.clear();
 
-    renderAtlas(0);
+    glyphHeight = height;
+    renderAtlas('T');
+    std::map<int,GlyphData>::iterator it = glyphData.find('T');
+    if (it!=glyphData.end()) {
+        const GlyphData& gd = it->second;
+
+        glyphHeight = gd.srcRect[3];
+        glyphRenderOffset = -gd.drawOffset[1];
+    }
+
+    tCanvasHeight = (glyphHeight*16)/10;
+    glyphRenderBaseline = (glyphHeight*2/10);
+    glyphRenderOffset += glyphRenderBaseline;
 
     tempCanvas = nullptr;
 }
@@ -155,13 +167,13 @@ void gxFont::render(gxCanvas *dest,unsigned color_argb,int x,int y,const std::st
     int width=stringWidth( text );
     if( tempCanvas == nullptr || width>tempCanvas->getWidth() ){
         graphics->freeCanvas( tempCanvas );
-        tempCanvas=graphics->createCanvas( width,height*16/10,0 );
+        tempCanvas=graphics->createCanvas( width,tCanvasHeight,0 );
         tempCanvas->setMask(transparentPixel);
     }
 
     if( (color_argb&0xffffff)==transparentPixel ) { color_argb++; }
     tempCanvas->setColor( transparentPixel );
-    tempCanvas->rect( 0,0,width,height*16/10,true );
+    tempCanvas->rect( 0,0,width,tCanvasHeight,true );
     tempCanvas->setColor( color_argb );
 
     int t_x = 0;
@@ -179,27 +191,15 @@ void gxFont::render(gxCanvas *dest,unsigned color_argb,int x,int y,const std::st
             const GlyphData& gd = it->second;
 
             if (gd.atlasIndex>=0) {
-                tempCanvas->rect( t_x - gd.drawOffset[0],(height*4/10)-gd.drawOffset[1],gd.srcRect[2],gd.srcRect[3],true );
-                tempCanvas->blit( t_x - gd.drawOffset[0],(height*4/10)-gd.drawOffset[1],atlases[gd.atlasIndex],gd.srcRect[0],gd.srcRect[1],gd.srcRect[2],gd.srcRect[3],false );
+                tempCanvas->rect( t_x - gd.drawOffset[0],glyphRenderBaseline-gd.drawOffset[1],gd.srcRect[2],gd.srcRect[3],true );
+                tempCanvas->blit( t_x - gd.drawOffset[0],glyphRenderBaseline-gd.drawOffset[1],atlases[gd.atlasIndex],gd.srcRect[0],gd.srcRect[1],gd.srcRect[2],gd.srcRect[3],false );
             }
             t_x += gd.horizontalAdvance;
         }
         i+=codepointLen;
     }
 
-    std::map<int,GlyphData>::iterator it = glyphData.find('T');
-    if (it==glyphData.end()) {
-        renderAtlas('T');
-        it = glyphData.find('T');
-    }
-
-    if (it!=glyphData.end()) {
-        const GlyphData& gd = it->second;
-
-        y -= (height*4/10)-gd.drawOffset[1];
-    }
-
-    dest->blit( x,y,tempCanvas,0,0,width,height*16/10,false );
+    dest->blit( x,y,tempCanvas,0,0,width,tCanvasHeight,false );
 }
 
 int gxFont::charWidth(int chr) {
@@ -244,7 +244,7 @@ int gxFont::getWidth()const {
 }
 
 int gxFont::getHeight()const {
-    return height;
+    return glyphHeight+glyphRenderOffset*2;
 }
 
 int gxFont::getWidth( const std::string &text ) {

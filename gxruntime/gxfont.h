@@ -41,6 +41,10 @@ class gxFont {
         gxFont();
 
         int maxWidth = 0;
+        int glyphHeight = 0;
+        int tCanvasHeight = 0;
+        int glyphRenderBaseline = 0;
+        int glyphRenderOffset = 0;
 
         struct GlyphData {
             int atlasIndex;
