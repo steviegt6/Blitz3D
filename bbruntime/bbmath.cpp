@@ -1,6 +1,8 @@
 
 #include "std.h"
 #include "bbmath.h"
+#include <algorithm>
+#include "bbutility.h"
 
 static int rnd_state;
 static const int RND_A = 48271;
@@ -8,16 +10,13 @@ static const int RND_M = 2147483647;
 static const int RND_Q = 44488;
 static const int RND_R = 3399;
 
-static const float dtor = 0.01745329252f; //DEGREES TO RADIANS
-static const float rtod = 57.295779513f;  //RADIANS TO DEGREES
-
-float bbSin(float n)						{ return sin(n*dtor);			}
-float bbCos(float n)						{ return cos(n*dtor);			}
-float bbTan(float n)						{ return tan(n*dtor);			}
-float bbASin(float n)						{ return asin(n)*rtod;			}
-float bbACos(float n)						{ return acos(n)*rtod;			}
-float bbATan(float n)						{ return atan(n)*rtod;			}
-float bbATan2(float n, float t)				{ return atan2(n,t)*rtod;		}
+float bbSin(float n)						{ return sin(degToRad(n));		}
+float bbCos(float n)						{ return cos(degToRad(n));		}
+float bbTan(float n)						{ return tan(degToRad(n));		}
+float bbASin(float n)						{ return radToDeg(asin(n));		}
+float bbACos(float n)						{ return radToDeg(acos(n));		}
+float bbATan(float n)						{ return radToDeg(atan(n));		}
+float bbATan2(float n, float t)				{ return radToDeg(atan2(n,t));	}
 float bbSqr(float n)						{ return sqrtf(n);				}
 float bbFloor(float n)						{ return floor(n);				}
 float bbCeil(float n)						{ return ceil(n);				}
