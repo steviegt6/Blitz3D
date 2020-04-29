@@ -483,10 +483,6 @@ float _bbFPow(float x,float y) {
 	return pow(x,y);
 }
 
-int _bbMakeBool(int n) {
-	return n ? 1 : 0;
-}
-
 void bbRuntimeStats() {
 	gx_runtime->debugLog(("Active strings :"+itoa(stringCnt)).c_str());
 	gx_runtime->debugLog(("Active objects :"+itoa(objCnt)).c_str());
@@ -569,6 +565,5 @@ void basic_link(void (*rtSym)(const char *sym,void *pc)) {
 	rtSym("_bbReadStr",_bbReadStr);
 	rtSym("_bbFMod",_bbFMod);
 	rtSym("_bbFPow",_bbFPow);
-	rtSym("_bbMakeBool", _bbMakeBool);
 	rtSym("RuntimeStats",bbRuntimeStats);
 }
