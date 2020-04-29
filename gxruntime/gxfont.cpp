@@ -217,7 +217,7 @@ int gxFont::charAdvance(int chr) {
         renderAtlas(chr);
         it = glyphData.find(chr);
     }
-    return it->second.horizontalAdvance;
+    return it != glyphData.end() ? it->second.horizontalAdvance : 0;
 }
 
 int gxFont::stringWidth(const std::string& text) {
@@ -232,7 +232,9 @@ int gxFont::stringWidth(const std::string& text) {
             it = glyphData.find(chr);
         }
 
-        width += it->second.horizontalAdvance;
+        if (it != glyphData.end()) {
+            width += it->second.horizontalAdvance;
+        }
         i+=codepointLen;
     }
 

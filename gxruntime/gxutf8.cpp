@@ -1,3 +1,4 @@
+#include "std.h"
 #include "gxutf8.h"
 
 int UTF8::measureCodepoint(char chr) {
@@ -82,4 +83,13 @@ std::string UTF8::substr(const std::string& str, int start, int length) {
     return str.substr(bytesStart, bytesLength);
 }
 
+std::wstring UTF8::convertToUtf16(const std::string& str) {
+    std::wstring result = L"";
 
+    for (int i=0;i<str.size();) {
+        result.push_back(decodeCharacter(str.c_str(),i));
+        i+=measureCodepoint(str[i]);
+    }
+
+    return result;
+}

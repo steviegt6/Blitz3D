@@ -1,7 +1,7 @@
 #ifndef GXUTF8_H
 #define GXUTF8_H
 
-#include "std.h"
+#include <string>
 
 class UTF8 {
 private:
@@ -13,6 +13,7 @@ public:
     static int length(const std::string& str);
     static int find(const std::string& str, const std::string& sstr, int from);
     static std::string substr(const std::string& str, int start, int length);
+    static std::wstring convertToUtf16(const std::string& str);
 };
 
 #endif

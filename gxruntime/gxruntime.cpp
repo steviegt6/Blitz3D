@@ -3,6 +3,8 @@
 #include "gxruntime.h"
 #include "zmouse.h"
 
+#include "../gxruntime/gxutf8.h"
+
 struct gxRuntime::GfxMode{
 	DDSURFACEDESC2 desc;
 };
@@ -649,7 +651,7 @@ bool gxRuntime::execute( const string &cmd_line ){
 void gxRuntime::setTitle( const string &t,const string &e ){
 	app_title=t;
 	app_close=e;
-	SetWindowText( hwnd,app_title.c_str() );
+	SetWindowTextW( hwnd,UTF8::convertToUtf16(app_title).c_str() );
 }
 
 //////////////////
