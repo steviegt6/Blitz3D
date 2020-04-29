@@ -41,8 +41,8 @@ gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int
         glyphRenderOffset = -gd.drawOffset[1];
     }
 
-    tCanvasHeight = (glyphHeight*16)/10;
-    glyphRenderBaseline = (glyphHeight*2/10);
+    tCanvasHeight = (glyphHeight*20)/10;
+    glyphRenderBaseline = (glyphHeight*3/10);
     glyphRenderOffset += glyphRenderBaseline;
 
     tempCanvas = nullptr;
