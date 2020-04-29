@@ -41,7 +41,7 @@ gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int
         glyphRenderOffset = -gd.drawOffset[1];
     }
 
-    tCanvasHeight = (glyphHeight*20)/10;
+    tCanvasHeight = (glyphHeight*40)/10;
     glyphRenderBaseline = (glyphHeight*3/10);
     glyphRenderOffset += glyphRenderBaseline;
 
@@ -56,7 +56,7 @@ gxFont::~gxFont() {
     FT_Done_Face(freeTypeFace);
 }
 
-const int transparentPixel = 0x777777;
+const int transparentPixel = 0x4A412A;
 const int opaquePixel = 0xffffff;
 
 void gxFont::renderAtlas(int chr) {
