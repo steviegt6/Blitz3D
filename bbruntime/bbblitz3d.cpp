@@ -59,40 +59,40 @@ static map<string, Transform> loader_mat_map;
 
 static inline void debug3d()
 {
-	if(debug && !gx_scene) RTEX("3D Graphics mode not set");
+	if(debug && !gx_scene) RTEX("3D Graphics mode not set.");
 }
 static inline void debugTexture(Texture* t)
 {
-	if(debug && !texture_set.count(t)) RTEX("Texture does not exist");
+	if(debug && !texture_set.count(t)) RTEX("Texture does not exist!");
 }
 static inline void debugBrush(Brush* b)
 {
-	if(debug && !brush_set.count(b)) RTEX("Brush does not exist");
+	if(debug && !brush_set.count(b)) RTEX("Brush does not exist!");
 }
 static inline void debugEntity(Entity* e)
 {
-	if(debug && !entity_set.count(e)) RTEX("Entity does not exist");
+	if(debug && !entity_set.count(e)) RTEX("Entity does not exist!");
 }
 static inline void debugParent(Entity* e)
 {
 	if(debug)
 	{
 		debug3d();
-		if(e && !entity_set.count(e)) RTEX("Parent entity does not exist");
+		if(e && !entity_set.count(e)) RTEX("Parent entity does not exist.");
 	}
 }
 static inline void debugMesh(MeshModel* m)
 {
 	if(debug)
 	{
-		debugEntity(m); if(!m->getMeshModel()) RTEX("Entity is not a mesh");
+		debugEntity(m); if(!m->getMeshModel()) RTEX("Entity is not a mesh!");
 	}
 }
 static inline void debugObject(Object* o)
 {
 	if(debug)
 	{
-		debugEntity(o); if(!o->getObject()) RTEX("Entity is not an object");
+		debugEntity(o); if(!o->getObject()) RTEX("Entity is not an object!");
 	}
 }
 static inline void debugColl(Object* o, int index)
@@ -100,56 +100,56 @@ static inline void debugColl(Object* o, int index)
 	if(debug)
 	{
 		debugObject(o);
-		if(index<1 || index>o->getCollisions().size()) RTEX("Collision index out of range");
+		if(index<1 || index>o->getCollisions().size()) RTEX("Collision index out of range.");
 	}
 }
 static inline void debugCamera(Camera* c)
 {
 	if(debug)
 	{
-		debugEntity(c); if(!c->getCamera()) RTEX("Entity is not a camera");
+		debugEntity(c); if(!c->getCamera()) RTEX("Entity is not a camera!");
 	}
 }
 static inline void debugLight(Light* l)
 {
 	if(debug)
 	{
-		debugEntity(l); if(!l->getLight()) RTEX("Entity is not a light");
+		debugEntity(l); if(!l->getLight()) RTEX("Entity is not a light!");
 	}
 }
 static inline void debugModel(Model* m)
 {
 	if(debug)
 	{
-		debugEntity(m); if(!m->getModel()) RTEX("Entity is not a model");
+		debugEntity(m); if(!m->getModel()) RTEX("Entity is not a model!");
 	}
 }
 static inline void debugSprite(Sprite* s)
 {
 	if(debug)
 	{
-		debugModel(s); if(!s->getSprite()) RTEX("Entity is not a sprite");
+		debugModel(s); if(!s->getSprite()) RTEX("Entity is not a sprite!");
 	}
 }
 static inline void debugMD2(MD2Model* m)
 {
 	if(debug)
 	{
-		debugModel(m); if(!m->getMD2Model()) RTEX("Entity is not an MD2 Model");
+		debugModel(m); if(!m->getMD2Model()) RTEX("Entity is not an MD2 Model!");
 	}
 }
 static inline void debugBSP(Q3BSPModel* m)
 {
 	if(debug)
 	{
-		debugModel(m); if(!m->getBSPModel()) RTEX("Entity is not a BSP Model");
+		debugModel(m); if(!m->getBSPModel()) RTEX("Entity is not a BSP Model!");
 	}
 }
 static inline void debugTerrain(Terrain* t)
 {
 	if(debug)
 	{
-		debugModel(t); if(!t->getTerrain()) RTEX("Entity is not a terrain");
+		debugModel(t); if(!t->getTerrain()) RTEX("Entity is not a terrain!");
 	}
 }
 static inline void debugSegs(int n)
@@ -157,7 +157,7 @@ static inline void debugSegs(int n)
 	if(debug)
 	{
 		debug3d();
-		if(n < 3 || n>50) RTEX("Illegal number of segments");
+		if(n < 3 || n>50) RTEX("Illegal number of segments!");
 	}
 }
 static inline void debugVertex(Surface* s, int n)
@@ -165,7 +165,7 @@ static inline void debugVertex(Surface* s, int n)
 	if(debug)
 	{
 		debug3d();
-		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range");
+		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range.");
 	}
 }
 static inline void debugVertex(Surface* s, int n, int t)
@@ -173,8 +173,8 @@ static inline void debugVertex(Surface* s, int n, int t)
 	if(debug)
 	{
 		debug3d();
-		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range");
-		if(t < 0 || t>1) RTEX("Texture coordinate set out of range");
+		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range.");
+		if(t < 0 || t>1) RTEX("Texture coordinate set out of range.");
 	}
 }
 
@@ -476,7 +476,7 @@ Texture* bbCreateTexture(int w, int h, int flags, int frames)
 		debug3d();
 		if(frames <= 0)
 		{
-			RTEX("Illegal number of texture frames");
+			RTEX("Illegal number of texture frames!");
 		}
 	}
 	Texture* t = d_new Texture(w, h, flags, frames);
@@ -738,21 +738,21 @@ Entity* bbCreateCube(Entity* p)
 
 Entity* bbCreateSphere(int segs, Entity* p)
 {
-	if(debug) { debugParent(p); if(segs < 2 || segs>100) RTEX("Illegal number of segments"); }
+	if(debug) { debugParent(p); if(segs < 2 || segs>100) RTEX("Illegal number of segments!"); }
 	Entity* e = MeshUtil::createSphere(Brush(), segs);
 	return insertEntity(e, p);
 }
 
 Entity* bbCreateCylinder(int segs, int solid, Entity* p)
 {
-	if(debug) { debugParent(p); if(segs < 3 || segs>100) RTEX("Illegal number of segments"); }
+	if(debug) { debugParent(p); if(segs < 3 || segs>100) RTEX("Illegal number of segments!"); }
 	Entity* e = MeshUtil::createCylinder(Brush(), segs, !!solid);
 	return insertEntity(e, p);
 }
 
 Entity* bbCreateCone(int segs, int solid, Entity* p)
 {
-	if(debug) { debugParent(p); if(segs < 3 || segs>100) RTEX("Illegal number of segments"); }
+	if(debug) { debugParent(p); if(segs < 3 || segs>100) RTEX("Illegal number of segments!"); }
 	Entity* e = MeshUtil::createCone(Brush(), segs, !!solid);
 	return insertEntity(e, p);
 }
@@ -834,7 +834,7 @@ void  bbAddMesh(MeshModel* src, MeshModel* dest)
 	if(debug)
 	{
 		debugMesh(src); debugMesh(dest);
-		if(src == dest) RTEX("A mesh cannot be added to itself");
+		if(src == dest) RTEX("A mesh cannot be added to itself!");
 	}
 
 	dest->add(*src);
@@ -889,7 +889,7 @@ Surface* bbGetSurface(MeshModel* m, int index)
 		debugMesh(m);
 		if(index<1 || index>m->getSurfaces().size())
 		{
-			RTEX("Surface Index out of range");
+			RTEX("Surface Index out of range.");
 		}
 	}
 	return m->getSurfaces()[index - 1];
@@ -1461,7 +1461,7 @@ Entity* bbCreatePlane(int segs, Entity* p)
 	if(debug)
 	{
 		debugParent(p);
-		if(segs < 1 || segs>20) RTEX("Illegal number of segments");
+		if(segs < 1 || segs>20) RTEX("Illegal number of segments!");
 	}
 	PlaneModel* t = d_new PlaneModel(segs);
 	return insertEntity(t, p);
@@ -1557,7 +1557,7 @@ Entity* bbCreateTerrain(int n, Entity* p)
 	debugParent(p);
 	int shift = 0;
 	while((1 << shift) < n) ++shift;
-	if((1 << shift) != n) RTEX("Illegal terrain size");
+	if((1 << shift) != n) RTEX("Illegal terrain size!");
 	Terrain* t = d_new Terrain(shift);
 	return insertEntity(t, p);
 }
@@ -1566,12 +1566,12 @@ Entity* bbLoadTerrain(BBStr* file, Entity* p)
 {
 	debugParent(p);
 	gxCanvas* c = gx_graphics->loadCanvas(*file, gxCanvas::CANVAS_HIGHCOLOR);
-	if(!c) RTEX("Unable to load heightmap image");
+	if(!c) RTEX("Unable to load heightmap image.");
 	int w = c->getWidth(), h = c->getHeight();
-	if(w != h) RTEX("Terrain must be square");
+	if(w != h) RTEX("Terrain must be square!");
 	int shift = 0;
 	while((1 << shift) < w) ++shift;
-	if((1 << shift) != w) RTEX("Illegal terrain size");
+	if((1 << shift) != w) RTEX("Illegal terrain size.");
 	Terrain* t = d_new Terrain(shift);
 	c->lock();
 	for(int y = 0; y < h; ++y)
@@ -1645,7 +1645,7 @@ Entity* bbCreateListener(Entity* p, float roll, float dopp, float dist)
 	if(debug)
 	{
 		debugParent(p);
-		if(listener) RTEX("Listener already created");
+		if(listener) RTEX("Listener already created!");
 	}
 	listener = d_new Listener(roll, dopp, dist);
 	return insertEntity(listener, p);
@@ -1656,7 +1656,7 @@ gxChannel* bbEmitSound(gxSound* sound, Object* o)
 	if(debug)
 	{
 		debugObject(o);
-		if(!listener) RTEX("No Listener created");
+		if(!listener) RTEX("No Listener created.");
 	}
 	return o->emitSound(sound);
 }
@@ -1794,7 +1794,7 @@ void  bbSetAnimTime(Object* o, float time, int seq)
 	}
 	else
 	{
-		RTEX("Entity has no animations");
+		RTEX("Entity has no animations.");
 	}
 }
 
@@ -1807,7 +1807,7 @@ void  bbAnimate(Object* o, int mode, float speed, int seq, float trans)
 	}
 	else
 	{
-		RTEX("Entity has no animations");
+		RTEX("Entity has no animations.");
 	}
 }
 
@@ -1939,7 +1939,7 @@ void  bbEntityOrder(Object* o, int n)
 		debugEntity(o);
 		if(!o->getModel() && !o->getCamera())
 		{
-			RTEX("Entity is not a model or camera");
+			RTEX("Entity is not a model or camera!");
 		}
 	}
 	o->setOrder(n);
@@ -2114,7 +2114,7 @@ void  bbEntityType(Object* o, int type, int recurs)
 	if(debug)
 	{
 		debugObject(o);
-		if(type < 0 || type>999) RTEX("EntityType ID must be in the range 0...999");
+		if(type < 0 || type>999) RTEX("EntityType ID must be a number from 0 to 999.");
 	}
 	if(recurs) entityType(o, type);
 	else
@@ -2405,7 +2405,7 @@ int  bbActiveTextures()
 void blitz3d_open()
 {
 	gx_scene = gx_graphics->createScene(0);
-	if(!gx_scene) RTEX("Unable to create 3D Scene");
+	if(!gx_scene) RTEX("Unable to create gxScene instance!");
 	world = d_new World();
 	projected = Vector();
 	picked.collision = Collision();

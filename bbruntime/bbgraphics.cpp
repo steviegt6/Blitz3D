@@ -40,7 +40,7 @@ private:
 //degrees to radians
 static const float dtor = 0.01745329252f;
 
-static int gx_driver;	//current graphics driver
+static int gx_driver;	//Current graphics driver index.
 
 static bool filter;
 static bool auto_dirty;
@@ -59,8 +59,8 @@ static inline void debugImage(bbImage* i, int frame = 0)
 {
 	if(debug)
 	{
-		if(!image_set.count(i)) RTEX("Image does not exist");
-		if(frame >= i->getFrames().size()) RTEX("Image frame out of range");
+		if(!image_set.count(i)) RTEX("Image doesn't exist.");
+		if(frame >= i->getFrames().size()) RTEX("Image frame out of range!");
 	}
 }
 
@@ -68,7 +68,7 @@ static inline void debugFont(gxFont* f)
 {
 	if(debug)
 	{
-		if(!gx_graphics->verifyFont(f)) RTEX("Font does not exist");
+		if(!gx_graphics->verifyFont(f)) RTEX("Font doesn't exist.");
 	}
 }
 
@@ -76,7 +76,7 @@ static inline void debugCanvas(gxCanvas* c)
 {
 	if(debug)
 	{
-		if(!gx_graphics->verifyCanvas(c)) RTEX("Buffer does not exist");
+		if(!gx_graphics->verifyCanvas(c)) RTEX("Buffer doesn't exist.");
 	}
 }
 
@@ -86,7 +86,7 @@ static inline void debugDriver(int n)
 	{
 		if(n<1 || n>gx_runtime->numGraphicsDrivers())
 		{
-			RTEX("Illegal graphics driver index");
+			RTEX("Illegal graphics driver index.");
 		}
 	}
 }
@@ -97,7 +97,7 @@ static inline void debugMode(int n)
 	{
 		if(n<1 || n>gfx_modes.size())
 		{
-			RTEX("Illegal graphics mode index");
+			RTEX("Illegal graphics mode index.");
 		}
 	}
 }
@@ -430,7 +430,7 @@ static void graphics(int w, int h, int d, int flags)
 	if(!gx_runtime->idle()) RTEX(0);
 	if(!gx_graphics)
 	{
-		RTEX("Unable to set graphics mode");
+		RTEX("Unable to create a gxGraphics instance.");
 	}
 	curr_clsColor = 0;
 	curr_color = 0xffffffff;
@@ -452,7 +452,7 @@ void bbGraphics(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics mode");
+		default:RTEX("Illegal Graphics mode.");
 	}
 	graphics(w, h, d, flags);
 }
@@ -470,7 +470,7 @@ void bbGraphics3D(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics3D mode");
+		default:RTEX("Illegal Graphics3D mode.");
 	}
 	graphics(w, h, d, flags);
 	extern void blitz3d_open();
@@ -492,7 +492,7 @@ void bbEndGraphics()
 		bbSetBuffer(gx_graphics->getFrontCanvas());
 		return;
 	}
-	RTEX("Unable to set graphics mode");
+	RTEX("Unable to close gxGraphics instance.");
 }
 
 int bbGraphicsLost()
@@ -830,8 +830,8 @@ bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 
 	string t = *s; delete s;
 
-	if(cnt < 1) RTEX("Illegal frame count");
-	if(first < 0) RTEX("Illegal first frame");
+	if(cnt < 1) RTEX("Illegal frame count!");
+	if(first < 0) RTEX("Illegal first frame!");
 
 	gxCanvas* pic = gx_graphics->loadCanvas(t, gxCanvas::CANVAS_NONDISPLAY);
 	if(!pic) return 0;
@@ -842,7 +842,7 @@ bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 	if(first + cnt > fpp)
 	{
 		gx_graphics->freeCanvas(pic);
-		RTEX("Not enough frames in bitmap");
+		RTEX("Not enough frames in bitmap.");
 	}
 
 	//x,y of first frame...
