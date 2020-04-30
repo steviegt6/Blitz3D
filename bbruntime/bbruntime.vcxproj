@@ -176,7 +176,6 @@
     <ClInclude Include="bbstream.h" />
     <ClInclude Include="bbstring.h" />
     <ClInclude Include="bbsys.h" />
-    <ClInclude Include="bbutility.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="std.h" />
     <ClInclude Include="userlibs.h" />
