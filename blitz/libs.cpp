@@ -254,8 +254,9 @@ const char *openLibs(){
 		GetCurrentDirectory(128, workingDir);
 		home = workingDir; home+="\\\\..";
 		putenv( (string("blitzpath=")+home).c_str() );
+	} else {
+		home=string(p);
 	}
-	home=string(p);
 
 	linkerHMOD=LoadLibrary( (home+"/bin/linker.dll").c_str() );
 	if( !linkerHMOD ) return "Unable to open linker.dll";

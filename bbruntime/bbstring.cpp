@@ -4,8 +4,8 @@
 #include "../gxruntime/gxutf8.h"
 #include <time.h>
 
-#define CHKPOS(x) if( (x)<0 ) RTEX( "parameter must be positive" );
-#define CHKOFF(x) if( (x)<=0 ) RTEX( "parameter must be greater than 0" );
+#define CHKPOS(x) if( (x)<0 ) RTEX( (string(__func__)+": parameter must be positive").c_str() );
+#define CHKOFF(x) if( (x)<=0 ) RTEX( (string(__func__)+": parameter must be greater than 0").c_str() );
 
 BBStr *bbString( BBStr *s,int n ){
 	BBStr *t=d_new BBStr();

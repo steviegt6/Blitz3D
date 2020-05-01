@@ -509,8 +509,9 @@ void gxRuntime::asyncEnd(){
 bool gxRuntime::idle(){
 	for(;;){
 		MSG msg;
+		BOOL success = 0;
 		if( suspended && run_flag ){
-			GetMessage( &msg,0,0,0 );
+			success = GetMessage( &msg,0,0,0 );
 		}else{
 			if( !PeekMessage( &msg,0,0,0,PM_REMOVE ) ) return run_flag;
 		}
@@ -525,7 +526,11 @@ bool gxRuntime::idle(){
 			debugger=0;
 			run_flag=false;
 			break;
+		case WM_CHAR:
+			input->wm_char(msg.wParam, msg.lParam);
+			break;
 		default:
+			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
 	}

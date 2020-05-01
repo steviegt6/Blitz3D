@@ -31,6 +31,55 @@ int UTF8::decodeCharacter(const char* buf, int index) {
     }
 }
 
+int UTF8::encodeCharacter(int chr, char* result) {
+    //fits in standard ASCII, just return the char as-is
+    if ((chr & 0x7f) == chr) {
+        if (result != nullptr) { result[0] = chr; }
+        return 1;
+    }
+
+    int len = 1;
+
+    //determine most of the bytes after the first one
+    while ((chr & (~0x3f)) != 0x00) {
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        len++;
+    }
+
+    //determine the remaining byte(s): if the number of free bits in
+    //the first byte isn't enough to fit the remaining bits,
+    //add another byte
+    char firstByte = 0x00;
+    for (int i = 0; i < len; i++) {
+        firstByte |= (0x1 << (7-i));
+    }
+
+    if (((firstByte | (0x1 << (7-len))) & chr) == 0x00) {
+        //it fits!
+        firstByte = firstByte | chr;
+        if (result != nullptr) { result[len - 1] = firstByte; }
+    } else {
+        //it doesn't fit: add another byte
+        if (result != nullptr) { result[len - 1] = 0x80 | (chr & 0x3f); }
+        chr >>= 6;
+        firstByte = (firstByte | (0x1 << (7 - len))) | chr;
+        len++;
+        if (result != nullptr) { result[len - 1] = firstByte; }
+    }
+
+    if (result != nullptr) {
+        //flip the result
+        for (int i = 0; i < len/2; i++) {
+            char b = result[i];
+            result[i] = result[len - 1 - i];
+            result[len - 1 - i] = b;
+        }
+    }
+
+    return len;
+}
+
 int UTF8::length(const std::string& str) {
     int utf8Len = 0;
     for (int i=0;i<str.size();) {
@@ -63,6 +112,16 @@ int UTF8::find(const std::string& str, const std::string& sstr, int from) {
         i += measureCodepoint(str[i]);
     }
     return result;
+}
+
+void UTF8::popBack(std::string& str) {
+    for (int i=str.size()-1;i>=0;i--) {
+        char chr = str[i];
+        str.pop_back();
+        if (((chr&0x80) == 0) || ((chr&0xc0) == 0xc0)) {
+            break;
+        }
+    }
 }
 
 std::string UTF8::substr(const std::string& str, int start, int length) {
