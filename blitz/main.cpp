@@ -196,6 +196,14 @@ int _cdecl main( int argc,char *argv[] ){
 		debug = true;
 	}
 
+
+	if(!debug && !quiet && !veryquiet && !compileonly &&
+		!dumpkeys && !dumphelp && !showhelp && !dumpasm &&
+		!versinfo && !in_file.size() && !out_file.size()) {
+		showHelp();
+		return 0;
+	}
+
 	if( out_file.size() && !in_file.size() ) usageErr();
 
 	if( const char *er=openLibs() ) err( er );
@@ -206,11 +214,7 @@ int _cdecl main( int argc,char *argv[] ){
 	if( dumpkeys ) dumpKeys( true,true,dumphelp );
 	if( versinfo ) versInfo();
 
-	if( !in_file.size() ){
-		versInfo();
-		showHelp();
-		return 0;
-	}
+	if( !in_file.size() ) return 0;
 
 	if( in_file[0]=='\"' ){
 		if( in_file.size()<3 || in_file[in_file.size()-1]!='\"' ) usageErr();
