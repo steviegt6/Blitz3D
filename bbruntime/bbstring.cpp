@@ -1,6 +1,7 @@
 
 #include "std.h"
 #include "bbsys.h"
+#include "../gxruntime/gxutf8.h"
 #include <time.h>
 
 #define CHKPOS(x) if( (x)<0 ) RTEX( "parameter must be positive" );
@@ -14,13 +15,13 @@ BBStr *bbString( BBStr *s,int n ){
 
 BBStr *bbLeft( BBStr *s,int n ){
 	CHKPOS( n );
-	*s=s->substr( 0,n );return s;
+	*s=UTF8::substr(*s,0,n );return s;
 }
 
 BBStr *bbRight( BBStr *s,int n ){
 	CHKPOS( n );
-	n=s->size()-n;if( n<0 ) n=0;
-	*s=s->substr( n );return s;
+	n=UTF8::length(*s)-n;if( n<0 ) n=0;
+	*s=UTF8::substr(*s,n,s->size());return s;
 }
 
 BBStr *bbReplace( BBStr *s,BBStr *from,BBStr *to ){
@@ -34,16 +35,16 @@ BBStr *bbReplace( BBStr *s,BBStr *from,BBStr *to ){
 
 int bbInstr( BBStr *s,BBStr *t,int from ){
 	CHKOFF( from );--from;
-	int n=s->find( *t,from );
+	int n=UTF8::find( *s,*t,from );
 	delete s;delete t;
-	return n==string::npos ? 0 : n+1;
+	return n<0 ? 0 : n+1;
 }
 
 BBStr *bbMid( BBStr *s,int o,int n ){
 	CHKOFF( o );--o;
 	if( o>s->size() ) o=s->size();
-	if( n>=0 ) *s=s->substr( o,n );
-	else *s=s->substr( o );
+	if( n>=0 ) *s=UTF8::substr( *s,o,n );
+	else *s=UTF8::substr( *s,o,s->size() );
 	return s;
 }
 
@@ -57,11 +58,15 @@ BBStr *bbLower( BBStr *s ){
 	return s;
 }
 
-BBStr *bbTrim( BBStr *s ){
-	int n=0,p=s->size();
-	while( n<s->size() && !isgraph( (*s)[n] ) ) ++n;
-	while( p>n && !isgraph( (*s)[p-1] ) ) --p;
-	*s=s->substr( n,p-n );return s;
+BBStr* bbTrim(BBStr* s) {
+	int n = 0;
+	int p = s->size();
+	int c;
+	// currently all characters above the standard ASCII range are simply not trimmed
+	while (n < s->size() && !isgraph(c = UTF8::decodeCharacter(s->c_str(), n)) && (c <= 127)) n += UTF8::measureCodepoint((*s)[n]);
+	while (p > n && !isgraph(c = UTF8::decodeCharacter(s->c_str(), p - 1)) && (c <= 127)) p -= UTF8::measureCodepoint((*s)[p - 1]);
+	*s = UTF8::substr(*s, n, p - n);
+	return s;
 }
 
 BBStr *bbLSet( BBStr *s,int n ){
@@ -112,7 +117,7 @@ int bbAsc( BBStr *s ){
 }
 
 int bbLen( BBStr *s ){
-	int n=s->size();
+	int n=UTF8::length(*s);
 	delete s;return n;
 }
 

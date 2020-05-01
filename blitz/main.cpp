@@ -223,7 +223,19 @@ int _cdecl main(int argc, char* argv[])
 		}
 	}
 
-	if(out_file.size() && !in_file.size()) usageErr();
+	ifstream debugFile; debugFile.open("debug.txt", ios_base::in);
+	if (debugFile.good())
+	{
+		char* tmpBuf = new char[1024];
+		debugFile.getline(tmpBuf, 1024);
+		in_file = tmpBuf;
+		out_file = "";
+		delete[] tmpBuf;
+		debugFile.close();
+		debug = true;
+	}
+
+	if( out_file.size() && !in_file.size() ) usageErr();
 
 	if(const char* er = openLibs()) err(er);
 
@@ -233,7 +245,11 @@ int _cdecl main(int argc, char* argv[])
 	if(dumpkeys) dumpKeys(true, true, dumphelp);
 	if(versinfo) versInfo();
 
-	if(!in_file.size()) return 0;
+	if( !in_file.size() ){
+		versInfo();
+		showHelp();
+		return 0;
+	}
 
 	if(in_file[0] == '\"')
 	{
