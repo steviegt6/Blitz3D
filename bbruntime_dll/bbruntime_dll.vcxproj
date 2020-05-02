@@ -106,7 +106,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <PreprocessorDefinitions>WIN32;NDEBUG;PRO;_WINDOWS;_USRDLL;BBRUNTIME_DLL_EXPORTS;_HAS_STD_BYTE=0;%(PreprocessorDefinitions);DIRECT3D_VERSION=0x0900</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;PRO;_WINDOWS;_USRDLL;BBRUNTIME_DLL_EXPORTS;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerOutput>NoListing</AssemblerOutput>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <PrecompiledHeaderOutputFile>.\Release\bbruntime_dll.pch</PrecompiledHeaderOutputFile>
