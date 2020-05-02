@@ -22,7 +22,7 @@
 #include <math.h>
 #include <Windows.h>
 #include <d3d9.h>
-#include <ddraw.h>
+//#include <ddraw.h>
 
 using namespace std;
 
