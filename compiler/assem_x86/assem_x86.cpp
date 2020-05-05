@@ -299,7 +299,7 @@ void Assem_x86::assemble(){
 #endif
 			assemLine( line );
 #ifdef LOG
-			clog<<endl;
+			clog<<;
 #endif
 		}catch( Ex &x ){
 			throw Ex( line+x.ex );

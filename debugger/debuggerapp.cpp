@@ -4,6 +4,7 @@
 #include "debuggerapp.h"
 #include "resource.h"
 #include "prefs.h"
+#include <iostream>
 
 DebuggerApp debuggerApp;
 

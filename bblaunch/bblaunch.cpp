@@ -5,7 +5,7 @@
 using namespace std;
 
 static const char* bb_err =
-"Error when creating Blitz3D process.";
+"Error when creating BlitzIDE process. Please make sure ide.exe is inside the \"bin\" folder.";
 
 static string getAppDir()
 {
@@ -18,8 +18,8 @@ static string getAppDir()
 
 static void fail(const char* p)
 {
-	::MessageBox(0, p, "Blitz Basic Error", MB_SETFOREGROUND | MB_TOPMOST | MB_ICONERROR);
-	ExitProcess(-1);
+	::MessageBox(0, p, "Blitz Error", MB_SETFOREGROUND | MB_TOPMOST | MB_ICONERROR);
+	ExitProcess(-1); //Exit with status -1 (AKA error).
 }
 
 int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
@@ -39,16 +39,16 @@ int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
 
 	if(!CreateProcess(0, (char*)t.c_str(), 0, 0, 0, 0, 0, 0, &startupInfo, &processInfo))
 	{
-		//Crash the application.
+		//Halt application as BlitzIDE couldn't be started.
 		fail(bb_err);
 	}
 
-	//Wait for BB to start...
+	//Wait for BlitzIDE to start...
 	WaitForInputIdle(processInfo.hProcess, INFINITE);
 
 	//Close process and thread handles. 
 	CloseHandle(processInfo.hProcess);
 	CloseHandle(processInfo.hThread);
 
-	return 0; //Success
+	return 0; //Success!
 }

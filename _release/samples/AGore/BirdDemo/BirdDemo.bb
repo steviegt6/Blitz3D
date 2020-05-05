@@ -6,8 +6,8 @@ Include "../start.bb"
 
 Include "KBSplines.bb"
 
-Global gwidth = 640;800
-Global gheight = 480;600
+Global gwidth = 800
+Global gheight = 600
 Const FPS = 30
 Global fstep
 

@@ -1,8 +1,9 @@
-
+binch = LoadFont("C:\Users\cakea\Desktop\Blitz3D\_release\samples\cour.ttf")
+SetFont(binch)
 SetGfx()
 
 Function SetGfx()
-	Print info1$:Print info2$:Print info3$:Print info4$:Print
+	;Print info1$:Print info2$:Print info3$:Print info4$:Print
 	If Windowed3D()
 		yn$=Input$( "Use windowed mode?" )
 		If Left$( Lower$( yn$ ),1 )="y"

@@ -13,6 +13,7 @@ class MainFrame : public CFrameWnd,public Debugger{
 	Tabber tabber2;
 	CToolBar toolBar;
 	SourceFile debug_log;
+	SourceFile internal_log;
 	ConstsTree consts_tree;
 	GlobalsTree globals_tree;
 	LocalsTree locals_tree;
@@ -36,6 +37,7 @@ public:
 	void debugLog( const char *msg );
 	void debugMsg( const char *msg,bool serious );
 	void debugSys( void *msg );
+	void internalLog(const char* msg);
 
 	void showCurStmt();
 	void setState( int n );

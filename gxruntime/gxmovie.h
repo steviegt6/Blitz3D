@@ -26,10 +26,11 @@ private:
 	IDirectDrawMediaStream *dd_stream;
 	IDirectDrawStreamSample *dd_sample;
 	IMultiMediaStream *mm_stream;
+	
 
 	/***** GX INTERFACE *****/
 public:
-
+	std::string filename;
 	bool draw( gxCanvas *dest,int x,int y,int w,int h );
 
 	bool isPlaying()const{ return playing; }

@@ -1,4 +1,5 @@
-
+binch = LoadFont("C:\Users\cakea\Desktop\Blitz3D\_release\samples\cour.ttf")
+SetFont(binch)
 SetGfx()
 
 Function SetGfx()

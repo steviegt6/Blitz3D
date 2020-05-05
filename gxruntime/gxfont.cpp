@@ -249,6 +249,11 @@ int gxFont::getHeight()const {
     return glyphHeight+glyphRenderOffset*2;
 }
 
+string gxFont::getName()const
+{
+    return filename;
+}
+
 int gxFont::getWidth( const std::string &text ) {
     return stringWidth(text);
 }

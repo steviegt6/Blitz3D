@@ -109,6 +109,7 @@ public:
 	void debugInfo( const char *t );
 	void debugError( const char *t );
 	void debugLog( const char *t );
+	void internalPrint(std::string t);
 
 	int numGraphicsDrivers();
 	void graphicsDriverInfo( int driver,std::string *name,int *caps );

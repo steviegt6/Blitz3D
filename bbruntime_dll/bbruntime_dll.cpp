@@ -30,6 +30,7 @@ public:
 		if( serious ) MessageBoxW( 0,UTF8::convertToUtf16(e).c_str(),L"Error!",MB_OK|MB_TOPMOST|MB_SETFOREGROUND );
 	}
 	virtual void debugSys(void* msg) { }
+	virtual void internalLog(const char* msg) { }
 };
 
 static HINSTANCE hinst;
@@ -73,15 +74,17 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 				bbruntime_panic(s.c_str());
 			}
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
-			bbruntime_panic("Illegal instruction.");
+			bbruntime_panic("Illegal instruction.\nThis means there is a byte in the assembled\nfile that isn't a valid CPU instruction.");
 		case EXCEPTION_STACK_OVERFLOW:
 			bbruntime_panic("Stack overflow!");
 		case EXCEPTION_INT_OVERFLOW:
-			bbruntime_panic("Integer overflow!");
+			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2,147,483,647.");
 		case EXCEPTION_FLT_OVERFLOW:
-			bbruntime_panic("Float overflow!");
+			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 3.40282347e+38F.");
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
 			bbruntime_panic("Float divide by zero.");
+		case EXCEPTION_WRITE_FAULT:
+			bbruntime_panic("Write fault exception.\nAccess violation was caused by a write attempt.");
 		default:
 			bbruntime_panic("Unknown runtime exception.");
 	}
@@ -201,7 +204,7 @@ static Runtime* runtime;
 
 static void fail()
 {
-	MessageBox(0, "Unable to run Blitz Basic module", 0, 0);
+	MessageBox(0, "Unable to run Blitz Basic module.", 0, 0);
 	ExitProcess(-1);
 }
 
@@ -325,10 +328,6 @@ int __stdcall bbWinMain()
 	int ver = VERSION & 0x7fff;
 	string t = "Created with Blitz3D Beta V" + itoa(ver / 100) + "." + itoa(ver % 100);
 	MessageBox(GetDesktopWindow(), t.c_str(), "Blitz3D Message", MB_OK);
-#endif
-
-#ifdef SCHOOLS
-	MessageBox(GetDesktopWindow(), "Created with the schools version of Blitz Basic", "Blitz Basic Message", MB_OK);
 #endif
 
 	runtime = runtimeGetRuntime();
