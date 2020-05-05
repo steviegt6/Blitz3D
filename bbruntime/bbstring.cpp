@@ -58,13 +58,18 @@ BBStr *bbLower( BBStr *s ){
 	return s;
 }
 
+bool isgraph_safe(int chr) {
+	if (chr > 127) { return true; }
+	return isgraph(chr);
+}
+
 BBStr* bbTrim(BBStr* s) {
 	int n = 0;
 	int p = s->size();
 	int c;
 	// currently all characters above the standard ASCII range are simply not trimmed
-	while (n < s->size() && !isgraph(c = UTF8::decodeCharacter(s->c_str(), n)) && (c <= 127)) n += UTF8::measureCodepoint((*s)[n]);
-	while (p > n && !isgraph(c = UTF8::decodeCharacter(s->c_str(), p - 1)) && (c <= 127)) p -= UTF8::measureCodepoint((*s)[p - 1]);
+	while( n<s->size() && !isgraph_safe( (unsigned char)(*s)[n] ) ) ++n;
+	while( p>n && !isgraph_safe( (unsigned char)(*s)[p-1] ) ) --p;
 	*s = UTF8::substr(*s, n, p - n);
 	return s;
 }

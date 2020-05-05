@@ -56,6 +56,8 @@ BBStr* bbTextInput(BBStr* s) {
 	for (int i=0;i<chars.size();i++) {
 		if (chars[i]==8) { //backspace
 			if (t.size()>0) { UTF8::popBack(t); }
+		} else if (chars[i]==127) {
+			t.clear();
 		} else if (chars[i]>=32) {
 			int codepointLen = UTF8::encodeCharacter(chars[i], tBuf);
 			tBuf[codepointLen] = '\0';

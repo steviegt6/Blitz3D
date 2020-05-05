@@ -199,7 +199,7 @@ void gxFont::render(gxCanvas *dest,unsigned color_argb,int x,int y,const std::st
         i+=codepointLen;
     }
 
-    dest->blit( x,y,tempCanvas,0,0,width,tCanvasHeight,false );
+    dest->blit( x,y-glyphRenderOffset,tempCanvas,0,0,width,tCanvasHeight,false );
 }
 
 int gxFont::charWidth(int chr) {
@@ -246,7 +246,11 @@ int gxFont::getWidth()const {
 }
 
 int gxFont::getHeight()const {
-    return glyphHeight+glyphRenderOffset*2;
+    return glyphHeight;
+}
+
+int gxFont::getRenderOffset()const {
+    return glyphRenderOffset;
 }
 
 int gxFont::getWidth( const std::string &text ) {

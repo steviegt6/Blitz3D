@@ -27,6 +27,7 @@ class gxFont {
         //ACCESSORS
         int getWidth()const;							//width of widest char
         int getHeight()const;							//height of font
+        int getRenderOffset()const;
         int getWidth( const std::string &text );	    //width of string
         bool isPrintable( int chr )const;				//printable char?
 

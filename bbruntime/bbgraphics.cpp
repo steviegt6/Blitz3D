@@ -662,7 +662,7 @@ int bbStringWidth( BBStr *str ){
 
 int bbStringHeight( BBStr *str ){
 	delete str;
-	return curr_font->getHeight();
+	return curr_font->getHeight()+curr_font->getRenderOffset();
 }
 
 gxMovie *bbOpenMovie( BBStr *s ){
