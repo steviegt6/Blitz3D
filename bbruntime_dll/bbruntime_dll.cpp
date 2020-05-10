@@ -59,7 +59,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 		case EXCEPTION_ACCESS_VIOLATION:
 			if(ErrorMessagePool::memoryAccessViolation == 0)
 			{
-				bbruntime_panic("Memory Access Violation!");
+				bbruntime_panic("Segmentation fault!");
 			}
 			else
 			{

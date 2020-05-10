@@ -25,6 +25,9 @@
 Graphics3D 640,480
 SetBuffer BackBuffer()
 
+binch = LoadFont("C:\Users\cakea\Desktop\stuff\Blitz3D - IMPORTANT\_release\samples\cour.ttf")
+SetFont(binch)
+
 ; Variables..
 Global dObjs$ = "objects\",dGfx$ = "graphics\",dSnd$ = "sounds\"
 

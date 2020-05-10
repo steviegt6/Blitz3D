@@ -101,7 +101,6 @@ gxRuntime* gxRuntime::openRuntime(HINSTANCE hinst, const string& cmd_line, Debug
 	UpdateWindow(hwnd);
 
 	runtime = d_new gxRuntime(hinst, cmd_line, hwnd);
-	runtime->internalPrint("Created gxRuntime instance.");
 	return runtime;
 }
 
@@ -118,7 +117,6 @@ void gxRuntime::closeRuntime(gxRuntime* r)
 
 	delete runtime;
 	runtime = 0;
-	runtime->internalPrint("Destroyed gxRuntime instance.");
 }
 
 //////////////////////////
@@ -148,7 +146,6 @@ gxRuntime::gxRuntime(HINSTANCE hi, const string& cl, HWND hw) :
 		RtlGetVersionFunc RtlGetVersion = (RtlGetVersionFunc)GetProcAddress(osinfodll, "RtlGetVersion");
 		if(RtlGetVersion) RtlGetVersion(&osinfo);
 		FreeLibrary(osinfodll);
-		runtime->internalPrint("Freed library ntdll.dll");
 	}
 
 	memset(&statex, 0, sizeof(statex));
@@ -161,7 +158,6 @@ gxRuntime::gxRuntime(HINSTANCE hi, const string& cl, HWND hw) :
 		SetAppCompatDataFunc SetAppCompatData = (SetAppCompatDataFunc)GetProcAddress(ddraw, "SetAppCompatData");
 		if(SetAppCompatData) SetAppCompatData(12, 0);
 		FreeLibrary(ddraw);
-		runtime->internalPrint("Freed library ddraw.dll");
 	}
 }
 
@@ -249,7 +245,6 @@ void gxRuntime::suspend()
 
 	if(gfx_mode == 3) ShowCursor(1);
 
-	runtime->internalPrint("Suspended gxRuntime.");
 	if(debugger) debugger->debugStop();
 }
 
@@ -266,7 +261,6 @@ void gxRuntime::resume()
 	suspended = false;
 	busy = false;
 
-	runtime->internalPrint("Resumed gxRuntime.");
 	if(debugger) debugger->debugRun();
 }
 
@@ -366,8 +360,7 @@ void gxRuntime::flip(bool vwait)
 				n = f->getSurface()->Flip(0, DDFLIP_NOVSYNC | DDFLIP_WAIT);
 			}
 			if(n >= 0) return;
-			string t = "Flip Failed! Return code:" + itoa(n & 0x7fff);
-			runtime->internalPrint(t);
+			debugLog(("Flip Failed! Return code:" + itoa(n & 0x7fff)).c_str());
 			break;
 	}
 }
@@ -697,16 +690,6 @@ void gxRuntime::debugLog(const char* t)
 	if(debugger) debugger->debugLog(t);
 }
 
-/////////////////
-// INTERNALLOG //
-/////////////////
-void gxRuntime::internalPrint(std::string t)
-{
-	if(!debugger) return;
-	Debugger* d = debugger;
-	d->internalLog(t.c_str());
-}
-
 /////////////////////////
 // RETURN COMMAND LINE //
 /////////////////////////
@@ -748,7 +731,6 @@ bool gxRuntime::execute(const string& cmd_line)
 	while(params.size() && params[params.size() - 1] == ' ') params = params.substr(0, params.size() - 1);
 
 	SetForegroundWindow(GetDesktopWindow());
-	runtime->internalPrint("Executing...");
 	return (int)ShellExecute(GetDesktopWindow(), 0, cmd.c_str(), params.size() ? params.c_str() : 0, 0, SW_SHOW) > 32;
 }
 
@@ -759,7 +741,6 @@ void gxRuntime::setTitle(const string& t, const string& e)
 {
 	app_title = t;
 	app_close = e;
-	runtime->internalPrint("Set window title to: " + t);
 	SetWindowTextW(hwnd, UTF8::convertToUtf16(app_title).c_str());
 }
 
@@ -776,7 +757,6 @@ int gxRuntime::getMilliSecs()
 ////////////////
 int gxRuntime::getMemoryLoad()
 {
-	runtime->internalPrint("Memory load: " + statex.dwMemoryLoad);
 	return statex.dwMemoryLoad;
 }
 
@@ -814,7 +794,7 @@ void gxRuntime::setPointerVisible(bool vis)
 	POINT pt;
 	GetCursorPos(&pt);
 	SetCursorPos(pt.x, pt.y);
-	runtime->internalPrint("Set pointer visibility to: " + vis);
+	string s = vis ? "true" : "false";
 }
 
 /////////////////
@@ -835,7 +815,6 @@ gxAudio* gxRuntime::openAudio(int flags)
 	}
 
 	audio = d_new gxAudio(this);
-	runtime->internalPrint("Created new gxAudio instance.");
 	return audio;
 }
 
@@ -844,7 +823,6 @@ void gxRuntime::closeAudio(gxAudio* a)
 	if(!audio || audio != a) return;
 	delete audio;
 	audio = 0;
-	runtime->internalPrint("Destroyed gxAudio instance.");
 }
 
 /////////////////
@@ -859,12 +837,11 @@ gxInput* gxRuntime::openInput(int flags)
 	if(DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&di, 0) >= 0)
 	{
 		input = d_new gxInput(this, di);
-		runtime->internalPrint("Created new gxInput instance.");
 		acquireInput();
 	}
 	else
 	{
-		runtime->internalPrint("Failed to create DirectInput.");
+		runtime->debugLog("Failed to create DirectInput.");
 	}
 	return input;
 }
@@ -875,7 +852,6 @@ void gxRuntime::closeInput(gxInput* i)
 	unacquireInput();
 	delete input;
 	input = 0;
-	runtime->internalPrint("Destroyed gxInput instance.");
 }
 
 /////////////////////////////////////////////////////
@@ -998,23 +974,17 @@ gxGraphics* gxRuntime::openWindowedGraphics(int w, int h, int d, bool d3d)
 								mod_cnt = 0;
 								fs->AddRef();
 								return d_new gxGraphics(this, dd, fs, fs, d3d);
-								runtime->internalPrint("Created new gxGraphics instance.");
 							}
 							fs->Release();
-							runtime->internalPrint("Released DirectDrawSurface7 object.");
 						}
 					}
 				}
 				cp->Release();
-				runtime->internalPrint("Released DirectDrawClipper object.");
 			}
 			ps->Release();
-			runtime->internalPrint("Released DirectDrawSurface7 object.");
 		}
 	}
 	dd->Release();
-	runtime->internalPrint("Released DirectDraw7 object.");
-	runtime->internalPrint("Couldn't create windowed graphics.");
 	return 0;
 }
 
@@ -1048,18 +1018,13 @@ gxGraphics* gxRuntime::openExclusiveGraphics(int w, int h, int d, bool d3d)
 				if(ps->GetAttachedSurface(&caps, &bs) >= 0)
 				{
 					return d_new gxGraphics(this, dd, ps, bs, d3d);
-					runtime->internalPrint("Created new gxGraphics instance.");
 				}
 				ps->Release();
-				runtime->internalPrint("Released DirectDrawSurface7 object.");
 			}
 			dd->RestoreDisplayMode();
-			runtime->internalPrint("Restored DirectDraw7 display mode.");
 		}
 	}
 	dd->Release();
-	runtime->internalPrint("Released DirectDraw7 object.");
-	runtime->internalPrint("Couldn't create exclusive graphics.");
 	return 0;
 }
 
@@ -1086,7 +1051,6 @@ gxGraphics* gxRuntime::openGraphics(int w, int h, int d, int driver, int flags)
 			border_mode = (flags & gxGraphics::GRAPHICS_BORDERLESS) ? 1 : 0;
 			if(gfx_mode == 1)
 			{
-				runtime->internalPrint("Created scaled window.");
 				ws = scaled_ws;
 				RECT c_r;
 				GetClientRect(hwnd, &c_r);
@@ -1153,7 +1117,6 @@ gxGraphics* gxRuntime::openGraphics(int w, int h, int d, int driver, int flags)
 
 	busy = false;
 
-	runtime->internalPrint("Created gxGraphics.");
 	return graphics;
 }
 
@@ -1181,7 +1144,6 @@ void gxRuntime::closeGraphics(gxGraphics* g)
 	gfx_lost = false;
 
 	busy = false;
-	runtime->internalPrint("Closed gxGraphics");
 }
 
 bool gxRuntime::graphicsLost()
@@ -1210,7 +1172,6 @@ gxFileSystem* gxRuntime::openFileSystem(int flags)
 	if(fileSystem) return 0;
 
 	fileSystem = d_new gxFileSystem();
-	runtime->internalPrint("Created new gxFileSystem instance.");
 	return fileSystem;
 }
 
@@ -1220,7 +1181,6 @@ void gxRuntime::closeFileSystem(gxFileSystem* f)
 
 	delete fileSystem;
 	fileSystem = 0;
-	runtime->internalPrint("Deleted gxFileSystem instance.");
 }
 
 ////////////////////
@@ -1383,7 +1343,6 @@ gxTimer* gxRuntime::createTimer(int hertz)
 {
 	gxTimer* t = d_new gxTimer(this, hertz);
 	timers.insert(t);
-	runtime->internalPrint("Created new gxTimer instance.");
 	return t;
 }
 
@@ -1391,7 +1350,6 @@ void gxRuntime::freeTimer(gxTimer* t)
 {
 	if(!timers.count(t)) return;
 	timers.erase(t);
-	runtime->internalPrint("Deleted gxTimer instance.");
 	delete t;
 }
 

@@ -95,19 +95,12 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		CRect(0, 0, 0, 0), this, 2);
 	tabber2.SetFont(&prefs.tabsFont);
 
-	//Internal Log
-	internal_log.Create(
-		WS_CHILD | WS_HSCROLL | WS_VSCROLL |
-		ES_NOHIDESEL | ES_MULTILINE | ES_AUTOHSCROLL | ES_AUTOVSCROLL,
-		CRect(0, 0, 0, 0), &tabber, 1);
-	tabber.insert(0, &internal_log, "Internal log");
-
 	//Debug Log
 	debug_log.Create(
 		WS_CHILD | WS_HSCROLL | WS_VSCROLL |
 		ES_NOHIDESEL | ES_MULTILINE | ES_AUTOHSCROLL | ES_AUTOVSCROLL,
-		CRect(0, 0, 0, 0), &tabber, 2);
-	tabber.insert(1, &debug_log, "Debug log");
+		CRect(0, 0, 0, 0), &tabber, 1);
+	tabber.insert(0, &debug_log, "Debug log");
 
 	//Debug trees
 	locals_tree.Create(
@@ -129,7 +122,6 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	tabber2.insert(1, &globals_tree, "Globals");
 	tabber2.insert(2, &consts_tree, "Consts");
 	tabber2.setCurrent(0);
-	tabber.setCurrent(1);
 
 	setState(STARTING);
 
@@ -235,7 +227,7 @@ void MainFrame::debugMsg(const char* msg, bool serious)
 {
 	if(serious)
 	{
-		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Runtime Error", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Catastrophic Error", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 	else
 	{
@@ -247,15 +239,7 @@ void MainFrame::debugLog(const char* msg)
 {
 	debug_log.ReplaceSel(msg);
 	debug_log.ReplaceSel("\n");
-	//tabber.setCurrent(1);
-	setState(state);
-}
-
-void MainFrame::internalLog(const char* msg)
-{
-	internal_log.ReplaceSel(msg);
-	internal_log.ReplaceSel("\n");
-	//tabber.setCurrent(2);
+	tabber.setCurrent(0);
 	setState(state);
 }
 

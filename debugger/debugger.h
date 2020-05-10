@@ -12,7 +12,6 @@ public:
 	virtual void debugLog( const char *msg )=0;
 	virtual void debugMsg( const char *msg,bool serious )=0;
 	virtual void debugSys( void *msg )=0;
-	virtual void internalLog(const char* msg)=0;
 };
 
 extern "C" _declspec(dllexport) Debugger * _cdecl debuggerGetDebugger( void *mod,void *env );

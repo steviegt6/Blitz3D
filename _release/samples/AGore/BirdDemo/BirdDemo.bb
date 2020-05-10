@@ -6,8 +6,8 @@ Include "../start.bb"
 
 Include "KBSplines.bb"
 
-Global gwidth = 800
-Global gheight = 600
+Global gwidth = 640
+Global gheight = 400
 Const FPS = 30
 Global fstep
 
@@ -33,7 +33,7 @@ LightColor light_sun,200,200,100
 RotateEntity light_sun,60,-90,0
 
 mesh_canyon = LoadMesh( "Canyon.x" )
-mesh_skybox = MakeSkyBox("Textures\sky") 
+mesh_skybox = MakeSkyBox("Textures\sky")
 mesh_bird = LoadMD2("Bird.md2")
 tex1 = LoadTexture( "Textures\Bird.bmp" )
 EntityTexture mesh_bird,tex1

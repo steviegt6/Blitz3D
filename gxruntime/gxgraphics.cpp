@@ -67,12 +67,9 @@ gxGraphics::~gxGraphics()
 	FT_Done_FreeType(ftLibrary);
 
 	ds_dirDraw->Release();
-	gx_runtime->internalPrint("Released DirectDraw object.");
 
 	dirDraw->RestoreDisplayMode();
-	gx_runtime->internalPrint("Restored display mode.");
 	dirDraw->Release();
-	gx_runtime->internalPrint("Released DirectDraw7 object.");
 }
 
 void gxGraphics::setGamma(int r, int g, int b, float dr, float dg, float db)
@@ -129,7 +126,6 @@ bool gxGraphics::restore()
 		(*mesh_it)->restore();
 	}
 	if(dir3d) dir3d->EvictManagedTextures();
-	gx_runtime->internalPrint("Evicted managed textures.");
 #endif
 
 	return true;
@@ -178,7 +174,6 @@ int gxGraphics::getTotalVidmem()const
 {
 	DDCAPS caps = { sizeof(caps) };
 	dirDraw->GetCaps(&caps, 0);
-	gx_runtime->internalPrint("Total Video Memory: " + caps.dwVidMemTotal / 1024);
 	return caps.dwVidMemTotal / 1024;
 }
 
@@ -186,7 +181,6 @@ int gxGraphics::getAvailVidmem()const
 {
 	DDCAPS caps = { sizeof(caps) };
 	dirDraw->GetCaps(&caps, 0);
-	gx_runtime->internalPrint("Available Video Memory: " + caps.dwVidMemFree / 1024);
 	return caps.dwVidMemFree / 1024;
 }
 
@@ -218,15 +212,12 @@ gxMovie* gxGraphics::openMovie(const string& file, int flags)
 					gxMovie* movie = d_new gxMovie(this, iam_stream);
 					movie->filename = file;
 					movie_set.insert(movie);
-					gx_runtime->internalPrint("Created movie succesfully.");
 					return movie;
 				}
 			}
 		}
 		iam_stream->Release();
-		gx_runtime->internalPrint("Released multi media stream.");
 	}
-	gx_runtime->internalPrint("Failed to create gxMovie instance.");
 	return 0;
 }
 
@@ -238,7 +229,6 @@ gxMovie* gxGraphics::verifyMovie(gxMovie* m)
 void gxGraphics::closeMovie(gxMovie* m)
 {
 	if(movie_set.erase(m)) delete m;
-	gx_runtime->internalPrint("Closed movie " + m->filename);
 }
 
 gxCanvas* gxGraphics::createCanvas(int w, int h, int flags)
@@ -258,7 +248,6 @@ gxCanvas* gxGraphics::loadCanvas(const string& f, int flags)
 	if(!s) return 0;
 	gxCanvas* c = d_new gxCanvas(this, s, flags);
 	canvas_set.insert(c);
-	gx_runtime->internalPrint("Loaded gxCanvas surface: " + f);
 	return c;
 }
 
@@ -270,7 +259,6 @@ gxCanvas* gxGraphics::verifyCanvas(gxCanvas* c)
 void gxGraphics::freeCanvas(gxCanvas* c)
 {
 	if(canvas_set.erase(c)) delete c;
-	gx_runtime->internalPrint("Freed canvas instance.");
 }
 
 int gxGraphics::getWidth()const
@@ -305,7 +293,6 @@ gxFont* gxGraphics::loadFont(const string& f, int height, int flags)
 
 	gxFont* newFont = new gxFont(ftLibrary, this, f, height, flags);
 	font_set.emplace(newFont);
-	gx_runtime->internalPrint("Loaded font " + f);
 	return newFont;
 }
 
@@ -316,7 +303,6 @@ gxFont* gxGraphics::verifyFont(gxFont* f)
 
 void gxGraphics::freeFont(gxFont* f)
 {
-	gx_runtime->internalPrint("Freed font " + f->getName());
 	if(font_set.erase(f)) delete f;
 }
 
@@ -541,12 +527,10 @@ gxScene* gxGraphics::createScene(int flags)
 
 							dummy_mesh = createMesh(8, 12, 0);
 
-							gx_runtime->internalPrint("Created scene succesfully!");
 							return scene;
 						}
 						dir3dDev->Release();
 						dir3dDev = 0;
-						gx_runtime->internalPrint("Released Direct3D7 Device.");
 					}
 					back_canvas->releaseZBuffer();
 				}
@@ -554,9 +538,7 @@ gxScene* gxGraphics::createScene(int flags)
 		}
 		dir3d->Release();
 		dir3d = 0;
-		gx_runtime->internalPrint("Released Direct3D7 object.");
 	}
-	gx_runtime->internalPrint("Couldn't create gxScene instance.");
 	return 0;
 }
 
@@ -573,7 +555,6 @@ void gxGraphics::freeScene(gxScene* scene)
 	back_canvas->releaseZBuffer();
 	if(dir3dDev) { dir3dDev->Release(); dir3dDev = 0; }
 	if(dir3d) { dir3d->Release(); dir3d = 0; }
-	gx_runtime->internalPrint("Freed gxScene instance.");
 	delete scene;
 }
 
@@ -599,7 +580,6 @@ gxMesh* gxGraphics::createMesh(int max_verts, int max_tris, int flags)
 	WORD* indices = d_new WORD[max_tris * 3];
 	gxMesh* mesh = d_new gxMesh(this, buff, indices, max_verts, max_tris);
 	mesh_set.insert(mesh);
-	gx_runtime->internalPrint("Created mesh with " + to_string(max_tris) + " tris.");
 	return mesh;
 }
 
