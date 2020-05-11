@@ -35,8 +35,6 @@ BOOL BlitzIDE::InitInstance(){
 }
 
 int BlitzIDE::ExitInstance(){
-
 	prefs.close();
-
 	return 0;
 }

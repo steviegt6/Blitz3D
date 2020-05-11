@@ -43,9 +43,6 @@ private:
 
 	float trans_time,trans_speed;
 	MD2Rep::Vert *trans_verts;
-
-	//Unimplemented
-	MD2Model &operator=( const MD2Model & );
 };
 
 #endif

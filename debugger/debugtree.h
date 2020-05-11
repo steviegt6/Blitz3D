@@ -24,7 +24,6 @@ public:
 class ConstsTree : public DebugTree{
 public:
 	ConstsTree();
-
 	void reset( Environ *env );
 };
 
@@ -35,7 +34,6 @@ public:
 	GlobalsTree();
 
 	void reset( Module *mod,Environ *env );
-
 	void refresh();
 };
 
@@ -57,13 +55,9 @@ public:
 	LocalsTree();
 
 	void reset( Environ *env );
-
 	void refresh();
-
 	void pushFrame( void *frame,void *env,const char *func );
-
 	void popFrame();
-
 	int size()const{ return frames.size(); }
 };
 

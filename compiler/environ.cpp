@@ -42,9 +42,9 @@ Decl *Environ::findFunc( const string &s ){
 }
 
 Type *Environ::findType( const string &s ){
-	if( s=="%" ) return Type::int_type;
-	if( s=="#" ) return Type::float_type;
-	if( s=="$" ) return Type::string_type;
+	if( s=="%" ) return Type::int_type;		//INTEGER
+	if( s=="#" ) return Type::float_type;	//FLOATING POINT
+	if( s=="$" ) return Type::string_type;	//STRING
 	for( Environ *e=this;e;e=e->globals ){
 		if( Decl *d=e->typeDecls->findDecl( s ) ) return d->type->structType();
 	}

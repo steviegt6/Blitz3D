@@ -14,7 +14,6 @@ class bbImage;
 //general graphics functions
 int		 bbCountGfxDrivers();
 BBStr *	 bbGfxDriverName( int n );
-BBStr *	 bbGfxDriverDesc( int n );
 void	 bbSetGfxDriver( int n );
 int		 bbGfxModeExists( int w,int h,int d );
 int		 bbCountGfxModes();

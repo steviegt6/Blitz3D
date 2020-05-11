@@ -168,14 +168,6 @@ MeshModel::MeshModel( const MeshModel &t ):Model( t ),
 rep( t.rep ),brush_changes( rep->brush_changes-1 ){
 	++rep->ref_cnt;
 	surf_bones.resize( t.surf_bones.size() );
-	/*
-	if( t.surf_bones.size() ){
-		surf_bones.resize( t.surf_bones.size() );
-		if( rep->bone_tforms.size() ){
-			setRenderSpace( RENDER_SPACE_WORLD );
-		}
-	}
-	*/
 }
 
 MeshModel::~MeshModel(){

@@ -38,7 +38,6 @@ public:
 	void transform( const Transform &t );
 	void paint( const Brush &b );
 	void add( const MeshModel &t );
-	void optimize();
 
 	//accessors
 	const SurfaceList &getSurfaces()const;
@@ -56,8 +55,6 @@ private:
 	vector<Brush> brushes;
 
 	vector<Surface::Bone> surf_bones;
-
-	MeshModel &operator=(const MeshModel &);
 };
 
 #endif

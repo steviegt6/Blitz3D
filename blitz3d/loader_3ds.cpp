@@ -27,7 +27,6 @@ struct Face3DS{
 };
 
 static vector<Face3DS> faces;
-//static vector<Surface::Vertex> vertices;
 
 static map<string,Brush> materials_map;
 static map<string,MeshModel*> name_map;
@@ -171,7 +170,6 @@ static void parseMapList(){
 		Surface::Vertex &v=MeshLoader::refVertex( k );
 		v.tex_coords[0][0]=v.tex_coords[1][0]=uv[0];
 		v.tex_coords[0][1]=v.tex_coords[1][1]=1-uv[1];
-//		v->tex_coords[0]=v->tex_coords[1]=Vector( uv[0],1-uv[1],1 );
 	}
 }
 
@@ -204,7 +202,6 @@ static void parseTriMesh( MeshModel *mesh ){
 	leaveChunk();
 
 	//should really do something here...
-//	bool neg_x=tform.m.j.cross(tform.m.k).dot(tform.m.i)<0;
 
 	int k;
 
@@ -336,13 +333,11 @@ static void parseAnimKeys( Animation *anim,int type ){
 		case 0xb020:	//POS_TRACK_TAG
 			in.sgetn( (char*)&pos,12 );
 			if( conv ) pos=conv_tform*pos;
-//			_log( "POS_KEY: time="+itoa(time)+" pos="+ftoa( pos.x )+","+ftoa( pos.y )+","+ftoa( pos.z ) );
 			if( time<=anim_len ) anim->setPositionKey( time,pos );
 			break;
 		case 0xb021:	//ROT_TRACK_TAG
 			in.sgetn( (char*)&angle,4 );
 			in.sgetn( (char*)&axis,12 );
-//			_log( "ROT_KEY: time="+itoa(time)+" angle="+ftoa(angle)+" axis="+ftoa(axis.x)+","+ftoa(axis.y)+","+ftoa(axis.z) );
 			if( axis.length()>EPSILON ){
 				if( flip_tris ) angle=-angle;
 				if( conv ) axis=conv_tform.m*axis;
@@ -354,7 +349,6 @@ static void parseAnimKeys( Animation *anim,int type ){
 		case 0xb022:	//SCL_TRACK_TAG
 			in.sgetn( (char*)&scale,12 );
 			if( conv ) scale=conv_tform.m*scale;
-//			scale.x=fabs(scale.x);scale.y=fabs(scale.y);scale.z=fabs(scale.z);
 			_log( "SCL_KEY: time="+itoa(time)+" scale="+ftoa( scale.x )+","+ftoa( scale.y )+","+ftoa( scale.z ) );
 			if( time<=anim_len ) anim->setScaleKey( time,scale );
 			break;

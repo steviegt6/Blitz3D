@@ -12,7 +12,6 @@ struct ExprNode : public Node{
 	ExprNode( Type *t ):sem_type( t ){}
 
 	ExprNode *castTo( Type *ty,Environ *e );
-	ExprNode *semant( Environ *e,Type *ty );
 
 	virtual ExprNode *semant( Environ *e )=0;
 	virtual TNode *translate( Codegen *g )=0;
@@ -106,7 +105,6 @@ struct UniExprNode : public ExprNode{
 	int op;ExprNode *expr;
 	UniExprNode( int op,ExprNode *expr ):op( op ),expr( expr ){}
 	~UniExprNode(){ delete expr; }
-	ExprNode *constize();
 	ExprNode *semant( Environ *e );
 	TNode *translate( Codegen *g );
 };

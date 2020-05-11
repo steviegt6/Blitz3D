@@ -22,7 +22,6 @@ public:
 	gxScene( gxGraphics *graphics,gxCanvas *target );
 	~gxScene();
 
-	void setEnabled( gxLight *light,bool enabled );
 
 	/***** GX INTERFACE *****/
 public:

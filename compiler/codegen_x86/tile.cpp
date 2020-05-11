@@ -156,12 +156,6 @@ int Tile::eval( int want ){
 	freeReg( got_r );
 	if( want_l!=got_l ) moveReg( got_l,want_l );
 
-	//cleanup argFrame
-	if( argFrame ){
-		//***** Not needed for STDCALL *****
-//		codeFrags.push_back( "+"+itoa(argFrame) );
-	}
-
 	//restore spilled regs
 	if( spill ){
 		for( int n=NUM_REGS;n>=1;--n ){

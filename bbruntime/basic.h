@@ -85,7 +85,6 @@ struct BBData{
 
 #pragma pack( pop )
 
-void basic_link();
 
 extern BBType _bbIntType;
 extern BBType _bbFltType;

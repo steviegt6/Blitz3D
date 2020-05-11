@@ -474,18 +474,14 @@ inline Matrix rollMatrix( float q ){
 
 inline float matrixPitch( const Matrix &m ){
 	return m.k.pitch();
-//	return asinf( -m.k.y );
 }
 
 inline float matrixYaw( const Matrix &m ){
 	return m.k.yaw();
-	//return atan2f( -m.k.x,m.k.z );
 }
 
 inline float matrixRoll( const Matrix &m ){
 	return atan2f( m.i.y,m.j.y );
-	//Matrix t=pitchMatrix( -matrixPitch(m) )*yawMatrix( -matrixYaw(m) )*m;
-	//return atan2f( t.i.y,t.i.x );
 }
 
 inline Matrix scaleMatrix( float x,float y,float z ){
@@ -508,10 +504,6 @@ inline Quat rollQuat( float r ){
 	return Quat( cosf(r/-2),Vector( 0,0,sinf(r/-2) ) );
 }
 
-//inline Quat rotationQuat( float p,float y,float r ){
-//	return yawQuat(y)*pitchQuat(p)*rollQuat(r);
-//}
-
 Quat rotationQuat( float p,float y,float r );
 
 inline Matrix rotationMatrix( float p,float y,float r ){
@@ -531,8 +523,6 @@ inline float quatYaw( const Quat &q ){
 }
 
 inline float quatRoll( const Quat &q ){
-//	Vector i=q.i(),j=q.j();
-//	return atan2f( i.y,j.y );
 	return matrixRoll( q );
 }
 

@@ -7,7 +7,7 @@
 
 #include "../gxruntime/gxutf8.h"
 
-#define WM_IDLEUPDATECMDUI  0x0363  // wParam == bDisableIfNoHandler
+#define WM_IDLEUPDATECMDUI  0x0363
 
 enum
 {

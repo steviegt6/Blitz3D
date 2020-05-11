@@ -19,8 +19,6 @@ typedef InstMap::const_iterator InstIter;
 
 static InstMap instMap;
 
-//#define LOG
-
 Assem_x86::Assem_x86( istream &in,Module *mod ):Assem(in,mod){
 
 	//build instruction map, if not built already.

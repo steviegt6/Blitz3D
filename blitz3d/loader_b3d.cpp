@@ -5,7 +5,6 @@
 #include "pivot.h"
 #include "meshutil.h"
 
-//#define SHOW_BONES
 
 static FILE* in;
 static vector<int> chunk_stack;

@@ -166,20 +166,6 @@ MD2Rep::~MD2Rep(){
 	if( mesh ) gx_graphics->freeMesh( mesh );
 }
 
-/*
-void MD2Rep::render( Vert *v,int frame ){
-
-	const Frame &frame_a=frames[frame];
-	const Vertex *v_a=frame_a.verts.begin();
-	const Vector scale_a=frame_a.scale,trans_a=frame_a.trans;
-
-	for( int k=0;k<n_verts;++v,++v_a,++k ){
-		v->coords=Vector( v_a->x*scale_a.x+trans_a.x,v_a->y*scale_a.y+trans_a.y,v_a->z*scale_a.z+trans_a.z );
-		v->normal=normals[ v_a->n ];
-	}
-}
-*/
-
 void MD2Rep::render( Vert *v,int frame,float time ){
 
 	const Frame &frame_b=frames[frame];
@@ -218,15 +204,6 @@ void MD2Rep::render( Vert *v,int render_a,int render_b,float render_t ){
 	}
 }
 
-/*
-void MD2Rep::render( Vert *v,const Vert *v_a,const Vert *v_b,float render_t ){
-	for( int k=0;k<n_verts;++v,++v_a,++v_b,++k ){
-		v->coords=(v_b->coords-v_a->coords)*render_t+v_a->coords;
-		v->normal=(v_b->normal-v_a->normal)*render_t+v_a->normal;
-	}
-}
-*/
-
 void MD2Rep::render( Model *model,int render_a,int render_b,float render_t ){
 	const Frame &frame_a=frames[render_a];
 	const Vector scale_a=frame_a.scale,trans_a=frame_a.trans;
@@ -258,27 +235,6 @@ void MD2Rep::render( Model *model,int render_a,int render_b,float render_t ){
 
 	model->enqueue( mesh,0,n_verts,0,n_tris );
 }
-/*
-void MD2Rep::render( Model *model,const Vert *v_a,const Vert *v_b,float render_t ){
-
-	const VertexUV *uv=uvs.begin();
-
-	mesh->lock();
-	for( int k=0;k<n_verts;++uv,++v_a,++v_b,++k ){
-
-		const Vector t( ( v_b->coords-v_a->coords)*render_t+v_a->coords );
-		const Vector n( ( v_b->normal-v_a->normal)*render_t+v_a->normal );
-
-		tex_coords[0]=uv->u;
-		tex_coords[1]=uv->v;
-
-		mesh->setVertex( k,&t.x,&n.x,tex_coords );
-	}
-	mesh->unlock();
-
-	model->enqueue( mesh,0,n_verts,0,n_tris );
-}
-*/
 
 void MD2Rep::render( Model *model,const Vert *v_a,int render_b,float render_t ){
 

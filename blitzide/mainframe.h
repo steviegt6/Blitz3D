@@ -53,14 +53,7 @@ public:
 	afx_msg void helpAutodoc();
 	afx_msg void helpBack();
 	afx_msg void helpForward();
-	afx_msg void helpSupport();
 	afx_msg void helpAbout();
-
-	afx_msg void logSyn();
-	afx_msg void logIR();
-	afx_msg void logASM();
-	afx_msg void logMsgs();
-	afx_msg void noExecute();
 
 	afx_msg void updateCmdUI( CCmdUI *ui );
 	afx_msg void updateCmdUIRange( CCmdUI *ui );

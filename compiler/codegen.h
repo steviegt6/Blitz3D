@@ -31,8 +31,6 @@ struct TNode{
 	TNode( int op,TNode *l,TNode *r,int i ):op(op),l(l),r(r),iconst(i){}
 	TNode( int op,TNode *l,TNode *r,const string &s ):op(op),l(l),r(r),iconst(0),sconst(s){}
 	~TNode(){ delete l;delete r; }
-
-	void log();
 };
 
 class Codegen{

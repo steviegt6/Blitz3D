@@ -9,7 +9,7 @@
 char _credits[]=
 "\r\n"
 "Programming and design: Mark Sibly\r\n\r\n"
-"Keeping this thing alive: juanjpro\r\n\r\n"
+"Keeping this thing alive: juanjp600\r\n\r\n"
 "Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n\r\n"
 "Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n\r\n"
 "Image loader courtesy of FreeImage by Floris van den berg\r\n\r\n";

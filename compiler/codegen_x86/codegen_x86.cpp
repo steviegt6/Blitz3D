@@ -3,8 +3,6 @@
 #include "codegen_x86.h"
 #include "tile.h"
 
-//#define NOOPTS
-
 Codegen_x86::Codegen_x86( ostream &out,bool debug ):Codegen( out,debug ),inCode(false){
 }
 

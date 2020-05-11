@@ -599,13 +599,9 @@ Q3BSPRep::Q3BSPRep( const string &f,float gam ):root_node(0),vis_sz(0),vis_data(
 	root_node=createNode( 0 );
 
 	createCollider();
-
 	createTextures();
-
 	createLightMaps();
-
 	createSurfs();
-
 	createVis();
 
 	//unload all lumps...

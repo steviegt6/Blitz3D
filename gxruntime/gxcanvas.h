@@ -11,7 +11,7 @@ typedef IDirectDrawSurface7 ddSurf;
 
 class gxCanvas{
 public:
-	gxCanvas( gxGraphics *graphics,ddSurf *surface,int flags );
+	gxCanvas(gxGraphics* g, IDirectDrawSurface7* s, int f);
 	~gxCanvas();
 
 	void backup()const;

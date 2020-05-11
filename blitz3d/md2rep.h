@@ -13,13 +13,10 @@ public:
 	MD2Rep( const string &f );
 	virtual ~MD2Rep();
 
-	void render( Vert *verts,int frame );
 	void render( Vert *verts,int frame,float time );
 	void render( Vert *verts,int frame_a,int frame_b,float time );
-	void render( Vert *verts,const Vert *verts_a,const Vert *verts_b,float time );
 
 	void render( Model *model,int frame_a,int frame_b,float time );
-	void render( Model *model,const Vert *verts_a,const Vert *verts_b,float time );
 	void render( Model *model,const Vert *verts_a,int frame_b,float time );
 
 	const Box &getBox()const{ return box; }

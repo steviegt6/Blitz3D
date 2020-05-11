@@ -41,7 +41,6 @@ private:
 
 	VarNode *parseVar();
 	VarNode *parseVar( const string &ident,const string &tag );
-	CallNode *parseCall( const string &ident,const string &tag );
 	IfNode *parseIf(bool debug);
 
 	DeclNode *parseVarDecl( int kind,bool constant );

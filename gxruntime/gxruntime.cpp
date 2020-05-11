@@ -1399,7 +1399,10 @@ string gxRuntime::systemProperty(const std::string& p)
 				}
 				break;
 			case 10:
-				return "Windows 10";
+				switch(osinfo.dwMinorVersion)
+				{
+					case 0: return "Windows 10";
+				}
 				break;
 		}
 	}

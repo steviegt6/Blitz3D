@@ -11,7 +11,6 @@ Prefs prefs;
 
 void Prefs::open()
 {
-
 	char* p = getenv("blitzpath");
 	if(!p)
 	{
@@ -20,9 +19,7 @@ void Prefs::open()
 	}
 
 	homeDir = p;
-
 	AddFontResource((homeDir + "/cfg/Blitz.fon").c_str());
-
 	setDefault();
 
 	bool prg_windowed;
@@ -214,7 +211,6 @@ void Prefs::setDefault()
 
 void Prefs::createFonts()
 {
-
 	editFont.Detach();
 	tabsFont.Detach();
 	debugFont.Detach();

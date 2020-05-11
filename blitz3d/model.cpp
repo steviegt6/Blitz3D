@@ -12,7 +12,6 @@ class Model::MeshQueue{
 	int fv,vc,ft,tc;
 	Brush brush;
 	int q_type;
-//	bool opaque;
 
 	static MeshQueue *pool;
 
