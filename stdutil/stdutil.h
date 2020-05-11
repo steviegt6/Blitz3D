@@ -41,22 +41,6 @@ std::string fullfilename( const std::string &t );
 std::string filenamepath( const std::string &t );
 std::string filenamefile( const std::string &t );
 
-//lazy version of auto_ptr
-template<class T>
-class a_ptr{
-public:
-	a_ptr(T *t=0):t(t){}
-	~a_ptr(){delete t;}
-	a_ptr &operator=(T *t){this->t=t;return *this;}
-	T &operator*()const{return *t;}
-	T *operator->()const{return t;}
-	operator T&()const{return *t;}
-	operator T*()const{return t;}
-	T *release(){ T *tt=t;t=0;return tt; }
-private:
-	T *t;
-};
-
 //Speed-up for SLOW sstream
 class qstreambuf : public std::streambuf{
 public:
