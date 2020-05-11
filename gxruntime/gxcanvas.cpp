@@ -469,13 +469,7 @@ void gxCanvas::blitstretch(int x, int y, int w, int h, gxCanvas* src, int src_x,
 	if (!clip(&dest_r, &src_r)) return;
 	if (!::clip(src->clip_rect, &src_r, &dest_r)) return;
 
-	//	if( solid ){
 	surf->Blt(&dest_r, src->surf, &src_r, DDBLT_WAIT, 0);
-	/*	}else{
-			bltfx.ddckSrcColorkey.dwColorSpaceLowValue=
-			bltfx.ddckSrcColorkey.dwColorSpaceHighValue=src->mask_surf;
-			surf->Blt( &dest_r,src->surf,&src_r,DDBLT_WAIT|DDBLT_KEYSRCOVERRIDE,&bltfx );
-		}*/
 	damage(dest_r);
 }
 

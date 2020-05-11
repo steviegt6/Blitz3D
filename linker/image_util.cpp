@@ -64,7 +64,6 @@ struct Rsrc{
 
 	Rsrc( int id,Rsrc *p ):id(id),data(0),data_sz(0){
 		if( p ) p->kids.push_back( this );
-//		cout<<"res id:"<<dec<<id<<hex<<endl;
 	}
 
 	~Rsrc(){
@@ -110,7 +109,6 @@ static void openRsrcDir( Section *s,int off,Rsrc *p ){
 			openRsrcDir( s,ent->data&0x7fffffff,r );
 		}else{				//a leaf
 			Rdat *dat=(Rdat*)( data+ent->data );
-//			cout<<"dat addr:"<<dat->addr<<" size:"<<dat->size<<endl;
 			int sz=dat->size;
 			void *src=dat->addr-s->sect.virt_addr+data;
 			void *dest=d_new char[sz];
@@ -272,7 +270,6 @@ static void loadImage( istream &in ){
 		if( !s->sect.data_addr ) continue;
 		int data_sz=s->sect.data_size;
 		s->data=d_new char[data_sz];//char[s->sect.virt_size];
-		//memset( s->data,0,s->sect.virt_size );
 		in.seekg( s->sect.data_addr );
 		in.read( s->data,data_sz );
 	}
@@ -319,7 +316,6 @@ bool makeExe( int entry ){
 	head->chars|=0x0002;		//executable
 	head->chars&=~0x2000;		//not Dll
 	opts->entry=entry;
-//	opts->image_base=0x400000;	//have to deal to fix-ups to do this properly.
 	return true;
 }
 

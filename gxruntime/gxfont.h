@@ -21,7 +21,6 @@ class gxFont {
 
         int charWidth( int c );
         int charAdvance( int c );
-
         int stringWidth(const std::string& text);
 
         //ACCESSORS
@@ -57,18 +56,13 @@ class gxFont {
         gxCanvas* tempCanvas;
 
         const int atlasDims = 1024;
-
         void renderAtlas(int chr);
-
         int flags;
 
         int height;
         FT_Face freeTypeFace;
-
         std::map<int,GlyphData> glyphData;
-
         gxGraphics *graphics;
-
         std::string filename;
 };
 

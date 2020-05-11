@@ -27,13 +27,9 @@ private:
 	/***** GX INTERFACE *****/
 public:
 	void flush();
-
 	bool keyDown( int key );
-
 	int keyHit( int key );
-
 	int getKey();
-
 	float getAxisState( int axis );
 };
 

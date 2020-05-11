@@ -6,7 +6,6 @@
 class BBModule : public Module{
 public:
 	BBModule();
-	BBModule( istream &in );
 	~BBModule();
 
 	void *link( Module *libs );

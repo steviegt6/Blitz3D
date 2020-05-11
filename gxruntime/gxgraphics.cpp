@@ -9,7 +9,6 @@ static Debugger* debugger;
 gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs, IDirectDrawSurface7* bs, bool d3d) :
 	runtime(rt), dirDraw(dd), dir3d(0), dir3dDev(0), def_font(0), gfx_lost(false), dummy_mesh(0)
 {
-
 	dirDraw->QueryInterface(IID_IDirectDraw, (void**)&ds_dirDraw);
 
 	front_canvas = d_new gxCanvas(this, fs, 0);
@@ -21,7 +20,6 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 	FT_Init_FreeType(&ftLibrary);
 
 	def_font = nullptr;
-	//def_font=loadFont( "courier",12,0 );
 
 	front_canvas->setFont(def_font);
 	back_canvas->setFont(def_font);
@@ -90,10 +88,6 @@ void gxGraphics::getGamma(int r, int g, int b, float* dr, float* dg, float* db)
 	*dr = _gammaRamp.red[r & 255] / 257.0f;
 	*dg = _gammaRamp.green[g & 255] / 257.0f;
 	*db = _gammaRamp.blue[b & 255] / 257.0f;
-}
-
-void gxGraphics::backup()
-{
 }
 
 bool gxGraphics::restore()

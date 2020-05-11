@@ -66,10 +66,8 @@ static void adjustTexSize( int *width,int *height,IDirect3DDevice7 *dir3dDev ){
 	int w=*width,h=*height,min,max;
 	//make power of 2
 	//Try *always* making POW2 size to fix GF6800 non-pow2 tex issue
-//    if( ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_POW2 ){
 		for( w=1;w<*width;w<<=1 ){}
 		for( h=1;h<*height;h<<=1 ){}
-//	}
 	//make square
     if( ddDesc.dpcTriCaps.dwTextureCaps & D3DPTEXTURECAPS_SQUAREONLY ){
 		if( w>h ) h=w;
@@ -364,8 +362,6 @@ IDirectDrawSurface7 *loadDXTC(const char* filename,gxGraphics *gfx)
 
 	/* remove unwanted flags if they exist */
 	//not sure if this is needed, works without it though
-	//ddsd.dwFlags &= ~DDSD_LINEARSIZE;
-
 	int blockSize = 0;
 	int chunkSize = 0;
 

@@ -36,7 +36,6 @@ public:
 	gxGraphics( gxRuntime *runtime,IDirectDraw7 *dirDraw,IDirectDrawSurface7 *front,IDirectDrawSurface7 *back,bool d3d );
 	~gxGraphics();
 
-	void backup();
 	bool restore();
 
 	gxRuntime *runtime;

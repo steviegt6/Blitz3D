@@ -12,7 +12,7 @@ gxMovie::gxMovie( gxGraphics *g,IMultiMediaStream *mm )
 	DDSURFACEDESC desc={sizeof(desc)};
 	dd_stream->GetFormat( &desc,0,0,0 );
 
-	canvas=gfx->createCanvas( desc.dwWidth,desc.dwHeight,0 );	//gxCanvas::CANVAS_NONDISPLAY );
+	canvas=gfx->createCanvas( desc.dwWidth,desc.dwHeight,0 );
 	canvas->getSurface()->QueryInterface( IID_IDirectDrawSurface,(void**)&dd_surf );
 
 	src_rect.left=src_rect.top=0;

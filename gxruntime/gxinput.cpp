@@ -155,11 +155,7 @@ static Keyboard *createKeyboard( gxInput *input ){
 				dword.dwData=32;
 				if( dev->SetProperty( DIPROP_BUFFERSIZE,&dword.diph )>=0 ){
 					return d_new Keyboard( input,dev );
-				}else{
-//					input->runtime->debugInfo( "keyboard: SetProperty failed" );
 				}
-			}else{
-//				input->runtime->debugInfo( "keyboard: SetDataFormat failed" );
 			}
 
 			return d_new Keyboard( input,dev );
@@ -187,8 +183,6 @@ static Mouse *createMouse( gxInput *input ){
 
 			if( dev->SetDataFormat( &c_dfDIMouse )>=0 ){
 				return d_new Mouse( input,dev );
-			}else{
-//				input->runtime->debugInfo( "mouse: SetDataFormat failed" );
 			}
 
 			return d_new Mouse( input,dev );

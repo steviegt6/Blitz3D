@@ -19,13 +19,11 @@ static string getAppDir()
 static void fail(const char* p)
 {
 	::MessageBox(0, p, "Blitz Error", MB_SETFOREGROUND | MB_TOPMOST | MB_ICONERROR);
-	ExitProcess(-1); //Exit with status -1 (AKA error).
+	ExitProcess(-1);
 }
 
 int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
 {
-	//We really need a better way to get the application path...
-	//Maybe with C++17's new std::filesystem::path class?
 	string t = getAppDir();
 	string idePath = "\\bin\\ide.exe ";
 
@@ -39,14 +37,11 @@ int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
 
 	if(!CreateProcess(0, (char*)t.c_str(), 0, 0, 0, 0, 0, 0, &startupInfo, &processInfo))
 	{
-		//Halt application as BlitzIDE couldn't be started.
 		fail(bb_err);
 	}
 
-	//Wait for BlitzIDE to start...
 	WaitForInputIdle(processInfo.hProcess, INFINITE);
 
-	//Close process and thread handles. 
 	CloseHandle(processInfo.hProcess);
 	CloseHandle(processInfo.hThread);
 

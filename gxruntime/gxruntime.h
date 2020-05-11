@@ -68,7 +68,6 @@ private:
 	void resetInput();
 	void pauseAudio();
 	void resumeAudio();
-	void backupGraphics();
 	void restoreGraphics();
 	void acquireInput();
 	void unacquireInput();

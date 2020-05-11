@@ -91,8 +91,8 @@ public:
 	void setAntialias( bool enable );
 	void setWireframe( bool enable );
 	void setFlippedTris( bool enable );
-	void setAmbient( const float rgb[3] );
-	void setAmbient2( const float rgb[3] );
+	void setAmbient( const float rgb[] );
+	void setAmbient2( const float rgb[] );
 	void setFogColor( const float rgb[3] );
 	void setFogRange( float nr,float fr );
 	void setFogDensity(float den);

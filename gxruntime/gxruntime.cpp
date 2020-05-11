@@ -187,14 +187,6 @@ void gxRuntime::resumeAudio()
 	if(audio) audio->resume();
 }
 
-void gxRuntime::backupGraphics()
-{
-	if(auto_suspend)
-	{
-		graphics->backup();
-	}
-}
-
 void gxRuntime::restoreGraphics()
 {
 	if(auto_suspend)
@@ -238,7 +230,6 @@ void gxRuntime::suspend()
 {
 	busy = true;
 	pauseAudio();
-	backupGraphics();
 	unacquireInput();
 	suspended = true;
 	busy = false;
@@ -833,7 +824,6 @@ gxInput* gxRuntime::openInput(int flags)
 	if(input) return 0;
 
 	IDirectInput8* di;
-	//	if (DirectInputCreateEx(hinst, DIRECTINPUT_VERSION, IID_IDirectInput7, (void**)&di, 0) >= 0) {
 	if(DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&di, 0) >= 0)
 	{
 		input = d_new gxInput(this, di);

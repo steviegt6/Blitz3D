@@ -10,6 +10,7 @@
 
 class gxGraphics;
 
+//Who the fuck actually uses this?
 class gxMovie{
 
 public:
