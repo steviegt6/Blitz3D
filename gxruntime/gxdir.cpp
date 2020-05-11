@@ -9,9 +9,9 @@ gxDir::~gxDir(){
 	if( handle!=INVALID_HANDLE_VALUE ) FindClose( handle );
 }
 
-string gxDir::getNextFile(){
+std::string gxDir::getNextFile(){
 	if( handle==INVALID_HANDLE_VALUE ) return "";
-	string t=findData.cFileName;
+	std::string t=findData.cFileName;
 	if( !FindNextFile( handle,&findData ) ){
 		FindClose( handle );
 		handle=INVALID_HANDLE_VALUE;

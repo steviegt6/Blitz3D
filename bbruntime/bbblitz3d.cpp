@@ -30,9 +30,9 @@ extern gxFileSystem* gx_filesys;
 static int tri_count;
 static World* world;
 
-static set<Brush*> brush_set;
-static set<Texture*> texture_set;
-static set<Entity*> entity_set;
+static std::set<Brush*> brush_set;
+static std::set<Texture*> texture_set;
+static std::set<Entity*> entity_set;
 
 static Listener* listener;
 
@@ -55,7 +55,7 @@ static Loader_X loader_x;
 static Loader_3DS loader_3ds;
 static Loader_B3D loader_b3d;
 
-static map<string, Transform> loader_mat_map;
+static std::map<std::string, Transform> loader_mat_map;
 
 static inline void debug3d()
 {
@@ -178,11 +178,11 @@ static inline void debugVertex(Surface* s, int n, int t)
 	}
 }
 
-static Entity* loadEntity(string t, int hint)
+static Entity* loadEntity(std::string t, int hint)
 {
 	t = tolower(t);
-	int n = t.rfind("."); if(n == string::npos) return 0;
-	string ext = t.substr(n + 1);
+	int n = t.rfind("."); if(n == std::string::npos) return 0;
+	std::string ext = t.substr(n + 1);
 	MeshLoader* l;
 
 	if(ext == "x") l = &loader_x;
@@ -244,7 +244,7 @@ static void erase(Entity* e)
 	if(debug) entity_set.erase(e);
 }
 
-static Entity* findChild(Entity* e, const string& t)
+static Entity* findChild(Entity* e, const std::string& t)
 {
 	if(e->getName() == t) return e;
 	for(Entity* p = e->children(); p; p = p->successor())
@@ -595,13 +595,6 @@ gxCanvas* bbTextureBuffer(Texture* t, int frame)
 		if(c->getDepth()) return c;
 	}
 	return 0;
-	/*
-	//v1.03  crashes if t->getCanvas returns null!
-	debugTexture(t);
-	gxCanvas *c=t->getCanvas( frame );
-	if( c->getDepth() ) return c;
-	return 0;
-	*/
 }
 
 void  bbClearTextureFilters()

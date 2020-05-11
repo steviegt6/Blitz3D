@@ -8,15 +8,15 @@ class HtmlHelp;
 
 class HelpListener{
 public:
-	virtual void helpOpen( HtmlHelp *help,const string &file )=0;
-	virtual void helpTitleChange( HtmlHelp *help,const string &title )=0;
+	virtual void helpOpen( HtmlHelp *help,const std::string &file )=0;
+	virtual void helpTitleChange( HtmlHelp *help,const std::string &title )=0;
 };
 
 class HtmlHelp : public CHtmlView{
 public:
 	HtmlHelp( HelpListener *l ):listener(l){}
 
-	string getTitle();
+	std::string getTitle();
 
 DECLARE_DYNAMIC( HtmlHelp )
 DECLARE_MESSAGE_MAP()
@@ -27,7 +27,7 @@ private:
 	virtual void OnTitleChange( LPCTSTR t );
 	virtual void OnBeforeNavigate2( LPCTSTR lpszURL, DWORD nFlags, LPCTSTR lpszTargetFrameName, CByteArray& baPostedData, LPCTSTR lpszHeaders, BOOL* pbCancel );
 
-	string title;
+	std::string title;
 	HelpListener *listener;
 };
 

@@ -453,7 +453,7 @@ IDirectDrawSurface7 *loadDXTC(const char* filename,gxGraphics *gfx)
 ddSurf *ddUtil::loadSurface( const std::string &f,int flags,gxGraphics *gfx ){
 
 	int i=f.find( ".dds" );
-	if( i!=string::npos && i+4==f.size() ){
+	if( i!= std::string::npos && i+4==f.size() ){
 		//dds file!
 		ddSurf *surf=loadDXTC( f.c_str(),gfx );
 		return surf;
@@ -462,7 +462,7 @@ ddSurf *ddUtil::loadSurface( const std::string &f,int flags,gxGraphics *gfx ){
 	FreeImage_Initialise();
 	FREE_IMAGE_FORMAT fmt=FreeImage_GetFileType( f.c_str(),f.size() );
 	if( fmt==FIF_UNKNOWN ){
-		int n=f.find( "." );if( n==string::npos ) return 0;
+		int n=f.find( "." );if( n== std::string::npos ) return 0;
 		fmt=FreeImage_GetFileTypeFromExt( f.substr(n+1).c_str() );
 		if( fmt==FIF_UNKNOWN ) return 0;
 	}

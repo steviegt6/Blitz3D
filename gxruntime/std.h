@@ -24,6 +24,5 @@
 #include <ddraw.h> // Why are we still here? Just to suffer?
 #include <d3d.h>
 
-using namespace std;
 
 #endif

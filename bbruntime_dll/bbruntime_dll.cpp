@@ -8,8 +8,6 @@
 #include "../shareprot/shareprot.h"
 #endif
 
-using namespace std;
-
 #include <map>
 #include <eh.h>
 #include <float.h>
@@ -34,8 +32,8 @@ public:
 };
 
 static HINSTANCE hinst;
-static map<const char*, void*> syms;
-map<const char*, void*>::iterator sym_it;
+static std::map<const char*, void*> syms;
+std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
 
 static void rtSym(const char* sym, void* pc)
@@ -63,7 +61,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 			}
 			else
 			{
-				string s = "";
+				std::string s = "";
 				for(int i = 0; i < ErrorMessagePool::size; i++)
 				{
 					if(!ErrorMessagePool::memoryAccessViolation[i].empty())
@@ -112,7 +110,7 @@ const char* Runtime::nextSym()
 
 int Runtime::symValue(const char* sym)
 {
-	map<const char*, void*>::iterator it = syms.find(sym);
+	std::map<const char*, void*>::iterator it = syms.find(sym);
 	if(it != syms.end()) return (int)it->second;
 	return -1;
 }
@@ -145,7 +143,7 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg)
 #endif
 
 	//strip spaces from ends of args...
-	string params = args;
+	std::string params = args;
 	while(params.size() && params[0] == ' ') params = params.substr(1);
 	while(params.size() && params[params.size() - 1] == ' ') params = params.substr(0, params.size() - 1);
 
@@ -183,9 +181,9 @@ void Runtime::asyncEnd()
 	if(gx_runtime) gx_runtime->asyncEnd();
 }
 
-void Runtime::checkmem(streambuf* buf)
+void Runtime::checkmem(std::streambuf* buf)
 {
-	ostream out(buf);
+	std::ostream out(buf);
 	::checkmem(out);
 }
 
@@ -198,8 +196,8 @@ Runtime* _cdecl runtimeGetRuntime()
 /********************** BUTT UGLY DLL->EXE HOOK! *************************/
 
 static void* module_pc;
-static map<string, int> module_syms;
-static map<string, int> runtime_syms;
+static std::map<std::string, int> module_syms;
+static std::map<std::string, int> runtime_syms;
 static Runtime* runtime;
 
 static void fail()
@@ -210,7 +208,7 @@ static void fail()
 
 struct Sym
 {
-	string name;
+	std::string name;
 	int value;
 };
 
@@ -223,16 +221,16 @@ static Sym getSym(void** p)
 	*p = t + 4; return sym;
 }
 
-static int findSym(const string& t)
+static int findSym(const std::string& t)
 {
-	map<string, int>::iterator it;
+	std::map<std::string, int>::iterator it;
 
 	it = module_syms.find(t);
 	if(it != module_syms.end()) return it->second;
 	it = runtime_syms.find(t);
 	if(it != runtime_syms.end()) return it->second;
 
-	string err = "Can't find symbol: " + t;
+	std::string err = "Can't find symbol: " + t;
 	MessageBox(0, err.c_str(), 0, 0);
 	ExitProcess(0);
 	return 0;
@@ -244,7 +242,7 @@ static void link()
 	while(const char* sc = runtime->nextSym())
 	{
 
-		string t(sc);
+		std::string t(sc);
 
 		if(t[0] == '_')
 		{
@@ -336,12 +334,12 @@ int __stdcall bbWinMain()
 	link();
 
 	//get cmd_line and params
-	string cmd = GetCommandLine(), params;
+	std::string cmd = GetCommandLine(), params;
 	while(cmd.size() && cmd[0] == ' ') cmd = cmd.substr(1);
 	if(cmd.find('\"') == 0)
 	{
 		int n = cmd.find('\"', 1);
-		if(n != string::npos)
+		if(n != std::string::npos)
 		{
 			params = cmd.substr(n + 1);
 			cmd = cmd.substr(1, n - 1);
@@ -350,7 +348,7 @@ int __stdcall bbWinMain()
 	else
 	{
 		int n = cmd.find(' ');
-		if(n != string::npos)
+		if(n != std::string::npos)
 		{
 			params = cmd.substr(n + 1);
 			cmd = cmd.substr(0, n);

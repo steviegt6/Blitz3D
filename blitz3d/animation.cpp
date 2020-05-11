@@ -6,7 +6,7 @@ struct Animation::Rep{
 
 	int ref_cnt;
 
-	typedef map<int,Quat> KeyList;
+	typedef std::map<int,Quat> KeyList;
 
 	KeyList scale_anim,rot_anim,pos_anim;
 

@@ -30,8 +30,8 @@ static BBStr usedStrs, freeStrs;
 static int next_handle;
 
 //object<->handle maps
-static map<int, BBObj*> handle_map;
-static map<BBObj*, int> object_map;
+static std::map<int, BBObj*> handle_map;
+static std::map<BBObj*, int> object_map;
 
 static BBType _bbIntType(BBTYPE_INT);
 static BBType _bbFltType(BBTYPE_FLT);
@@ -41,22 +41,11 @@ static BBType _bbCStrType(BBTYPE_CSTR);
 static void* bbMalloc(int size)
 {
 	return malloc(size);
-	/*
-		char *c=d_new char[ size ];
-		memBlks.push_back(c);
-		return c;
-	*/
 }
 
 static void bbFree(void* q)
 {
 	free(q);
-	/*
-		if(!q) return;
-		char *c=(char*)q;
-		memBlks.remove(c);
-		delete [] c;
-	*/
 }
 
 static void removeStr(BBStr* str)
@@ -97,39 +86,39 @@ BBStr::BBStr()
 	++stringCnt;
 }
 
-BBStr::BBStr(const char* s) :string(s)
+BBStr::BBStr(const char* s) : std::string(s)
 {
 	++stringCnt;
 }
 
-BBStr::BBStr(const char* s, int n) : string(s, n)
+BBStr::BBStr(const char* s, int n) : std::string(s, n)
 {
 	++stringCnt;
 }
 
-BBStr::BBStr(const BBStr& s) : string(s)
+BBStr::BBStr(const BBStr& s) : std::string(s)
 {
 	++stringCnt;
 }
 
-BBStr::BBStr(const string& s) : string(s)
+BBStr::BBStr(const std::string& s) : std::string(s)
 {
 	++stringCnt;
 }
 
 BBStr& BBStr::operator=(const char* s)
 {
-	string::operator=(s); return *this;
+	std::string::operator=(s); return *this;
 }
 
 BBStr& BBStr::operator=(const BBStr& s)
 {
-	string::operator=(s); return *this;
+	std::string::operator=(s); return *this;
 }
 
-BBStr& BBStr::operator=(const string& s)
+BBStr& BBStr::operator=(const std::string& s)
 {
-	string::operator=(s); return *this;
+	std::string::operator=(s); return *this;
 }
 
 BBStr::~BBStr()
@@ -337,7 +326,7 @@ void _bbObjDelete(BBObj* obj)
 				break;
 		}
 	}
-	map<BBObj*, int>::iterator it = object_map.find(obj);
+	std::map<BBObj*, int>::iterator it = object_map.find(obj);
 	if(it != object_map.end())
 	{
 		handle_map.erase(it->second);
@@ -500,7 +489,7 @@ BBStr* _bbObjToStr(BBObj* obj)
 int _bbObjToHandle(BBObj* obj)
 {
 	if(!obj || !obj->fields) return 0;
-	map<BBObj*, int>::const_iterator it = object_map.find(obj);
+	std::map<BBObj*, int>::const_iterator it = object_map.find(obj);
 	if(it != object_map.end()) return it->second;
 	++next_handle;
 	object_map[obj] = next_handle;
@@ -510,7 +499,7 @@ int _bbObjToHandle(BBObj* obj)
 
 BBObj* _bbObjFromHandle(int handle, BBObjType* type)
 {
-	map<int, BBObj*>::const_iterator it = handle_map.find(handle);
+	std::map<int, BBObj*>::const_iterator it = handle_map.find(handle);
 	if(it == handle_map.end()) return 0;
 	BBObj* obj = it->second;
 	return obj->type == type ? obj : 0;
@@ -582,20 +571,11 @@ void bbRuntimeStats()
 	gx_runtime->debugLog(("Active strings :" + itoa(stringCnt)).c_str());
 	gx_runtime->debugLog(("Active objects :" + itoa(objCnt)).c_str());
 	gx_runtime->debugLog(("Unreleased objs:" + itoa(unrelObjCnt)).c_str());
-	/*
-	clog<<"Active strings:"<<stringCnt<<endl;
-	clog<<"Active objects:"<<objCnt<<endl;
-	clog<<"Unreleased Objects:"<<unrelObjCnt<<endl;
-	for(BBStr *t=usedStrs.next;t!=&usedStrs;t=t->next) {
-		clog<<"string@"<<(void*)t<<endl;
-	}
-	*/
 }
 
 bool basic_create()
 {
 	next_handle = 0;
-	//	memBlks.clear();
 	handle_map.clear();
 	object_map.clear();
 	stringCnt = objCnt = unrelObjCnt = 0;
@@ -607,7 +587,6 @@ bool basic_create()
 bool basic_destroy()
 {
 	while(usedStrs.next != &usedStrs) delete usedStrs.next;
-	//	while(memBlks.size()) bbFree(memBlks.back());
 	handle_map.clear();
 	object_map.clear();
 	return true;

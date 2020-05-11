@@ -134,9 +134,6 @@ void	 _bbRestore( BBData *data );
 int		 _bbReadInt();
 float	 _bbReadFloat();
 BBStr *	 _bbReadStr();
-
-int		 _bbMod( int x,int y );
-float	 _bbFSgn( float n );
 float	 _bbFMod( float x,float y );
 float	 _bbFPow( float x,float y );
 int		 _bbMakeBool(int n);

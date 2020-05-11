@@ -11,7 +11,7 @@ public:
 	MainFrame();
 
 	Editor *getEditor();
-	void setTitle( const string &s );
+	void setTitle( const std::string &s );
 
 	DECLARE_DYNAMIC( MainFrame )
 	DECLARE_MESSAGE_MAP()
@@ -67,10 +67,10 @@ private:
 	CToolBar toolBar;
 	CStatusBar statusBar;
 
-	map<CWnd*,Editor*> editors;
-	map<CWnd*,HtmlHelp*> helps;
+	std::map<CWnd*,Editor*> editors;
+	std::map<CWnd*,HtmlHelp*> helps;
 
-	string last_quick_help;
+	std::string last_quick_help;
 
 	HtmlHelp *getHelp();
 	HtmlHelp *getHelp( int index );
@@ -80,13 +80,13 @@ private:
 
 	bool exit_flag;
 
-	void insertRecent( const string &f );
-	void newed( const string &t );
-	bool open( const string &f );
+	void insertRecent( const std::string &f );
+	void newed( const std::string &t );
+	bool open( const std::string &f );
 	bool close( int n );
 	bool save( int n );
 
-	void compile( const string &cmd );
+	void compile( const std::string &cmd );
 	void build( bool exec,bool publish );
 
 	//editorlistener
@@ -96,8 +96,8 @@ private:
 	void currentSet( Tabber *tabber,int index );
 
 	//htmlhelplistener
-	void helpOpen( HtmlHelp *help,const string &file );
-	void helpTitleChange( HtmlHelp *help,const string &title );
+	void helpOpen( HtmlHelp *help,const std::string &file );
+	void helpTitleChange( HtmlHelp *help,const std::string &title );
 };
 
 #endif

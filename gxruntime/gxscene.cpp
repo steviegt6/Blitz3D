@@ -687,7 +687,7 @@ void gxScene::setRenderState(const RenderState& rs)
 	}
 }
 
-bool gxScene::begin(const vector<gxLight*>& lights)
+bool gxScene::begin(const std::vector<gxLight*>& lights)
 {
 
 	if(dir3dDev->BeginScene() != D3D_OK) return false;

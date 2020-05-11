@@ -11,12 +11,12 @@ static inline void debugSound( gxSound *s ){
 }
 
 static gxSound *loadSound( BBStr *f,bool use_3d ){
-	string t=*f;delete f;
+	std::string t=*f;delete f;
 	return gx_audio ? gx_audio->loadSound( t,use_3d ) : 0;
 }
 
 static gxChannel *playMusic( BBStr *f,bool use_3d, int mode){
-	string t=*f;delete f;
+	std::string t=*f;delete f;
 	return gx_audio ? gx_audio->playFile( t,use_3d, mode) : 0;
 }
 

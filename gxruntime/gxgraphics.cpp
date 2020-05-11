@@ -55,7 +55,7 @@ gxGraphics::~gxGraphics()
 	while(font_set.size()) freeFont(*font_set.begin());
 	while(canvas_set.size()) freeCanvas(*canvas_set.begin());
 
-	set<string>::iterator it;
+	std::set<std::string>::iterator it;
 	for(it = font_res.begin(); it != font_res.end(); ++it) RemoveFontResource((*it).c_str());
 	font_res.clear();
 
@@ -106,7 +106,7 @@ bool gxGraphics::restore()
 	dirDraw->RestoreAllSurfaces();
 
 	//restore all canvases
-	set<gxCanvas*>::iterator it;
+	std::set<gxCanvas*>::iterator it;
 	for(it = canvas_set.begin(); it != canvas_set.end(); ++it)
 	{
 		(*it)->restore();
@@ -114,7 +114,7 @@ bool gxGraphics::restore()
 
 #ifdef PRO
 	//restore all meshes (b3d surfaces)
-	set<gxMesh*>::iterator mesh_it;
+	std::set<gxMesh*>::iterator mesh_it;
 	for(mesh_it = mesh_set.begin(); mesh_it != mesh_set.end(); ++mesh_it)
 	{
 		(*mesh_it)->restore();
@@ -178,7 +178,7 @@ int gxGraphics::getAvailVidmem()const
 	return caps.dwVidMemFree / 1024;
 }
 
-gxMovie* gxGraphics::openMovie(const string& file, int flags)
+gxMovie* gxGraphics::openMovie(const std::string& file, int flags)
 {
 
 	IAMMultiMediaStream* iam_stream;
@@ -236,7 +236,7 @@ gxCanvas* gxGraphics::createCanvas(int w, int h, int flags)
 	return c;
 }
 
-gxCanvas* gxGraphics::loadCanvas(const string& f, int flags)
+gxCanvas* gxGraphics::loadCanvas(const std::string& f, int flags)
 {
 	ddSurf* s = ddUtil::loadSurface(f, flags, this);
 	if(!s) return 0;
@@ -270,11 +270,11 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-gxFont* gxGraphics::loadFont(const string& f, int height, int flags)
+gxFont* gxGraphics::loadFont(const std::string& f, int height, int flags)
 {
-	string t;
+	std::string t;
 	int n = f.find('.');
-	if(n != string::npos)
+	if(n != std::string::npos)
 	{
 		t = fullfilename(f);
 		if(!font_res.count(t) && AddFontResource(t.c_str())) font_res.insert(t);
@@ -358,7 +358,7 @@ static int cntBits(int mask)
 	return n;
 }
 
-static vector<TexFmt> tex_fmts;
+static std::vector<TexFmt> tex_fmts;
 
 static HRESULT CALLBACK enumTextureFormat(DDPIXELFORMAT* fmt, void* p)
 {
@@ -373,9 +373,9 @@ static HRESULT CALLBACK enumTextureFormat(DDPIXELFORMAT* fmt, void* p)
 	return D3DENUMRET_OK;
 }
 
-static string itobin(int n)
+static std::string itobin(int n)
 {
-	string t;
+	std::string t;
 	for(int k = 0; k < 32; n <<= 1, ++k)
 	{
 		t += (n & 0x80000000) ? '1' : '0';

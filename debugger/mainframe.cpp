@@ -48,7 +48,7 @@ MainFrame::MainFrame() :state(STARTING), step_level(-1), cur_pos(0), cur_file(0)
 
 MainFrame::~MainFrame()
 {
-	map<const char*, SourceFile*>::iterator it;
+	std::map<const char*, SourceFile*>::iterator it;
 	for(it = files.begin(); it != files.end(); ++it) delete it->second;
 }
 
@@ -58,7 +58,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	prefs.open();
 
-	string tb = prefs.homeDir + "/cfg/dbg_toolbar.bmp";
+	std::string tb = prefs.homeDir + "/cfg/dbg_toolbar.bmp";
 
 	//Toolbar
 	HBITMAP toolbmp = (HBITMAP)LoadImage(
@@ -285,7 +285,7 @@ SourceFile* MainFrame::sourceFile(const char* file)
 {
 	if(!file) file = "<unknown>";
 
-	map<const char*, SourceFile*>::const_iterator it = files.find(file);
+	std::map<const char*, SourceFile*>::const_iterator it = files.find(file);
 
 	if(it != files.end())
 	{
@@ -296,7 +296,7 @@ SourceFile* MainFrame::sourceFile(const char* file)
 	//crete new source file
 	SourceFile* t = new SourceFile();
 
-	it = files.insert(make_pair(file, t)).first;
+	it = files.insert(std::make_pair(file, t)).first;
 
 	int tab = files.size();
 
@@ -318,7 +318,7 @@ SourceFile* MainFrame::sourceFile(const char* file)
 		fclose(f);
 	}
 
-	file_tabs.insert(make_pair(file, tab));
+	file_tabs.insert(std::make_pair(file, tab));
 
 	if(const char* p = strrchr(file, '/')) file = p + 1;
 	if(const char* p = strrchr(file, '\\')) file = p + 1;

@@ -4,7 +4,7 @@
 
 struct DeclNode : public Node{
 	int pos;
-	string file;
+	std::string file;
 	DeclNode():pos(-1){}
 	virtual void proto( DeclSeq *d,Environ *e ){}
 	virtual void semant( Environ *e ){}
@@ -13,7 +13,7 @@ struct DeclNode : public Node{
 };
 
 struct DeclSeqNode : public Node{
-	vector<DeclNode*> decls;
+	std::vector<DeclNode*> decls;
 	DeclSeqNode(){}
 	~DeclSeqNode(){ for(;decls.size();decls.pop_back())delete decls.back(); }
 	void proto( DeclSeq *d,Environ *e );
@@ -30,11 +30,11 @@ struct DeclSeqNode : public Node{
 //'kind' shouldn't really be in Parser...
 //should probably be LocalDeclNode,GlobalDeclNode,ParamDeclNode
 struct VarDeclNode : public DeclNode{
-	string ident,tag;
+	std::string ident,tag;
 	int kind;bool constant;
 	ExprNode *expr;
 	DeclVarNode *sem_var;
-	VarDeclNode( const string &i,const string &t,int k,bool c,ExprNode *e ):ident(i),tag(t),kind(k),constant(c),expr(e),sem_var(0){}
+	VarDeclNode( const std::string &i,const std::string &t,int k,bool c,ExprNode *e ):ident(i),tag(t),kind(k),constant(c),expr(e),sem_var(0){}
 	~VarDeclNode(){ delete expr;delete sem_var; }
 	void proto( DeclSeq *d,Environ *e );
 	void semant( Environ *e );
@@ -42,12 +42,12 @@ struct VarDeclNode : public DeclNode{
 };
 
 struct FuncDeclNode : public DeclNode{
-	string ident,tag;
+	std::string ident,tag;
 	DeclSeqNode *params;
 	StmtSeqNode *stmts;
 	FuncType *sem_type;
 	Environ *sem_env;
-	FuncDeclNode( const string &i,const string &t,DeclSeqNode *p,StmtSeqNode *ss ):ident(i),tag(t),params(p),stmts(ss){}
+	FuncDeclNode( const std::string &i,const std::string &t,DeclSeqNode *p,StmtSeqNode *ss ):ident(i),tag(t),params(p),stmts(ss){}
 	~FuncDeclNode(){ delete params;delete stmts; }
 	void proto( DeclSeq *d,Environ *e );
 	void semant( Environ *e );
@@ -55,10 +55,10 @@ struct FuncDeclNode : public DeclNode{
 };
 
 struct StructDeclNode : public DeclNode{
-	string ident;
+	std::string ident;
 	DeclSeqNode *fields;
 	StructType *sem_type;
-	StructDeclNode( const string &i,DeclSeqNode *f ):ident(i),fields(f){}
+	StructDeclNode( const std::string &i,DeclSeqNode *f ):ident(i),fields(f){}
 	~StructDeclNode(){ delete fields; }
 	void proto( DeclSeq *d,Environ *e );
 	void semant( Environ *e );
@@ -67,7 +67,7 @@ struct StructDeclNode : public DeclNode{
 
 struct DataDeclNode : public DeclNode{
 	ExprNode *expr;
-	string str_label;
+	std::string str_label;
 	DataDeclNode( ExprNode *e ):expr(e){}
 	~DataDeclNode(){ delete expr; }
 	void proto( DeclSeq *d,Environ *e );
@@ -77,11 +77,11 @@ struct DataDeclNode : public DeclNode{
 };
 
 struct VectorDeclNode : public DeclNode{
-	string ident,tag;
+	std::string ident,tag;
 	ExprSeqNode *exprs;
 	int kind;
 	VectorType *sem_type;
-	VectorDeclNode( const string &i,const string &t,ExprSeqNode *e,int k ):ident(i),tag(t),exprs(e),kind(k){}
+	VectorDeclNode( const std::string &i,const std::string &t,ExprSeqNode *e,int k ):ident(i),tag(t),exprs(e),kind(k){}
 	~VectorDeclNode(){ delete exprs; }
 	void proto( DeclSeq *d,Environ *e );
 	void translate( Codegen *g );

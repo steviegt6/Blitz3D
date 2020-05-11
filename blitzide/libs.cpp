@@ -4,11 +4,11 @@
 #include "editor.h"
 #include "blitzide.h"
 
-static map<string,string> keyhelps;
+static std::map<std::string, std::string> keyhelps;
 
 int linker_ver,runtime_ver;
 
-static string execProc( const string &proc ){
+static std::string execProc( const std::string &proc ){
 	HANDLE rd,wr;
 
 	SECURITY_ATTRIBUTES sa={sizeof(sa),0,true};
@@ -23,7 +23,7 @@ static string execProc( const string &proc ){
 			CloseHandle( pi.hThread );
 			CloseHandle( wr );
 
-			string t;
+			std::string t;
 			char *buf=new char[1024];
 			for(;;){
 				unsigned long sz;
@@ -31,7 +31,7 @@ static string execProc( const string &proc ){
 				if( !n && GetLastError()==ERROR_BROKEN_PIPE ) break;
 				if( !n ){ t="";break; }
 				if( !sz ) break;
-				t+=string( buf,sz );
+				t+= std::string( buf,sz );
 			}
 			delete[] buf;
 			CloseHandle(rd);
@@ -45,7 +45,7 @@ static string execProc( const string &proc ){
 	return "";
 }
 
-int version( string vers,string t ){
+int version(std::string vers, std::string t ){
 	t+=" version:";
 	int n=vers.find( t );n+=t.size();
 	int maj=atoi( vers.substr(n) );n=vers.find( '.',n )+1;
@@ -55,18 +55,18 @@ int version( string vers,string t ){
 
 void initLibs(){
 
-	string valid=execProc( prefs.homeDir+"/bin/blitzcc -q" );
+	std::string valid=execProc( prefs.homeDir+"/bin/blitzcc -q" );
 	if( valid.size() ){
 		AfxMessageBox( ("Compiler environment error: "+valid).c_str() );
 		ExitProcess(0);
 	}
 
-	string vers=tolower( execProc( prefs.homeDir+"/bin/blitzcc -v" ) );
+	std::string vers=tolower( execProc( prefs.homeDir+"/bin/blitzcc -v" ) );
 	linker_ver=version( vers,"linker" );
 	runtime_ver=version( vers,"runtime" );
 
 	//generate keywords!
-	string kws=execProc( prefs.homeDir+"/bin/blitzcc +k" );
+	std::string kws=execProc( prefs.homeDir+"/bin/blitzcc +k" );
 
 	if( !kws.size() ){
 		AfxMessageBox( "Error generating keywords" );
@@ -74,13 +74,13 @@ void initLibs(){
 	}
 
 	int pos=0,n;
-	while( (n=kws.find( '\n',pos ))!=string::npos ){
-		string t=kws.substr( pos,n-pos-1 );
-		for( int q=0;(q=t.find('\r',q))!=string::npos; ) t=t.replace( q,1,"" );
+	while( (n=kws.find( '\n',pos ))!= std::string::npos ){
+		std::string t=kws.substr( pos,n-pos-1 );
+		for( int q=0;(q=t.find('\r',q))!= std::string::npos; ) t=t.replace( q,1,"" );
 
-		string help=t;
+		std::string help=t;
 		int i=t.find(' ');
-		if( i!=string::npos ){
+		if( i!= std::string::npos ){
 			t=t.substr(0,i);if( !t.size() ){
 				AfxMessageBox( "Error in keywords" );
 				ExitProcess(0);
@@ -94,12 +94,12 @@ void initLibs(){
 	}
 }
 
-string quickHelp( const string &kw ){
-	map<string,string>::const_iterator it=keyhelps.find(kw);
+std::string quickHelp( const std::string &kw ){
+	std::map<std::string, std::string>::const_iterator it=keyhelps.find(kw);
 	return it==keyhelps.end() ? "" : it->second;
 }
 
-bool isMediaFile( const string &f ){
+bool isMediaFile( const std::string &f ){
 
 #ifndef PRO
 	return false;
@@ -112,11 +112,11 @@ bool isMediaFile( const string &f ){
 	};
 
 	int i=f.rfind( '.' );
-	if( i==string::npos || i+1==f.size() ) return false;
-	string ext=f.substr( i+1 );
+	if( i== std::string::npos || i+1==f.size() ) return false;
+	std::string ext=f.substr( i+1 );
 	char **p=exts;
 	while( const char *e=*p++ ){
-		string t(e);
+		std::string t(e);
 		if( i+t.size()+1!=f.size() ) continue;
 		if( ext==t ) return true;
 	}

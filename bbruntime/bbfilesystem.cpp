@@ -7,8 +7,8 @@
 gxFileSystem *gx_filesys;
 
 struct bbFile : public bbStream{
-	filebuf *buf;
-	bbFile( filebuf *f ):buf(f){
+	std::filebuf *buf;
+	bbFile(std::filebuf *f ):buf(f){
 	}
 	~bbFile(){
 		delete buf;
@@ -27,7 +27,7 @@ struct bbFile : public bbStream{
 	}
 };
 
-static set<bbFile*> file_set;
+static std::set<bbFile*> file_set;
 
 static inline void debugFile( bbFile *f ){
 	if( debug ){
@@ -42,9 +42,9 @@ static inline void debugDir( gxDir *d ){
 }
 
 static bbFile *open( BBStr *f,int n ){
-	string t=*f;
-	filebuf *buf=d_new filebuf();
-	if( buf->open( t.c_str(),n|ios_base::binary ) ){
+	std::string t=*f;
+	std::filebuf *buf=d_new std::filebuf();
+	if( buf->open( t.c_str(),n| std::ios_base::binary ) ){
 		bbFile *f=d_new bbFile( buf );
 		file_set.insert( f );
 		return f;
@@ -54,15 +54,15 @@ static bbFile *open( BBStr *f,int n ){
 }
 
 bbFile *bbReadFile( BBStr *f ){
-	return open( f,ios_base::in );
+	return open( f, std::ios_base::in );
 }
 
 bbFile *bbWriteFile( BBStr *f ){
-	return open( f,ios_base::out|ios_base::trunc );
+	return open( f, std::ios_base::out| std::ios_base::trunc );
 }
 
 bbFile *bbOpenFile( BBStr *f ){
-	return open( f,ios_base::in|ios_base::out );
+	return open( f, std::ios_base::in| std::ios_base::out );
 }
 
 void bbCloseFile( bbFile *f ){
@@ -72,15 +72,15 @@ void bbCloseFile( bbFile *f ){
 }
 
 int bbFilePos( bbFile *f ){
-	return f->buf->pubseekoff( 0,ios_base::cur );
+	return f->buf->pubseekoff( 0, std::ios_base::cur );
 }
 
 int bbSeekFile( bbFile *f,int pos ){
-	return f->buf->pubseekoff( pos,ios_base::beg );
+	return f->buf->pubseekoff( pos, std::ios_base::beg );
 }
 
 gxDir *bbReadDir( BBStr *d ){
-	string t=*d;delete d;
+	std::string t=*d;delete d;
 	return gx_filesys->openDir( t,0 );
 }
 
@@ -113,25 +113,25 @@ void bbDeleteDir( BBStr *d ){
 }
 
 int bbFileType( BBStr *f ){
-	string t=*f;delete f;
+	std::string t=*f;delete f;
 	int n=gx_filesys->getFileType( t );
 	return n==gxFileSystem::FILE_TYPE_FILE ? 1 : (n==gxFileSystem::FILE_TYPE_DIR ? 2 : 0);
 }
 
 int	bbFileSize( BBStr *f ){
-	string t=*f;delete f;
+	std::string t=*f;delete f;
 	return gx_filesys->getFileSize( t );
 }
 
 BBStr* bbFileExtension(BBStr* f) {
-	string t = *f; delete f;
-	if (t.find_last_of(".") != string::npos)
+	std::string t = *f; delete f;
+	if (t.find_last_of(".") != std::string::npos)
 		return d_new BBStr(t.substr(t.find_last_of(".") + 1));
 	return d_new BBStr("");
 }
 
 void bbCopyFile( BBStr *f,BBStr *to ){
-	string src=*f,dest=*to;
+	std::string src=*f,dest=*to;
 	delete f;delete to;
 	gx_filesys->copyFile( src,dest );
 }

@@ -27,7 +27,7 @@ float bbLog(float n) { return log(n); }
 float bbLog10(float n) { return log10(n); }
 float bbMin(float n, float m) { return fmin(n, m); }
 float bbMax(float n, float m) { return fmax(n, m); }
-float bbClamp(float v, float lo, float hi) { return clamp(v, lo, hi); }
+float bbClamp(float v, float lo, float hi) { return std::clamp(v, lo, hi); }
 int	bbIsNaN(float n) { return isnan(n); }
 
 //return rand float from 0...1

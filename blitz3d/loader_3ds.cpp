@@ -12,9 +12,9 @@ extern gxRuntime *gx_runtime;
 #define _log( X )
 #endif
 
-static filebuf in;
+static std::filebuf in;
 static int chunk_end;
-static vector<int> parent_end;
+static std::vector<int> parent_end;
 static unsigned short anim_len;
 
 static bool conv,flip_tris;
@@ -26,25 +26,25 @@ struct Face3DS{
 	Brush brush;
 };
 
-static vector<Face3DS> faces;
+static std::vector<Face3DS> faces;
 
-static map<string,Brush> materials_map;
-static map<string,MeshModel*> name_map;
-static map<int,MeshModel*> id_map;
+static std::map<std::string,Brush> materials_map;
+static std::map<std::string,MeshModel*> name_map;
+static std::map<int,MeshModel*> id_map;
 
 static int nextChunk(){
-	in.pubseekoff( chunk_end,ios_base::beg );
+	in.pubseekoff( chunk_end, std::ios_base::beg );
 	if( chunk_end==parent_end.back() ) return 0;
 	unsigned short id;int len;
 	in.sgetn( (char*)&id,2 );
 	in.sgetn( (char*)&len,4 );
-	chunk_end=(int)in.pubseekoff( 0,ios_base::cur )+len-6;
+	chunk_end=(int)in.pubseekoff( 0, std::ios_base::cur )+len-6;
 	return id;
 }
 
 static void enterChunk(){
 	parent_end.push_back( chunk_end );
-	chunk_end=(int)in.pubseekoff( 0,ios_base::cur );
+	chunk_end=(int)in.pubseekoff( 0, std::ios_base::cur );
 }
 
 static void leaveChunk(){
@@ -52,8 +52,8 @@ static void leaveChunk(){
 	parent_end.pop_back();
 }
 
-static string parseString(){
-	string t;
+static std::string parseString(){
+	std::string t;
 	while( int c=in.sbumpc() ) t+=char(c);
 	return t;
 }
@@ -123,7 +123,7 @@ static void parseVertList(){
 }
 
 static void parseFaceMat(){
-	string name=parseString();
+	std::string name=parseString();
 	_log( "FaceMat: "+name );
 	Brush mat=materials_map[name];
 	unsigned short cnt;
@@ -231,7 +231,7 @@ static void parseTriMesh( MeshModel *mesh ){
 
 static void parseObject( MeshModel *root ){
 	//skip name
-	string name=parseString();
+	std::string name=parseString();
 	_log( "Object:"+name );
 	MeshModel *mesh=0;
 
@@ -253,7 +253,7 @@ static void parseObject( MeshModel *root ){
 static void parseMaterial(){
 	_log( "Material" );
 	Brush mat;
-	string name,tex_name;
+	std::string name,tex_name;
 	enterChunk();
 	while( int id=nextChunk() ){
 		switch( id ){
@@ -311,9 +311,9 @@ static void parseAnimKeys( Animation *anim,int type ){
 	int cnt=0;
 	short t_flags;
 	in.sgetn( (char*)&t_flags,2 );
-	in.pubseekoff( 8,ios_base::cur );
+	in.pubseekoff( 8, std::ios_base::cur );
 	in.sgetn( (char*)&cnt,2 );
-	in.pubseekoff( 2,ios_base::cur );
+	in.pubseekoff( 2, std::ios_base::cur );
 	_log( "ANIM_TRACK: frames="+itoa( cnt ) );
 	Vector pos,axis,scale;
 	float angle;
@@ -359,7 +359,7 @@ static void parseAnimKeys( Animation *anim,int type ){
 static void parseMeshInfo( MeshModel *root,float curr_time ){
 	_log( "OBJECT_NODE_TAG" );
 	enterChunk();
-	string name,inst;
+	std::string name,inst;
 	Vector pivot;
 	Animation anim;
 	unsigned short id=65535,parent=65535,flags1,flags2;
@@ -405,7 +405,7 @@ static void parseMeshInfo( MeshModel *root,float curr_time ){
 
 	MeshModel *p=root;
 	if( parent!=65535 ){
-		map<int,MeshModel*>::const_iterator it=id_map.find( parent );
+		std::map<int,MeshModel*>::const_iterator it=id_map.find( parent );
 		if( it==id_map.end() ) return;
 		p=it->second;
 	}
@@ -415,7 +415,7 @@ static void parseMeshInfo( MeshModel *root,float curr_time ){
 		mesh->setName( inst );
 		mesh->setParent( p );
 	}else{
-		map<string,MeshModel*>::const_iterator it=name_map.find( name );
+		std::map<std::string,MeshModel*>::const_iterator it=name_map.find( name );
 		if( it==name_map.end() ) return;
 		mesh=it->second;
 		name_map.erase( name );
@@ -436,7 +436,7 @@ static void parseMeshInfo( MeshModel *root,float curr_time ){
 static void parseKeyFramer( MeshModel *root ){
 	_log( "KeyFramer" );
 	enterChunk();
-	string file_3ds;
+	std::string file_3ds;
 	unsigned short rev,curr_time=0;
 	while( int id=nextChunk() ){
 		switch( id ){
@@ -468,7 +468,7 @@ static MeshModel *parseFile(){
 	in.sgetn( (char*)&id,2 );
 	in.sgetn( (char*)&len,4 );
 	if( id!=CHUNK_MAIN ) return 0;
-	chunk_end=(int)in.pubseekoff( 0,ios_base::cur )+len-6;
+	chunk_end=(int)in.pubseekoff( 0, std::ios_base::cur )+len-6;
 
 	enterChunk();
 	MeshModel *root=d_new MeshModel();
@@ -486,7 +486,7 @@ static MeshModel *parseFile(){
 	return root;
 }
 
-MeshModel *Loader_3DS::load( const string &filename,const Transform &t,int hint ){
+MeshModel *Loader_3DS::load( const std::string &filename,const Transform &t,int hint ){
 
 	conv_tform=t;
 	conv=flip_tris=false;
@@ -498,7 +498,7 @@ MeshModel *Loader_3DS::load( const string &filename,const Transform &t,int hint 
 	collapse=!!(hint&MeshLoader::HINT_COLLAPSE);
 	animonly=!!(hint&MeshLoader::HINT_ANIMONLY);
 
-	if( !in.open( filename.c_str(),ios_base::in|ios_base::binary ) ){
+	if( !in.open( filename.c_str(), std::ios_base::in| std::ios_base::binary ) ){
 		return 0;
 	}
 

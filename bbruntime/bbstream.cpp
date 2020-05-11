@@ -2,7 +2,7 @@
 #include "std.h"
 #include "bbstream.h"
 
-static set<bbStream*> stream_set;
+static std::set<bbStream*> stream_set;
 
 void debugStream( bbStream *s ){
 	if( stream_set.count(s) ) return;
@@ -62,7 +62,7 @@ BBStr *bbReadString( bbStream *s ){
 	if( s->read( (char*)&len,4 ) ){
 		char *buff=d_new char[len];
 		if( s->read( buff,len ) ){
-			*str=string( buff,len );
+			*str=std::string( buff,len );
 		}
 		delete[] buff;
 	}

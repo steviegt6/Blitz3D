@@ -6,7 +6,7 @@
 
 int Toker::chars_toked;
 
-static map<string, int> alphaTokes, lowerTokes;
+static std::map<std::string, int> alphaTokes, lowerTokes;
 
 static void makeKeywords()
 {
@@ -84,7 +84,7 @@ static void makeKeywords()
 	alphaTokes["Infinity"] = INFINITYCONST;
 	alphaTokes["PowTwo"] = POWTWO;
 
-	map<string, int>::const_iterator it;
+	std::map<std::string, int>::const_iterator it;
 	for(it = alphaTokes.begin(); it != alphaTokes.end(); ++it)
 	{
 		lowerTokes[tolower(it->first)] = it->second;
@@ -92,13 +92,13 @@ static void makeKeywords()
 	made = true;
 }
 
-Toker::Toker(istream& in) :in(in), curr_row(-1)
+Toker::Toker(std::istream& in) :in(in), curr_row(-1)
 {
 	makeKeywords();
 	nextline();
 }
 
-map<string, int>& Toker::getKeywords()
+std::map<std::string, int>& Toker::getKeywords()
 {
 	makeKeywords();
 	return alphaTokes;
@@ -114,7 +114,7 @@ int Toker::curr()
 	return tokes[curr_toke].n;
 }
 
-string Toker::text()
+std::string Toker::text()
 {
 	int from = tokes[curr_toke].from, to = tokes[curr_toke].to;
 	return line.substr(from, to - from);
@@ -188,20 +188,20 @@ void Toker::nextline()
 		{
 			for(++k; isalnum(line[k]) || line[k] == '_'; ++k) { }
 
-			string ident = tolower(line.substr(from, k - from));
+			std::string ident = tolower(line.substr(from, k - from));
 
 			if(line[k] == ' ' && isalpha(line[k + 1]))
 			{
 				int t = k;
 				for(t += 2; isalnum(line[t]) || line[t] == '_'; ++t) { }
-				string s = tolower(line.substr(from, t - from));
+				std::string s = tolower(line.substr(from, t - from));
 				if(lowerTokes.find(s) != lowerTokes.end())
 				{
 					k = t; ident = s;
 				}
 			}
 
-			map<string, int>::iterator it = lowerTokes.find(ident);
+			std::map<std::string, int>::iterator it = lowerTokes.find(ident);
 
 			if(it == lowerTokes.end())
 			{

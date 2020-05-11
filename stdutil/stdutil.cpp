@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <Windows.h>
 
-using namespace std;
-
 #ifdef MEMDEBUG
 
 struct Mem{
@@ -110,10 +108,10 @@ void checkmem( ostream &out ){
 		check( m );
 		xsum+=m->size;
 	}
-	out<<"Tracked blitz mem in use:"<<sum<<endl;
-	out<<"Tracked other mem in use:"<<usum<<endl;
-	out<<"Untracked mem in use:"<<xsum<<endl;
-	out<<"Total mem in use:"<<(sum+usum+xsum)<<endl;
+	out<<"Tracked blitz mem in use:"<<sum<< std::endl;
+	out<<"Tracked other mem in use:"<<usum<< std::endl;
+	out<<"Untracked mem in use:"<<xsum<< std::endl;
+	out<<"Total mem in use:"<<(sum+usum+xsum)<< std::endl;
 }
 
 void * _cdecl operator new( size_t size ){ return op_new( size ); }
@@ -130,35 +128,35 @@ void _cdecl operator delete[]( void *q,const char *file,int line ){ op_delete( q
 void trackmem( bool enable ){
 }
 
-void checkmem( ostream &out ){
+void checkmem(std::ostream &out ){
 }
 
 #endif
 
-int atoi( const string &s ){
+int atoi( const std::string &s ){
 	return atoi( s.c_str() );
 }
 
-double atof( const string &s ){
+double atof( const std::string &s ){
 	return atof( s.c_str() );
 }
 
-string itoa( int n ){
-	char buff[32];itoa( n,buff,10 );
-	return string( buff );
+std::string itoa( int n ){
+	char buff[32];itoa( n, buff,10 );
+	return std::string( buff );
 }
 
 /////////////
 //By FLOYD!//
 /////////////
-string ftoa( float n ){
+std::string ftoa( float n ){
 
 	static const int digits=6;
 
 	int eNeg = -4, ePos = 8;	// limits for e notation.
 
 	char buffer[50]; // from MSDN example, 25 would probably suffice
-	string t;
+	std::string t;
 	int dec, sign;
 
 	if ( _finite( n ) ){		
@@ -176,7 +174,7 @@ string ftoa( float n ){
 	
 		if ( dec <= 0 ){
 
-			t = "0." + string( -dec, '0' ) + t;
+			t = "0." + std::string( -dec, '0' ) + t;
 			dec = 1;	// new location for decimal point
 
 		}
@@ -187,7 +185,7 @@ string ftoa( float n ){
 		}
 		else{
 
-			t = t + string( dec - digits, '0' ) + ".0";
+			t = t + std::string( dec - digits, '0' ) + ".0";
 			dec += dec - digits;
 
 		}
@@ -196,7 +194,7 @@ string ftoa( float n ){
 
 		int dp1 = dec + 1, p = t.length();	
 		while( --p > dp1 && t[p] == '0' );
-		t = string( t, 0, ++p );
+		t = std::string( t, 0, ++p );
 
 		return sign ? "-" + t : t;
 
@@ -209,36 +207,36 @@ string ftoa( float n ){
 	abort();
 }
 
-string tolower( const string &s ){
-	string t=s;
+std::string tolower( const std::string &s ){
+	std::string t=s;
 	for( int k=0;k<t.size();++k ) t[k]=tolower(t[k]);
 	return t;
 }
 
-string toupper( const string &s ){
-	string t=s;
+std::string toupper( const std::string &s ){
+	std::string t=s;
 	for( int k=0;k<t.size();++k ) t[k]=toupper(t[k]);
 	return t;
 }
 
-string fullfilename( const string &t ){
+std::string fullfilename( const std::string &t ){
 	char buff[MAX_PATH+1],*p;
 	GetFullPathName( t.c_str(),MAX_PATH,buff,&p );
-	return string(buff);
+	return std::string(buff);
 }
 
-string filenamepath( const string &t ){
+std::string filenamepath( const std::string &t ){
 	char buff[MAX_PATH+1],*p;
 	GetFullPathName( t.c_str(),MAX_PATH,buff,&p );
 	if( !p ) return "";
-	*p=0;return string(buff);
+	*p=0;return std::string(buff);
 }
 
-string filenamefile( const string &t ){
+std::string filenamefile( const std::string &t ){
 	char buff[MAX_PATH+1],*p;
 	GetFullPathName( t.c_str(),MAX_PATH,buff,&p );
 	if( !p ) return "";
-	return string( p );
+	return std::string( p );
 }
 
 const int MIN_SIZE=256;

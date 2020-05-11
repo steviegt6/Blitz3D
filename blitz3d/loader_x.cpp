@@ -10,7 +10,7 @@
 #include "minidx9/include/rmxftmpl.h"
 
 extern gxRuntime *gx_runtime;
-static map<string,MeshModel*> frames_map;
+static std::map<std::string,MeshModel*> frames_map;
 static int anim_len;
 
 static bool conv,flip_tris;
@@ -81,7 +81,7 @@ static void parseAnim( IDirectXFileData *fileData ){
 					if( *guid==TID_D3DRMFrame ){
 						char name[80];DWORD len=80;
 						if( childData->GetName( name,&len )>=0 ){
-							map<string,MeshModel*>::iterator it=frames_map.find( name );
+							std::map<std::string,MeshModel*>::iterator it=frames_map.find( name );
 							if( it!=frames_map.end() ) frame=it->second;
 						}
 					}
@@ -146,7 +146,7 @@ static Brush parseMaterial( IDirectXFileData *fileData ){
 	return brush;
 }
 
-static void parseMaterialList( IDirectXFileData *fileData,vector<Brush> &mats ){
+static void parseMaterialList( IDirectXFileData *fileData, std::vector<Brush> &mats ){
 
 	const GUID *guid;
 	IDirectXFileObject *childObj;
@@ -191,8 +191,8 @@ static void parseMesh( IDirectXFileData *fileData,MeshModel *mesh ){
 	if( fileData->GetData( 0,&sz,(void**)&data )<0 ) return;
 
 	//stuff...
-	vector<FaceX> faces;
-	vector<Brush> mats;
+	std::vector<FaceX> faces;
+	std::vector<Brush> mats;
 
 	MeshLoader::beginMesh();
 
@@ -328,7 +328,7 @@ static MeshModel *parseFrame( IDirectXFileData *fileData ){
 	return e;
 }
 
-static MeshModel *parseFile( const string &file ){
+static MeshModel *parseFile( const std::string &file ){
 
 	const GUID *guid;
 	IDirectXFile *xfile;
@@ -368,7 +368,7 @@ static MeshModel *parseFile( const string &file ){
 	return e;
 }
 
-MeshModel *Loader_X::load( const string &filename,const Transform &t,int hint ){
+MeshModel *Loader_X::load( const std::string &filename,const Transform &t,int hint ){
 	conv_tform=t;
 	conv=flip_tris=false;
 	if( conv_tform!=Transform() ){

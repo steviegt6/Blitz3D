@@ -2,17 +2,15 @@
 #include <string>
 #include <Windows.h>
 
-using namespace std;
-
 static const char* bb_err =
 "Error when creating BlitzIDE process. Please make sure ide.exe is inside the \"bin\" folder.";
 
-static string getAppDir()
+static std::string getAppDir()
 {
 	char buffer[MAX_PATH];
-	string t = string(buffer, GetModuleFileName(NULL, buffer, MAX_PATH));
+	std::string t = std::string(buffer, GetModuleFileName(NULL, buffer, MAX_PATH));
 	int n = t.find_last_of('\\');
-	if(n != string::npos) t = t.substr(0, n); //Remove filename from the path and return it
+	if(n != std::string::npos) t = t.substr(0, n); //Remove filename from the path and return it
 	return t;								  //Blitz3D doesnt like filenames in his path...
 }
 
@@ -24,8 +22,8 @@ static void fail(const char* p)
 
 int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
 {
-	string t = getAppDir();
-	string idePath = "\\bin\\ide.exe ";
+	std::string t = getAppDir();
+	std::string idePath = "\\bin\\ide.exe ";
 
 	putenv(("blitzpath=" + t).c_str());
 	SetCurrentDirectory(t.c_str());

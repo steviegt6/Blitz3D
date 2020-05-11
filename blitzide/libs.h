@@ -5,7 +5,7 @@
 extern int linker_ver,runtime_ver;
 
 void	initLibs();
-string	quickHelp( const string &kw );
-bool	isMediaFile( const string &file );
+std::string	quickHelp( const std::string &kw );
+bool	isMediaFile( const std::string &file );
 
 #endif

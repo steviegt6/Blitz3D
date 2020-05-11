@@ -8,14 +8,14 @@ int lnk_ver;
 int run_ver;
 int dbg_ver;
 
-string home;
+std::string home;
 Linker *linkerLib;
 Runtime *runtimeLib;
 
 Module *runtimeModule;
 Environ *runtimeEnviron;
-vector<string> keyWords;
-vector<UserFunc> userFuncs;
+std::vector<std::string> keyWords;
+std::vector<UserFunc> userFuncs;
 
 static HMODULE linkerHMOD,runtimeHMOD;
 
@@ -29,9 +29,9 @@ static Type *typeof( int c ){
 }
 
 static int curr;
-static string text;
+static std::string text;
 
-static int next( istream &in ){
+static int next(std::istream &in ){
 
 	text="";
 
@@ -62,7 +62,7 @@ static const char *linkRuntime(){
 
 	while( const char *sym=runtimeLib->nextSym() ){
 
-		string s( sym );
+		std::string s( sym );
 
 		int pc=runtimeLib->symValue(sym);
 
@@ -90,18 +90,18 @@ static const char *linkRuntime(){
 		}
 		end=k;
 		DeclSeq *params=d_new DeclSeq();
-		string n=s.substr( start,end-start );
+		std::string n=s.substr( start,end-start );
 		while( k<s.size() ){
 			Type *t=typeof(s[k++]);
 			int from=k;
 			for( ;isalnum(s[k])||s[k]=='_';++k ){}
-			string str=s.substr( from,k-from );
+			std::string str=s.substr( from,k-from );
 			ConstType *defType=0;
 			if( s[k]=='=' ){
 				int from=++k;
 				if( s[k]=='\"' ){
 					for( ++k;s[k]!='\"';++k ){}
-					string t=s.substr( from+1,k-from-1 );
+					std::string t=s.substr( from+1,k-from-1 );
 					defType=d_new ConstType( t );++k;
 				}else{
 					if( s[k]=='-' ) ++k;
@@ -126,14 +126,14 @@ static const char *linkRuntime(){
 	return 0;
 }
 
-static set<string> _ulibkws;
+static std::set<std::string> _ulibkws;
 
-static const char *loadUserLib( const string &userlib ){
+static const char *loadUserLib( const std::string &userlib ){
 
-	string t=home+"/userlibs/"+userlib;
+	std::string t=home+"/userlibs/"+userlib;
 
-	string lib="";
-	ifstream in(t.c_str());
+	std::string lib="";
+	std::ifstream in(t.c_str());
 
 	next(in);
 	while( curr ){
@@ -155,8 +155,8 @@ static const char *loadUserLib( const string &userlib ){
 
 			if( !lib.size() ) return "function decl without lib directive";
 
-			string id=text;
-			string lower_id=tolower(id);
+			std::string id=text;
+			std::string lower_id=tolower(id);
 
 			if( _ulibkws.count( lower_id ) ) return "duplicate identifier";
 			_ulibkws.insert( lower_id );
@@ -177,7 +177,7 @@ static const char *loadUserLib( const string &userlib ){
 			if( curr!=')' ){
 				for(;;){
 					if( curr!=-1 ) break;
-					string arg=text;
+					std::string arg=text;
 
 					Type *ty=0;
 					switch( next(in) ){
@@ -253,9 +253,9 @@ const char *openLibs(){
 		char workingDir[128];
 		GetCurrentDirectory(128, workingDir);
 		home = workingDir; home+="\\\\..";
-		putenv( (string("blitzpath=")+home).c_str() );
+		putenv( (std::string("blitzpath=")+home).c_str() );
 	}
-	home=string(p);
+	home= std::string(p);
 
 	linkerHMOD=LoadLibrary( (home+"/bin/linker.dll").c_str() );
 	if( !linkerHMOD ) return "Unable to open linker.dll";

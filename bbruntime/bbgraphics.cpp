@@ -14,7 +14,7 @@ struct GfxMode
 class bbImage
 {
 public:
-	bbImage(const vector<gxCanvas*>& f) :frames(f)
+	bbImage(const std::vector<gxCanvas*>& f) :frames(f)
 	{
 	}
 	~bbImage()
@@ -24,7 +24,7 @@ public:
 			gx_graphics->freeCanvas(frames[k]);
 		}
 	}
-	const vector<gxCanvas*>& getFrames()const
+	const std::vector<gxCanvas*>& getFrames()const
 	{
 		return frames;
 	}
@@ -34,7 +34,7 @@ public:
 		frames[n] = c;
 	}
 private:
-	vector<gxCanvas*> frames;
+	std::vector<gxCanvas*> frames;
 };
 
 //degrees to radians
@@ -45,7 +45,7 @@ static int gx_driver;	//Current graphics driver index.
 static bool filter;
 static bool auto_dirty;
 static bool auto_midhandle;
-static set<bbImage*> image_set;
+static std::set<bbImage*> image_set;
 static int curs_x, curs_y;
 static gxCanvas* p_canvas;
 
@@ -53,7 +53,7 @@ static gxFont* curr_font;
 static unsigned curr_color;
 static unsigned curr_clsColor;
 
-static vector<GfxMode> gfx_modes;
+static std::vector<GfxMode> gfx_modes;
 
 static inline void debugImage(bbImage* i, int frame = 0)
 {
@@ -208,10 +208,10 @@ static gxCanvas* tformCanvas(gxCanvas* c, float m[2][2], int x_handle, int y_han
 	return t;
 }
 
-static bool saveCanvas(gxCanvas* c, const string& f)
+static bool saveCanvas(gxCanvas* c, const std::string& f)
 {
 
-	ofstream out(f.c_str(), ios::binary);
+	std::ofstream out(f.c_str(), std::ios::binary);
 	if(!out.good()) return false;
 
 	int tempsize = (c->getWidth() * 3 + 3) & ~3;
@@ -261,7 +261,7 @@ int bbCountGfxDrivers()
 BBStr* bbGfxDriverName(int n)
 {
 	debugDriver(n);
-	string t; int caps;
+	std::string t; int caps;
 	gx_runtime->graphicsDriverInfo(n - 1, &t, &caps);
 	return d_new BBStr(t);
 }
@@ -326,7 +326,7 @@ int  bbGfxModeExists(int w, int h, int d)
 int  bbGfxDriver3D(int n)
 {
 	debugDriver(n);
-	string t; int caps;
+	std::string t; int caps;
 	gx_runtime->graphicsDriverInfo(n - 1, &t, &caps);
 	return (caps & gxRuntime::GFXMODECAPS_3D) ? 1 : 0;
 }
@@ -393,7 +393,7 @@ gxCanvas* bbGraphicsBuffer()
 int bbLoadBuffer(gxCanvas* c, BBStr* str)
 {
 	debugCanvas(c);
-	string s = *str; delete str;
+	std::string s = *str; delete str;
 	gxCanvas* t = gx_graphics->loadCanvas(s, 0);
 	if(!t) return 0;
 	float m[2][2];
@@ -412,7 +412,7 @@ int bbLoadBuffer(gxCanvas* c, BBStr* str)
 int bbSaveBuffer(gxCanvas* c, BBStr* str)
 {
 	debugCanvas(c);
-	string t = *str; delete str;
+	std::string t = *str; delete str;
 	return saveCanvas(c, t) ? 1 : 0;
 }
 
@@ -766,7 +766,7 @@ int bbFontHeight()
 
 int bbStringWidth(BBStr* str)
 {
-	string t = *str; delete str;
+	std::string t = *str; delete str;
 	return curr_font->getWidth(t);
 }
 
@@ -813,12 +813,12 @@ void bbCloseMovie(gxMovie* movie)
 
 bbImage* bbLoadImage(BBStr* s)
 {
-	string t = *s; delete s;
+	std::string t = *s; delete s;
 	gxCanvas* c = gx_graphics->loadCanvas(t, 0);
 	if(!c) return 0;
 	if(auto_dirty) c->backup();
 	if(auto_midhandle) c->setHandle(c->getWidth() / 2, c->getHeight() / 2);
-	vector<gxCanvas*> frames;
+	std::vector<gxCanvas*> frames;
 	frames.push_back(c);
 	bbImage* i = d_new bbImage(frames);
 	image_set.insert(i);
@@ -828,7 +828,7 @@ bbImage* bbLoadImage(BBStr* s)
 bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 {
 
-	string t = *s; delete s;
+	std::string t = *s; delete s;
 
 	if(cnt < 1) RTEX("Illegal frame count!");
 	if(first < 0) RTEX("Illegal first frame!");
@@ -846,7 +846,7 @@ bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 	}
 
 	//x,y of first frame...
-	vector<gxCanvas*> frames;
+	std::vector<gxCanvas*> frames;
 	int src_x = first % fpr * w, src_y = first / fpr * h;
 
 	for(int k = 0; k < cnt; ++k)
@@ -872,8 +872,8 @@ bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 bbImage* bbCopyImage(bbImage* i)
 {
 	debugImage(i);
-	vector<gxCanvas*> frames;
-	const vector<gxCanvas*>& f = i->getFrames();
+	std::vector<gxCanvas*> frames;
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	for(int k = 0; k < f.size(); ++k)
 	{
 		gxCanvas* t = f[k];
@@ -900,7 +900,7 @@ bbImage* bbCopyImage(bbImage* i)
 
 bbImage* bbCreateImage(int w, int h, int n)
 {
-	vector<gxCanvas*> frames;
+	std::vector<gxCanvas*> frames;
 	for(int k = 0; k < n; ++k)
 	{
 		gxCanvas* c = gx_graphics->createCanvas(w, h, 0);
@@ -921,7 +921,7 @@ bbImage* bbCreateImage(int w, int h, int n)
 void bbFreeImage(bbImage* i)
 {
 	if(!image_set.erase(i)) return;
-	const vector<gxCanvas*>& f = i->getFrames();
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	for(int k = 0; k < f.size(); ++k)
 	{
 		if(f[k] == gx_canvas)
@@ -936,7 +936,7 @@ void bbFreeImage(bbImage* i)
 int bbSaveImage(bbImage* i, BBStr* str, int n)
 {
 	debugImage(i, n);
-	string t = *str; delete str;
+	std::string t = *str; delete str;
 	gxCanvas* c = i->getFrames()[n];
 	return saveCanvas(c, t) ? 1 : 0;
 }
@@ -1031,21 +1031,21 @@ void bbMaskImage(bbImage* i, int r, int g, int b)
 {
 	debugImage(i);
 	unsigned argb = (r << 16) | (g << 8) | b;
-	const vector<gxCanvas*>& f = i->getFrames();
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	for(int k = 0; k < f.size(); ++k) f[k]->setMask(argb);
 }
 
 void bbHandleImage(bbImage* i, int x, int y)
 {
 	debugImage(i);
-	const vector<gxCanvas*>& f = i->getFrames();
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	for(int k = 0; k < f.size(); ++k) f[k]->setHandle(x, y);
 }
 
 void bbMidHandle(bbImage* i)
 {
 	debugImage(i);
-	const vector<gxCanvas*>& f = i->getFrames();
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	for(int k = 0; k < f.size(); ++k) f[k]->setHandle(f[k]->getWidth() / 2, f[k]->getHeight() / 2);
 }
 
@@ -1123,7 +1123,7 @@ int bbImageRectCollide(bbImage* i, int x, int y, int f, int x2, int y2, int w2, 
 void bbTFormImage(bbImage* i, float a, float b, float c, float d)
 {
 	debugImage(i);
-	const vector<gxCanvas*>& f = i->getFrames();
+	const std::vector<gxCanvas*>& f = i->getFrames();
 	int k;
 	for(k = 0; k < f.size(); ++k)
 	{
@@ -1236,7 +1236,7 @@ void bbPrint(BBStr* str)
 BBStr* bbInput(BBStr* prompt)
 {
 	gxCanvas* c = startPrinting();
-	string t = *prompt; delete prompt;
+	std::string t = *prompt; delete prompt;
 
 	//get temp canvas
 	if(!p_canvas || p_canvas->getWidth() < c->getWidth() || p_canvas->getHeight() < curr_font->getHeight() * 2)
@@ -1257,7 +1257,7 @@ BBStr* bbInput(BBStr* prompt)
 	p_canvas->setColor(curr_color);
 	p_canvas->blit(0, 0, c, 0, curs_y, c->getWidth(), curr_font->getHeight(), true);
 
-	string str;
+	std::string str;
 	bool go = true;
 	int curs = 0, last_key = 0, last_time, rep_delay;
 

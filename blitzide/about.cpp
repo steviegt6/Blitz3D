@@ -62,13 +62,13 @@ void aboutBlitz(){
 
 	about.Create( IDD_ABOUT );
 
-	string credits;
+	std::string credits;
 
 	credits+=_credits;
 
 	about.GetDlgItem( IDC_CREDITS )->SetWindowText( credits.c_str() );
 
-	string t="";
+	std::string t="";
 
 #ifdef PRO
 	t+="Blitz3D";

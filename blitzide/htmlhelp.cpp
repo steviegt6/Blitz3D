@@ -9,7 +9,7 @@ BEGIN_MESSAGE_MAP( HtmlHelp,CHtmlView )
 	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
-string HtmlHelp::getTitle(){
+std::string HtmlHelp::getTitle(){
 	return title;
 }
 
@@ -18,7 +18,7 @@ void HtmlHelp::OnTitleChange( LPCTSTR t ){
 }
 
 void HtmlHelp::OnBeforeNavigate2( LPCTSTR url,DWORD flags,LPCTSTR target,CByteArray& posted,LPCTSTR headers,BOOL* cancel ){
-	string t( url );
+	std::string t( url );
 	int attr=GetFileAttributes( url );if( attr==-1 ) attr=0;
 	if( (attr & FILE_ATTRIBUTE_DIRECTORY) ||
 		(t.rfind( ".bb" )+3==t.size()) ||

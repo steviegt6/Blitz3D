@@ -473,7 +473,7 @@ void gxCanvas::blitstretch(int x, int y, int w, int h, gxCanvas* src, int src_x,
 	damage(dest_r);
 }
 
-void gxCanvas::text( int x,int y,const string &t ){
+void gxCanvas::text( int x,int y,const std::string &t ){
 
 	int ty=y+origin_y;
 	if( ty>=viewport.bottom ) return;

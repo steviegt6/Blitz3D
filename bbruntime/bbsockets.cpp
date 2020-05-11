@@ -20,9 +20,9 @@ class UDPStream;
 class TCPStream;
 class TCPServer;
 
-static set<UDPStream*> udp_set;
-static set<TCPStream*> tcp_set;
-static set<TCPServer*> server_set;
+static std::set<UDPStream*> udp_set;
+static std::set<TCPStream*> tcp_set;
+static std::set<TCPServer*> server_set;
 
 class UDPStream : public bbStream{
 public:
@@ -43,7 +43,7 @@ public:
 
 private:
 	SOCKET sock;
-	vector<char> in_buf,out_buf;
+	std::vector<char> in_buf,out_buf;
 	sockaddr_in addr,in_addr,out_addr;
 	int in_get,e;
 };
@@ -169,7 +169,7 @@ public:
 private:
 	int e;
 	SOCKET sock;
-	set<TCPStream*> accepted_set;
+	std::set<TCPStream*> accepted_set;
 };
 
 TCPStream::TCPStream( SOCKET s,TCPServer *t ):sock(s),server(t),e(0){
@@ -289,7 +289,7 @@ static inline void debugTCPServer( TCPServer *p ){
 	}
 }
 
-static vector<int> host_ips;
+static std::vector<int> host_ips;
 
 int bbCountHostIPs( BBStr *host ){
 	host_ips.clear();
@@ -370,7 +370,7 @@ BBStr *bbDottedIP( int ip ){
 		itoa((ip>>8)&255)+"."+itoa(ip&255) );
 }
 
-static int findHostIP( const string &t ){
+static int findHostIP( const std::string &t ){
 	int ip=inet_addr( t.c_str() );
 	if( ip!=INADDR_NONE ) return ip;
 	HOSTENT *h=gethostbyname( t.c_str() );

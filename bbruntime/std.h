@@ -17,6 +17,4 @@
 
 #include <cmath>
 
-using namespace std;
-
 #endif
