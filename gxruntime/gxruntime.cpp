@@ -3,6 +3,8 @@
 #include "gxruntime.h"
 #include "zmouse.h"
 
+#include "../gxruntime/gxutf8.h"
+
 struct gxRuntime::GfxMode{
 	DDSURFACEDESC2 desc;
 };
@@ -507,8 +509,9 @@ void gxRuntime::asyncEnd(){
 bool gxRuntime::idle(){
 	for(;;){
 		MSG msg;
+		BOOL success = 0;
 		if( suspended && run_flag ){
-			GetMessage( &msg,0,0,0 );
+			success = GetMessage( &msg,0,0,0 );
 		}else{
 			if( !PeekMessage( &msg,0,0,0,PM_REMOVE ) ) return run_flag;
 		}
@@ -523,7 +526,11 @@ bool gxRuntime::idle(){
 			debugger=0;
 			run_flag=false;
 			break;
+		case WM_CHAR:
+			input->wm_char(msg.wParam, msg.lParam);
+			break;
 		default:
+			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
 	}
@@ -649,7 +656,7 @@ bool gxRuntime::execute( const string &cmd_line ){
 void gxRuntime::setTitle( const string &t,const string &e ){
 	app_title=t;
 	app_close=e;
-	SetWindowText( hwnd,app_title.c_str() );
+	SetWindowTextW( hwnd,UTF8::convertToUtf16(app_title).c_str() );
 }
 
 //////////////////

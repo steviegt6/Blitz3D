@@ -135,6 +135,7 @@ public:
 static Keyboard *keyboard;
 static Mouse *mouse;
 static vector<Joystick*> joysticks;
+static vector<int> chars;
 					  
 static Keyboard *createKeyboard( gxInput *input ){
 
@@ -271,6 +272,13 @@ void gxInput::wm_mousewheel( int dz ){
 	if( mouse ) mouse->axis_states[2]+=dz;
 }
 
+void gxInput::wm_char( int wParam, int lParam ){
+	int repeats = lParam&0xffff;
+	for (int i=0;i<repeats;i++) {
+		chars.push_back(wParam);
+	}
+}
+
 void gxInput::reset(){
 	if( mouse ) mouse->reset();
 	if( keyboard ) keyboard->reset();
@@ -309,6 +317,12 @@ gxDevice *gxInput::getKeyboard()const{
 
 gxDevice *gxInput::getJoystick( int n )const{
 	return n>=0 && n<joysticks.size() ? joysticks[n] : 0;
+}
+
+std::vector<int> gxInput::getChars() {
+	std::vector<int> chrs = chars;
+	chars.clear();
+	return chrs;
 }
 
 int gxInput::getJoystickType( int n )const{

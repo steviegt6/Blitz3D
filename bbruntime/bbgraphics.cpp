@@ -631,12 +631,8 @@ void bbCopyRectStretch(int sx, int sy, int w, int h, int dx, int dy, int dw, int
 }
 
 
-gxFont *bbLoadFont( BBStr *name,int height,int bold,int italic,int underline ){
-	int flags=
-		(bold ? gxFont::FONT_BOLD : 0 ) |
-		(italic ? gxFont::FONT_ITALIC : 0 ) |
-		(underline ? gxFont::FONT_UNDERLINE : 0 );
-	gxFont *font=gx_graphics->loadFont( *name,height,flags );
+gxFont *bbLoadFont( BBStr *name, int height ){
+	gxFont *font=gx_graphics->loadFont( *name,height );
 	delete name;
 	return font;
 }
@@ -662,7 +658,7 @@ int bbStringWidth( BBStr *str ){
 
 int bbStringHeight( BBStr *str ){
 	delete str;
-	return curr_font->getHeight();
+	return curr_font->getHeight()+curr_font->getRenderOffset();
 }
 
 gxMovie *bbOpenMovie( BBStr *s ){
@@ -1315,7 +1311,7 @@ void graphics_link( void (*rtSym)( const char *sym,void *pc ) ){
 
 
 	//fonts
-	rtSym( "%LoadFont$fontname%height=12%bold=0%italic=0%underline=0",bbLoadFont );
+	rtSym( "%LoadFont$fontname%height=12",bbLoadFont );
 	rtSym( "FreeFont%font",bbFreeFont );
 	rtSym( "%FontWidth",bbFontWidth );
 	rtSym( "%FontHeight",bbFontHeight );

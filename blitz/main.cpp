@@ -184,6 +184,26 @@ int _cdecl main( int argc,char *argv[] ){
 		}
 	}
 
+	ifstream debugFile; debugFile.open("debug.txt", ios_base::in);
+	if (debugFile.good())
+	{
+		char* tmpBuf = new char[1024];
+		debugFile.getline(tmpBuf, 1024);
+		in_file = tmpBuf;
+		out_file = "";
+		delete[] tmpBuf;
+		debugFile.close();
+		debug = true;
+	}
+
+
+	if(!debug && !quiet && !veryquiet && !compileonly &&
+		!dumpkeys && !dumphelp && !showhelp && !dumpasm &&
+		!versinfo && !in_file.size() && !out_file.size()) {
+		showHelp();
+		return 0;
+	}
+
 	if( out_file.size() && !in_file.size() ) usageErr();
 
 	if( const char *er=openLibs() ) err( er );

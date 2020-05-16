@@ -9,7 +9,6 @@
 Prefs prefs;
 
 void Prefs::open(){
-
 	homeDir=getenv( "blitzpath" );
 
 	AddFontResource( (homeDir+"/cfg/blitz.fon").c_str() );

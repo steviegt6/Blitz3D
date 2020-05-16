@@ -249,8 +249,14 @@ static const char *linkUserLibs(){
 const char *openLibs(){
 	
 	char *p=getenv( "blitzpath" );
-	if( !p ) return "Can't find blitzpath environment variable";
-	home=string(p);
+	if (!p) {
+		char workingDir[128];
+		GetCurrentDirectory(128, workingDir);
+		home = workingDir; home+="\\\\..";
+		putenv( (string("blitzpath=")+home).c_str() );
+	} else {
+		home=string(p);
+	}
 
 	linkerHMOD=LoadLibrary( (home+"/bin/linker.dll").c_str() );
 	if( !linkerHMOD ) return "Unable to open linker.dll";
