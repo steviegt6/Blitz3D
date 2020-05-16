@@ -14,7 +14,7 @@ typedef IDirectDrawSurface7 ddSurf;
 
 class gxFont {
     public:
-        gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int h, int flgs);
+        gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int h);
         ~gxFont();
 
         void render( gxCanvas *dest,unsigned color_argb,int x,int y,const std::string &t );
