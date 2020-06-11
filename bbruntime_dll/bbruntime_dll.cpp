@@ -4,10 +4,6 @@
 #include "bbruntime_dll.h"
 #include "../debugger/debugger.h"
 
-#ifdef PRODEMO
-#include "../shareprot/shareprot.h"
-#endif
-
 #include <map>
 #include <eh.h>
 #include <float.h>
@@ -41,12 +37,10 @@ static void rtSym(const char* sym, void* pc)
 	syms[sym] = pc;
 }
 
-#ifdef PRODEMO
 static void killer()
 {
 	ExitProcess(-1);
 }
-#endif
 
 static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 {
@@ -149,10 +143,6 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg)
 
 	if(gx_runtime = gxRuntime::openRuntime(hinst, params, dbg))
 	{
-
-#ifdef PRODEMO
-		shareProtCheck(killer);
-#endif
 		bbruntime_run(gx_runtime, pc, debug);
 
 		gxRuntime* t = gx_runtime;
