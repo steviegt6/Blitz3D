@@ -48,7 +48,9 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 gxGraphics::~gxGraphics()
 {
 	if(_gamma) _gamma->Release();
+#ifdef PRO
 	while(scene_set.size()) freeScene(*scene_set.begin());
+#endif
 	while(movie_set.size()) closeMovie(*movie_set.begin());
 	while(font_set.size()) freeFont(*font_set.begin());
 	while(canvas_set.size()) freeCanvas(*canvas_set.begin());
@@ -110,6 +112,7 @@ bool gxGraphics::restore()
 		(*it)->restore();
 	}
 
+#ifdef PRO
 	//restore all meshes (b3d surfaces)
 	std::set<gxMesh*>::iterator mesh_it;
 	for(mesh_it = mesh_set.begin(); mesh_it != mesh_set.end(); ++mesh_it)
@@ -117,6 +120,7 @@ bool gxGraphics::restore()
 		(*mesh_it)->restore();
 	}
 	if(dir3d) dir3d->EvictManagedTextures();
+#endif
 
 	return true;
 }
@@ -299,6 +303,8 @@ void gxGraphics::freeFont(gxFont* f)
 //////////////
 // 3D STUFF //
 //////////////
+
+#ifdef PRO
 
 static int maxDevType;
 
@@ -580,3 +586,5 @@ void gxGraphics::freeMesh(gxMesh* mesh)
 {
 	if(mesh_set.erase(mesh)) delete mesh;
 }
+
+#endif

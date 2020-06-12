@@ -1,6 +1,8 @@
 
 #include "std.h"
 
+#ifdef PRO
+
 #include "bbblitz3d.h"
 #include "bbgraphics.h"
 #include "../blitz3d/blitz3d.h"
@@ -2722,3 +2724,5 @@ void blitz3d_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("%TotalVirtual", bbTotalVirtual);
 	rtSym("%AvailVirtual", bbAvailVirtual);
 }
+
+#endif

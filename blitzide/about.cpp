@@ -70,7 +70,11 @@ void aboutBlitz(){
 
 	std::string t="";
 
+#ifdef PRO
 	t+="Blitz3D";
+#else
+	t+="Blitz2D";
+#endif
 
 	t+=" - Release Version\n\n";
 

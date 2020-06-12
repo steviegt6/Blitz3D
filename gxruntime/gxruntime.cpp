@@ -14,7 +14,9 @@ struct gxRuntime::GfxDriver
 	GUID* guid;
 	std::string name;
 	std::vector<GfxMode*> modes;
+#ifdef PRO
 	D3DDEVICEDESC7 d3d_desc;
+#endif
 };
 
 static const int static_ws = WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
@@ -885,10 +887,12 @@ bool gxRuntime::setDisplayMode(int w, int h, int d, bool d3d, IDirectDraw7* dirD
 
 	if(d3d)
 	{
+#ifdef PRO
 		int bd = curr_driver->d3d_desc.dwDeviceRenderBitDepth;
 		if(bd & DDBD_32) best_d = 32;
 		else if(bd & DDBD_24) best_d = 24;
 		else if(bd & DDBD_16) best_d = 16;
+#endif
 	}
 	else
 	{
@@ -1185,6 +1189,7 @@ static HRESULT WINAPI enumMode(DDSURFACEDESC2* desc, void* context)
 	return DDENUMRET_OK;
 }
 
+#ifdef PRO
 static int maxDevType;
 static HRESULT CALLBACK enumDevice(char* desc, char* name, D3DDEVICEDESC7* devDesc, void* context)
 {
@@ -1201,6 +1206,7 @@ static HRESULT CALLBACK enumDevice(char* desc, char* name, D3DDEVICEDESC7* devDe
 	}
 	return D3DENUMRET_OK;
 }
+#endif
 
 static BOOL WINAPI enumDriver(GUID FAR* guid, LPSTR desc, LPSTR name, LPVOID context, HMONITOR hm)
 {
@@ -1218,6 +1224,7 @@ static BOOL WINAPI enumDriver(GUID FAR* guid, LPSTR desc, LPSTR name, LPVOID con
 	d->guid = guid ? d_new GUID(*guid) : 0;
 	d->name = desc;//string( name )+" "+string( desc );
 
+#ifdef PRO
 	memset(&d->d3d_desc, 0, sizeof(d->d3d_desc));
 	IDirect3D7* dir3d;
 	if(dd->QueryInterface(IID_IDirect3D7, (void**)&dir3d) >= 0)
@@ -1226,6 +1233,7 @@ static BOOL WINAPI enumDriver(GUID FAR* guid, LPSTR desc, LPSTR name, LPVOID con
 		dir3d->EnumDevices(enumDevice, d);
 		dir3d->Release();
 	}
+#endif
 	std::vector<gxRuntime::GfxDriver*>* drivers = (std::vector<gxRuntime::GfxDriver*>*)context;
 	drivers->push_back(d);
 	dd->EnumDisplayModes(0, 0, d, enumMode);
@@ -1272,7 +1280,9 @@ void gxRuntime::graphicsDriverInfo(int driver, std::string* name, int* c)
 {
 	GfxDriver* g = drivers[driver];
 	int caps = 0;
+#ifdef PRO
 	if(g->d3d_desc.dwDeviceRenderBitDepth) caps |= GFXMODECAPS_3D;
+#endif
 	* name = g->name;
 	*c = caps;
 }
@@ -1287,6 +1297,7 @@ void gxRuntime::graphicsModeInfo(int driver, int mode, int* w, int* h, int* d, i
 	GfxDriver* g = drivers[driver];
 	GfxMode* m = g->modes[mode];
 	int caps = 0;
+#ifdef PRO
 	int bd = 0;
 	switch(m->desc.ddpfPixelFormat.dwRGBBitCount)
 	{
@@ -1295,6 +1306,7 @@ void gxRuntime::graphicsModeInfo(int driver, int mode, int* w, int* h, int* d, i
 		case 32:bd = DDBD_32; break;
 	}
 	if(g->d3d_desc.dwDeviceRenderBitDepth & bd) caps |= GFXMODECAPS_3D;
+#endif
 	* w = m->desc.dwWidth;
 	*h = m->desc.dwHeight;
 	*d = m->desc.ddpfPixelFormat.dwRGBBitCount;
@@ -1304,6 +1316,7 @@ void gxRuntime::graphicsModeInfo(int driver, int mode, int* w, int* h, int* d, i
 void gxRuntime::windowedModeInfo(int* c)
 {
 	int caps = 0;
+#ifdef PRO
 	int bd = 0;
 	switch(desktop_desc.ddpfPixelFormat.dwRGBBitCount)
 	{
@@ -1312,6 +1325,7 @@ void gxRuntime::windowedModeInfo(int* c)
 		case 32:bd = DDBD_32; break;
 	}
 	if(drivers[0]->d3d_desc.dwDeviceRenderBitDepth & bd) caps |= GFXMODECAPS_3D;
+#endif
 	* c = caps;
 }
 

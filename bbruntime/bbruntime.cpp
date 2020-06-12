@@ -197,10 +197,15 @@ void audio_link(void (*rtSym)(const char* sym, void* pc));
 bool userlibs_create();
 void userlibs_destroy();
 void userlibs_link(void (*rtSym)(const char* sym, void* pc));
-
+#ifdef PRO
 bool blitz3d_create();
 bool blitz3d_destroy();
 void blitz3d_link(void (*rtSym)(const char* sym, void* pc));
+#else
+bool blitz3d_create() { return true; }
+bool blitz3d_destroy() { return true; }
+void blitz3d_link(void (*rtSym)(const char* sym, void* pc)) { }
+#endif
 
 void bbruntime_link(void (*rtSym)(const char* sym, void* pc))
 {
