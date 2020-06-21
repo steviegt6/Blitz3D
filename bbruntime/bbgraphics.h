@@ -69,7 +69,7 @@ int		 bbColorGreen();
 int		 bbColorBlue();
 
 //font functions
-gxFont * bbLoadFont( BBStr *name,int height,int bold,int italic,int underline );
+gxFont * bbLoadFont( BBStr *name,int height );
 void	 bbFreeFont( gxFont *f );
 void	 bbSetFont( gxFont *f );
 int		 bbFontWidth();

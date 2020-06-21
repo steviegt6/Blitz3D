@@ -566,28 +566,29 @@ bool gxRuntime::idle()
 	for(;;)
 	{
 		MSG msg;
-		if(suspended && run_flag)
-		{
-			GetMessage(&msg, 0, 0, 0);
+		BOOL success = 0;
+		if( suspended && run_flag ){
+			success = GetMessage( &msg,0,0,0 );
+		}else{
+			if( !PeekMessage( &msg,0,0,0,PM_REMOVE ) ) return run_flag;
 		}
-		else
-		{
-			if(!PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) return run_flag;
-		}
-		switch(msg.message)
-		{
-			case WM_STOP:
-				if(!suspended) forceSuspend();
-				break;
-			case WM_RUN:
-				if(suspended) forceResume();
-				break;
-			case WM_END:
-				debugger = 0;
-				run_flag = false;
-				break;
-			default:
-				DispatchMessage(&msg);
+		switch( msg.message ){
+		case WM_STOP:
+			if( !suspended ) forceSuspend();
+			break;
+		case WM_RUN:
+			if( suspended ) forceResume();
+			break;
+		case WM_END:
+			debugger=0;
+			run_flag=false;
+			break;
+		case WM_CHAR:
+			input->wm_char(msg.wParam, msg.lParam);
+			break;
+		default:
+			TranslateMessage( &msg );
+			DispatchMessage( &msg );
 		}
 	}
 	return run_flag;

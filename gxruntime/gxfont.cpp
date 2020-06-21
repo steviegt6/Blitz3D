@@ -9,12 +9,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int h, int flgs) {
+gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int h) {
     graphics = gfx;
     filename = fn;
     height = h;
-
-    flags = flgs;
 
     FT_New_Face(ftLibrary,
                 filename.c_str(),
@@ -24,9 +22,6 @@ gxFont::gxFont(FT_Library ftLibrary, gxGraphics *gfx, const std::string& fn, int
     FT_Set_Pixel_Sizes(freeTypeFace,
                        0,
                        height);
-
-    freeTypeFace->style_flags = (flgs & FONT_BOLD ? FT_STYLE_FLAG_BOLD : 0) |
-                                (flgs & FONT_ITALIC ? FT_STYLE_FLAG_ITALIC : 0);
 
     glyphData.clear();
     atlases.clear();
@@ -199,7 +194,7 @@ void gxFont::render(gxCanvas *dest,unsigned color_argb,int x,int y,const std::st
         i+=codepointLen;
     }
 
-    dest->blit( x,y,tempCanvas,0,0,width,tCanvasHeight,false );
+    dest->blit( x,y-glyphRenderOffset,tempCanvas,0,0,width,tCanvasHeight,false );
 }
 
 int gxFont::charWidth(int chr) {
@@ -246,7 +241,11 @@ int gxFont::getWidth()const {
 }
 
 int gxFont::getHeight()const {
-    return glyphHeight+glyphRenderOffset*2;
+    return glyphHeight;
+}
+
+int gxFont::getRenderOffset()const {
+    return glyphRenderOffset;
 }
 
 std::string gxFont::getName()const

@@ -266,22 +266,18 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-gxFont* gxGraphics::loadFont(const std::string& f, int height, int flags)
-{
-	std::string t;
-	int n = f.find('.');
-	if(n != std::string::npos)
-	{
-		t = fullfilename(f);
-		if(!font_res.count(t) && AddFontResource(t.c_str())) font_res.insert(t);
-		t = filenamefile(f.substr(0, n));
-	}
-	else
-	{
-		t = f;
+gxFont *gxGraphics::loadFont(const string &f,int height) {
+	string t;
+	int n=f.find('.');
+	if( n!=string::npos ){
+		t=fullfilename(f);
+		if( !font_res.count(t) && AddFontResource( t.c_str() ) ) font_res.insert( t );
+		t=filenamefile( f.substr(0,n) );
+	}else{
+		t=f;
 	}
 
-	gxFont* newFont = new gxFont(ftLibrary, this, f, height, flags);
+	gxFont* newFont = new gxFont(ftLibrary, this, f, height);
 	font_set.emplace(newFont);
 	return newFont;
 }
