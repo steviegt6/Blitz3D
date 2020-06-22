@@ -93,7 +93,7 @@
             // vQuietMode
             // 
             this.vQuietMode.AutoSize = true;
-            this.vQuietMode.Location = new System.Drawing.Point(104, 110);
+            this.vQuietMode.Location = new System.Drawing.Point(121, 110);
             this.vQuietMode.Name = "vQuietMode";
             this.vQuietMode.Size = new System.Drawing.Size(102, 17);
             this.vQuietMode.TabIndex = 5;
@@ -103,7 +103,7 @@
             // compileOnly
             // 
             this.compileOnly.AutoSize = true;
-            this.compileOnly.Location = new System.Drawing.Point(212, 110);
+            this.compileOnly.Location = new System.Drawing.Point(229, 110);
             this.compileOnly.Name = "compileOnly";
             this.compileOnly.Size = new System.Drawing.Size(85, 17);
             this.compileOnly.TabIndex = 6;
@@ -159,9 +159,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(18, 185);
+            this.button2.Location = new System.Drawing.Point(17, 185);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(98, 23);
             this.button2.TabIndex = 12;
             this.button2.Text = "Compile";
             this.button2.UseVisualStyleBackColor = true;

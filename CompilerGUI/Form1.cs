@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CompilerGUI
 {
     public partial class MainForm : Form
     {
-        string fileToCompile;
+        string fileToCompile = string.Empty;
+        string execute = "/k blitzcc.exe ";
         public MainForm()
         {
             InitializeComponent();
         }
 
+        //I know this isnt the cleanest code, but come on, its just 2 functions.
         private void MainForm_Load(object sender, EventArgs e)
         {
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            if (!File.Exists("blitzcc.exe"))
+            {
+                MessageBox.Show("blitzcc.exe must be in the same directory as the GUI!",
+                    "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                button2.Enabled = false;
+            }
+            else button2.Enabled = true;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -43,7 +45,13 @@ namespace CompilerGUI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string execute = "/k blitzcc.exe ";
+            error.Text = string.Empty;
+
+            if(fileToCompile == string.Empty)
+            {
+                error.Text = "Choose a file to compile!";
+                return;
+            }
             if(genExe.Checked == true && textBox2.Text == string.Empty)
             {
                 error.Text = "Executable name can't be empty!";
@@ -80,6 +88,7 @@ namespace CompilerGUI
             execute += fileToCompile;
             Trace.WriteLine(execute);
             Process.Start("CMD.exe", execute);
+            execute = "/k blitzcc.exe ";
         }
     }
 }
