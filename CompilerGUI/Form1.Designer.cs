@@ -170,10 +170,11 @@
             // error
             // 
             this.error.AutoSize = true;
-            this.error.Location = new System.Drawing.Point(101, 190);
+            this.error.Location = new System.Drawing.Point(121, 190);
             this.error.Name = "error";
-            this.error.Size = new System.Drawing.Size(0, 13);
+            this.error.Size = new System.Drawing.Size(62, 13);
             this.error.TabIndex = 13;
+            this.error.Text = "placeholder";
             // 
             // MainForm
             // 

@@ -17,6 +17,7 @@ namespace CompilerGUI
         //I know this isnt the cleanest code, but come on, its just 2 functions.
         private void MainForm_Load(object sender, EventArgs e)
         {
+            error.Text = string.Empty;
             FormBorderStyle = FormBorderStyle.FixedSingle;
             if (!File.Exists("blitzcc.exe"))
             {
