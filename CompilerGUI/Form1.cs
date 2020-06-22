@@ -39,14 +39,15 @@ namespace CompilerGUI
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                fileToCompile = openFileDialog1.FileName;
-                textBox1.Text = fileToCompile;
+                textBox1.Text = openFileDialog1.FileName;
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            fileToCompile = textBox1.Text;
             error.Text = string.Empty;
+            fileToCompile = fixPathSpaces(fileToCompile);
 
             if(fileToCompile == string.Empty)
             {
@@ -90,6 +91,16 @@ namespace CompilerGUI
             Trace.WriteLine(execute);
             Process.Start("CMD.exe", execute);
             execute = "/k blitzcc.exe ";
+            fileToCompile = string.Empty;
+        }
+
+        string fixPathSpaces(string path)
+        {
+            if (path.Contains(" "))
+            {
+                return $"\"{path}\"";
+            }
+            else return path;
         }
     }
 }

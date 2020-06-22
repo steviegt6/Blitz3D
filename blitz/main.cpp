@@ -141,16 +141,10 @@ static void dumpKeys(bool lang, bool mod, bool help)
 
 static void versInfo()
 {
-	std::cout << "Compiler version:" << verstr(bcc_ver) << std::endl;
-	std::cout << "Runtime version:" << verstr(run_ver) << std::endl;
-	std::cout << "Debugger version:" << verstr(dbg_ver) << std::endl;
-	std::cout << "Linker version:" << verstr(lnk_ver) << std::endl;
-}
-
-static void demoError()
-{
-	std::cout << "Compiler can not be used standalone in demo version." << std::endl;
-	exit(0);
+	std::cout << "Compiler version: " << verstr(bcc_ver) << std::endl;
+	std::cout << "Runtime version: " << verstr(run_ver) << std::endl;
+	std::cout << "Debugger version: " << verstr(dbg_ver) << std::endl;
+	std::cout << "Linker version: " << verstr(lnk_ver) << std::endl;
 }
 
 int _cdecl main(int argc, char* argv[])
