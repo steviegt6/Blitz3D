@@ -266,10 +266,10 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-gxFont *gxGraphics::loadFont(const string &f,int height) {
-	string t;
+gxFont *gxGraphics::loadFont(const std::string &f,int height) {
+	std::string t;
 	int n=f.find('.');
-	if( n!=string::npos ){
+	if( n!=std::string::npos ){
 		t=fullfilename(f);
 		if( !font_res.count(t) && AddFontResource( t.c_str() ) ) font_res.insert( t );
 		t=filenamefile( f.substr(0,n) );

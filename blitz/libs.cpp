@@ -253,9 +253,9 @@ const char *openLibs(){
 		char workingDir[128];
 		GetCurrentDirectory(128, workingDir);
 		home = workingDir; home+="\\\\..";
-		putenv( (string("blitzpath=")+home).c_str() );
+		putenv( (std::string("blitzpath=")+home).c_str() );
 	} else {
-		home=string(p);
+		home=std::string(p);
 	}
 
 	linkerHMOD=LoadLibrary( (home+"/bin/linker.dll").c_str() );
