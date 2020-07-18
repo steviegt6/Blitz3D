@@ -66,9 +66,9 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 				bbruntime_panic(s.c_str());
 			}
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
-			bbruntime_panic("Illegal instruction.\nThis means there is a byte in the assembled\nfile that isn't a valid CPU instruction.");
+			bbruntime_panic("Illegal instruction.\nThis means there is a byte in the assembled file that isn't a valid CPU instruction.");
 		case EXCEPTION_STACK_OVERFLOW:
-			bbruntime_panic("Stack overflow!");
+			bbruntime_panic("Stack overflow.\nMake sure there is no recursion without a base case.");
 		case EXCEPTION_INT_OVERFLOW:
 			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2,147,483,647.");
 		case EXCEPTION_FLT_OVERFLOW:
