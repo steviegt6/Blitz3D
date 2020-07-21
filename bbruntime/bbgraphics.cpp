@@ -57,7 +57,7 @@ static inline void debugImage( bbImage *i,int frame=0 ){
 
 static inline void debugFont( gxFont *f ){
 	if( debug ){
-		if( !gx_graphics->verifyFont( f ) ) RTEX( "Font does not exist" );
+		if(f != nullptr && !gx_graphics->verifyFont(f)) RTEX("Font does not exist");
 	}
 }
 
