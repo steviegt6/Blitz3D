@@ -18,8 +18,8 @@ void Prefs::open()
 		ExitProcess(0);
 	}
 
-	homeDir = p;
-	AddFontResource((homeDir + "/cfg/Blitz.fon").c_str());
+	homeDir=p;
+
 	setDefault();
 
 	bool prg_windowed;
@@ -144,9 +144,7 @@ void Prefs::close()
 	{
 		out << "file_recent\t" << recentFiles[k] << std::endl;
 	}
-	out << std::dec;
-
-	RemoveFontResource((homeDir + "/cfg/Blitz.fon").c_str());
+	out<<dec;
 }
 
 void Prefs::setDefault()
