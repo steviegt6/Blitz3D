@@ -49,14 +49,14 @@ static void showHelp()
 	showUsage();
 	std::cout << "-h         : show this help" << std::endl;
 	std::cout << "-q         : quiet mode" << std::endl;
-	std::cout << "+q		  : very quiet mode" << std::endl;
+	std::cout << "+q		 : very quiet mode" << std::endl;
 	std::cout << "-c         : compile only" << std::endl;
 	std::cout << "-d         : debug compile" << std::endl;
 	std::cout << "-k         : dump keywords" << std::endl;
 	std::cout << "+k         : dump keywords and syntax" << std::endl;
-	std::cout << "-v		  : version info" << std::endl;
+	std::cout << "-v		 : version info" << std::endl;
+	std::cout << "-laa       : make the output executable large address aware." << std::endl;
 	std::cout << "-o exefile : generate executable" << std::endl;
-
 }
 
 static void err(const std::string& t)
@@ -154,6 +154,7 @@ int _cdecl main(int argc, char* argv[])
 	bool debug = false, quiet = false, veryquiet = false, compileonly = false;
 	bool dumpkeys = false, dumphelp = false, showhelp = false, dumpasm = false;
 	bool versinfo = false;
+	bool laa = false;
 
 	for(int k = 1; k < argc; ++k)
 	{
@@ -201,6 +202,10 @@ int _cdecl main(int argc, char* argv[])
 		{
 			if(out_file.size() || k == argc - 1) usageErr();
 			out_file = argv[++k];
+		}
+		else if(t == "-laa")
+		{
+			laa = true;
 		}
 		else
 		{
@@ -323,6 +328,53 @@ int _cdecl main(int argc, char* argv[])
 		if(!module->createExe(out_file.c_str(), (home + "/bin/runtime.dll").c_str()))
 		{
 			err("Error creating executable!");
+		}
+		if(laa == true)
+		{
+			FILE* exe = fopen(out_file.c_str(), "rb+");
+			if(exe != NULL)
+			{
+				short mzH;
+				fread(&mzH, sizeof(short), 1, exe);
+				if(mzH != 0x5A4D)
+				{
+					err("Error enabling Large Address Awareness: .exe header is invalid.");
+				}
+				//GET PE HEADER OFFSET
+				long PEHeadOff;
+				fseek(exe, 0x3c, SEEK_SET);
+				fread(&PEHeadOff, sizeof(long), 1, exe);
+
+				//GET ACTUAL PE HEADER
+				int PEHead;
+				fseek(exe, PEHeadOff, SEEK_SET);
+				fread(&PEHead, sizeof(int), 1, exe);
+				if(PEHead != 0x4550)
+				{
+					err("Error enabling Large Address Awareness: .exe PE header is invalid.");
+				}
+
+				//PATCH
+				short LAA = 0x22;
+				fseek(exe, 0x12, SEEK_CUR);
+				fwrite(&LAA, sizeof(LAA), 1, exe);
+
+				fseek(exe, -sizeof(short), SEEK_CUR);
+				short LAAEnabled;
+				fread(&LAAEnabled, sizeof(short), 1, exe);
+				if(LAAEnabled == 0x22)
+				{
+					std::cout << "LAA has been patched correctly!" << std::endl;
+				}
+				else
+				{
+					std::cout << "Something went wrong while patching LAA." << std::endl;
+				}
+			}
+			else
+			{
+				err("Error enabling Large Address Awareness: Couldn't open target .exe");
+			}
 		}
 	}
 	else if(!compileonly)
