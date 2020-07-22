@@ -35,8 +35,10 @@ static std::string verstr(int ver)
 
 static void showInfo()
 {
+	std::cout << std::endl;
 	std::cout << "BlitzCC V" << verstr(VERSION) << std::endl;
 	std::cout << "(C)opyright 2000-2003 Blitz Research Ltd" << std::endl;
+	std::cout << "----------------------------------------" << std::endl;
 }
 
 static void showUsage()
