@@ -41,7 +41,7 @@ static void showInfo()
 
 static void showUsage()
 {
-	std::cout << "Usage: blitzcc [-h|-q|+q|-c|-d|-k|+k|-v|-o exefile] [sourcefile.bb]" << std::endl;
+	std::cout << "Usage: blitzcc [-h|-q|+q|-c|-d|-k|+k|-laa|-v|-o exefile] [sourcefile.bb]" << std::endl;
 }
 
 static void showHelp()
@@ -334,6 +334,7 @@ int _cdecl main(int argc, char* argv[])
 			FILE* exe = fopen(out_file.c_str(), "rb+");
 			if(exe != NULL)
 			{
+				if(!veryquiet) std::cout << "Patching exe for Large Address Awareness..." << std::endl;
 				short mzH;
 				fread(&mzH, sizeof(short), 1, exe);
 				if(mzH != 0x5A4D)
