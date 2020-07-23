@@ -252,7 +252,7 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-gxFont *gxGraphics::loadFont(const string &f,int height) {
+gxFont *gxGraphics::loadFont(const std::string &f,int height) {
 	gxFont* newFont = new gxFont(ftLibrary, this, f, height);
 	font_set.emplace(newFont);
 	return newFont;

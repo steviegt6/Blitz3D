@@ -135,7 +135,7 @@ void Prefs::close()
 	{
 		out << "file_recent\t" << recentFiles[k] << std::endl;
 	}
-	out<<dec;
+	out<<std::dec;
 }
 
 void Prefs::setDefault()
