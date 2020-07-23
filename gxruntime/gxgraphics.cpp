@@ -6,10 +6,8 @@
 extern gxRuntime* gx_runtime;
 static Debugger* debugger;
 
-gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs, IDirectDrawSurface7* bs, bool d3d) :
-	runtime(rt), dirDraw(dd), dir3d(0), dir3dDev(0), def_font(0), gfx_lost(false), dummy_mesh(0)
-{
-	dirDraw->QueryInterface(IID_IDirectDraw, (void**)&ds_dirDraw);
+gxGraphics::gxGraphics( gxRuntime *rt,IDirectDraw7 *dd,IDirectDrawSurface7 *fs,IDirectDrawSurface7 *bs,bool d3d ):
+runtime(rt),dirDraw(dd),dir3d(0),dir3dDev(0),gfx_lost(false),dummy_mesh(0){
 
 	front_canvas = d_new gxCanvas(this, fs, 0);
 	back_canvas = d_new gxCanvas(this, bs, 0);
@@ -19,14 +17,8 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 
 	FT_Init_FreeType(&ftLibrary);
 
-	def_font = nullptr;
-
-	front_canvas->setFont(def_font);
-	back_canvas->setFont(def_font);
-
-	memset(&primFmt, 0, sizeof(primFmt));
-	primFmt.dwSize = sizeof(primFmt);
-	fs->GetPixelFormat(&primFmt);
+	front_canvas->setFont(nullptr);
+	back_canvas->setFont(nullptr);
 
 	getTotalVidmem();
 
@@ -131,14 +123,8 @@ gxCanvas* gxGraphics::getBackCanvas()const
 	return back_canvas;
 }
 
-gxFont* gxGraphics::getDefaultFont()const
-{
-	return def_font;
-}
-
-void gxGraphics::vwait()
-{
-	dirDraw->WaitForVerticalBlank(DDWAITVB_BLOCKBEGIN, 0);
+void gxGraphics::vwait(){
+	dirDraw->WaitForVerticalBlank( DDWAITVB_BLOCKBEGIN,0 );
 }
 
 void gxGraphics::flip(bool v)
@@ -266,17 +252,7 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-gxFont *gxGraphics::loadFont(const std::string &f,int height) {
-	std::string t;
-	int n=f.find('.');
-	if( n!=std::string::npos ){
-		t=fullfilename(f);
-		if( !font_res.count(t) && AddFontResource( t.c_str() ) ) font_res.insert( t );
-		t=filenamefile( f.substr(0,n) );
-	}else{
-		t=f;
-	}
-
+gxFont *gxGraphics::loadFont(const string &f,int height) {
 	gxFont* newFont = new gxFont(ftLibrary, this, f, height);
 	font_set.emplace(newFont);
 	return newFont;

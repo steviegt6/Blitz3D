@@ -64,11 +64,9 @@ static inline void debugImage(bbImage* i, int frame = 0)
 	}
 }
 
-static inline void debugFont(gxFont* f)
-{
-	if(debug)
-	{
-		if(!gx_graphics->verifyFont(f)) RTEX("Font doesn't exist.");
+static inline void debugFont( gxFont *f ){
+	if( debug ){
+		if(f != nullptr && !gx_graphics->verifyFont(f)) RTEX("Font does not exist");
 	}
 }
 
@@ -428,10 +426,10 @@ static void graphics(int w, int h, int d, int flags)
 	{
 		RTEX("Unable to create a gxGraphics instance.");
 	}
-	curr_clsColor = 0;
-	curr_color = 0xffffffff;
-	curr_font = gx_graphics->getDefaultFont();
-	gxCanvas* buff = (flags & gxGraphics::GRAPHICS_3D) ?
+	curr_clsColor=0;
+	curr_color=0xffffffff;
+	curr_font = nullptr;
+	gxCanvas *buff=(flags & gxGraphics::GRAPHICS_3D) ?
 		gx_graphics->getBackCanvas() : gx_graphics->getFrontCanvas();
 	bbSetBuffer(buff);
 }
@@ -475,15 +473,14 @@ void bbGraphics3D(int w, int h, int d, int mode)
 void bbEndGraphics()
 {
 	freeGraphics();
-	gx_runtime->closeGraphics(gx_graphics);
-	gx_graphics = gx_runtime->openGraphics(400, 300, 0, 0, gxGraphics::GRAPHICS_WINDOWED);
-	if(!gx_runtime->idle()) RTEX(0);
-	if(gx_graphics)
-	{
-		curr_clsColor = 0;
-		curr_color = 0xffffffff;
-		curr_font = gx_graphics->getDefaultFont();
-		bbSetBuffer(gx_graphics->getFrontCanvas());
+	gx_runtime->closeGraphics( gx_graphics );
+	gx_graphics=gx_runtime->openGraphics( 400,300,0,0,gxGraphics::GRAPHICS_WINDOWED );
+	if( !gx_runtime->idle() ) RTEX( 0 );
+	if( gx_graphics ){
+		curr_clsColor=0;
+		curr_color=0xffffffff;
+		curr_font = nullptr;
+		bbSetBuffer( gx_graphics->getFrontCanvas() );
 		return;
 	}
 	RTEX("Unable to close gxGraphics instance.");
@@ -736,11 +733,10 @@ gxFont *bbLoadFont( BBStr *name, int height ){
 	return font;
 }
 
-void bbFreeFont(gxFont* f)
-{
-	debugFont(f);
-	if(f == curr_font) bbSetFont(gx_graphics->getDefaultFont());
-	gx_graphics->freeFont(f);
+void bbFreeFont( gxFont *f ){
+	debugFont( f );
+	if( f==curr_font ) bbSetFont(nullptr);
+	gx_graphics->freeFont( f );
 }
 
 int bbFontWidth()
@@ -1386,15 +1382,14 @@ bool graphics_create()
 	filter = true;
 	gx_driver = 0;
 	freeGraphics();
-	auto_dirty = true;
-	auto_midhandle = false;
-	gx_graphics = gx_runtime->openGraphics(400, 300, 0, 0, gxGraphics::GRAPHICS_WINDOWED);
-	if(gx_graphics)
-	{
-		curr_clsColor = 0;
-		curr_color = 0xffffffff;
-		curr_font = gx_graphics->getDefaultFont();
-		bbSetBuffer(bbFrontBuffer());
+	auto_dirty=true;
+	auto_midhandle=false;
+	gx_graphics=gx_runtime->openGraphics( 400,300,0,0,gxGraphics::GRAPHICS_WINDOWED );
+	if( gx_graphics ){
+		curr_clsColor=0;
+		curr_color=0xffffffff;
+		curr_font = nullptr;
+		bbSetBuffer( bbFrontBuffer() );
 		return true;
 	}
 	return false;
