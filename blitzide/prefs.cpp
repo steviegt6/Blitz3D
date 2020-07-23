@@ -24,15 +24,16 @@ void Prefs::open()
 
 	bool prg_windowed;
 
-	std::ifstream in((homeDir + "/cfg/blitzide.prefs").c_str());
+	std::ifstream in((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in | std::ios::out);
 	if(!in.good()) return;
 
-	while(!in.eof())
+	std::string t;
+	while(in >> t)
 	{
-		std::string t; in >> t;
 		if(!t.size()) continue;
 		while(in.peek() == '\t') in.ignore();
 		if(t == "prg_debug") in >> prg_debug;
+		else if(t == "prg_laa") in >> prg_laa;
 		else if(t == "prg_lastbuild") getline(in, prg_lastbuild);
 		else if(t == "prg_windowed") in >> prg_windowed;
 		else if(t == "win_maximized") in >> win_maximized;
@@ -115,11 +116,11 @@ void Prefs::open()
 
 void Prefs::close()
 {
-
-	std::ofstream out((homeDir + "/cfg/blitzide.prefs").c_str());
+	std::fstream out((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in | std::ios::out);
 	if(!out.good()) return;
 
 	out << "prg_debug\t" << prg_debug << std::endl;
+	out << "prg_laa\t" << prg_laa << std::endl;
 	out << "prg_lastbuild\t" << prg_lastbuild << std::endl;
 	out << "win_maximized\t" << win_maximized << std::endl;
 	out << "win_notoolbar\t" << win_notoolbar << std::endl;
@@ -149,8 +150,8 @@ void Prefs::close()
 
 void Prefs::setDefault()
 {
-
 	prg_debug = true;
+	prg_laa = false;
 
 	win_rect.left = win_rect.top = 0;
 	win_rect.right = 640; win_rect.bottom = 480;

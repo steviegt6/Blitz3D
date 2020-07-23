@@ -97,6 +97,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "&Program Command Line...",    ID_COMMANDLINE
         MENUITEM "&Debug Enabled?",             ID_DEBUG
+        MENUITEM "&Large Address Aware? (.EXE Only)", ID_LAA
     END
     POPUP "&Help"
     BEGIN

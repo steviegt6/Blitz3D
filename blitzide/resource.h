@@ -68,6 +68,7 @@
 #define ID_COMMANDLINE                  40129
 #define ID_REEXECUTE                    40130
 #define ID_SUPPORT                      40131
+#define ID_LAA							40132
 
 // Next default values for new objects
 // 
