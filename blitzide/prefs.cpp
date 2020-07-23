@@ -18,8 +18,8 @@ void Prefs::open()
 		ExitProcess(0);
 	}
 
-	homeDir=p;
-
+	homeDir = p;
+	AddFontResource((homeDir + "/cfg/Blitz.fon").c_str());
 	setDefault();
 
 	bool prg_windowed;
@@ -144,7 +144,13 @@ void Prefs::close()
 	{
 		out << "file_recent\t" << recentFiles[k] << std::endl;
 	}
+<<<<<<< HEAD
 	out<<dec;
+=======
+	out << std::dec;
+
+	RemoveFontResource((homeDir + "/cfg/Blitz.fon").c_str());
+>>>>>>> a1fb23f02e9e47339ca9027e12ae461d26d09e3c
 }
 
 void Prefs::setDefault()
@@ -156,8 +162,8 @@ void Prefs::setDefault()
 	win_rect.right = 640; win_rect.bottom = 480;
 	win_maximized = false;
 	win_notoolbar = false;
-	font_editor = "blitz";
-	font_editor_height = 12;
+	font_editor = "consolas";
+	font_editor_height = 14;
 
 	rgb_bkgrnd = RGB(0x22, 0x55, 0x88);
 	rgb_string = RGB(0x00, 0xff, 0x66);

@@ -43,6 +43,7 @@ public:
 private:
 
 	gxCanvas *front_canvas,*back_canvas;
+	gxFont *def_font;
 	bool gfx_lost;
 	gxMesh *dummy_mesh;
 
@@ -88,6 +89,7 @@ public:
 
 	gxCanvas *getFrontCanvas()const;
 	gxCanvas *getBackCanvas()const;
+	gxFont *getDefaultFont()const;
 
 	//OBJECTS
 	gxCanvas *createCanvas( int width,int height,int flags );
