@@ -96,8 +96,8 @@ void Prefs::open(){
 		}
 		else
 		{
-			std::string s = "Unrecognized option '" + t + "' in blitzide.prefs";
-			MessageBox(0, s.c_str(), "Error in preferences", MB_OK);
+			std::string s = "Unrecognized option '" + t + "' in blitzide.prefs!";
+			MessageBox(0, s.c_str(), "Error in preferences file", MB_OK);
 			setDefault();
 			return;
 		}
@@ -150,8 +150,8 @@ void Prefs::setDefault()
 	win_maximized = false;
 	win_notoolbar = false;
 
-	font_editor = "blitz";
-	font_editor_height = 12;
+	font_editor = "consolas";
+	font_editor_height = 14;
 	font_tabs = "verdana";
 	font_tabs_height = 8;
 	font_debug = "verdana";

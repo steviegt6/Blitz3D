@@ -157,8 +157,8 @@ void Prefs::setDefault()
 	win_rect.right = 640; win_rect.bottom = 480;
 	win_maximized = false;
 	win_notoolbar = false;
-	font_editor = "blitz";
-	font_editor_height = 12;
+	font_editor = "consolas";
+	font_editor_height = 14;
 
 	rgb_bkgrnd = RGB(0x22, 0x55, 0x88);
 	rgb_string = RGB(0x00, 0xff, 0x66);
