@@ -11,7 +11,7 @@ static std::string getAppDir()
 	std::string t = std::string(buffer, GetModuleFileName(NULL, buffer, MAX_PATH));
 	int n = t.find_last_of('\\');
 	if(n != std::string::npos) t = t.substr(0, n); //Remove filename from the path and return it
-	return t;								  //Blitz3D doesnt like filenames in his path...
+	return t;
 }
 
 static void fail(const char* p)
