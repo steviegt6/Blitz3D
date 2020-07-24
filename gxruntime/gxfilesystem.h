@@ -3,6 +3,7 @@
 #define GXFILESYSTEM_H
 
 #include <string>
+#include <filesystem>
 
 #include "gxdir.h"
 

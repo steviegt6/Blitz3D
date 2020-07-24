@@ -136,6 +136,12 @@ void bbCopyFile( BBStr *f,BBStr *to ){
 	gx_filesys->copyFile( src,dest );
 }
 
+void bbCreateFile(BBStr* f)
+{
+	std::string fn = *f; delete f;
+	gx_filesys->createFile(fn);
+}
+
 void bbDeleteFile( BBStr *f ){
 	gx_filesys->deleteFile( *f );
 	delete f;
@@ -175,4 +181,5 @@ void filesystem_link( void(*rtSym)(const char*,void*) ){
 	rtSym("$FileExtension$file", bbFileExtension);
 	rtSym( "CopyFile$file$to",bbCopyFile );
 	rtSym( "DeleteFile$file",bbDeleteFile );
+	rtSym("CreateFile$filename", bbCreateFile);
 }

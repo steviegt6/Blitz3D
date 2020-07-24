@@ -208,7 +208,6 @@ static gxCanvas* tformCanvas(gxCanvas* c, float m[2][2], int x_handle, int y_han
 
 static bool saveCanvas(gxCanvas* c, const std::string& f)
 {
-
 	std::ofstream out(f.c_str(), std::ios::binary);
 	if(!out.good()) return false;
 
@@ -1173,7 +1172,7 @@ static gxCanvas* startPrinting()
 	c->getHandle(&p_hx, &p_hy);
 	c->getViewport(&p_vpx, &p_vpy, &p_vpw, &p_vph);
 
-	c->setOrigin(0, 0);
+	c->setOrigin(0, 2); //2
 	c->setHandle(0, 0);
 	c->setViewport(0, 0, c->getWidth(), c->getHeight());
 	if(c != gx_canvas)
@@ -1217,7 +1216,7 @@ void bbPrint(BBStr* str)
 	gxCanvas* c = startPrinting();
 	c->text(curs_x, curs_y, *str);
 	curs_x = 0;
-	curs_y += curr_font->getHeight();
+	curs_y += curr_font->getHeight() + 3; //avoid multiline overlapping by adding 3 to the font height
 	endPrinting(c);
 	delete str;
 }
