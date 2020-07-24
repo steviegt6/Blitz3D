@@ -21,7 +21,7 @@ public:
 	virtual void debugLeave(){}
 	virtual void debugLog( const char *msg ){}
 	virtual void debugMsg( const char *e,bool serious ){
-		if( serious ) MessageBoxW( 0,UTF8::convertToUtf16(e).c_str(),L"Error!",MB_OK|MB_TOPMOST|MB_SETFOREGROUND );
+		if( serious ) MessageBoxW( 0,UTF8::convertToUtf16(e).c_str(),L"Catastrophic Error!",MB_OK|MB_TOPMOST|MB_SETFOREGROUND );
 	}
 	virtual void debugSys(void* msg) { }
 	virtual void internalLog(const char* msg) { }
@@ -51,7 +51,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 		case EXCEPTION_ACCESS_VIOLATION:
 			if(ErrorMessagePool::memoryAccessViolation == 0)
 			{
-				bbruntime_panic("Segmentation fault!");
+				bbruntime_panic("Memory Access Violation!\nThe program attempted to read or write to a protected memory address.");
 			}
 			else
 			{
@@ -66,21 +66,17 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 				bbruntime_panic(s.c_str());
 			}
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
-			bbruntime_panic("Illegal instruction.\nThis means there is a byte in the assembled file that isn't a valid CPU instruction.");
+			bbruntime_panic("Illegal instruction.\nProcess tried to execute an invalid CPU instruction.");
 		case EXCEPTION_STACK_OVERFLOW:
 			bbruntime_panic("Stack overflow.\nMake sure there is no recursion without a base case.");
 		case EXCEPTION_INT_OVERFLOW:
-			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2,147,483,647.");
+			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2147483647.");
 		case EXCEPTION_FLT_OVERFLOW:
-			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 3.40282347e+38F.");
+			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 340282347e+38F.");
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
 			bbruntime_panic("Float divide by zero.");
-		case EXCEPTION_WRITE_FAULT:
-			bbruntime_panic("Write fault exception.\nAccess violation was caused by a write attempt.");
-		default:
-			bbruntime_panic("Unknown runtime exception.");
 	}
-	//bbruntime_panic("Unknown runtime exception");
+	bbruntime_panic("Unknown runtime exception.");
 }
 
 int Runtime::version()

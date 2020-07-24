@@ -227,7 +227,7 @@ void MainFrame::debugMsg(const char* msg, bool serious)
 {
 	if(serious)
 	{
-		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Catastrophic Error", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Catastrophic Error!", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 	else
 	{
