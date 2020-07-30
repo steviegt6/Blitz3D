@@ -296,7 +296,7 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 	{
 		if(!gx_runtime->idle()) RTEX(0);
 		pc();
-		gx_runtime->debugInfo("Program has ended");
+		gx_runtime->debugInfo("Program has ended.");
 	}
 	catch(bbEx x)
 	{
