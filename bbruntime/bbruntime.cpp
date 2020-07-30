@@ -308,7 +308,7 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 	}
 	catch(...)
 	{
-		t = "Unknown/non-standard exception thrown";
+		t = "Unknown/non-standard exception thrown!";
 	}
 	bbruntime_destroy();
 	return t;
