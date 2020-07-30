@@ -248,70 +248,24 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc))
 static void sue(const char* t)
 {
 	std::string p = std::string("Startup Error: ") + t;
-	gx_runtime->debugInfo(p.c_str());
+	//gx_runtime->debugInfo(p.c_str());
+	gx_runtime->debugError(p.c_str());
 }
 
 bool bbruntime_create()
 {
-	if(basic_create())
-	{
-		if(math_create())
-		{
-			if(string_create())
-			{
-				if(stream_create())
-				{
-					if(sockets_create())
-					{
-						if(filesystem_create())
-						{
-							if(bank_create())
-							{
-								if(graphics_create())
-								{
-									if(input_create())
-									{
-										if(audio_create())
-										{
-											if(blitz3d_create())
-											{
-												if(userlibs_create())
-												{
-													return true;
-												}
-											}
-											else sue("blitz3d_create failed");
-											audio_destroy();
-										}
-										else sue("audio_create failed");
-										input_destroy();
-									}
-									else sue("input_create failed");
-									graphics_destroy();
-								}
-								else sue("graphics_create failed");
-								bank_destroy();
-							}
-							else sue("bank_create failed");
-							filesystem_destroy();
-						}
-						else sue("filesystem_create failed");
-						sockets_destroy();
-					}
-					else sue("sockets_create failed");
-					stream_destroy();
-				}
-				else sue("stream_create failed");
-				string_destroy();
-			}
-			else sue("string_create failed");
-			math_destroy();
-		}
-		else sue("math_create failed");
-		basic_destroy();
-	}
-	else sue("basic_create failed");
-	return false;
+	INIT(basic);
+	INIT(math);
+	INIT(string);
+	INIT(stream);
+	INIT(sockets);
+	INIT(filesystem);
+	INIT(bank);
+	INIT(graphics);
+	INIT(input);
+	INIT(audio);
+	INIT(blitz3d);
+	return true;
 }
 
 bool bbruntime_destroy()
@@ -336,7 +290,7 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 	debug = dbg;
 	gx_runtime = rt;
 
-	if(!bbruntime_create()) return "Unable to start program";
+	if(!bbruntime_create()) return "Unable to start program! A required module could not be started.";
 	const char* t = 0;
 	try
 	{
