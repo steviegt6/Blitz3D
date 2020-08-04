@@ -339,39 +339,39 @@ int _cdecl main(int argc, char* argv[])
 				if(!veryquiet) std::cout << "Patching exe for Large Address Awareness..." << std::endl;
 				short mzH;
 				fread(&mzH, sizeof(short), 1, exe);
-				if(mzH != 0x5A4D)
+				if(mzH != 0x5A4D) //23117 (LITTLE ENDIAN) 19802 (BIG ENDIAN)
 				{
 					err("Error enabling Large Address Awareness: .exe header is invalid.");
 				}
 				//GET PE HEADER OFFSET
 				long PEHeadOff;
-				fseek(exe, 0x3c, SEEK_SET);
+				fseek(exe, 0x3c /*60*/, SEEK_SET);
 				fread(&PEHeadOff, sizeof(long), 1, exe);
 
 				//GET ACTUAL PE HEADER
 				int PEHead;
 				fseek(exe, PEHeadOff, SEEK_SET);
 				fread(&PEHead, sizeof(int), 1, exe);
-				if(PEHead != 0x4550)
+				if(PEHead != 0x4550) //17744 (LITTLE ENDIAN) 20549 (BIG ENDIAN)
 				{
 					err("Error enabling Large Address Awareness: .exe PE header is invalid.");
 				}
 
 				//PATCH
-				short LAA = 0x22;
-				fseek(exe, 0x12, SEEK_CUR);
+				short LAA = 0x0122; //290 (LITTLE ENDIAN) 8705 (BIG ENDIAN)
+				fseek(exe, 0x12 /*18*/, SEEK_CUR);
 				fwrite(&LAA, sizeof(LAA), 1, exe);
 
 				fseek(exe, -sizeof(short), SEEK_CUR);
 				short LAAEnabled;
 				fread(&LAAEnabled, sizeof(short), 1, exe);
-				if(LAAEnabled == 0x22)
+				if(LAAEnabled == 0x0122)
 				{
 					std::cout << "LAA has been patched correctly!" << std::endl;
 				}
 				else
 				{
-					std::cout << "Something went wrong while patching LAA." << std::endl;
+					std::cout << "Something went wrong while patching LAA. The executable will still be generated." << std::endl;
 				}
 			}
 			else
