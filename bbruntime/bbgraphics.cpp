@@ -1172,7 +1172,7 @@ static gxCanvas* startPrinting()
 	c->getHandle(&p_hx, &p_hy);
 	c->getViewport(&p_vpx, &p_vpy, &p_vpw, &p_vph);
 
-	c->setOrigin(0, 2); //2
+	c->setOrigin(0, 0);
 	c->setHandle(0, 0);
 	c->setViewport(0, 0, c->getWidth(), c->getHeight());
 	if(c != gx_canvas)
@@ -1357,7 +1357,7 @@ BBStr* bbInput(BBStr* prompt)
 	}
 
 	curs_x = 0;
-	curs_y += curr_font->getHeight();
+	curs_y += curr_font->getHeight() + 3;
 	endPrinting(c);
 	return d_new BBStr(str);
 }
