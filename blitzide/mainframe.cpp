@@ -133,7 +133,7 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		toolbmp = (HBITMAP)LoadImage(0, t.c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_LOADMAP3DCOLORS);
 		if(!toolbmp)
 		{
-			AfxMessageBox("toolbar bitmap failed to load!");
+			AfxMessageBox("Toolbar failed to load!");
 			ExitProcess(0);
 		}
 		GetObject(toolbmp, sizeof(bm), &bm);
@@ -212,7 +212,7 @@ void MainFrame::OnDestroy()
 
 void MainFrame::setTitle(const std::string& s)
 {
-	SetWindowText(("Blitz3D - " + s).c_str());
+	SetWindowText(("Blitz3D TSS - " + s).c_str());
 	return;
 }
 
@@ -523,7 +523,7 @@ bool MainFrame::save(int n)
 	if(!out.good())
 	{
 		std::string e = "Error writing file \"" + t + "\"";
-		AfxMessageBox(e.c_str(), MB_ICONWARNING);
+		AfxMessageBox(e.c_str(), MB_ICONERROR);
 		return false;
 	}
 	e->getText(out);
@@ -803,15 +803,18 @@ void MainFrame::build(bool exec, bool publish)
 
 	std::string src = src_file;
 
+	//if the file doesnt exist, create a temporary file.
 	if(!src.size())
 	{
-		src = prefs.homeDir + "\\Games\\tmp.bb";
+		src = prefs.homeDir + "\\temp\\tmp.bb";
+		checkAndCreateDir(prefs.homeDir + "\\temp");
+
 		int om = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
 		std::ofstream out(src.c_str(), om);
 		if(!out.good())
 		{
 			std::string e = "Error writing file \"" + src + "\"";
-			AfxMessageBox(e.c_str(), MB_ICONWARNING);
+			AfxMessageBox(e.c_str(), MB_ICONERROR);
 			return;
 		}
 		e->getText(out);
@@ -1098,4 +1101,9 @@ void MainFrame::OnActivate(UINT state, CWnd* other, BOOL min)
 		if(state != WA_ACTIVE && state != WA_CLICKACTIVE) return;
 		e->SetFocus();
 	}
+}
+
+void MainFrame::checkAndCreateDir(std::string dir)
+{
+	CreateDirectory(dir.c_str(), 0);
 }

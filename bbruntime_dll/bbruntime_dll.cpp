@@ -48,6 +48,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 	{
 		case EXCEPTION_INT_DIVIDE_BY_ZERO:
 			bbruntime_panic("Integer divide by zero.");
+			break;
 		case EXCEPTION_ACCESS_VIOLATION:
 			if(ErrorMessagePool::memoryAccessViolation == 0)
 			{
@@ -65,16 +66,22 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 				}
 				bbruntime_panic(s.c_str());
 			}
+			break;
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
 			bbruntime_panic("Illegal instruction.\nProcess tried to execute an invalid CPU instruction.");
+			break;
 		case EXCEPTION_STACK_OVERFLOW:
 			bbruntime_panic("Stack overflow.\nMake sure there is no recursion without a base case.");
+			break;
 		case EXCEPTION_INT_OVERFLOW:
 			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2147483647.");
+			break;
 		case EXCEPTION_FLT_OVERFLOW:
 			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 340282347e+38F.");
+			break;
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
 			bbruntime_panic("Float divide by zero.");
+			break;
 	}
 	bbruntime_panic("Unknown runtime exception.");
 }

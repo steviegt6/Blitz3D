@@ -24,7 +24,7 @@ void Prefs::open()
 
 	bool prg_windowed;
 
-	std::ifstream in((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in | std::ios::out);
+	std::ifstream in((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in);
 	if(!in.good()) return;
 
 	std::string t;
@@ -106,7 +106,7 @@ void Prefs::open()
 		else
 		{
 			std::string s = "Unrecognized option '" + t + "' in blitzide.prefs";
-			AfxMessageBox("Error in preferences file");
+			AfxMessageBox(s.c_str());
 			setDefault();
 			return;
 		}
@@ -162,13 +162,13 @@ void Prefs::setDefault()
 	font_editor = "consolas";
 	font_editor_height = 14;
 
-	rgb_bkgrnd = RGB(0x22, 0x55, 0x88);
-	rgb_string = RGB(0x00, 0xff, 0x66);
-	rgb_ident = RGB(0xff, 0xff, 0xff);
-	rgb_keyword = RGB(0xaa, 0xff, 0xff);
-	rgb_comment = RGB(0xff, 0xee, 0x00);
-	rgb_digit = RGB(0x33, 0xff, 0xdd);
-	rgb_default = RGB(0xee, 0xee, 0xee);
+	rgb_bkgrnd = RGB(34, 85, 136);
+	rgb_string = RGB(0, 255, 102);
+	rgb_ident = RGB(255, 255, 255);
+	rgb_keyword = RGB(170, 255, 255);
+	rgb_comment = RGB(255, 238, 0);
+	rgb_digit = RGB(51, 255, 221);
+	rgb_default = RGB(238, 238, 238);
 
 	edit_tabs = 4;
 	edit_blkcursor = false;

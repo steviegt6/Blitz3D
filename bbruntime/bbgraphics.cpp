@@ -447,7 +447,7 @@ void bbGraphics(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics mode.");
+		default:RTEX("Illegal Graphics mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.");
 	}
 	graphics(w, h, d, flags);
 }
@@ -464,7 +464,7 @@ void bbGraphics3D(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics3D mode.");
+		default:RTEX("Illegal Graphics3D mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.");
 	}
 	graphics(w, h, d, flags);
 	extern void blitz3d_open();
