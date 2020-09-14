@@ -6,8 +6,6 @@
 #include "asmcoder.h"
 #include "gxutf8.h"
 
-#define DEBUG_BITMASK
-
 static int canvas_cnt;
 static DDBLTFX bltfx={sizeof(DDBLTFX)};
 

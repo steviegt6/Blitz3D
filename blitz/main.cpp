@@ -1,6 +1,4 @@
 
-#pragma warning(disable:4786)
-
 #include "libs.h"
 
 #include <iostream>

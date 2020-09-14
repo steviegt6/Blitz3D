@@ -506,7 +506,7 @@ gxScene* gxGraphics::createScene(int flags)
 							string ts = "ZBuffer Bit Depth:" + itoa(zbuffFmt.dwZBufferBitDepth);
 							gx_runtime->debugLog(ts.c_str());
 #endif
-							gxScene* scene = d_new gxScene(this, back_canvas);
+							gxScene* scene = new gxScene(this, back_canvas);
 							scene_set.insert(scene);
 
 							dummy_mesh = createMesh(8, 12, 0);
@@ -561,8 +561,8 @@ gxMesh* gxGraphics::createMesh(int max_verts, int max_tris, int flags)
 
 	IDirect3DVertexBuffer7* buff;
 	if(dir3d->CreateVertexBuffer(&desc, &buff, 0) < 0) return 0;
-	WORD* indices = d_new WORD[max_tris * 3];
-	gxMesh* mesh = d_new gxMesh(this, buff, indices, max_verts, max_tris);
+	WORD* indices = new WORD[max_tris * 3];
+	gxMesh* mesh = new gxMesh(this, buff, indices, max_verts, max_tris);
 	mesh_set.insert(mesh);
 	return mesh;
 }

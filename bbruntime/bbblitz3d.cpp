@@ -22,6 +22,8 @@
 #include "../blitz3d/listener.h"
 #include "../blitz3d/cachedtexture.h"
 
+
+//Why is everything static?
 gxScene* gx_scene;
 extern gxFileSystem* gx_filesys;
 
@@ -350,6 +352,7 @@ void  bbRenderWorld(float tween)
 {
 	debug3d();
 
+//Should we remove this stuff?
 #ifndef BETA
 	tri_count = gx_scene->getTrianglesDrawn();
 	world->render(tween);
@@ -371,8 +374,9 @@ void  bbRenderWorld(float tween)
 	}
 	if(bbKeyHit(0x58))
 	{
+		//This stuff is broken.
 		static int n;
-		string t = "screenshot" + itoa(++n) + ".bmp";
+		std::string t = "screenshot" + itoa(++n) + ".bmp";
 		bbSaveBuffer(bbBackBuffer(), d_new BBStr(t));
 	}
 
@@ -388,12 +392,12 @@ void  bbRenderWorld(float tween)
 	int ups = update_ms ? 1000 / update_ms : 1000;
 	int rps = render_ms ? 1000 / render_ms : 1000;
 
-	string t_fps = "000" + itoa(fps); t_fps = t_fps.substr(t_fps.size() - 4);
-	string t_ups = "000" + itoa(ups); t_ups = t_ups.substr(t_ups.size() - 4);
-	string t_rps = "000" + itoa(rps); t_rps = t_rps.substr(t_rps.size() - 4);
-	string t_tris = "00000" + itoa(tris); t_tris = t_tris.substr(t_tris.size() - 6);
+	std::string t_fps = "000" + itoa(fps); t_fps = t_fps.substr(t_fps.size() - 4);
+	std::string t_ups = "000" + itoa(ups); t_ups = t_ups.substr(t_ups.size() - 4);
+	std::string t_rps = "000" + itoa(rps); t_rps = t_rps.substr(t_rps.size() - 4);
+	std::string t_tris = "00000" + itoa(tris); t_tris = t_tris.substr(t_tris.size() - 6);
 
-	string t = "FPS:" + t_fps + " UPS:" + t_ups + " RPS:" + t_rps + " TRIS:" + t_tris;
+	std::string t = "FPS:" + t_fps + " UPS:" + t_ups + " RPS:" + t_rps + " TRIS:" + t_tris;
 
 	bbText(0, bbGraphicsHeight() - bbFontHeight(), d_new BBStr(t), 0, 0);
 #endif
@@ -1345,7 +1349,7 @@ int  bbPickedTriangle()
 Entity* bbCreateLight(int type, Entity* p)
 {
 	debugParent(p);
-	Light* t = d_new Light(type);
+	Light* t = new Light(type); //Changed the d_new to new because internally its just a def for new.
 	return insertEntity(t, p);
 }
 
@@ -1379,7 +1383,7 @@ void  bbLightConeAngles(Light* light, float inner, float outer)
 Entity* bbCreatePivot(Entity* p)
 {
 	debugParent(p);
-	Pivot* t = d_new Pivot();
+	Pivot* t = new Pivot();
 	return insertEntity(t, p);
 }
 
@@ -1389,7 +1393,7 @@ Entity* bbCreatePivot(Entity* p)
 Entity* bbCreateSprite(Entity* p)
 {
 	debugParent(p);
-	Sprite* s = d_new Sprite();
+	Sprite* s = new Sprite();
 	s->setFX(gxScene::FX_FULLBRIGHT);
 	return insertEntity(s, p);
 }
@@ -1399,7 +1403,7 @@ Entity* bbLoadSprite(BBStr* file, int flags, Entity* p)
 	debugParent(p);
 	Texture t(*file, flags);
 	delete file; if(!t.getCanvas(0)) return 0;
-	Sprite* s = d_new Sprite();
+	Sprite* s = new Sprite();
 	s->setTexture(0, t, 0);
 	s->setFX(gxScene::FX_FULLBRIGHT);
 
@@ -1440,7 +1444,7 @@ void  bbSpriteViewMode(Sprite* s, int mode)
 Entity* bbCreateMirror(Entity* p)
 {
 	debugParent(p);
-	Mirror* t = d_new Mirror();
+	Mirror* t = new Mirror();
 	return insertEntity(t, p);
 }
 
@@ -1454,7 +1458,7 @@ Entity* bbCreatePlane(int segs, Entity* p)
 		debugParent(p);
 		if(segs < 1 || segs>20) RTEX("Illegal number of segments!");
 	}
-	PlaneModel* t = d_new PlaneModel(segs);
+	PlaneModel* t = new PlaneModel(segs);
 	return insertEntity(t, p);
 }
 
@@ -1464,7 +1468,7 @@ Entity* bbCreatePlane(int segs, Entity* p)
 Entity* bbLoadMD2(BBStr* file, Entity* p)
 {
 	debugParent(p);
-	MD2Model* t = d_new MD2Model(*file); delete file;
+	MD2Model* t = new MD2Model(*file); delete file;
 	if(!t->getValid()) { delete t; return 0; }
 	return insertEntity(t, p);
 }
@@ -1500,7 +1504,7 @@ Entity* bbLoadBSP(BBStr* file, float gam, Entity* p)
 {
 	debugParent(p);
 	CachedTexture::setPath(filenamepath(*file));
-	Q3BSPModel* t = d_new Q3BSPModel(*file, gam); delete file;
+	Q3BSPModel* t = new Q3BSPModel(*file, gam); delete file;
 	CachedTexture::setPath("");
 
 	if(!t->isValid()) { delete t; return 0; }
@@ -1549,7 +1553,7 @@ Entity* bbCreateTerrain(int n, Entity* p)
 	int shift = 0;
 	while((1 << shift) < n) ++shift;
 	if((1 << shift) != n) RTEX("Illegal terrain size!");
-	Terrain* t = d_new Terrain(shift);
+	Terrain* t = new Terrain(shift);
 	return insertEntity(t, p);
 }
 
@@ -1563,7 +1567,7 @@ Entity* bbLoadTerrain(BBStr* file, Entity* p)
 	int shift = 0;
 	while((1 << shift) < w) ++shift;
 	if((1 << shift) != w) RTEX("Illegal terrain size.");
-	Terrain* t = d_new Terrain(shift);
+	Terrain* t = new Terrain(shift);
 	c->lock();
 	for(int y = 0; y < h; ++y)
 	{
@@ -1638,7 +1642,7 @@ Entity* bbCreateListener(Entity* p, float roll, float dopp, float dist)
 		debugParent(p);
 		if(listener) RTEX("Listener already created!");
 	}
-	listener = d_new Listener(roll, dopp, dist);
+	listener = new Listener(roll, dopp, dist);
 	return insertEntity(listener, p);
 }
 

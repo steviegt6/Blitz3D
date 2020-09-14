@@ -110,7 +110,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <Optimization>Disabled</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <MinimalRebuild>true</MinimalRebuild>
       <PreprocessorDefinitions>WIN32;_DEBUG;PRO;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
