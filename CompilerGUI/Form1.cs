@@ -9,6 +9,7 @@ namespace CompilerGUI
     {
         string fileToCompile = string.Empty;
         string execute = "/k blitzcc.exe ";
+        public static bool laa = false;
         public MainForm()
         {
             InitializeComponent();
@@ -39,13 +40,13 @@ namespace CompilerGUI
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                textBox1.Text = openFileDialog1.FileName;
+                bbFile.Text = openFileDialog1.FileName;
             }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            fileToCompile = textBox1.Text;
+            fileToCompile = bbFile.Text;
             error.Text = string.Empty;
             fileToCompile = fixPathSpaces(fileToCompile);
 
@@ -54,20 +55,24 @@ namespace CompilerGUI
                 error.Text = "Choose a file to compile!";
                 return;
             }
-            if(genExe.Checked == true && textBox2.Text == string.Empty)
+            if(genExe.Checked == true && exeName.Text == string.Empty)
             {
                 error.Text = "Executable name can't be empty!";
                 return;
             }
-            else if(genExe.Checked == true && textBox2.Text != string.Empty)
+            else if(genExe.Checked == true && exeName.Text != string.Empty)
             {
-                execute += string.Format("-o {0} ", textBox2.Text);
+                execute += string.Format("-o {0} ", exeName.Text);
             }
             if(quietMode.Checked == true)
             {
                 execute += "-q ";
             }
-            if(vQuietMode.Checked == true)
+            if (laa == true)
+            {
+                execute += "-laa ";
+            }
+            if (vQuietMode.Checked == true)
             {
                 execute += "+q ";
             }
@@ -87,9 +92,11 @@ namespace CompilerGUI
             {
                 execute += "+k ";
             }
+            //Execute compiler with the arguments.
             execute += fileToCompile;
-            Trace.WriteLine(execute);
             Process.Start("CMD.exe", execute);
+
+            //Reset variables.
             execute = "/k blitzcc.exe ";
             fileToCompile = string.Empty;
         }
@@ -101,6 +108,12 @@ namespace CompilerGUI
                 return $"\"{path}\"";
             }
             else return path;
+        }
+
+        private void extrabutt_Click(object sender, EventArgs e)
+        {
+            ExtraOpts form = new ExtraOpts();
+            form.Show();
         }
     }
 }

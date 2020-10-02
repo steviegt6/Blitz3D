@@ -299,10 +299,10 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 		gx_runtime->debugInfo("Program has ended.");
 	}
 	//why tf doesnt this trigger on ram outage situations, its supposed to
-	catch(std::bad_alloc)
+	/*catch(const std::bad_alloc& balloc)
 	{
 		bbruntime_panic("Program has ran out of memory!");
-	}
+	}*/
 	catch(bbEx x)
 	{
 		t = x.err;
