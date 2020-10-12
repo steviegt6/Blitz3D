@@ -96,10 +96,6 @@ gxScene::gxScene(gxGraphics* g, gxCanvas* t) :
 	}
 	setHWMultiTex(true);
 
-	//ATI lighting hack
-	dir3dDev->LightEnable(0, true);
-	dir3dDev->LightEnable(0, false);
-
 	//globals
 	sphere_mat._11 = .5f; sphere_mat._22 = -.5f; sphere_mat._33 = .5f;
 	sphere_mat._41 = .5f; sphere_mat._42 = .5f; sphere_mat._43 = .5f;
