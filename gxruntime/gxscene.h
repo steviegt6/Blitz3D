@@ -125,7 +125,7 @@ private:
 	gxCanvas *target;
 	bool wbuffer,dither,antialias,wireframe,flipped;
 	unsigned ambient,ambient2,fogcolor;
-	int caps_level,fogmode,zmode;
+	int caps_level,fogmode,zmode,max_lights;
 	float fogrange_nr, fogrange_fr, fog_density;
 	D3DVIEWPORT7 viewport;
 	bool ortho_proj;
