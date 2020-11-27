@@ -447,7 +447,7 @@ void bbGraphics(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics mode.");
+		default:RTEX("Illegal Graphics mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.");
 	}
 	graphics(w, h, d, flags);
 }
@@ -464,7 +464,7 @@ void bbGraphics3D(int w, int h, int d, int mode)
 		case 4:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_BORDERLESS; break;
 		case 6:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
 		case 7:flags |= gxGraphics::GRAPHICS_WINDOWED | gxGraphics::GRAPHICS_SCALED | gxGraphics::GRAPHICS_AUTOSUSPEND; break;
-		default:RTEX("Illegal Graphics3D mode.");
+		default:RTEX("Illegal Graphics3D mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.");
 	}
 	graphics(w, h, d, flags);
 	extern void blitz3d_open();
@@ -1172,7 +1172,7 @@ static gxCanvas* startPrinting()
 	c->getHandle(&p_hx, &p_hy);
 	c->getViewport(&p_vpx, &p_vpy, &p_vpw, &p_vph);
 
-	c->setOrigin(0, 2); //2
+	c->setOrigin(0, 0);
 	c->setHandle(0, 0);
 	c->setViewport(0, 0, c->getWidth(), c->getHeight());
 	if(c != gx_canvas)
@@ -1357,7 +1357,7 @@ BBStr* bbInput(BBStr* prompt)
 	}
 
 	curs_x = 0;
-	curs_y += curr_font->getHeight();
+	curs_y += curr_font->getHeight() + 3;
 	endPrinting(c);
 	return d_new BBStr(str);
 }

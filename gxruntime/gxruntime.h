@@ -81,10 +81,18 @@ public:
 	void asyncRun();
 	void asyncEnd();
 
+
 	/***** GX INTERFACE *****/
 public:
 	enum{
 		GFXMODECAPS_3D=1
+	};
+	enum
+	{
+		GMODE_NONE = 0,
+		GMODE_SCALED = 1,
+		GMODE_FIXED = 2,
+		GMODE_EXCLUSIVE = 3 //IDK what exclusive mode is -Aesthetical
 	};
 
 	//return true if program should continue, or false for quit.

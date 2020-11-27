@@ -20,24 +20,28 @@ static void fail(const char* p)
 	ExitProcess(-1);
 }
 
-int _stdcall WinMain(HINSTANCE inst, HINSTANCE prev, char* cmd, int show)
+int WINAPI WinMain(_In_ HINSTANCE inst, _In_opt_ HINSTANCE prev, _In_ char* cmd, _In_ int show)
 {
-	std::string t = getAppDir();
+	std::string basedir = getAppDir();
 	std::string idePath = "\\bin\\ide.exe ";
 
-	putenv(("blitzpath=" + t).c_str());
-	SetCurrentDirectory(t.c_str());
-	t += idePath + cmd;
+	_putenv_s("blitzpath", basedir.c_str());
+	SetCurrentDirectory(basedir.c_str());
+	basedir += idePath + cmd;
 
 	STARTUPINFO startupInfo;
 	PROCESS_INFORMATION processInfo;
-	ZeroMemory(&startupInfo, sizeof(startupInfo)); startupInfo.cb = sizeof(startupInfo);
 
-	if(!CreateProcess(0, (char*)t.c_str(), 0, 0, 0, 0, 0, 0, &startupInfo, &processInfo))
+	ZeroMemory(&startupInfo, sizeof(startupInfo));
+	startupInfo.cb = sizeof(startupInfo);
+	ZeroMemory(&processInfo, sizeof(processInfo));
+
+	if(!CreateProcess(NULL, (char*)basedir.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &startupInfo, &processInfo))
 	{
 		fail(bb_err);
 	}
 
+	//Wait until BlitzIDE enters an idle state, then close bblaunch.
 	WaitForInputIdle(processInfo.hProcess, INFINITE);
 
 	CloseHandle(processInfo.hProcess);

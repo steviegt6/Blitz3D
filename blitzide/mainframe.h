@@ -5,6 +5,7 @@
 #include "editor.h"
 #include "htmlhelp.h"
 #include "tabber.h"
+#include <filesystem>
 
 class MainFrame : public CFrameWnd,public HelpListener,EditorListener,TabberListener{
 public:
@@ -88,6 +89,9 @@ private:
 
 	void compile( const std::string &cmd );
 	void build( bool exec,bool publish );
+
+	//does the dir exist? If not, create it.
+	void checkAndCreateDir(std::string dir);
 
 	//editorlistener
 	void cursorMoved( Editor *editor );

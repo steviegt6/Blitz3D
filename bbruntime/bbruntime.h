@@ -10,6 +10,9 @@ To be statically linked with an appropriate gxruntime driver.
 #ifndef BBRUNTIME_H
 #define BBRUNTIME_H
 
+//My friend Kat Purpy gave me this macro and I tweaked it a bit to fit B3D.
+#define INIT(thing) if(!thing##_create()) {sue(#thing "_create() failed!"); return false;}
+
 #include "../gxruntime/gxruntime.h"
 
 void bbruntime_link( void (*rtSym)( const char *sym,void *pc ) );

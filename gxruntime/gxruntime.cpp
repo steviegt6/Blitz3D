@@ -86,7 +86,7 @@ gxRuntime* gxRuntime::openRuntime(HINSTANCE hinst, const std::string& cmd_line, 
 	wndclass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	RegisterClass(&wndclass);
 
-	gfx_mode = 0;
+	gfx_mode = GMODE_NONE;
 	clipper = 0; primSurf = 0;
 	busy = suspended = false;
 	run_flag = true;
@@ -201,7 +201,7 @@ void gxRuntime::resetInput()
 void gxRuntime::acquireInput()
 {
 	if(!input) return;
-	if(gfx_mode == 3)
+	if(gfx_mode == GMODE_EXCLUSIVE)
 	{
 		if(use_di)
 		{
@@ -217,7 +217,7 @@ void gxRuntime::acquireInput()
 void gxRuntime::unacquireInput()
 {
 	if(!input) return;
-	if(gfx_mode == 3 && use_di) input->unacquire();
+	if(gfx_mode == GMODE_EXCLUSIVE && use_di) input->unacquire();
 	input->reset();
 }
 
@@ -232,7 +232,7 @@ void gxRuntime::suspend()
 	suspended = true;
 	busy = false;
 
-	if(gfx_mode == 3) ShowCursor(1);
+	if(gfx_mode == GMODE_EXCLUSIVE) ShowCursor(1);
 
 	if(debugger) debugger->debugStop();
 }
@@ -242,7 +242,7 @@ void gxRuntime::suspend()
 ////////////
 void gxRuntime::resume()
 {
-	if(gfx_mode == 3) ShowCursor(0);
+	if(gfx_mode == GMODE_EXCLUSIVE) ShowCursor(0);
 	busy = true;
 	acquireInput();
 	restoreGraphics();
@@ -258,7 +258,7 @@ void gxRuntime::resume()
 ///////////////////
 void gxRuntime::forceSuspend()
 {
-	if(gfx_mode == 3)
+	if(gfx_mode == GMODE_EXCLUSIVE)
 	{
 		SetForegroundWindow(GetDesktopWindow());
 		ShowWindow(GetDesktopWindow(), SW_SHOW);
@@ -274,7 +274,7 @@ void gxRuntime::forceSuspend()
 //////////////////
 void gxRuntime::forceResume()
 {
-	if(gfx_mode == 3)
+	if(gfx_mode == GMODE_EXCLUSIVE)
 	{
 		SetForegroundWindow(hwnd);
 		ShowWindow(hwnd, SW_SHOWMAXIMIZED);
@@ -292,29 +292,21 @@ void gxRuntime::paint()
 {
 	switch(gfx_mode)
 	{
-		case 0:
-			{
-			}
-			break;
-		case 1:case 2:	//scaled windowed mode.
+		case GMODE_SCALED:
+		case GMODE_FIXED:
 			{
 				RECT src, dest;
 				src.left = src.top = 0;
 				GetClientRect(hwnd, &dest);
-				src.right = gfx_mode == 1 ? graphics->getWidth() : dest.right;
-				src.bottom = gfx_mode == 1 ? graphics->getHeight() : dest.bottom;
+				src.right = gfx_mode == GMODE_SCALED ? graphics->getWidth() : dest.right;
+				src.bottom = gfx_mode == GMODE_SCALED ? graphics->getHeight() : dest.bottom;
 				POINT p; p.x = p.y = 0; ClientToScreen(hwnd, &p);
 				dest.left += p.x; dest.right += p.x;
 				dest.top += p.y; dest.bottom += p.y;
 				gxCanvas* f = graphics->getFrontCanvas();
 				primSurf->Blt(&dest, f->getSurface(), &src, 0, 0);
+				break;
 			}
-			break;
-		case 3:
-			{
-				//exclusive mode
-			}
-			break;
 	}
 }
 
@@ -328,7 +320,8 @@ void gxRuntime::flip(bool vwait)
 	int n;
 	switch(gfx_mode)
 	{
-		case 1:case 2:
+		case GMODE_SCALED:
+		case GMODE_FIXED:
 			if(vwait) graphics->vwait();
 			f->setModify(b->getModify());
 			if(f->getModify() != mod_cnt)
@@ -337,7 +330,7 @@ void gxRuntime::flip(bool vwait)
 				paint();
 			}
 			break;
-		case 3:
+		case GMODE_EXCLUSIVE:
 			if(vwait)
 			{
 				BOOL vb;
@@ -363,14 +356,14 @@ void gxRuntime::moveMouse(int x, int y)
 	RECT rect;
 	switch(gfx_mode)
 	{
-		case 1:
+		case GMODE_SCALED:
 			GetClientRect(hwnd, &rect);
 			x = x * (rect.right - rect.left) / graphics->getWidth();
 			y = y * (rect.bottom - rect.top) / graphics->getHeight();
-		case 2:
+		case GMODE_FIXED:
 			p.x = x; p.y = y; ClientToScreen(hwnd, &p); x = p.x; y = p.y;
 			break;
-		case 3:
+		case GMODE_EXCLUSIVE:
 			if(use_di) return;
 			break;
 		default:
@@ -405,7 +398,7 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			EndPaint(hwnd, &ps);
 			return DefWindowProc(hwnd, msg, wparam, lparam);
 		case WM_ERASEBKGND:
-			return gfx_mode ? 1 : DefWindowProc(hwnd, msg, wparam, lparam);
+			return gfx_mode ? GMODE_SCALED : DefWindowProc(hwnd, msg, wparam, lparam);
 		case WM_CLOSE:
 			if(app_close.size())
 			{
@@ -417,7 +410,7 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		case WM_SETCURSOR:
 			if(!suspended)
 			{
-				if(gfx_mode == 3)
+				if(gfx_mode == GMODE_EXCLUSIVE)
 				{
 					SetCursor(0);
 					return 1;
@@ -453,7 +446,7 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	if(!input || suspended) return DefWindowProc(hwnd, msg, wparam, lparam);
 
-	if(gfx_mode == 3 && use_di)
+	if(gfx_mode == GMODE_EXCLUSIVE && use_di)
 	{
 		use_di = input->acquire();
 		return DefWindowProc(hwnd, msg, wparam, lparam);
@@ -490,7 +483,7 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			break;
 		case WM_MOUSEMOVE:
 			if(!graphics) break;
-			if(gfx_mode == 3 && !use_di)
+			if(gfx_mode == GMODE_EXCLUSIVE && !use_di)
 			{
 				POINT p; GetCursorPos(&p);
 				input->wm_mousemove(p.x, p.y);
@@ -498,7 +491,7 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			else
 			{
 				int x = (short)(lparam & 0xffff), y = lparam >> 16;
-				if(gfx_mode == 1)
+				if(gfx_mode == GMODE_SCALED)
 				{
 					RECT rect; GetClientRect(hwnd, &rect);
 					x = x * graphics->getWidth() / (rect.right - rect.left);
@@ -778,7 +771,7 @@ void gxRuntime::setPointerVisible(bool vis)
 	if(pointer_visible == vis) return;
 
 	pointer_visible = vis;
-	if(gfx_mode == 3) return;
+	if(gfx_mode == GMODE_EXCLUSIVE) return;
 
 	//force a WM_SETCURSOR
 	POINT pt;
@@ -1032,11 +1025,11 @@ gxGraphics* gxRuntime::openGraphics(int w, int h, int d, int driver, int flags)
 	{
 		if(graphics = openWindowedGraphics(w, h, d, d3d))
 		{
-			gfx_mode = (flags & gxGraphics::GRAPHICS_SCALED) ? 1 : 2;
+			gfx_mode = (flags & gxGraphics::GRAPHICS_SCALED) ? GMODE_SCALED : GMODE_FIXED;
 			auto_suspend = (flags & gxGraphics::GRAPHICS_AUTOSUSPEND) ? true : false;
 			int ws, ww, hh;
 			border_mode = (flags & gxGraphics::GRAPHICS_BORDERLESS) ? 1 : 0;
-			if(gfx_mode == 1)
+			if(gfx_mode == GMODE_SCALED)
 			{
 				ws = scaled_ws;
 				RECT c_r;
@@ -1086,7 +1079,7 @@ gxGraphics* gxRuntime::openGraphics(int w, int h, int d, int driver, int flags)
 		ShowCursor(0);
 		if(graphics = openExclusiveGraphics(w, h, d, d3d))
 		{
-			gfx_mode = 3;
+			gfx_mode = GMODE_EXCLUSIVE;
 			auto_suspend = true;
 			SetCursorPos(0, 0);
 			acquireInput();
@@ -1121,12 +1114,12 @@ void gxRuntime::closeGraphics(gxGraphics* g)
 	if(primSurf) { primSurf->Release(); primSurf = 0; }
 	delete graphics; graphics = 0;
 
-	if(gfx_mode == 3)
+	if(gfx_mode == GMODE_EXCLUSIVE)
 	{
 		ShowCursor(1);
 		restoreWindowState();
 	}
-	gfx_mode = 0;
+	gfx_mode = GMODE_NONE;
 
 	gfx_lost = false;
 
