@@ -43,7 +43,7 @@ int bbReadByte(bbStream* s)
 	}
 	catch(std::exception& ex)
 	{
-		RTEX("ReadShort couldn't read a valid short.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX("ReadByte couldn't read a valid byte.\nMake sure the file you attempted to read isn't corrupted.");
 	}
 }
 
