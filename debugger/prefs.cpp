@@ -137,13 +137,9 @@ void Prefs::close()
 	{
 		out << "file_recent\t" << recentFiles[k] << std::endl;
 	}
-<<<<<<< HEAD
-	out<<dec;
-=======
 	out << std::dec;
 
 	RemoveFontResource((homeDir + "cfg\\Blitz.fon").c_str());
->>>>>>> a1fb23f02e9e47339ca9027e12ae461d26d09e3c
 }
 
 void Prefs::setDefault()

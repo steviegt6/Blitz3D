@@ -266,9 +266,6 @@ int gxGraphics::getDepth()const
 	return front_canvas->getDepth();
 }
 
-<<<<<<< HEAD
-gxFont *gxGraphics::loadFont(const string &f,int height) {
-=======
 gxFont *gxGraphics::loadFont(const std::string &f,int height) {
 	std::string t;
 	int n=f.find('.');
@@ -280,7 +277,6 @@ gxFont *gxGraphics::loadFont(const std::string &f,int height) {
 		t=f;
 	}
 
->>>>>>> a1fb23f02e9e47339ca9027e12ae461d26d09e3c
 	gxFont* newFont = new gxFont(ftLibrary, this, f, height);
 	font_set.emplace(newFont);
 	return newFont;
@@ -513,7 +509,7 @@ gxScene* gxGraphics::createScene(int flags)
 							gxScene* scene = new gxScene(this, back_canvas);
 							scene_set.insert(scene);
 
-							dummy_mesh = createMesh(8, 12, 0);
+							//dummy_mesh = createMesh(8, 12, 0);
 
 							return scene;
 						}
