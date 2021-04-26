@@ -1697,6 +1697,12 @@ void  bbShowEntity(Entity* e)
 	e->getObject()->reset();
 }
 
+int bbEntityHidden(Entity* e)
+{
+	debugEntity(e);
+	return !e->visible();
+}
+
 void  bbEntityParent(Entity* e, Entity* p, int global)
 {
 	if(debug)
@@ -2714,6 +2720,7 @@ void blitz3d_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("EntityOrder%entity%order", bbEntityOrder);
 	rtSym("HideEntity%entity", bbHideEntity);
 	rtSym("ShowEntity%entity", bbShowEntity);
+	rtSym("%EntityHidden%entity", bbEntityHidden);
 	rtSym("FreeEntity%entity", bbFreeEntity);
 
 	rtSym("NameEntity%entity$name", bbNameEntity);
