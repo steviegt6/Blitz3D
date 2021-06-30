@@ -77,7 +77,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp)
 			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2147483647.");
 			break;
 		case EXCEPTION_FLT_OVERFLOW:
-			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 340282347e+38F.");
+			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 3.40282347e+38F.");
 			break;
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
 			bbruntime_panic("Float divide by zero.");

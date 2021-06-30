@@ -282,6 +282,9 @@ bool bbruntime_destroy()
 	string_destroy();
 	math_destroy();
 	basic_destroy();
+#ifdef _DEBUG
+	fclose(stdout);
+#endif
 	return true;
 }
 
@@ -294,15 +297,16 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 	const char* t = 0;
 	try
 	{
+#ifdef _DEBUG
+		AllocConsole();
+		freopen("CONOUT$", "w", stdout);
+		SetConsoleTitleA("Blitz3D Internal Log");
+		std::cout << "Test!" << std::endl;
+#endif
 		if(!gx_runtime->idle()) RTEX(0);
 		pc();
 		gx_runtime->debugInfo("Program has ended.");
 	}
-	//why tf doesnt this trigger on ram outage situations, its supposed to
-	/*catch(const std::bad_alloc& balloc)
-	{
-		bbruntime_panic("Program has ran out of memory!");
-	}*/
 	catch(bbEx x)
 	{
 		t = x.err;
