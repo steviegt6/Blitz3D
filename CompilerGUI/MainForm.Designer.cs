@@ -208,7 +208,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
-            this.Text = "BlitzCC 1.118 GUI";
+            this.Text = "BlitzCC GUI";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.flagsGroup.ResumeLayout(false);
             this.flagsGroup.PerformLayout();
