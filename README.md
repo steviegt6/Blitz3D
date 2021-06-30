@@ -17,9 +17,9 @@ To build Blitz3D TSS you will need:
 
 4) Note: Blitz3D TSS uses the dynamic version of the fmod audio lib. When redistributing programs built with Blitz3D TSS, you will need to also include the fmod.dll file found in the "bin" directory with your programs. This should be placed in the same directory as your program's executable.
 
-Blitz3D is released under the zlib/libpng license.
+**Blitz3D is released under the zlib/libpng license.**
 
-This is a fork of Blitz3D by Blitz Research.
+**This is a fork of Blitz3D by Blitz Research.***
 
 # The zlib/libpng License
 
