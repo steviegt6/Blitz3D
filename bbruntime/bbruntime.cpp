@@ -297,12 +297,6 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg)
 	const char* t = 0;
 	try
 	{
-#ifdef _DEBUG
-		AllocConsole();
-		freopen("CONOUT$", "w", stdout);
-		SetConsoleTitleA("Blitz3D Internal Log");
-		std::cout << "Test!" << std::endl;
-#endif
 		if(!gx_runtime->idle()) RTEX(0);
 		pc();
 		gx_runtime->debugInfo("Program has ended.");
