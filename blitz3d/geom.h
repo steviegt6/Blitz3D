@@ -106,13 +106,17 @@ public:
 	}
 	Vector normalized()const{
 		float l = length();
-		if (abs(l)<EPSILON) return Vector( x,y,z );
+		if (abs(l)<EPSILON) return Vector(x / EPSILON, y / EPSILON, z / EPSILON);
 		return Vector(x / l, y / l, z / l);
 	}
 	void normalize(){
 		float l = length();
-		if (abs(l)<EPSILON) return;
-		x /= l; y /= l; z /= l;
+		if (abs(l) < EPSILON) {
+			x /= EPSILON; y /= EPSILON; z /= EPSILON;
+		}
+		else {
+			x /= l; y /= l; z /= l;
+		}
 	}
 	float yaw()const{
 		return -atan2f( x,z );
@@ -223,12 +227,16 @@ struct Quat{
 	}
 	void normalize(){
 		float l = length();
-		if (l<EPSILON) return;
-		*this = *this / l;
+		if (l < EPSILON) {
+			*this = *this / EPSILON;
+		}
+		else {
+			*this = *this / l;
+		}
 	}
 	Quat normalized()const{
 		float l = length();
-		if (l<EPSILON) return *this;
+		if (l<EPSILON) return *this / EPSILON;
 		return *this / l;
 	}
 	Quat slerpTo( const Quat &q,float a )const{

@@ -509,7 +509,7 @@ gxScene* gxGraphics::createScene(int flags)
 							gxScene* scene = new gxScene(this, back_canvas);
 							scene_set.insert(scene);
 
-							dummy_mesh = createMesh(8, 12, 0);
+							//dummy_mesh = createMesh(8, 12, 0);
 
 							return scene;
 						}

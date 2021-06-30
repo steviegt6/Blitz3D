@@ -117,7 +117,7 @@ t_surf(0),cm_mask(0),locked_cnt(0),mod_cnt(0),remip_cnt(0){
 	setHandle( 0,0 );
 	setFont( graphics->getDefaultFont() );
 	setViewport( 0,0,getWidth(),getHeight() );
-	if( flags & gxCanvas::CANVAS_TEXTURE ) ddUtil::buildMipMaps( surf );
+	if( flags & gxCanvas::CANVAS_TEX_MIPMAP ) ddUtil::buildMipMaps( surf );
 }
 
 gxCanvas::~gxCanvas(){
@@ -163,7 +163,7 @@ ddSurf *gxCanvas::getSurface()const{
 
 ddSurf *gxCanvas::getTexSurface()const{
 	if( mod_cnt==remip_cnt ) return main_surf;
-	ddUtil::buildMipMaps( surf );
+	if (flags & gxCanvas::CANVAS_TEX_MIPMAP) ddUtil::buildMipMaps( surf );
 	remip_cnt=mod_cnt;
 	return main_surf;
 }

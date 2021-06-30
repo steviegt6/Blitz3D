@@ -5,7 +5,6 @@
 class Prefs{
 public:
 	bool prg_debug;
-	bool prg_laa;
 	std::string prg_lastbuild;
 
 	RECT win_rect;

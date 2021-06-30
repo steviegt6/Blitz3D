@@ -83,6 +83,8 @@ gxScene::gxScene(gxGraphics* g, gxCanvas* t) :
 		caps_level = 110;
 	}
 
+	max_lights = devDesc.dwMaxActiveLights;
+
 	//default texture states
 	for(int n = 0; n < hw_tex_stages; ++n)
 	{
@@ -701,7 +703,7 @@ bool gxScene::begin(const std::vector<gxLight*>& lights)
 
 	//set light states
 	_curLights.clear();
-	for(n = 0; n < 8; ++n)
+	for(n = 0; n < max_lights; ++n)
 	{
 		if(n < lights.size())
 		{
