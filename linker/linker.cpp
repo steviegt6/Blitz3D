@@ -9,7 +9,7 @@ public:
 	~BBModule();
 
 	void *link( Module *libs );
-	bool createExe( const char *exe_file,const char *dll_file );
+	bool createExe( const char *exe_file,const char *dll_file,bool laa );
 
 	int getPC();
 
@@ -140,7 +140,7 @@ Linker *_cdecl linkerGetLinker(){
 	static Linker linker;return &linker;
 }
 
-bool BBModule::createExe( const char *exe_file,const char *dll_file ){
+bool BBModule::createExe( const char *exe_file,const char *dll_file,bool laa ){
 	//find proc address of bbWinMain
 	HMODULE hmod=LoadLibrary( dll_file );if( !hmod ) return false;
 	int proc=(int)GetProcAddress( hmod,"_bbWinMain@0" );
@@ -150,7 +150,7 @@ bool BBModule::createExe( const char *exe_file,const char *dll_file ){
 
 	if( !openImage( exe_file ) ) return false;
 
-	makeExe( entry );
+	makeExe( entry, laa );
 
 	//create module
 	//code size: code...

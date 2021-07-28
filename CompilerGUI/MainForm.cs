@@ -70,6 +70,8 @@ namespace CompilerGUI
             }
             Parameters += FileToCompile;
 
+            Debug.WriteLine(Parameters);
+
             try
             {
                 //Execute compiler with the arguments.
