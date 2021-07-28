@@ -282,9 +282,6 @@ bool bbruntime_destroy()
 	string_destroy();
 	math_destroy();
 	basic_destroy();
-#ifdef _DEBUG
-	fclose(stdout);
-#endif
 	return true;
 }
 

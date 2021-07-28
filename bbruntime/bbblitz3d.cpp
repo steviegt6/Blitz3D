@@ -632,7 +632,6 @@ Brush* bbLoadBrush(BBStr* file, int flags, float u_scale, float v_scale)
 	if(u_scale != 1 || v_scale != 1) t.setScale(1 / u_scale, 1 / v_scale);
 	Brush* br = bbCreateBrush(255, 255, 255);
 	br->setTexture(0, t, 0);
-	delete file;
 	return br;
 }
 
