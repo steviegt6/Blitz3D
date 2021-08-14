@@ -19,7 +19,7 @@ To build Blitz3D TSS you will need:
 
 **Blitz3D is released under the zlib/libpng license.**
 
-**This is a fork of Blitz3D by Blitz Research.***
+**This is a fork of Blitz3D by Blitz Research.**
 
 # The zlib/libpng License
 
