@@ -561,9 +561,9 @@ bool gxRuntime::idle()
 		MSG msg;
 		BOOL success = 0;
 		if( suspended && run_flag ){
-			success = GetMessage( &msg,0,0,0 );
+			success = GetMessageW( &msg,0,0,0 );
 		}else{
-			if( !PeekMessage( &msg,0,0,0,PM_REMOVE ) ) return run_flag;
+			if( !PeekMessageW( &msg,0,0,0,PM_REMOVE ) ) return run_flag;
 		}
 		switch( msg.message ){
 		case WM_STOP:
@@ -581,7 +581,7 @@ bool gxRuntime::idle()
 			break;
 		default:
 			TranslateMessage( &msg );
-			DispatchMessage( &msg );
+			DispatchMessageW( &msg );
 		}
 	}
 	return run_flag;
@@ -1340,7 +1340,7 @@ std::string gxRuntime::systemProperty(const std::string& p)
 			case 3:
 				switch(osinfo.dwMinorVersion)
 				{
-					case 51:return "Windows NT 3.1";
+					case 51:return "Windows NT 3.51";
 				}
 				break;
 			case 4:
@@ -1369,10 +1369,8 @@ std::string gxRuntime::systemProperty(const std::string& p)
 				}
 				break;
 			case 10:
-				switch(osinfo.dwMinorVersion)
-				{
-					case 0: return "Windows 10";
-				}
+				if(osinfo.dwBuildNumber >= 22000) return "Windows 11";
+				return "Windows 10";
 				break;
 		}
 	}
