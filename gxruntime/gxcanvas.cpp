@@ -689,10 +689,10 @@ void gxCanvas::setPixel( int x,int y,unsigned argb ){
 unsigned gxCanvas::getPixel( int x,int y )const{
 	x+=origin_x;if( x<viewport.left || x>=viewport.right ) return format.toARGB( mask_surf );
 	y+=origin_y;if( y<viewport.top || y>=viewport.bottom ) return format.toARGB( mask_surf );
-	unsigned p=getPixelFast( x,y );
 	lock();
-	return p;
+	unsigned p=getPixelFast( x,y );
 	unlock();
+	return p;
 }
 
 void gxCanvas::copyPixelFast( int x,int y,gxCanvas *src,int src_x,int src_y ){
