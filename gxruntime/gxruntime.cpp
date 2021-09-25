@@ -1340,7 +1340,7 @@ std::string gxRuntime::systemProperty(const std::string& p)
 			case 3:
 				switch(osinfo.dwMinorVersion)
 				{
-					case 51:return "Windows NT 3.1";
+					case 51:return "Windows NT 3.51";
 				}
 				break;
 			case 4:
@@ -1369,10 +1369,8 @@ std::string gxRuntime::systemProperty(const std::string& p)
 				}
 				break;
 			case 10:
-				switch(osinfo.dwMinorVersion)
-				{
-					case 0: return "Windows 10";
-				}
+				if(osinfo.dwBuildNumber >= 22000) return "Windows 11";
+				return "Windows 10";
 				break;
 		}
 	}
