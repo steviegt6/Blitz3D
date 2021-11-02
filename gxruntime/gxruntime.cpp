@@ -777,7 +777,6 @@ void gxRuntime::setPointerVisible(bool vis)
 	POINT pt;
 	GetCursorPos(&pt);
 	SetCursorPos(pt.x, pt.y);
-	std::string s = vis ? "true" : "false";
 }
 
 /////////////////
