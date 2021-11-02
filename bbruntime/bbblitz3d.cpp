@@ -413,6 +413,15 @@ float  bbStats3D(int n)
 	return stats3d[n];
 }
 
+int bbRunningUnderWine()
+{
+	HMODULE ntdllModule = GetModuleHandleW(L"ntdll.dll");
+
+	if (ntdllModule && GetProcAddress(ntdllModule, "wine_get_version")) return true;
+
+	return false;
+}
+
 ////////////////
 // MEMORYINFO //
 ////////////////
@@ -2731,4 +2740,6 @@ void blitz3d_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("%AvailPhys", bbAvailPhys);
 	rtSym("%TotalVirtual", bbTotalVirtual);
 	rtSym("%AvailVirtual", bbAvailVirtual);
+
+	rtSym("%RunningOnWine", bbRunningUnderWine);
 }
