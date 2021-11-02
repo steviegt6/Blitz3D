@@ -6,5 +6,6 @@ blitzide.prefs
 *.dll
 *.pdb
 *.ilk
+*.aps
 .vs
 */objs/*

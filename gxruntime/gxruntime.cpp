@@ -1337,28 +1337,6 @@ std::string gxRuntime::systemProperty(const std::string& p)
 	{
 		switch(osinfo.dwMajorVersion)
 		{
-			case 3:
-				switch(osinfo.dwMinorVersion)
-				{
-					case 51:return "Windows NT 3.51";
-				}
-				break;
-			case 4:
-				switch(osinfo.dwMinorVersion)
-				{
-					case 0:return "Windows 95";
-					case 10:return "Windows 98";
-					case 90:return "Windows ME";
-				}
-				break;
-			case 5:
-				switch(osinfo.dwMinorVersion)
-				{
-					case 0:return "Windows 2000";
-					case 1:return "Windows XP";
-					case 2:return "Windows Server 2003";
-				}
-				break;
 			case 6:
 				switch(osinfo.dwMinorVersion)
 				{
@@ -1373,6 +1351,44 @@ std::string gxRuntime::systemProperty(const std::string& p)
 				return "Windows 10";
 				break;
 		}
+	}
+	else if (t == "cpuname")
+	{
+		//Uses the __cpuid intrinsic to get the brand name.
+		//-------RESOURCES-------
+		//https://en.wikipedia.org/wiki/CPUID#EAX=80000002h,80000003h,80000004h:_Processor_Brand_String
+		//https://docs.microsoft.com/en-us/cpp/intrinsics/cpuid-cpuidex?view=msvc-160
+
+		std::string cpuBrand;
+		uint32_t regs[4];
+		int numberOfExtendedFlags;
+
+		__cpuid((int*)regs, 0x80000000);
+		numberOfExtendedFlags = regs[0];
+
+		if (numberOfExtendedFlags >= 0x80000004)
+		{
+			__cpuid((int*)regs, 0x80000002);
+			cpuBrand += std::string((const char*)&regs[0], 4);
+			cpuBrand += std::string((const char*)&regs[1], 4);
+			cpuBrand += std::string((const char*)&regs[2], 4);
+			cpuBrand += std::string((const char*)&regs[3], 4);
+
+			__cpuid((int*)regs, 0x80000003);
+			cpuBrand += std::string((const char*)&regs[0], 4);
+			cpuBrand += std::string((const char*)&regs[1], 4);
+			cpuBrand += std::string((const char*)&regs[2], 4);
+			cpuBrand += std::string((const char*)&regs[3], 4);
+
+			__cpuid((int*)regs, 0x80000004);
+			cpuBrand += std::string((const char*)&regs[0], 4);
+			cpuBrand += std::string((const char*)&regs[1], 4);
+			cpuBrand += std::string((const char*)&regs[2], 4);
+			cpuBrand += std::string((const char*)&regs[3], 4);
+		}
+		else cpuBrand = getenv("PROCESSOR_IDENTIFIER"); //Should never happen, modern CPUs implement the brand name.
+
+		return cpuBrand;
 	}
 	else if(t == "osbuild")
 	{
