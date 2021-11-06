@@ -1389,6 +1389,27 @@ std::string gxRuntime::systemProperty(const std::string& p)
 
 		return cpuBrand;
 	}
+	else if (t == "cpuarch")
+	{
+		SYSTEM_INFO systemInfo;
+		GetNativeSystemInfo(&systemInfo);
+
+		switch (systemInfo.wProcessorArchitecture)
+		{
+		case PROCESSOR_ARCHITECTURE_AMD64:
+			return "AMD64";
+		case PROCESSOR_ARCHITECTURE_INTEL:
+			return "x86";
+		//Maybe someone runs the game under the x86 emulation layers of ARM Windows, detect it.
+		case PROCESSOR_ARCHITECTURE_ARM:
+			return "ARM32";
+		case PROCESSOR_ARCHITECTURE_ARM64:
+			return "ARM64";
+		//-------------------------------------------------------------------------------------
+		default:
+			return "Unknown";
+		}
+	}
 	else if(t == "osbuild")
 	{
 		return itoa((int)osinfo.dwBuildNumber);
