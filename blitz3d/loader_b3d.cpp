@@ -306,6 +306,7 @@ static Object* readObject(Object* parent)
 				mesh_brush = readInt();
 				mesh_flags = readMesh();
 				break;
+			case 'PIVO': //Fix for modern fragMOTION versions.
 			case 'BONE':
 				obj = readBone();
 				break;
