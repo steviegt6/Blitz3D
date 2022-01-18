@@ -2,14 +2,13 @@
 // Microsoft Visual C++ generated include file.
 // Used by blitzide.rc
 //
+#define IDI_MAIN_ICON						100
 #define IDR_MAINFRAME                   101
 #define IDD_COMPILING                   123
 #define IDR_DEBUGFRAME                  125
-#define IDB_BITMAP1                     127
 #define IDD_COMMANDLINE                 129
 #define IDD_ABOUT                       130
 #define IDB_BITMAP2                     132
-#define IDI_ICON1                       133
 #define IDC_COMPILEPROGRESS             1005
 #define IDC_CMDLINE                     1018
 #define IDC_VERSION                     1020
@@ -17,7 +16,6 @@
 #define IDC_PROGRESS1                   1022
 #define IDC_CREDITS                     1023
 #define IDC_MONTHCALENDAR1              1024
-#define IDC_COMBOBOXEX1                 1025
 #define ID_OPEN                         40001
 #define ID_SAVE                         40003
 #define ID_EXIT                         40004
@@ -76,7 +74,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        135
+#define _APS_NEXT_RESOURCE_VALUE        144
 #define _APS_NEXT_COMMAND_VALUE         40133
 #define _APS_NEXT_CONTROL_VALUE         1026
 #define _APS_NEXT_SYMED_VALUE           101

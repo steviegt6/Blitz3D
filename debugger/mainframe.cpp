@@ -56,6 +56,9 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	CFrameWnd::OnCreate(lpCreateStruct);
 
+	HICON hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_ICON1));
+	SetIcon(hIcon, FALSE);
+
 	prefs.open();
 
 	std::string tb = prefs.homeDir + "/cfg/dbg_toolbar.bmp";

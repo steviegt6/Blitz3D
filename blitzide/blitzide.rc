@@ -48,6 +48,16 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_MAIN_ICON           ICON                    "blitzide.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Menu
 //
 
@@ -103,7 +113,7 @@ BEGIN
         MENUITEM "&Back",                       ID_BACK
         MENUITEM "&Forward",                    ID_FORWARD
         MENUITEM "&Quick command help\tF1",     ID_QUICKHELP
-        MENUITEM "&About Blitz3D!",             ID_ABOUT
+        MENUITEM "&About Blitz3D TSS!",         ID_ABOUT
     END
 END
 
@@ -142,24 +152,23 @@ END
 // Dialog
 //
 
-IDD_COMPILING DIALOG 0, 0, 189, 63
-STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
-CAPTION "Compiling"
-FONT 8, "MS Sans Serif"
+IDD_COMPILING DIALOGEX 0, 0, 201, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Compiling Program"
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    LTEXT           "Compiling Blitz Basic Program...",IDC_STATIC,36,13,99,8
-    CONTROL         "Progress2",IDC_COMPILEPROGRESS,"msctls_progress32",WS_BORDER,28,31,134,14
+    LTEXT           "Compiling Blitz Basic Program...",IDC_STATIC,48,12,102,8
+    CONTROL         "Progress2",IDC_COMPILEPROGRESS,"msctls_progress32",PBS_SMOOTH | WS_BORDER,30,30,140,14
 END
 
-IDD_COMMANDLINE DIALOG 0, 0, 186, 77
-STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
+IDD_COMMANDLINE DIALOGEX 0, 0, 187, 50
+STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION
 CAPTION "Program Command Line"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    EDITTEXT        IDC_CMDLINE,7,21,172,14,ES_AUTOHSCROLL
-    DEFPUSHBUTTON   "OK",IDOK,7,56,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,129,56,50,14
-    LTEXT           "Program command line:",IDC_STATIC,7,7,74,8
+    EDITTEXT        IDC_CMDLINE,6,6,174,14,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,6,30,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,132,30,50,14
 END
 
 
@@ -174,17 +183,18 @@ BEGIN
     IDD_COMPILING, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 182
+        RIGHTMARGIN, 194
+        VERTGUIDE, 91
         TOPMARGIN, 7
-        BOTTOMMARGIN, 56
+        BOTTOMMARGIN, 55
     END
 
     IDD_COMMANDLINE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 179
+        RIGHTMARGIN, 180
         TOPMARGIN, 7
-        BOTTOMMARGIN, 70
+        BOTTOMMARGIN, 43
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -192,10 +202,18 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Bitmap
+// AFX_DIALOG_LAYOUT
 //
 
-IDB_BITMAP1             BITMAP                  "IDE (logo, no code) 32.ico"
+IDD_COMPILING AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_COMMANDLINE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -285,17 +303,17 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_NZ
 // Dialog
 //
 
-IDD_ABOUT DIALOGEX 0, 0, 224, 179
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
+IDD_ABOUT DIALOGEX 0, 0, 224, 188
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION
 CAPTION "About Blitz"
-FONT 10, "MS Sans Serif", 0, 0, 0x0
+FONT 10, "MS Shell Dlg", 400, 0, 0x0
 BEGIN
-    DEFPUSHBUTTON   "Okay!",IDOK,87,158,50,14
-    CONTROL         IDB_BITMAP2,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,12,7,64,32
-    CTEXT           "BlitzPlus - Demo Version",IDC_PRODUCT,78,7,139,8
-    CTEXT           "IDE V1.1  Runtime V1.1  Linker V1.1",IDC_VERSION,78,34,139,8
-    CTEXT           "Copyright Blitz Research, Third Subdivision Studios",IDC_STATIC,78,17,139,15
-    CONTROL         "",IDC_CREDITS,"RICHEDIT",TCS_SCROLLOPPOSITE | TCS_RAGGEDRIGHT | TCS_MULTISELECT | WS_DISABLED | WS_BORDER | WS_TABSTOP,5,46,212,108
+    DEFPUSHBUTTON   "Okay!",IDOK,84,168,54,14
+    CONTROL         IDB_BITMAP2,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,6,6,73,32
+    CTEXT           "BlitzPlus - Demo Version",IDC_PRODUCT,84,6,133,8
+    CTEXT           "IDE V1.1  Runtime V1.1  Linker V1.1",IDC_VERSION,84,36,133,8
+    CTEXT           "Copyright Blitz Research, Third Subdivision Studios",IDC_STATIC,84,18,133,15
+    CONTROL         "",IDC_CREDITS,"RICHEDIT",TCS_SCROLLOPPOSITE | TCS_RAGGEDRIGHT | TCS_MULTISELECT | WS_DISABLED | WS_BORDER | WS_TABSTOP,6,48,212,114
 END
 
 
@@ -311,18 +329,10 @@ BEGIN
     BEGIN
         LEFTMARGIN, 5
         RIGHTMARGIN, 217
-        BOTTOMMARGIN, 172
+        BOTTOMMARGIN, 181
     END
 END
 #endif    // APSTUDIO_INVOKED
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_BITMAP2             BITMAP                  "b3dlogo.bmp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -334,6 +344,14 @@ IDD_ABOUT AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP2             BITMAP                  "b3dlogo.bmp"
 
 #endif    // English (New Zealand) resources
 /////////////////////////////////////////////////////////////////////////////

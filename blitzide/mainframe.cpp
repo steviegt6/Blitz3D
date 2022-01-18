@@ -111,6 +111,9 @@ MainFrame::MainFrame() :exit_flag(false) {
 int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	CFrameWnd::OnCreate(lpCreateStruct);
 
+	HICON hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_MAIN_ICON));
+	SetIcon(hIcon, FALSE);
+
 	static HBITMAP toolbmp;
 	static SIZE imgsz, butsz;
 	static UINT toolbuts[] = {
@@ -279,7 +282,7 @@ void MainFrame::cursorMoved(Editor* editor) {
 	int row, col;
 	editor->getCursor(&row, &col);
 	char mod = editor->getModified() ? '*' : ' ';
-	char str[64]; sprintf(str, "Row:%i Col:%i %c", row, col, mod);
+	char str[64]; sprintf(str, "Row: %i Col: %i %c", row, col, mod);
 	statusBar.SetPaneText(1, str);
 }
 
