@@ -262,7 +262,6 @@ bool Editor::setText(std::istream &in ){
 	labsList.clear();
 	editCtrl.StreamIn( SF_RTF,es );
 	fmtBusy=false;
-	caret();
 	return es.dwError==0;
 }
 
@@ -537,20 +536,8 @@ LRESULT Editor::onFind( WPARAM w,LPARAM l ){
 	return 0;
 }
 
-void Editor::caret(){
-	if( !prefs.edit_blkcursor ) return;
-	long start,end;
-	editCtrl.GetSel( start,end );
-	if( start==end ){
-		editCtrl.CreateSolidCaret( 8,13 );
-		editCtrl.ShowCaret();
-	}else editCtrl.HideCaret();
-}
-
 void Editor::OnSetFocus( CWnd *wnd ){
-	if( prefs.edit_blkcursor ) SetCaretBlinkTime( 200 );
 	editCtrl.SetFocus();
-	caret();
 }
 
 void Editor::OnKillFocus( CWnd *wnd ){
@@ -587,7 +574,6 @@ void Editor::cursorMoved(){
 }
 
 void Editor::en_update(){
-	caret();
 }
 
 void Editor::en_msgfilter( NMHDR *nmhdr,LRESULT *result ){
@@ -644,13 +630,11 @@ void Editor::en_msgfilter( NMHDR *nmhdr,LRESULT *result ){
 			editCtrl.ReplaceSel( line.data(),true );
 		}
 	}
-	caret();
 }
 
 void Editor::en_selchange( NMHDR *nmhdr,LRESULT *result ){
 	if( !fmtBusy ) fixFmt(false);
 	cursorMoved();
-	caret();
 }
 
 void Editor::en_protected( NMHDR *nmhdr,LRESULT *result ){

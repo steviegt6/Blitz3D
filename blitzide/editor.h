@@ -5,6 +5,10 @@
 #include "tabber.h"
 #include "funclist.h"
 
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+	name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+	processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 class Editor;
 
 class EditorListener{
@@ -104,7 +108,6 @@ private:
 	void endFind();
 	void setFormat( int from,int to,int color,const std::string &s="" );
 	void formatLine( int line );
-	void caret();
 	void cursorMoved();
 	std::string getLine( int line );
 

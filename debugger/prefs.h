@@ -23,10 +23,7 @@ public:
 	int rgb_digit;		//5
 	int rgb_default;	//6
 
-	int rgb_unsel;	
-
 	int edit_tabs;
-	bool edit_blkcursor;
 	int edit_backup;
 
 	std::string img_toolbar;
@@ -39,10 +36,9 @@ public:
 	std::string cmd_line;
 
 	void open();
-	void close();
 
 private:
-
+	std::string boolToString(bool value);
 	void setDefault();
 	void createFonts();
 };

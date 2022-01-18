@@ -4,8 +4,9 @@
 #include <iomanip>
 #include "resource.h"
 #include "prefs.h"
+#include "../inipp/inipp.h"
 
-#define SWAPRB(x) ( (((x)>>16)&0xff) | ((x)&0xff00) | (((x)&0xff)<<16) )
+#pragma warning(disable: 6031)
 
 Prefs prefs;
 
@@ -14,154 +15,153 @@ void Prefs::open()
 	char* p = getenv("blitzpath");
 	if(!p)
 	{
-		AfxMessageBox("blitzpath environment variable not found!", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONINFORMATION);
+		AfxMessageBox("blitzpath environment variable not found!", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 		ExitProcess(0);
 	}
 
 	homeDir = p;
-	AddFontResource((homeDir + "/cfg/Blitz.fon").c_str());
 	setDefault();
 
-	bool prg_windowed;
-
-	std::ifstream in((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in);
+	std::ifstream in((homeDir + "/cfg/blitzide.ini").c_str(), std::ios::in);
 	if(!in.good()) return;
-	std::string t;
 
-	while(in >> t)
+	in.seekg(0, std::ios::end);
+	if (in.tellg() == 0)
 	{
-		if(!t.size()) continue;
-		while(in.peek() == '\t') in.ignore();
-		if(t == "prg_debug") in >> prg_debug;
-		else if (t == "prg_laa") in >> prg_laa;
-		else if(t == "prg_lastbuild") getline(in, prg_lastbuild);
-		else if(t == "prg_windowed") in >> prg_windowed;
-		else if(t == "win_maximized") in >> win_maximized;
-		else if(t == "win_notoolbar") in >> win_notoolbar;
-		else if(t == "win_rect")
-		{
-			in >> win_rect.left; in >> win_rect.top;
-			in >> win_rect.right; in >> win_rect.bottom;
-		}
-		else if(t.substr(0, 5) == "font_")
-		{
-			std::string s; int h; in >> s; in >> h;
-			t = t.substr(5);
-			if(t == "editor")
-			{
-				font_editor = s; font_editor_height = h;
-			}
-			else if(t == "tabs")
-			{
-				font_tabs = s; font_tabs_height = h;
-			}
-			else if(t == "debug")
-			{
-				font_debug = s; font_debug_height = h;
-			}
-		}
-		else if(t.substr(0, 4) == "rgb_")
-		{
-			t = t.substr(4);
-			std::string s; in >> s; int rgb = 0;
-			for(int k = 0; k < s.size(); ++k)
-			{
-				int n = s[k]; rgb = (rgb << 4) | (n <= '9' ? n - '0' : (n & 31) + 9);
-			}
-			rgb = SWAPRB(rgb);
+		AfxMessageBox("blitzide.ini is empty!\nDefaults will be set.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+		return;
+	}
+	in.seekg(0, std::ios::beg);
 
-			if(t == "bkgrnd") rgb_bkgrnd = rgb;
-			else if(t == "string") rgb_string = rgb;
-			else if(t == "ident") rgb_ident = rgb;
-			else if(t == "keyword") rgb_keyword = rgb;
-			else if(t == "comment") rgb_comment = rgb;
-			else if(t == "digit") rgb_digit = rgb;
-			else if(t == "default") rgb_default = rgb;
-		}
-		else if(t == "edit_tabs")
-		{
-			in >> edit_tabs;
-		}
-		else if(t == "edit_blkcursor")
-		{
-			in >> edit_blkcursor;
-		}
-		else if(t == "edit_backup")
-		{
-			in >> edit_backup;
-		}
-		else if(t == "img_toolbar")
-		{
-			getline(in, img_toolbar);
-		}
-		else if(t == "cmd_line")
-		{
-			getline(in, cmd_line);
-		}
-		else if(t == "file_recent")
-		{
-			std::string l; getline(in, l);
-			if(recentFiles.size() < 10) recentFiles.push_back(l);
-		}
-		else
-		{
-			std::string s = "Unrecognized option '" + t + "' in blitzide.prefs";
-			AfxMessageBox(s.c_str());
-			setDefault();
-			return;
-		}
+	inipp::Ini<char> ini;
+	ini.parse(in);
+
+	inipp::get_value(ini.sections["COMPILER"], "Debug", prg_debug);
+	inipp::get_value(ini.sections["COMPILER"], "LAA", prg_laa);
+	inipp::get_value(ini.sections["COMPILER"], "LastBuild", prg_lastbuild);
+	inipp::get_value(ini.sections["COMPILER"], "CommandLine", cmd_line);
+
+	std::string unprocessedRect;
+
+	inipp::get_value(ini.sections["WINDOW"], "Maximized", win_maximized);
+	inipp::get_value(ini.sections["WINDOW"], "NoToolbar", win_notoolbar);
+	inipp::get_value(ini.sections["WINDOW"], "WindowRect", unprocessedRect);
+
+	sscanf(unprocessedRect.c_str(), "%ld %ld %ld %ld", &win_rect.left, &win_rect.top, &win_rect.right, &win_rect.bottom);
+
+	inipp::get_value(ini.sections["FONTS"], "EditorFont", font_editor);
+	inipp::get_value(ini.sections["FONTS"], "EditorFontSize", font_editor_height);
+	inipp::get_value(ini.sections["FONTS"], "TabsFont", font_tabs);
+	inipp::get_value(ini.sections["FONTS"], "TabsFontSize", font_tabs_height);
+	inipp::get_value(ini.sections["FONTS"], "DebugFont", font_debug);
+	inipp::get_value(ini.sections["FONTS"], "DebugFontSize", font_debug_height);
+
+	std::string unprocessedBackground, unprocessedString, unprocessedIdent, unprocessedKeyword, unprocessedComment, unprocessedDigit, unprocessedDefault;
+
+	inipp::get_value(ini.sections["COLORS"], "Background", unprocessedBackground);
+	inipp::get_value(ini.sections["COLORS"], "String", unprocessedString);
+	inipp::get_value(ini.sections["COLORS"], "Ident", unprocessedIdent);
+	inipp::get_value(ini.sections["COLORS"], "Keyword", unprocessedKeyword);
+	inipp::get_value(ini.sections["COLORS"], "Comment", unprocessedComment);
+	inipp::get_value(ini.sections["COLORS"], "Digit", unprocessedDigit);
+	inipp::get_value(ini.sections["COLORS"], "Default", unprocessedDefault);
+
+	int r = 0, g = 0, b = 0;
+
+	sscanf(unprocessedBackground.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_bkgrnd = RGB(r, g, b);
+	sscanf(unprocessedString.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_string = RGB(r, g, b);
+	sscanf(unprocessedIdent.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_ident = RGB(r, g, b);
+	sscanf(unprocessedKeyword.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_keyword = RGB(r, g, b);
+	sscanf(unprocessedComment.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_comment = RGB(r, g, b);
+	sscanf(unprocessedDigit.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_digit = RGB(r, g, b);
+	sscanf(unprocessedDefault.c_str(), "%d %d %d", &r, &g, &b);
+	rgb_default = RGB(r, g, b);
+
+	inipp::get_value(ini.sections["EDITOR"], "TabSpaces", edit_tabs);
+	inipp::get_value(ini.sections["EDITOR"], "BackupCount", edit_backup);
+	inipp::get_value(ini.sections["EDITOR"], "ToolbarImage", img_toolbar);
+
+	std::string recentFile;
+	for (int i = 1; i < 11; i++)
+	{
+		inipp::get_value(ini.sections["RECENT_FILES"], "File" + itoa(i), recentFile);
+		if (recentFile.size() == 0) continue;
+		recentFiles.push_back(recentFile);
 	}
 	createFonts();
+	in.close();
 }
 
 void Prefs::close()
 {
-	std::fstream out((homeDir + "/cfg/blitzide.prefs").c_str(), std::ios::in | std::ios::out);
+	//the horror
+	std::fstream out((homeDir + "/cfg/blitzide.ini").c_str(), std::ios::out | std::ios::trunc);
 	if(!out.good()) return;
 
-	out << "prg_debug\t" << prg_debug << std::endl;
-	out << "prg_laa\t" << prg_laa << std::endl;
-	out << "prg_lastbuild\t" << prg_lastbuild << std::endl;
-	out << "win_maximized\t" << win_maximized << std::endl;
-	out << "win_notoolbar\t" << win_notoolbar << std::endl;
-	out << "win_rect\t" << win_rect.left << ' ' << win_rect.top << ' ' << win_rect.right << ' ' << win_rect.bottom << std::endl;
-	out << "font_editor\t" << font_editor << ' ' << font_editor_height << std::endl;
-	out << "font_tabs\t" << font_tabs << ' ' << font_tabs_height << std::endl;
-	out << "font_debug\t" << font_debug << ' ' << font_debug_height << std::endl;
-	out << std::hex;
-	out << "rgb_bkgrnd\t" << SWAPRB(rgb_bkgrnd) << std::endl;
-	out << "rgb_string\t" << SWAPRB(rgb_string) << std::endl;
-	out << "rgb_ident\t" << SWAPRB(rgb_ident) << std::endl;
-	out << "rgb_keyword\t" << SWAPRB(rgb_keyword) << std::endl;
-	out << "rgb_comment\t" << SWAPRB(rgb_comment) << std::endl;
-	out << "rgb_digit\t" << SWAPRB(rgb_digit) << std::endl;
-	out << "rgb_default\t" << SWAPRB(rgb_default) << std::endl;
-	out << "edit_tabs\t" << edit_tabs << std::endl;
-	out << "edit_blkcursor\t" << edit_blkcursor << std::endl;
-	out << "edit_backup\t" << edit_backup << std::endl;
-	out << "img_toolbar\t" << img_toolbar << std::endl;
-	out << "cmd_line\t" << cmd_line << std::endl;
-	for(int k = 0; k < recentFiles.size(); ++k)
-	{
-		out << "file_recent\t" << recentFiles[k] << std::endl;
-	}
-	out << std::dec;
+	inipp::Ini<char> ini;
 
-	RemoveFontResource((homeDir + "/cfg/Blitz.fon").c_str());
+	auto& compilerSection = ini.sections["COMPILER"];
+	compilerSection.insert(std::make_pair("Debug", boolToString(prg_debug)));
+	compilerSection.insert(std::make_pair("LAA", boolToString(prg_laa)));
+	compilerSection.insert(std::make_pair("LastBuild", prg_lastbuild));
+	compilerSection.insert(std::make_pair("CommandLine", cmd_line));
+
+	auto& windowSection = ini.sections["WINDOW"];
+	windowSection.insert(std::make_pair("Maximized", boolToString(win_maximized)));
+	windowSection.insert(std::make_pair("NoToolbar", boolToString(win_notoolbar)));
+	windowSection.insert(std::make_pair("WindowRect", std::to_string(win_rect.left) + " " + std::to_string(win_rect.top) + " " + std::to_string(win_rect.right) + " " + std::to_string(win_rect.bottom)));
+
+	auto& fontsSection = ini.sections["FONTS"];
+	fontsSection.insert(std::make_pair("EditorFont", font_editor));
+	fontsSection.insert(std::make_pair("EditorFontSize", std::to_string(font_editor_height)));
+	fontsSection.insert(std::make_pair("TabsFont", font_tabs));
+	fontsSection.insert(std::make_pair("TabsFontSize", std::to_string(font_tabs_height)));
+	fontsSection.insert(std::make_pair("DebugFont", font_debug));
+	fontsSection.insert(std::make_pair("DebugFontSize", std::to_string(font_debug_height)));
+
+	auto& colorsSection = ini.sections["COLORS"];
+	colorsSection.insert(std::make_pair("Background", std::to_string(GetRValue(rgb_bkgrnd)) + " " + std::to_string(GetGValue(rgb_bkgrnd)) + " " + std::to_string(GetBValue(rgb_bkgrnd))));
+	colorsSection.insert(std::make_pair("String", std::to_string(GetRValue(rgb_string)) + " " + std::to_string(GetGValue(rgb_string)) + " " + std::to_string(GetBValue(rgb_string))));
+	colorsSection.insert(std::make_pair("Ident", std::to_string(GetRValue(rgb_ident)) + " " + std::to_string(GetGValue(rgb_ident)) + " " + std::to_string(GetBValue(rgb_ident))));
+	colorsSection.insert(std::make_pair("Keyword", std::to_string(GetRValue(rgb_keyword)) + " " + std::to_string(GetGValue(rgb_keyword)) + " " + std::to_string(GetBValue(rgb_keyword))));
+	colorsSection.insert(std::make_pair("Comment", std::to_string(GetRValue(rgb_comment)) + " " + std::to_string(GetGValue(rgb_comment)) + " " + std::to_string(GetBValue(rgb_comment))));
+	colorsSection.insert(std::make_pair("Digit", std::to_string(GetRValue(rgb_digit)) + " " + std::to_string(GetGValue(rgb_digit)) + " " + std::to_string(GetBValue(rgb_digit))));
+	colorsSection.insert(std::make_pair("Default", std::to_string(GetRValue(rgb_default)) + " " + std::to_string(GetGValue(rgb_default)) + " " + std::to_string(GetBValue(rgb_default))));
+
+	auto& editorSection = ini.sections["EDITOR"];
+	editorSection.insert(std::make_pair("TabSpaces", std::to_string(edit_tabs)));
+	editorSection.insert(std::make_pair("BackupCount", std::to_string(edit_backup)));
+	editorSection.insert(std::make_pair("ToolbarImage", img_toolbar));
+
+	auto& recentFilesSection = ini.sections["RECENT_FILES"];
+	for (int i = 1; i < 11; i++)
+	{
+		recentFilesSection.insert(std::make_pair("File" + itoa(i), i <= recentFiles.size() ? recentFiles[i - 1] : ""));
+	}
+
+	ini.generate(out);
 }
 
 void Prefs::setDefault()
 {
-
 	prg_debug = true;
 	prg_laa = false;
 
 	win_rect.left = win_rect.top = 0;
-	win_rect.right = 640; win_rect.bottom = 480;
+	win_rect.right = 800; win_rect.bottom = 600;
 	win_maximized = false;
 	win_notoolbar = false;
+
 	font_editor = "consolas";
 	font_editor_height = 14;
+	font_debug = "consolas";
+	font_debug_height = 14;
 
 	rgb_bkgrnd = RGB(34, 85, 136);
 	rgb_string = RGB(0, 255, 102);
@@ -172,7 +172,6 @@ void Prefs::setDefault()
 	rgb_default = RGB(238, 238, 238);
 
 	edit_tabs = 4;
-	edit_blkcursor = false;
 	edit_backup = 2;
 
 	img_toolbar = "toolbar.bmp";
@@ -193,4 +192,9 @@ void Prefs::createFonts()
 	tabsFont.CreatePointFont(font_tabs_height * 10, font_tabs.c_str());
 	debugFont.CreatePointFont(font_debug_height * 10, font_debug.c_str());
 	conFont.CreatePointFont(80, "courier");
+}
+
+std::string Prefs::boolToString(bool value)
+{
+	return value ? "true" : "false";
 }

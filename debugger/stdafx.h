@@ -11,9 +11,13 @@
 #include <afxrich.h>		// CRich edit
 
 #include <map>
+#include <set>
 #include <list>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <fstream>
+#include <iostream>
 
 
 //some stuff that should be in std libs

@@ -24,7 +24,6 @@ public:
 	int rgb_default;	//6
 
 	int edit_tabs;
-	bool edit_blkcursor;
 	int edit_backup;
 
 	std::string img_toolbar;
@@ -40,7 +39,7 @@ public:
 	void close();
 
 private:
-
+	std::string boolToString(bool value);
 	void setDefault();
 	void createFonts();
 };
