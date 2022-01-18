@@ -200,7 +200,7 @@ int Editor::OnCreate( LPCREATESTRUCT cs ){
 	if( editCtrl.GetLimitText()!=TEXTLIMIT ) AfxMessageBox( "Unable to set editor text Limit" );
 	editCtrl.SetModify(false);
 
-	tabber.Create( WS_CHILD|WS_VISIBLE|TCS_BUTTONS|TCS_HOTTRACK,r,this,2 );
+	tabber.Create( WS_CHILD | WS_VISIBLE | TCS_HOTTRACK,r,this,2 );
 	tabber.SetFont( &prefs.tabsFont );
 	tabber.SetPadding( CSize(3,3) );
 
@@ -229,9 +229,9 @@ int Editor::OnCreate( LPCREATESTRUCT cs ){
 	labsList.SetTextColor( fg );
 	labsList.SetTextBkColor( bk );
 
-	tabber.insert( 0,&funcList,"funcs" );
-	tabber.insert( 1,&typeList,"types" );
-	tabber.insert( 2,&labsList,"labels" );
+	tabber.insert( 0,&funcList,"Funcs" );
+	tabber.insert( 1,&typeList,"Types" );
+	tabber.insert( 2,&labsList,"Labels" );
 
 	cursorMoved();
 
