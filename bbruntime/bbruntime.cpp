@@ -2,6 +2,8 @@
 #include "std.h"
 #include "bbsys.h"
 #include "bbruntime.h"
+#include "../gxruntime/gxutf8.h"
+#include <codecvt>
 
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
 int ErrorMessagePool::size = 0;
@@ -111,14 +113,24 @@ void  bbFreeTimer(gxTimer* t)
 	gx_runtime->freeTimer(t);
 }
 
+std::string utf16_to_utf8(std::u16string&& utf16_string)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> convert;
+	auto p = reinterpret_cast<const int16_t*>(utf16_string.data());
+	return convert.to_bytes(p, p + utf16_string.size());
+}
+
 BBStr* bbGetClipboardContents()
 {
 	OpenClipboard(nullptr);
-	HANDLE data = GetClipboardData(CF_TEXT);
+	HANDLE data = GetClipboardData(CF_UNICODETEXT);
 	BBStr* str;
-	if(IsClipboardFormatAvailable(CF_TEXT))
+	if(IsClipboardFormatAvailable(CF_UNICODETEXT))
 	{
-		str = d_new BBStr(static_cast<const char*>(data));
+		char16_t* pszText = static_cast<char16_t*>(GlobalLock(data));
+		std::u16string wtext(pszText);
+		GlobalUnlock(data);
+		str = d_new BBStr(utf16_to_utf8(std::move(wtext)));
 	}
 	else
 	{
@@ -130,14 +142,13 @@ BBStr* bbGetClipboardContents()
 
 void bbSetClipboardContents(BBStr* contents)
 {
-	const char* output = contents->c_str();
-	const size_t len = strlen(output) + 1;
-	HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, len);
-	memcpy(GlobalLock(hMem), output, len);
+	std::wstring chs = UTF8::convertToUtf16(contents->data());
+	HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, (chs.size() + 1) * sizeof(wchar_t));
+	memcpy(GlobalLock(hMem), chs.data(), (chs.size() + 1) * sizeof(wchar_t));
 	GlobalUnlock(hMem);
 	OpenClipboard(nullptr);
 	EmptyClipboard();
-	SetClipboardData(CF_TEXT, hMem);
+	SetClipboardData(CF_UNICODETEXT, hMem);
 	CloseClipboard();
 }
 
