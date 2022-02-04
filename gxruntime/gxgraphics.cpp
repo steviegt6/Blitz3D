@@ -187,7 +187,7 @@ gxMovie* gxGraphics::openMovie(const std::string& file, int flags)
 		if(iam_stream->Initialize(STREAMTYPE_READ, AMMSF_NOGRAPHTHREAD, NULL) == S_OK)
 		{
 
-			if(iam_stream->AddMediaStream(ds_dirDraw, &MSPID_PrimaryVideo, 0, NULL) == S_OK)
+			if(iam_stream->AddMediaStream(ds_dirDraw, &MSPID_PrimaryVideo, 0, 0) == S_OK)
 			{
 
 				iam_stream->AddMediaStream(NULL, &MSPID_PrimaryAudio, AMMSF_ADDDEFAULTRENDERER, NULL);
