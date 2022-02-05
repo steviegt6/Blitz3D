@@ -744,6 +744,7 @@ int gxRuntime::getMilliSecs()
 ////////////////
 int gxRuntime::getMemoryLoad()
 {
+	GlobalMemoryStatusEx(&statex);
 	return statex.dwMemoryLoad;
 }
 
