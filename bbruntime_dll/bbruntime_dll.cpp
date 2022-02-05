@@ -144,6 +144,13 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg)
 	while(params.size() && params[0] == ' ') params = params.substr(1);
 	while(params.size() && params[params.size() - 1] == ' ') params = params.substr(0, params.size() - 1);
 
+	//Fix the issue of NTF Mod clipping outside monitor boundaries in "fullscreen" mode when you have the system scale set to
+	//something different than 100%.
+	//************************************************************************************************************************
+	//BUG (?): Debugger window also scales back down. If set to the game thread only, the graphics cut out since it seems to run on
+	//the debugger thread.
+	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+
 	if(gx_runtime = gxRuntime::openRuntime(hinst, params, dbg))
 	{
 		bbruntime_run(gx_runtime, pc, debug);

@@ -8,14 +8,14 @@ namespace CompilerGUI
         public ExtraOpts()
         {
             InitializeComponent();
-            laaCheck.Checked = MainForm.LargeAddressAware;
+            nlaaCheck.Checked = MainForm.LargeAddressAware;
         }
 
         private void laaCheck_CheckedChanged(object sender, EventArgs e)
         {
-            MainForm.LargeAddressAware = laaCheck.Checked;
-            if (laaCheck.Checked) MainForm.ArgumentList.Add("-laa");
-            else MainForm.ArgumentList.Remove("-laa");
+            MainForm.LargeAddressAware = nlaaCheck.Checked;
+            if (nlaaCheck.Checked) MainForm.ArgumentList.Add("-nlaa");
+            else MainForm.ArgumentList.Remove("-nlaa");
         }
     }
 }

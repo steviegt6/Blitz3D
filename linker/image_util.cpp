@@ -310,11 +310,11 @@ bool openImage( const char *img ){
 	return true;
 }
 
-bool makeExe( int entry,bool laa ){
+bool makeExe( int entry,bool nolaa ){
 	if( !img_file ) return false;
 
 	head->chars|=0x0002;		//executable
-	if(laa == true) head->chars |= 0x0020;		//Large Address Aware
+	if(nolaa == false) head->chars |= 0x0020;		//Large Address Aware
 	head->chars&=~0x2000;		//not Dll
 	opts->entry=entry;
 	return true;

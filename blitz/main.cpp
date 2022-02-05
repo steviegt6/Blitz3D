@@ -41,7 +41,7 @@ static void showInfo()
 
 static void showUsage()
 {
-	std::cout << "Usage: blitzcc [-h|-q|+q|-c|-d|-k|+k|-laa|-v|-o exefile] [sourcefile.bb]" << std::endl;
+	std::cout << "Usage: blitzcc [-h|-q|+q|-c|-d|-k|+k|-nlaa|-v|-o exefile] [sourcefile.bb]" << std::endl;
 }
 
 static void showHelp()
@@ -55,7 +55,7 @@ static void showHelp()
 	std::cout << "-k         : dump keywords" << std::endl;
 	std::cout << "+k         : dump keywords and syntax" << std::endl;
 	std::cout << "-v		 : version info" << std::endl;
-	std::cout << "-laa       : make the output executable large address aware." << std::endl;
+	std::cout << "-nlaa      : disables large address awareness for the output executable." << std::endl;
 	std::cout << "-o exefile : generate executable" << std::endl;
 }
 
@@ -154,7 +154,7 @@ int _cdecl main(int argc, char* argv[])
 	bool debug = false, quiet = false, veryquiet = false, compileonly = false;
 	bool dumpkeys = false, dumphelp = false, showhelp = false, dumpasm = false;
 	bool versinfo = false;
-	bool laa = false;
+	bool nolaa = false;
 
 	for(int k = 1; k < argc; ++k)
 	{
@@ -203,9 +203,9 @@ int _cdecl main(int argc, char* argv[])
 			if(out_file.size() || k == argc - 1) usageErr();
 			out_file = argv[++k];
 		}
-		else if(t == "-laa")
+		else if(t == "-nlaa")
 		{
-			laa = true;
+			nolaa = true;
 		}
 		else
 		{
@@ -325,9 +325,8 @@ int _cdecl main(int argc, char* argv[])
 	if(out_file.size())
 	{
 		if(!veryquiet) std::cout << "Creating executable \"" << out_file << "\"..." << std::endl;
-		if (!veryquiet && laa == true) std::cout << "Executable will support LAA." << std::endl;
 
-		if (!module->createExe(out_file.c_str(), (home + "/bin/runtime.dll").c_str(), laa))
+		if (!module->createExe(out_file.c_str(), (home + "/bin/runtime.dll").c_str(), nolaa))
 		{
 			err("Error creating executable!");
 		}

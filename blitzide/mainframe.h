@@ -49,7 +49,7 @@ public:
 	afx_msg void programPublish();
 	afx_msg void programCommandLine();
 	afx_msg void programDebug();
-	afx_msg void programLAA();
+	afx_msg void programNoLAA();
 
 	afx_msg void helpHome();
 	afx_msg void helpAutodoc();

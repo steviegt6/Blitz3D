@@ -48,7 +48,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_COMMAND(ID_PUBLISH, programPublish)
 	ON_COMMAND(ID_COMMANDLINE, programCommandLine)
 	ON_COMMAND(ID_DEBUG, programDebug)
-	ON_COMMAND(ID_LAA, programLAA)
+	ON_COMMAND(ID_NLAA, programNoLAA)
 
 	ON_COMMAND(ID_HOME, helpHome)
 	ON_COMMAND(ID_BACK, helpBack)
@@ -76,7 +76,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_PUBLISH, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_COMMANDLINE, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_DEBUG, updateCmdUI)
-	ON_UPDATE_COMMAND_UI(ID_LAA, updateCmdUI)
+	ON_UPDATE_COMMAND_UI(ID_NLAA, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_HOME, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_BACK, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_FORWARD, updateCmdUI)
@@ -683,7 +683,7 @@ void MainFrame::build(bool exec, bool publish) {
 	std::string opts = " ";
 
 	if (prefs.prg_debug) opts += "-d ";
-	if (prefs.prg_laa) opts += "-laa ";
+	if (prefs.prg_nolaa) opts += "-nlaa ";
 
 	if (publish) {
 		std::string exe = src_file;
@@ -789,8 +789,8 @@ void MainFrame::programDebug() {
 	prefs.prg_debug = !prefs.prg_debug;
 }
 
-void MainFrame::programLAA() {
-	prefs.prg_laa = !prefs.prg_laa;
+void MainFrame::programNoLAA() {
+	prefs.prg_nolaa = !prefs.prg_nolaa;
 }
 
 void MainFrame::helpHome() {
@@ -868,8 +868,8 @@ void MainFrame::updateCmdUI(CCmdUI* ui) {
 	case ID_DEBUG:
 		ui->SetCheck(prefs.prg_debug); ui->Enable(true);
 		break;
-	case ID_LAA:
-		ui->SetCheck(prefs.prg_laa); ui->Enable(true);
+	case ID_NLAA:
+		ui->SetCheck(prefs.prg_nolaa); ui->Enable(true);
 		break;
 	case ID_CLOSE:case ID_PRINT:
 		ui->Enable(!!e);

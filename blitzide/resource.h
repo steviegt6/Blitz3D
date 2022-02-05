@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by blitzide.rc
 //
-#define IDI_MAIN_ICON						100
+#define IDI_MAIN_ICON                   100
 #define IDR_MAINFRAME                   101
 #define IDD_COMPILING                   123
 #define IDR_DEBUGFRAME                  125
@@ -68,7 +68,7 @@
 #define ID_COMMANDLINE                  40129
 #define ID_REEXECUTE                    40130
 #define ID_SUPPORT                      40131
-#define ID_LAA                          40132
+#define ID_NLAA                         40132
 
 // Next default values for new objects
 // 
