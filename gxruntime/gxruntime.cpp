@@ -157,6 +157,10 @@ gxRuntime::gxRuntime(HINSTANCE hi, const std::string& cl, HWND hw) :
 		if(SetAppCompatData) SetAppCompatData(12, 0);
 		FreeLibrary(ddraw);
 	}
+
+	memset(&devmode, 0, sizeof(devmode));
+	devmode.dmSize = sizeof(devmode);
+	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devmode);
 }
 
 gxRuntime::~gxRuntime()
@@ -1138,12 +1142,14 @@ bool gxRuntime::focus()
 
 int gxRuntime::desktopWidth()
 {
-	return GetSystemMetrics(SM_CXSCREEN);
+//	return GetSystemMetrics(SM_CXSCREEN);
+	return devmode.dmPelsWidth;
 }
 
 int gxRuntime::desktopHeight()
 {
-	return GetSystemMetrics(SM_CYSCREEN);
+//	return GetSystemMetrics(SM_CYSCREEN);
+	return devmode.dmPelsHeight;
 }
 
 gxFileSystem* gxRuntime::openFileSystem(int flags)

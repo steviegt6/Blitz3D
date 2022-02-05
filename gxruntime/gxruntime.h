@@ -151,6 +151,7 @@ public:
 
 	OSVERSIONINFO osinfo;
 	MEMORYSTATUSEX statex;
+	DEVMODE devmode;
 
 	int getMemoryLoad();
 	int getTotalPhys();
