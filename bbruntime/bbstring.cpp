@@ -97,21 +97,14 @@ BBStr *bbChr( int n ){
 }
 
 BBStr *bbHex( int n ){
-	char buff[12];
-	for( int k=7;k>=0;n>>=4,--k ){
-		int t=(n&15)+'0';
-		buff[k]=t>'9' ? t+='A'-'9'-1 : t;
-	}
-	buff[8]=0;
+    char buff[33];
+    itoa(n,buff,16);
 	return d_new BBStr( buff );
 }
 
 BBStr *bbBin( int n ){
-	char buff[36];
-	for( int k=31;k>=0;n>>=1,--k ){
-		buff[k]=n&1 ? '1' : '0';
-	}
-	buff[32]=0;
+    char buff[33];
+    itoa(n,buff,2);
 	return d_new BBStr( buff );
 }
 
