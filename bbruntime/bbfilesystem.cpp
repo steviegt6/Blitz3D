@@ -45,9 +45,9 @@ static bbFile *open( BBStr *f,int n ){
 	std::string t=*f;
 	std::filebuf *buf=d_new std::filebuf();
 	if( buf->open( t.c_str(),n| std::ios_base::binary ) ){
-		bbFile *f=d_new bbFile( buf );
-		file_set.insert( f );
-		return f;
+		bbFile *fl=d_new bbFile( buf );
+		file_set.insert( fl );
+		return fl;
 	}
 	delete buf;
 	return 0;

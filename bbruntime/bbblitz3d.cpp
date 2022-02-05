@@ -1180,7 +1180,6 @@ int  bbCameraProject(Camera* c, float x, float y, float z)
 		int vp_x, vp_y, vp_w, vp_h;
 		c->getViewport(&vp_x, &vp_y, &vp_w, &vp_h);
 		float nr = c->getFrustumNear();
-		float fr = c->getFrustumFar();
 		float nr_w = c->getFrustumWidth();
 		float nr_h = c->getFrustumHeight();
 		projected = Vector((v.x / nr_w + .5f) * vp_w, (.5f - v.y / nr_h) * vp_h, nr);
@@ -1194,7 +1193,6 @@ int  bbCameraProject(Camera* c, float x, float y, float z)
 			int vp_x, vp_y, vp_w, vp_h;
 			c->getViewport(&vp_x, &vp_y, &vp_w, &vp_h);
 			float nr = c->getFrustumNear();
-			float fr = c->getFrustumFar();
 			float nr_w = c->getFrustumWidth();
 			float nr_h = c->getFrustumHeight();
 			projected = Vector(
@@ -1583,8 +1581,8 @@ Entity* bbLoadTerrain(BBStr* file, Entity* p)
 		{
 			int rgb = c->getPixelFast(x, y);
 			int r = (rgb >> 16) & 0xff, g = (rgb >> 8) & 0xff, b = rgb & 0xff;
-			float p = (r > g ? (r > b ? r : b) : (g > b ? g : b)) / 255.0f;
-			t->setHeight(x, h - 1 - y, p, false);
+			float fp = (r > g ? (r > b ? r : b) : (g > b ? g : b)) / 255.0f;
+			t->setHeight(x, h - 1 - y, fp, false);
 		}
 	}
 	c->unlock();
@@ -2174,8 +2172,8 @@ Object* bbEntityCollided(Object* o, int type)
 	const Object::Collisions& c = o->getCollisions();
 	for(it = c.begin(); it != c.end(); ++it)
 	{
-		const ObjCollision* c = *it;
-		if(c->with->getCollisionType() == type) return c->with;
+		const ObjCollision* cc = *it;
+		if(cc->with->getCollisionType() == type) return cc->with;
 	}
 	return 0;
 }

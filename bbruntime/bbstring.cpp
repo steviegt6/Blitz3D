@@ -66,7 +66,6 @@ bool isgraph_safe(int chr) {
 BBStr* bbTrim(BBStr* s) {
 	int n = 0;
 	int p = s->size();
-	int c;
 	// currently all characters above the standard ASCII range are simply not trimmed
 	while( n<s->size() && !isgraph_safe( (unsigned char)(*s)[n] ) ) ++n;
 	while( p>n && !isgraph_safe( (unsigned char)(*s)[p-1] ) ) --p;
