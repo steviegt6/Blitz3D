@@ -1021,8 +1021,6 @@ gxGraphics* gxRuntime::openGraphics(int w, int h, int d, int driver, int flags)
 	bool d3d = flags & gxGraphics::GRAPHICS_3D ? true : false;
 	bool windowed = flags & gxGraphics::GRAPHICS_WINDOWED ? true : false;
 
-	if(windowed) driver = 0;
-
 	curr_driver = drivers[driver];
 
 	if(windowed)
