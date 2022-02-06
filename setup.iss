@@ -1,9 +1,9 @@
 [Setup]
-OutputBaseFilename=Blitz3D TSS v1.122 Setup
+OutputBaseFilename=Blitz3D TSS v1.125 Setup
 OutputDir=.\
 
 AppName=Blitz3D TSS
-AppVerName=Blitz3D TSS 1.122
+AppVerName=Blitz3D TSS 1.125
 AppPublisher=Third Subdivision Studios (Original by BlitzResearch)
 AppPublisherURL=https://github.com/Saalvage/Blitz3D
 DefaultDirName={pf}\Blitz3D TSS
