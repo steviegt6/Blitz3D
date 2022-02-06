@@ -149,7 +149,7 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg)
 	//************************************************************************************************************************
 	//BUG (?): Debugger window also scales back down. If set to the game thread only, the graphics cut out since it seems to run on
 	//the debugger thread.
-	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_SYSTEM_AWARE);
+	SetProcessDPIAware();
 
 	if(gx_runtime = gxRuntime::openRuntime(hinst, params, dbg))
 	{
