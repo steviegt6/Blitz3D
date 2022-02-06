@@ -14,11 +14,11 @@ DisableStartupPrompt=no
 DisableWelcomePage=no
 
 [Icons]
-Name: "{group}\Blitz3D TSS"; Filename: "{app}\Blitz3D TSS.exe"; WorkingDir: "{app}";
+Name: "{group}\Blitz3D TSS"; Filename: "{app}\Blitz3D.exe"; WorkingDir: "{app}";
 Name: "{group}\Uninstall Blitz3D TSS"; Filename: "{uninstallexe}";
 
 [Files]
 Source: ".\_release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Run]
-Filename: "{app}\Blitz3D TSS.exe"; Description: "Launch Blitz3D TSS"; Flags: postinstall nowait skipifsilent
+Filename: "{app}\Blitz3D.exe"; Description: "Launch Blitz3D TSS"; Flags: postinstall nowait skipifsilent
