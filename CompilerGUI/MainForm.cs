@@ -68,7 +68,7 @@ namespace CompilerGUI
             {
                 Parameters += string.Format(" -o {0} ", FixStringSpaces(exeName.Text));
             }
-            Parameters += FileToCompile;
+            Parameters += " " + FileToCompile;
 
             Debug.WriteLine(Parameters);
 
