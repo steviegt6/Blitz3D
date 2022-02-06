@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include <winreg.h>
 #include <iomanip>
+#include <filesystem>
 #include "resource.h"
 #include "prefs.h"
 #include "../inipp/inipp.h"
@@ -13,22 +14,42 @@ Prefs prefs;
 void Prefs::open()
 {
 	char* p = getenv("blitzpath");
-	if(!p)
+	if (!p)
 	{
 		AfxMessageBox("blitzpath environment variable not found!", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 		ExitProcess(0);
 	}
-
 	homeDir = p;
+
 	setDefault();
 
-	std::ifstream in((homeDir + "/cfg/blitzide.ini").c_str(), std::ios::in);
+	PWSTR appdataDir = NULL;
+	if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appdataDir) != S_OK)
+	{
+		AfxMessageBox("Couldn't access the AppData folder! This is needed for the preferences file to work.\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+		return;
+	}
+
+	std::wstringstream wss;
+	wss << appdataDir << "/Blitz3D TSS/";
+	if (!std::filesystem::exists(wss.str()))
+	{
+		if (!CreateDirectoryW(wss.str().c_str(), 0))
+		{
+			AfxMessageBox("Couldn't create a folder for the preferences!\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+			return;
+		}
+	}
+
+	wss << "blitzide.ini";
+
+	std::ifstream in(wss.str().c_str(), std::ios::in);
 	if(!in.good()) return;
 
 	in.seekg(0, std::ios::end);
 	if (in.tellg() == 0)
 	{
-		AfxMessageBox("blitzide.ini is empty!\nDefaults will be set.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+		AfxMessageBox("blitzide.ini is empty!\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 		return;
 	}
 	in.seekg(0, std::ios::beg);
@@ -96,12 +117,32 @@ void Prefs::open()
 	}
 	createFonts();
 	in.close();
+	CoTaskMemFree(static_cast<void*>(appdataDir));
 }
 
 void Prefs::close()
 {
-	//the horror
-	std::fstream out((homeDir + "/cfg/blitzide.ini").c_str(), std::ios::out | std::ios::trunc);
+	PWSTR appdataDir = NULL;
+	if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appdataDir) != S_OK)
+	{
+		AfxMessageBox("Couldn't access the AppData folder! This is needed for the preferences file to work.\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+		return;
+	}
+
+	std::wstringstream wss;
+	wss << appdataDir << "/Blitz3D TSS/";
+	if (!std::filesystem::exists(wss.str()))
+	{
+		if (!CreateDirectoryW(wss.str().c_str(), 0))
+		{
+			AfxMessageBox("Couldn't create a folder for the preferences!\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
+			return;
+		}
+	}
+
+	wss << "blitzide.ini";
+
+	std::fstream out(wss.str().c_str(), std::ios::out | std::ios::trunc);
 	if(!out.good()) return;
 
 	inipp::Ini<char> ini;
@@ -146,6 +187,7 @@ void Prefs::close()
 	}
 
 	ini.generate(out);
+	CoTaskMemFree(static_cast<void*>(appdataDir));
 }
 
 void Prefs::setDefault()

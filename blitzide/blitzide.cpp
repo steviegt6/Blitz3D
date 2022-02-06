@@ -26,10 +26,8 @@ BOOL BlitzIDE::InitInstance(){
 
 	mainFrame->LoadFrame( IDR_MAINFRAME );
 	mainFrame->MoveWindow( CRect( prefs.win_rect ) );
-	mainFrame->ShowWindow( m_nCmdShow );
+	mainFrame->ShowWindow( prefs.win_maximized ? SW_SHOWMAXIMIZED : m_nCmdShow);
 	mainFrame->UpdateWindow();
-
-	if( prefs.win_maximized ) mainFrame->ShowWindow( SW_SHOWMAXIMIZED );
 
 	return TRUE;
 }
