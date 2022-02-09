@@ -10,6 +10,7 @@ class DebugTree : public CTreeCtrl{
 protected:
 
 	HTREEITEM insertVar( void *var,Decl *d,const std::string &name,HTREEITEM it,HTREEITEM parent );
+	VOID sortItemAndChildren(HTREEITEM item);
 
 public:
 	DebugTree();

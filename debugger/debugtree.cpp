@@ -42,6 +42,25 @@ static std::string typeTag( Type *t ){
 	return "";
 }
 
+VOID DebugTree::sortItemAndChildren(HTREEITEM item)
+{
+	if (item != NULL)
+	{
+		if (item == TVI_ROOT || this->ItemHasChildren(item))
+		{
+			HTREEITEM child = this->GetChildItem(item);
+
+			while (child != NULL)
+			{
+				sortItemAndChildren(child);
+				child = this->GetNextItem(child, TVGN_NEXT);
+			}
+
+			this->SortChildren(item);
+		}
+	}
+}
+
 HTREEITEM DebugTree::insertVar( void *var,Decl *d,const std::string &name,HTREEITEM it,HTREEITEM parent ){
 
 	std::string s=name;
@@ -133,6 +152,8 @@ void ConstsTree::reset( Environ *env ){
 			it=insertVar( 0,d,name,it,TVI_ROOT );
 		}
 	}
+
+	sortItemAndChildren(TVI_ROOT);
 }
 
 /******************************* GLOBALS **********************************/
@@ -163,6 +184,8 @@ void GlobalsTree::refresh(){
 			it=insertVar( var,d,name,it,TVI_ROOT );
 		}
 	}
+
+	sortItemAndChildren(TVI_ROOT);
 }
 
 /******************************** LOCALS **********************************/
@@ -213,6 +236,8 @@ void LocalsTree::refreshFrame( const Frame &f ){
 		if( !isalpha( name[0] ) ) continue;
 		it=insertVar( (char*)f.frame+d->offset,d,name,it,f.item );
 	}
+
+	sortItemAndChildren(TVI_ROOT);
 }
 
 void LocalsTree::pushFrame( void *f,void *e,const char *func ){

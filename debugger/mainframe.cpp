@@ -162,9 +162,9 @@ void MainFrame::OnSize(UINT type, int sw, int sh)
 
 	toolBar.GetWindowRect(&t); y += t.Height(); h -= t.Height();
 
-	tabber.MoveWindow(x, y, w - 240, h);
+	tabber.MoveWindow(x, y, w - 360, h);
 
-	tabber2.MoveWindow(x + w - 240, y, 240, h);
+	tabber2.MoveWindow(x + w - 360, y, 360, h);
 }
 
 void MainFrame::setRuntime(void* mod, void* env)
