@@ -6,29 +6,29 @@
 
 class HtmlHelp;
 
-class HelpListener{
+class HelpListener {
 public:
-	virtual void helpOpen( HtmlHelp *help,const std::string &file )=0;
-	virtual void helpTitleChange( HtmlHelp *help,const std::string &title )=0;
+	virtual void helpOpen(HtmlHelp* help, const std::string& file) = 0;
+	virtual void helpTitleChange(HtmlHelp* help, const std::string& title) = 0;
 };
 
-class HtmlHelp : public CHtmlView{
+class HtmlHelp : public CHtmlView {
 public:
-	HtmlHelp( HelpListener *l ):listener(l){}
+	HtmlHelp(HelpListener* l) :listener(l) {}
 
 	std::string getTitle();
 
-DECLARE_DYNAMIC( HtmlHelp )
-DECLARE_MESSAGE_MAP()
+	DECLARE_DYNAMIC(HtmlHelp)
+	DECLARE_MESSAGE_MAP()
 
-	afx_msg BOOL OnEraseBkgnd( CDC *dc );
+	afx_msg BOOL OnEraseBkgnd(CDC* dc);
 
 private:
-	virtual void OnTitleChange( LPCTSTR t );
-	virtual void OnBeforeNavigate2( LPCTSTR lpszURL, DWORD nFlags, LPCTSTR lpszTargetFrameName, CByteArray& baPostedData, LPCTSTR lpszHeaders, BOOL* pbCancel );
+	virtual void OnTitleChange(LPCTSTR t);
+	virtual void OnBeforeNavigate2(LPCTSTR lpszURL, DWORD nFlags, LPCTSTR lpszTargetFrameName, CByteArray& baPostedData, LPCTSTR lpszHeaders, BOOL* pbCancel);
 
 	std::string title;
-	HelpListener *listener;
+	HelpListener* listener;
 };
 
 #endif
