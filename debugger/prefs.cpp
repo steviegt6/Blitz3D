@@ -11,25 +11,21 @@
 
 Prefs prefs;
 
-void Prefs::open()
-{
+void Prefs::open() {
 	homeDir = getenv("blitzpath");
 
 	setDefault();
 
 	PWSTR appdataDir = NULL;
-	if (SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appdataDir) != S_OK)
-	{
+	if(SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appdataDir) != S_OK) {
 		AfxMessageBox("Couldn't access the AppData folder! This is needed for the preferences file to work.\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 		return;
 	}
 
 	std::wstringstream wss;
 	wss << appdataDir << "/Blitz3D TSS/";
-	if (!std::filesystem::exists(wss.str()))
-	{
-		if (!CreateDirectoryW(wss.str().c_str(), 0))
-		{
+	if(!std::filesystem::exists(wss.str())) {
+		if(!CreateDirectoryW(wss.str().c_str(), 0)) {
 			AfxMessageBox("Couldn't create a folder for the preferences!\nThe IDE will use the default values.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 			return;
 		}
@@ -41,8 +37,7 @@ void Prefs::open()
 	if(!in.good()) return;
 
 	in.seekg(0, std::ios::end);
-	if (in.tellg() == 0)
-	{
+	if(in.tellg() == 0) {
 		AfxMessageBox("blitzide.ini is empty!\nDefaults will be set.", MB_TOPMOST | MB_SETFOREGROUND | MB_ICONERROR);
 		return;
 	}
@@ -103,10 +98,9 @@ void Prefs::open()
 	inipp::get_value(ini.sections["EDITOR"], "ToolbarImage", img_toolbar);
 
 	std::string recentFile;
-	for (int i = 1; i < 11; i++)
-	{
+	for(int i = 1; i < 11; i++) {
 		inipp::get_value(ini.sections["RECENT_FILES"], "File" + itoa(i), recentFile);
-		if (recentFile.size() == 0) continue;
+		if(recentFile.size() == 0) continue;
 		recentFiles.push_back(recentFile);
 	}
 	createFonts();
@@ -114,8 +108,7 @@ void Prefs::open()
 	CoTaskMemFree(static_cast<void*>(appdataDir));
 }
 
-void Prefs::setDefault()
-{
+void Prefs::setDefault() {
 	prg_debug = true;
 	prg_nolaa = false;
 
@@ -147,8 +140,7 @@ void Prefs::setDefault()
 	createFonts();
 }
 
-void Prefs::createFonts()
-{
+void Prefs::createFonts() {
 	editFont.Detach();
 	tabsFont.Detach();
 	debugFont.Detach();
@@ -160,7 +152,6 @@ void Prefs::createFonts()
 	conFont.CreatePointFont(80, "courier");
 }
 
-std::string Prefs::boolToString(bool value)
-{
+std::string Prefs::boolToString(bool value) {
 	return value ? "true" : "false";
 }
