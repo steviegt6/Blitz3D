@@ -16,8 +16,7 @@ class Listener;
 class MeshModel;
 class MD2Model;
 
-class Entity
-{
+class Entity {
 public:
 
 	Entity();

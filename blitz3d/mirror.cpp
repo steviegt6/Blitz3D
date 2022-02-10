@@ -2,15 +2,12 @@
 #include "std.h"
 #include "mirror.h"
 
-Mirror::Mirror()
-{
+Mirror::Mirror() {
 }
 
 Mirror::Mirror(const Mirror& t) :
-	Object(t)
-{
+	Object(t) {
 }
 
-Mirror::~Mirror()
-{
+Mirror::~Mirror() {
 }
