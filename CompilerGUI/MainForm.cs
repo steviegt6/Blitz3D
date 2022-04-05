@@ -19,6 +19,14 @@ namespace CompilerGUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            //Delete TSS Option window, replace with tooltip
+            ToolTip toolTip = new ToolTip();
+            toolTip.AutoPopDelay = 3000;
+            toolTip.InitialDelay = 500;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
+            toolTip.SetToolTip(nlaaCheck, "This option won't work in vanilla Blitz3D");
+
             if (!File.Exists("blitzcc.exe"))
             {
                 MessageBox.Show("blitzcc.exe must be in the same directory as the GUI!",
@@ -68,7 +76,7 @@ namespace CompilerGUI
             {
                 Parameters += string.Format(" -o {0} ", FixStringSpaces(exeName.Text));
             }
-            Parameters += " " + FileToCompile;
+            Parameters += FileToCompile;
 
             Debug.WriteLine(Parameters);
 
@@ -99,8 +107,8 @@ namespace CompilerGUI
             dKeywordsSyntax.Enabled     = state;
             genExe.Enabled              = state;
             exeName.Enabled             = state;
-            tssButton.Enabled           = state;
             compileButton.Enabled       = state;
+            nlaaCheck.Enabled           = state;
         }
 
         public string FixStringSpaces(string inputString)

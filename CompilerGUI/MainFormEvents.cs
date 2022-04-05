@@ -5,12 +5,6 @@ namespace CompilerGUI
 {
     public partial class MainForm : Form
     {
-        private void tssButton_Click(object sender, EventArgs e)
-        {
-            ExtraOpts form = new ExtraOpts();
-            form.Show();
-        }
-
         private void quietMode_CheckedChanged(object sender, EventArgs e)
         {
             if (quietMode.Checked) ArgumentList.Add("-q");

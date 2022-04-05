@@ -42,23 +42,23 @@
             this.compileButton = new System.Windows.Forms.Button();
             this.flagsGroup = new System.Windows.Forms.GroupBox();
             this.fileGroup = new System.Windows.Forms.GroupBox();
-            this.tssButton = new System.Windows.Forms.Button();
+            this.nlaaCheck = new System.Windows.Forms.CheckBox();
             this.flagsGroup.SuspendLayout();
             this.fileGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // bbFile
             // 
-            this.bbFile.Location = new System.Drawing.Point(8, 19);
+            this.bbFile.Location = new System.Drawing.Point(8, 18);
             this.bbFile.Name = "bbFile";
-            this.bbFile.Size = new System.Drawing.Size(340, 20);
+            this.bbFile.Size = new System.Drawing.Size(340, 21);
             this.bbFile.TabIndex = 1;
             // 
             // browseButton
             // 
             this.browseButton.Location = new System.Drawing.Point(354, 19);
             this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(75, 20);
+            this.browseButton.Size = new System.Drawing.Size(75, 18);
             this.browseButton.TabIndex = 2;
             this.browseButton.Text = "Browse";
             this.browseButton.UseVisualStyleBackColor = true;
@@ -67,9 +67,9 @@
             // quietMode
             // 
             this.quietMode.AutoSize = true;
-            this.quietMode.Location = new System.Drawing.Point(12, 18);
+            this.quietMode.Location = new System.Drawing.Point(12, 17);
             this.quietMode.Name = "quietMode";
-            this.quietMode.Size = new System.Drawing.Size(80, 17);
+            this.quietMode.Size = new System.Drawing.Size(84, 16);
             this.quietMode.TabIndex = 4;
             this.quietMode.Text = "Quiet mode";
             this.quietMode.UseVisualStyleBackColor = true;
@@ -78,9 +78,9 @@
             // vQuietMode
             // 
             this.vQuietMode.AutoSize = true;
-            this.vQuietMode.Location = new System.Drawing.Point(115, 18);
+            this.vQuietMode.Location = new System.Drawing.Point(115, 17);
             this.vQuietMode.Name = "vQuietMode";
-            this.vQuietMode.Size = new System.Drawing.Size(102, 17);
+            this.vQuietMode.Size = new System.Drawing.Size(114, 16);
             this.vQuietMode.TabIndex = 5;
             this.vQuietMode.Text = "Very quiet mode";
             this.vQuietMode.UseVisualStyleBackColor = true;
@@ -89,9 +89,9 @@
             // compileOnly
             // 
             this.compileOnly.AutoSize = true;
-            this.compileOnly.Location = new System.Drawing.Point(223, 18);
+            this.compileOnly.Location = new System.Drawing.Point(223, 17);
             this.compileOnly.Name = "compileOnly";
-            this.compileOnly.Size = new System.Drawing.Size(85, 17);
+            this.compileOnly.Size = new System.Drawing.Size(96, 16);
             this.compileOnly.TabIndex = 6;
             this.compileOnly.Text = "Compile only";
             this.compileOnly.UseVisualStyleBackColor = true;
@@ -100,9 +100,9 @@
             // debugCompile
             // 
             this.debugCompile.AutoSize = true;
-            this.debugCompile.Location = new System.Drawing.Point(12, 41);
+            this.debugCompile.Location = new System.Drawing.Point(12, 38);
             this.debugCompile.Name = "debugCompile";
-            this.debugCompile.Size = new System.Drawing.Size(97, 17);
+            this.debugCompile.Size = new System.Drawing.Size(102, 16);
             this.debugCompile.TabIndex = 7;
             this.debugCompile.Text = "Debug compile";
             this.debugCompile.UseVisualStyleBackColor = true;
@@ -111,9 +111,9 @@
             // dKeywords
             // 
             this.dKeywords.AutoSize = true;
-            this.dKeywords.Location = new System.Drawing.Point(115, 41);
+            this.dKeywords.Location = new System.Drawing.Point(115, 38);
             this.dKeywords.Name = "dKeywords";
-            this.dKeywords.Size = new System.Drawing.Size(102, 17);
+            this.dKeywords.Size = new System.Drawing.Size(102, 16);
             this.dKeywords.TabIndex = 8;
             this.dKeywords.Text = "Dump keywords";
             this.dKeywords.UseVisualStyleBackColor = true;
@@ -122,9 +122,9 @@
             // dKeywordsSyntax
             // 
             this.dKeywordsSyntax.AutoSize = true;
-            this.dKeywordsSyntax.Location = new System.Drawing.Point(223, 41);
+            this.dKeywordsSyntax.Location = new System.Drawing.Point(223, 38);
             this.dKeywordsSyntax.Name = "dKeywordsSyntax";
-            this.dKeywordsSyntax.Size = new System.Drawing.Size(144, 17);
+            this.dKeywordsSyntax.Size = new System.Drawing.Size(156, 16);
             this.dKeywordsSyntax.TabIndex = 9;
             this.dKeywordsSyntax.Text = "Dump keywords + syntax";
             this.dKeywordsSyntax.UseVisualStyleBackColor = true;
@@ -133,25 +133,25 @@
             // genExe
             // 
             this.genExe.AutoSize = true;
-            this.genExe.Location = new System.Drawing.Point(12, 64);
+            this.genExe.Location = new System.Drawing.Point(12, 59);
             this.genExe.Name = "genExe";
-            this.genExe.Size = new System.Drawing.Size(96, 17);
+            this.genExe.Size = new System.Drawing.Size(108, 16);
             this.genExe.TabIndex = 10;
             this.genExe.Text = "Generate .exe:";
             this.genExe.UseVisualStyleBackColor = true;
             // 
             // exeName
             // 
-            this.exeName.Location = new System.Drawing.Point(112, 61);
+            this.exeName.Location = new System.Drawing.Point(119, 56);
             this.exeName.Name = "exeName";
-            this.exeName.Size = new System.Drawing.Size(255, 20);
+            this.exeName.Size = new System.Drawing.Size(255, 21);
             this.exeName.TabIndex = 11;
             // 
             // compileButton
             // 
-            this.compileButton.Location = new System.Drawing.Point(9, 173);
+            this.compileButton.Location = new System.Drawing.Point(12, 175);
             this.compileButton.Name = "compileButton";
-            this.compileButton.Size = new System.Drawing.Size(98, 23);
+            this.compileButton.Size = new System.Drawing.Size(98, 21);
             this.compileButton.TabIndex = 12;
             this.compileButton.Text = "Compile";
             this.compileButton.UseVisualStyleBackColor = true;
@@ -159,6 +159,7 @@
             // 
             // flagsGroup
             // 
+            this.flagsGroup.Controls.Add(this.nlaaCheck);
             this.flagsGroup.Controls.Add(this.exeName);
             this.flagsGroup.Controls.Add(this.genExe);
             this.flagsGroup.Controls.Add(this.dKeywordsSyntax);
@@ -167,9 +168,9 @@
             this.flagsGroup.Controls.Add(this.compileOnly);
             this.flagsGroup.Controls.Add(this.vQuietMode);
             this.flagsGroup.Controls.Add(this.quietMode);
-            this.flagsGroup.Location = new System.Drawing.Point(12, 73);
+            this.flagsGroup.Location = new System.Drawing.Point(12, 67);
             this.flagsGroup.Name = "flagsGroup";
-            this.flagsGroup.Size = new System.Drawing.Size(435, 94);
+            this.flagsGroup.Size = new System.Drawing.Size(435, 103);
             this.flagsGroup.TabIndex = 14;
             this.flagsGroup.TabStop = false;
             this.flagsGroup.Text = "Flags";
@@ -178,29 +179,28 @@
             // 
             this.fileGroup.Controls.Add(this.browseButton);
             this.fileGroup.Controls.Add(this.bbFile);
-            this.fileGroup.Location = new System.Drawing.Point(12, 11);
+            this.fileGroup.Location = new System.Drawing.Point(12, 10);
             this.fileGroup.Name = "fileGroup";
-            this.fileGroup.Size = new System.Drawing.Size(435, 56);
+            this.fileGroup.Size = new System.Drawing.Size(435, 52);
             this.fileGroup.TabIndex = 15;
             this.fileGroup.TabStop = false;
             this.fileGroup.Text = "File";
             // 
-            // tssButton
+            // nlaaCheck
             // 
-            this.tssButton.Location = new System.Drawing.Point(113, 173);
-            this.tssButton.Name = "tssButton";
-            this.tssButton.Size = new System.Drawing.Size(98, 23);
-            this.tssButton.TabIndex = 16;
-            this.tssButton.Text = "TSS Options";
-            this.tssButton.UseVisualStyleBackColor = true;
-            this.tssButton.Click += new System.EventHandler(this.tssButton_Click);
+            this.nlaaCheck.AutoSize = true;
+            this.nlaaCheck.Location = new System.Drawing.Point(12, 80);
+            this.nlaaCheck.Name = "nlaaCheck";
+            this.nlaaCheck.Size = new System.Drawing.Size(162, 16);
+            this.nlaaCheck.TabIndex = 12;
+            this.nlaaCheck.Text = "Not Large Address Aware";
+            this.nlaaCheck.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(459, 207);
-            this.Controls.Add(this.tssButton);
+            this.ClientSize = new System.Drawing.Size(459, 204);
             this.Controls.Add(this.fileGroup);
             this.Controls.Add(this.flagsGroup);
             this.Controls.Add(this.compileButton);
@@ -232,7 +232,7 @@
         private System.Windows.Forms.Button compileButton;
         private System.Windows.Forms.GroupBox flagsGroup;
         private System.Windows.Forms.GroupBox fileGroup;
-        private System.Windows.Forms.Button tssButton;
+        private System.Windows.Forms.CheckBox nlaaCheck;
     }
 }
 
