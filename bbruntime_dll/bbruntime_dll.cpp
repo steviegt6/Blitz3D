@@ -27,13 +27,25 @@ public:
 	virtual void internalLog(const char* msg) {}
 };
 
+static int functionNumber = 1;
 static HINSTANCE hinst;
 static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
+static std::string functionList[999]; //a huge array
 
+/*
+* If you using a single variant to handle function names, then you will get error
+* sym is a pointer, backup function name is pointer too.
+* So, variant of backup name's content will change by sym's content.
+*/
 static void rtSym(const char* sym, void* pc) {
 	syms[sym] = pc;
+	functionList[functionNumber] = sym;
+	if (sym[0] == '%' || sym[0] == '$' || sym[0] == '#') functionList[functionNumber] = functionList[functionNumber].insert(1, "Blitz_");
+	else functionList[functionNumber] = "Blitz_" + functionList[functionNumber];
+	syms[functionList[functionNumber].c_str()] = pc;
+	functionNumber++;
 }
 
 static void killer() {
