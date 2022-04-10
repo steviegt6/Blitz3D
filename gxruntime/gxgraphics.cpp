@@ -10,8 +10,8 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 	runtime(rt), dirDraw(dd), dir3d(0), dir3dDev(0), def_font(0), gfx_lost(false), dummy_mesh(0) {
 	dirDraw->QueryInterface(IID_IDirectDraw, (void**)&ds_dirDraw);
 
-	front_canvas = d_new gxCanvas(this, fs, 0);
-	back_canvas = d_new gxCanvas(this, bs, 0);
+	front_canvas = new gxCanvas(this, fs, 0);
+	back_canvas = new gxCanvas(this, bs, 0);
 
 	front_canvas->cls();
 	back_canvas->cls();
@@ -173,7 +173,7 @@ gxMovie* gxGraphics::openMovie(const std::string& file, int flags) {
 				delete path;
 
 				if(n == S_OK) {
-					gxMovie* movie = d_new gxMovie(this, iam_stream);
+					gxMovie* movie = new gxMovie(this, iam_stream);
 					movie->filename = file;
 					movie_set.insert(movie);
 					return movie;
@@ -196,7 +196,7 @@ void gxGraphics::closeMovie(gxMovie* m) {
 gxCanvas* gxGraphics::createCanvas(int w, int h, int flags) {
 	ddSurf* s = ddUtil::createSurface(w, h, flags, this);
 	if(!s) return 0;
-	gxCanvas* c = d_new gxCanvas(this, s, flags);
+	gxCanvas* c = new gxCanvas(this, s, flags);
 	canvas_set.insert(c);
 	c->cls();
 	if(debugger) printf("Created new gxCanvas instance.");
@@ -206,7 +206,7 @@ gxCanvas* gxGraphics::createCanvas(int w, int h, int flags) {
 gxCanvas* gxGraphics::loadCanvas(const std::string& f, int flags) {
 	ddSurf* s = ddUtil::loadSurface(f, flags, this);
 	if(!s) return 0;
-	gxCanvas* c = d_new gxCanvas(this, s, flags);
+	gxCanvas* c = new gxCanvas(this, s, flags);
 	canvas_set.insert(c);
 	return c;
 }

@@ -228,7 +228,7 @@ static bool saveCanvas(gxCanvas* c, const std::string& f)
 	out.write((char*)&bf, sizeof(bf));
 	out.write((char*)&bi, sizeof(bi));
 
-	unsigned char* temp = d_new unsigned char[tempsize];
+	unsigned char* temp = new unsigned char[tempsize];
 	memset(temp, 0, tempsize);
 
 	c->lock();
@@ -261,7 +261,7 @@ BBStr* bbGfxDriverName(int n)
 	debugDriver(n);
 	std::string t; int caps;
 	gx_runtime->graphicsDriverInfo(n - 1, &t, &caps);
-	return d_new BBStr(t);
+	return new BBStr(t);
 }
 
 void  bbSetGfxDriver(int n)
@@ -825,7 +825,7 @@ bbImage* bbLoadImage(BBStr* s)
 	if(auto_midhandle) c->setHandle(c->getWidth() / 2, c->getHeight() / 2);
 	std::vector<gxCanvas*> frames;
 	frames.push_back(c);
-	bbImage* i = d_new bbImage(frames);
+	bbImage* i = new bbImage(frames);
 	image_set.insert(i);
 	return i;
 }
@@ -869,7 +869,7 @@ bbImage* bbLoadAnimImage(BBStr* s, int w, int h, int first, int cnt)
 		src_x += w; if(src_x + w > pic->getWidth()) { src_x = 0; src_y += h; }
 	}
 	gx_graphics->freeCanvas(pic);
-	bbImage* i = d_new bbImage(frames);
+	bbImage* i = new bbImage(frames);
 	image_set.insert(i);
 	return i;
 }
@@ -898,7 +898,7 @@ bbImage* bbCopyImage(bbImage* i)
 		c->setMask(t->getMask());
 		frames.push_back(c);
 	}
-	bbImage* t = d_new bbImage(frames);
+	bbImage* t = new bbImage(frames);
 	image_set.insert(t);
 	return t;
 }
@@ -918,7 +918,7 @@ bbImage* bbCreateImage(int w, int h, int n)
 		if(auto_midhandle) c->setHandle(c->getWidth() / 2, c->getHeight() / 2);
 		frames.push_back(c);
 	}
-	bbImage* i = d_new bbImage(frames);
+	bbImage* i = new bbImage(frames);
 	image_set.insert(i);
 	return i;
 }
@@ -1253,7 +1253,7 @@ BBStr* bbInput(BBStr* prompt)
 		if(!p_canvas)
 		{
 			endPrinting(c);
-			return d_new BBStr();
+			return new BBStr();
 		}
 	}
 	//draw prompt
@@ -1378,7 +1378,7 @@ BBStr* bbInput(BBStr* prompt)
 	curs_x = 0;
 	curs_y += curr_font->getHeight() + 3;
 	endPrinting(c);
-	return d_new BBStr(str);
+	return new BBStr(str);
 }
 
 void bbLocate(int x, int y)

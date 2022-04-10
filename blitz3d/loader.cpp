@@ -41,7 +41,7 @@ void MeshLoader::addTriangle( int v0,int v1,int v2,const Brush &b ){
 	map<Brush,Surf*>::const_iterator it=brush_map.find( b );
 	if( it!=brush_map.end() ) surf=it->second;
 	else{
-		surf=d_new Surf;
+		surf=new Surf;
 		brush_map.insert( make_pair( b,surf ) );
 	}
 

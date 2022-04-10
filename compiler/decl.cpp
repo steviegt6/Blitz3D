@@ -29,7 +29,7 @@ Decl* DeclSeq::findDecl(const std::string& s) {
 
 Decl* DeclSeq::insertDecl(const std::string& s, Type* t, int kind, ConstType* d) {
 	if(findDecl(s)) return 0;
-	decls.push_back(d_new Decl(s, t, kind, d));
+	decls.push_back(new Decl(s, t, kind, d));
 	return decls.back();
 }
 

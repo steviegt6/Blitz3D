@@ -110,7 +110,7 @@ Tile* Codegen_x86::genCompare(TNode* t, std::string& func, bool negate) {
 		}
 	}
 
-	return d_new Tile(q, ql ? munchReg(ql) : 0, qr ? munchReg(qr) : 0);
+	return new Tile(q, ql ? munchReg(ql) : 0, qr ? munchReg(qr) : 0);
 }
 
 ////////////////////////////////////////////////
@@ -123,18 +123,18 @@ Tile* Codegen_x86::munchUnary(TNode* t) {
 		case IR_NEG: s = "\tneg\t%l\n"; break;
 		case IR_POWTWO: s = "\timul\t%l,%l\n"; break;
 		case IR_ABS:
-			q = d_new Tile("\tcdq\n\txor\t%l,edx\n\tsub\teax,edx\n", munchReg(t->l));
+			q = new Tile("\tcdq\n\txor\t%l,edx\n\tsub\teax,edx\n", munchReg(t->l));
 			q->want_l = EAX;
 			q->hits = (1 << EAX) | (1 << EDX);
 			break;
 		case IR_SGN:
-			q = d_new Tile("\tcdq\n\tcmp\teax,byte 1\n\tsbb\tedx,byte 1\n\tadc\tedx,byte 1\n\tmov\teax,edx\n", munchReg(t->l));
+			q = new Tile("\tcdq\n\tcmp\teax,byte 1\n\tsbb\tedx,byte 1\n\tadc\tedx,byte 1\n\tmov\teax,edx\n", munchReg(t->l));
 			q->want_l = EAX;
 			q->hits = (1 << EAX) | (1 << EDX);
 			break;
 		default: return 0;
 	}
-	return q != nullptr ? q : d_new Tile(s, munchReg(t->l));
+	return q != nullptr ? q : new Tile(s, munchReg(t->l));
 }
 
 Tile* Codegen_x86::munchLogical(TNode* t) {
@@ -146,7 +146,7 @@ Tile* Codegen_x86::munchLogical(TNode* t) {
 			s2 = "\tand\t%l,%r\n" + t->sconst;
 
 			l = munchReg(t->l); r = munchReg(t->r);
-			q = d_new Tile(s2, d_new Tile(s1, l), r);
+			q = new Tile(s2, new Tile(s1, l), r);
 			q->forceOrder = true;
 			return q;
 			break;
@@ -155,7 +155,7 @@ Tile* Codegen_x86::munchLogical(TNode* t) {
 			s2 = "\tor\t%l,%r\n" + t->sconst;
 
 			l = munchReg(t->l); r = munchReg(t->r);
-			q = d_new Tile(s2, d_new Tile(s1, l), r);
+			q = new Tile(s2, new Tile(s1, l), r);
 			q->forceOrder = true;
 			return q;
 			break;
@@ -163,7 +163,7 @@ Tile* Codegen_x86::munchLogical(TNode* t) {
 		case IR_XOR:s = "\txor\t%l,%r\n"; break;
 		default:return 0;
 	}
-	return d_new Tile(s, munchReg(t->l), munchReg(t->r));
+	return new Tile(s, munchReg(t->l), munchReg(t->r));
 }
 
 Tile* Codegen_x86::munchArith(TNode* t) {
@@ -172,10 +172,10 @@ Tile* Codegen_x86::munchArith(TNode* t) {
 		int shift;
 		if(t->r->op == IR_CONST) {
 			if(getShift(t->r->iconst, shift)) {
-				return d_new Tile("\tsar\t%l,byte " + itoa(shift) + "\n", munchReg(t->l));
+				return new Tile("\tsar\t%l,byte " + itoa(shift) + "\n", munchReg(t->l));
 			}
 		}
-		Tile* q = d_new Tile("\tcdq\n\tidiv\tecx\n", munchReg(t->l), munchReg(t->r));
+		Tile* q = new Tile("\tcdq\n\tidiv\tecx\n", munchReg(t->l), munchReg(t->r));
 		q->want_l = EAX; q->want_r = ECX; q->hits = 1 << EDX;
 		return q;
 	}
@@ -184,19 +184,19 @@ Tile* Codegen_x86::munchArith(TNode* t) {
 		int shift;
 		if(t->r->op == IR_CONST) {
 			if(getShift(t->r->iconst, shift)) {
-				return d_new Tile("\tshl\t%l,byte " + itoa(shift) + "\n", munchReg(t->l));
+				return new Tile("\tshl\t%l,byte " + itoa(shift) + "\n", munchReg(t->l));
 			}
 		}
 		else if(t->l->op == IR_CONST) {
 			if(getShift(t->l->iconst, shift)) {
-				return d_new Tile("\tshl\t%l,byte " + itoa(shift) + "\n", munchReg(t->r));
+				return new Tile("\tshl\t%l,byte " + itoa(shift) + "\n", munchReg(t->r));
 			}
 		}
 	}
 
 	if(t->op == IR_MOD) {
 		Tile* q;
-		q = d_new Tile("\tcdq\n\tidiv\tecx\n\tmov\teax,edx\n", munchReg(t->l), munchReg(t->r));
+		q = new Tile("\tcdq\n\tidiv\tecx\n\tmov\teax,edx\n", munchReg(t->l), munchReg(t->r));
 		q->want_l = EAX;
 		q->want_r = ECX;
 		q->hits = 1 << EDX;
@@ -212,12 +212,12 @@ Tile* Codegen_x86::munchArith(TNode* t) {
 	}
 
 	if(matchMEMCONST(t->r, s)) {
-		return d_new Tile(op + "%l," + s + "\n", munchReg(t->l));
+		return new Tile(op + "%l," + s + "\n", munchReg(t->l));
 	}
 	if(t->op != IR_SUB && matchMEMCONST(t->l, s)) {
-		return d_new Tile(op + "%l," + s + "\n", munchReg(t->r));
+		return new Tile(op + "%l," + s + "\n", munchReg(t->r));
 	}
-	return d_new Tile(op + "%l,%r\n", munchReg(t->l), munchReg(t->r));
+	return new Tile(op + "%l,%r\n", munchReg(t->l), munchReg(t->r));
 }
 
 Tile* Codegen_x86::munchShift(TNode* t) {
@@ -230,10 +230,10 @@ Tile* Codegen_x86::munchShift(TNode* t) {
 	}
 
 	if(matchCONST(t->r, s)) {
-		return d_new Tile(op + "%l,byte " + s + "\n", munchReg(t->l));
+		return new Tile(op + "%l,byte " + s + "\n", munchReg(t->l));
 	}
 
-	Tile* q = d_new Tile(op + "%l,cl\n", munchReg(t->l), munchReg(t->r));
+	Tile* q = new Tile(op + "%l,cl\n", munchReg(t->l), munchReg(t->r));
 	q->want_r = ECX; return q;
 }
 
@@ -241,7 +241,7 @@ Tile* Codegen_x86::munchRelop(TNode* t) {
 	std::string func;
 	Tile* q = genCompare(t, func, false);
 
-	q = d_new Tile("\tset" + func + "\tal\n\tmovzx\teax,al\n", q);
+	q = new Tile("\tset" + func + "\tal\n\tmovzx\teax,al\n", q);
 	q->want_l = EAX;
 	return q;
 }
@@ -260,13 +260,13 @@ Tile* Codegen_x86::munchFPUnary(TNode* t) {
 		case IR_FPOWTWO:s = "\tfmul\tst(0)\n"; break;
 		case IR_FABS:s = "\tfabs\n"; break;
 		case IR_FSGN:
-			q = d_new Tile("\tfldz\n\tfucompp\n\tfnstsw\tax\n\tsahf\n\tje\tSGNZERO" + std::to_string(sgnnum) + "\n\tfld1\n\tjna\tSGNEND" + std::to_string(sgnnum) + "\n\tfchs\n\tjmp\tSGNEND" + std::to_string(sgnnum) + "\nSGNZERO" + std::to_string(sgnnum) + "\n\tfldz\nSGNEND" + std::to_string(sgnnum) + "\n", munchFP(t->l));
+			q = new Tile("\tfldz\n\tfucompp\n\tfnstsw\tax\n\tsahf\n\tje\tSGNZERO" + std::to_string(sgnnum) + "\n\tfld1\n\tjna\tSGNEND" + std::to_string(sgnnum) + "\n\tfchs\n\tjmp\tSGNEND" + std::to_string(sgnnum) + "\nSGNZERO" + std::to_string(sgnnum) + "\n\tfldz\nSGNEND" + std::to_string(sgnnum) + "\n", munchFP(t->l));
 			q->want_l = EAX;
 			sgnnum++;
 			break;
 		default:return 0;
 	}
-	return q != nullptr ? q : d_new Tile(s, munchFP(t->l));
+	return q != nullptr ? q : new Tile(s, munchFP(t->l));
 }
 
 Tile* Codegen_x86::munchFPArith(TNode* t) {
@@ -278,7 +278,7 @@ Tile* Codegen_x86::munchFPArith(TNode* t) {
 		case IR_FDIV:s = "\tfdivrp\tst(1)\n"; s2 = "\tfdivp\tst(1)\n"; break;
 		default:return 0;
 	}
-	return d_new Tile(s, s2, munchFP(t->l), munchFP(t->r));
+	return new Tile(s, s2, munchFP(t->l), munchFP(t->r));
 }
 
 Tile* Codegen_x86::munchFPRelop(TNode* t) {
@@ -294,7 +294,7 @@ Tile* Codegen_x86::munchFPRelop(TNode* t) {
 	}
 	s = "\tfucompp\n\tfnstsw\tax\n\tsahf\n\tset" + s + "\tal\n\tmovzx\t%l,al\n";
 	s2 = "\tfucompp\n\tfnstsw\tax\n\tsahf\n\tset" + s2 + "\tal\n\tmovzx\t%l,al\n";
-	Tile* q = d_new Tile(s, s2, munchFP(t->l), munchFP(t->r));
+	Tile* q = new Tile(s, s2, munchFP(t->l), munchFP(t->r));
 	q->want_l = EAX;
 	return q;
 }
@@ -305,10 +305,10 @@ Tile* Codegen_x86::munchFPRelop(TNode* t) {
 Tile* Codegen_x86::munchCall(TNode* t) {
 	Tile* q;
 	if(t->l->op == IR_GLOBAL) {
-		q = d_new Tile("\tcall\t" + t->l->sconst + "\n", t->r ? munchReg(t->r) : 0);
+		q = new Tile("\tcall\t" + t->l->sconst + "\n", t->r ? munchReg(t->r) : 0);
 	}
 	else {
-		q = d_new Tile("\tcall\t%l\n", munchReg(t->l), t->r ? munchReg(t->r) : 0);
+		q = new Tile("\tcall\t%l\n", munchReg(t->l), t->r ? munchReg(t->r) : 0);
 	}
 	q->argFrame = t->iconst;
 	q->want_l = EAX;
@@ -325,26 +325,26 @@ Tile* Codegen_x86::munch(TNode* t) {
 	std::string s;
 	switch(t->op) {
 		case IR_JSR:
-			q = d_new Tile("\tcall\t" + t->sconst + '\n');
+			q = new Tile("\tcall\t" + t->sconst + '\n');
 			break;
 		case IR_RET:
-			q = d_new Tile("\tret\n");
+			q = new Tile("\tret\n");
 			break;
 		case IR_RETURN:
 			q = munchReg(t->l); q->want_l = EAX;
 			s = "\tjmp\t" + t->sconst + '\n';
-			q = d_new Tile(s, q);
+			q = new Tile(s, q);
 			break;
 		case IR_FRETURN:
 			q = munchFP(t->l);
 			s = "\tjmp\t" + t->sconst + '\n';
-			q = d_new Tile(s, q);
+			q = new Tile(s, q);
 			break;
 		case IR_CALL:
 			q = munchCall(t);
 			break;
 		case IR_JUMP:
-			q = d_new Tile("\tjmp\t" + t->sconst + '\n');
+			q = new Tile("\tjmp\t" + t->sconst + '\n');
 			break;
 		case IR_JUMPT:
 			if(TNode* p = t->l) {
@@ -352,7 +352,7 @@ Tile* Codegen_x86::munch(TNode* t) {
 				if(isRelop(p->op)) {
 					std::string func;
 					q = genCompare(p, func, neg);
-					q = d_new Tile("\tj" + func + "\t" + t->sconst + "\n", q);
+					q = new Tile("\tj" + func + "\t" + t->sconst + "\n", q);
 				}
 			}
 			break;
@@ -362,7 +362,7 @@ Tile* Codegen_x86::munch(TNode* t) {
 				if(isRelop(p->op)) {
 					std::string func;
 					q = genCompare(p, func, neg);
-					q = d_new Tile("\tj" + func + "\t" + t->sconst + "\n", q);
+					q = new Tile("\tj" + func + "\t" + t->sconst + "\n", q);
 				}
 			}
 			break;
@@ -370,7 +370,7 @@ Tile* Codegen_x86::munch(TNode* t) {
 			if(matchMEM(t->r, s)) {
 				std::string c;
 				if(matchCONST(t->l, c)) {
-					q = d_new Tile("\tmov\t" + s + "," + c + "\n");
+					q = new Tile("\tmov\t" + s + "," + c + "\n");
 				}
 				else if(t->l->op == IR_ADD || t->l->op == IR_SUB) {
 					TNode* p = 0;
@@ -383,14 +383,14 @@ Tile* Codegen_x86::munch(TNode* t) {
 							case IR_SUB:op = "\tsub\t"; break;
 						}
 						if(matchCONST(p, c)) {
-							q = d_new Tile(op + s + "," + c + "\n");
+							q = new Tile(op + s + "," + c + "\n");
 						}
 						else {
-							q = d_new Tile(op + s + ",%l\n", munchReg(p));
+							q = new Tile(op + s + ",%l\n", munchReg(p));
 						}
 					}
 				}
-				if(!q) q = d_new Tile("\tmov\t" + s + ",%l\n", munchReg(t->l));
+				if(!q) q = new Tile("\tmov\t" + s + ",%l\n", munchReg(t->l));
 			}
 			break;
 	}
@@ -411,13 +411,13 @@ Tile* Codegen_x86::munchReg(TNode* t) {
 
 	switch(t->op) {
 		case IR_JUMPT:
-			q = d_new Tile("\tand\t%l,%l\n\tjnz\t" + t->sconst + '\n', munchReg(t->l));
+			q = new Tile("\tand\t%l,%l\n\tjnz\t" + t->sconst + '\n', munchReg(t->l));
 			break;
 		case IR_JUMPF:
-			q = d_new Tile("\tand\t%l,%l\n\tjz\t" + t->sconst + '\n', munchReg(t->l));
+			q = new Tile("\tand\t%l,%l\n\tjz\t" + t->sconst + '\n', munchReg(t->l));
 			break;
 		case IR_JUMPGE:
-			q = d_new Tile("\tcmp\t%l,%r\n\tjnc\t" + t->sconst + '\n', munchReg(t->l), munchReg(t->r));
+			q = new Tile("\tcmp\t%l,%r\n\tjnc\t" + t->sconst + '\n', munchReg(t->l), munchReg(t->r));
 			break;
 		case IR_CALL:
 			q = munchCall(t);
@@ -425,41 +425,41 @@ Tile* Codegen_x86::munchReg(TNode* t) {
 		case IR_MOVE:
 			//MUST BE MOVE TO MEM!
 			if(matchMEM(t->r, s)) {
-				q = d_new Tile("\tmov\t" + s + ",%l\n", munchReg(t->l));
+				q = new Tile("\tmov\t" + s + ",%l\n", munchReg(t->l));
 			}
 			else if(t->r->op == IR_MEM) {
-				q = d_new Tile("\tmov\t[%r],%l\n", munchReg(t->l), munchReg(t->r->l));
+				q = new Tile("\tmov\t[%r],%l\n", munchReg(t->l), munchReg(t->r->l));
 			}
 			break;
 		case IR_MEM:
 			if(matchMEM(t, s)) {
-				q = d_new Tile("\tmov\t%l," + s + "\n");
+				q = new Tile("\tmov\t%l," + s + "\n");
 			}
 			else {
-				q = d_new Tile("\tmov\t%l,[%l]\n", munchReg(t->l));
+				q = new Tile("\tmov\t%l,[%l]\n", munchReg(t->l));
 			}
 			break;
 		case IR_SEQ:
 			l = munch(t->l);
 			r = munch(t->r);
-			q = d_new Tile("", l, r);
+			q = new Tile("", l, r);
 			break;
 		case IR_ARG:
-			q = d_new Tile("\tlea\t%l,[esp" + itoa_sgn(t->iconst) + "]\n");
+			q = new Tile("\tlea\t%l,[esp" + itoa_sgn(t->iconst) + "]\n");
 			break;
 		case IR_LOCAL:
-			q = d_new Tile("\tlea\t%l,[ebp" + itoa_sgn(t->iconst) + "]\n");
+			q = new Tile("\tlea\t%l,[ebp" + itoa_sgn(t->iconst) + "]\n");
 			break;
 		case IR_GLOBAL:
-			q = d_new Tile(std::string("\tmov\t%l,") + t->sconst + '\n');
+			q = new Tile(std::string("\tmov\t%l,") + t->sconst + '\n');
 			break;
 		case IR_CAST:
 			q = munchFP(t->l);
 			s = "\tpush\t%l\n\tfistp\t[esp]\n\tpop\t%l\n";
-			q = d_new Tile(s, q);
+			q = new Tile(s, q);
 			break;
 		case IR_CONST:
-			q = d_new Tile("\tmov\t%l," + itoa(t->iconst) + "\n");
+			q = new Tile("\tmov\t%l," + itoa(t->iconst) + "\n");
 			break;
 		case IR_NEG:case IR_ABS:case IR_SGN:case IR_POWTWO:
 			q = munchUnary(t);
@@ -482,7 +482,7 @@ Tile* Codegen_x86::munchReg(TNode* t) {
 		default:
 			q = munchFP(t); if(!q) return 0;
 			s = "\tpush\t%l\n\tfstp\t[esp]\n\tpop\t%l\n";
-			q = d_new Tile(s, q);
+			q = new Tile(s, q);
 	}
 	return q;
 }
@@ -502,7 +502,7 @@ Tile* Codegen_x86::munchFP(TNode* t) {
 			break;
 		case IR_FCAST:
 			s = "\tpush\t%l\n\tfild\t[esp]\n\tpop\t%l\n";
-			q = d_new Tile(s, munchReg(t->l));
+			q = new Tile(s, munchReg(t->l));
 			break;
 		case IR_FNEG:case IR_FABS:case IR_FPOWTWO:case IR_FSGN:
 			q = munchFPUnary(t);
@@ -513,7 +513,7 @@ Tile* Codegen_x86::munchFP(TNode* t) {
 		default:
 			q = munchReg(t); if(!q) return 0;
 			s = "\tpush\t%l\n\tfld\t[esp]\n\tpop\t%l\n";
-			q = d_new Tile(s, q);
+			q = new Tile(s, q);
 	}
 	return q;
 }

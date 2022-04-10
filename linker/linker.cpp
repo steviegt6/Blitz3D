@@ -43,7 +43,7 @@ private:
 		data_sz = data_sz / 2 + data_sz;
 		if(data_sz < pc + n) data_sz = pc + n;
 		char* old_data = data;
-		data = d_new char[data_sz];
+		data = new char[data_sz];
 		memcpy(data, old_data, pc);
 		delete old_data;
 	}
@@ -129,7 +129,7 @@ int Linker::version() {
 }
 
 Module* Linker::createModule() {
-	return d_new BBModule();
+	return new BBModule();
 }
 
 void Linker::deleteModule(Module* mod) {

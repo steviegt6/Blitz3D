@@ -295,7 +295,7 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 
 static MeshModel* parseFrame(IDirectXFileData* fileData) {
 
-	MeshModel* e = d_new MeshModel();
+	MeshModel* e = new MeshModel();
 
 	const GUID* guid;
 	IDirectXFileObject* childObj;
@@ -353,7 +353,7 @@ static MeshModel* parseFile(const std::string& file) {
 	}
 
 	anim_len = 0;
-	MeshModel* e = d_new MeshModel();
+	MeshModel* e = new MeshModel();
 	for(; enumObj->GetNextDataObject(&fileData) >= 0; fileData->Release()) {
 		if(fileData->GetType(&guid) < 0) continue;
 
@@ -370,7 +370,7 @@ static MeshModel* parseFile(const std::string& file) {
 	}
 
 	if(!collapse) {
-		e->setAnimator(d_new Animator(e, anim_len));
+		e->setAnimator(new Animator(e, anim_len));
 	}
 
 	enumObj->Release();

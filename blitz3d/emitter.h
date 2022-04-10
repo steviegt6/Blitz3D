@@ -14,7 +14,7 @@ public:
 	~Emitter();
 
 	//Entity interface
-	Entity *clone(){ return d_new Emitter( *this ); }
+	Entity *clone(){ return new Emitter( *this ); }
 	Emitter *getEmitter(){ return this; }
 
 	//Object interface

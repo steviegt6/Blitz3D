@@ -11,7 +11,7 @@ Environ* ProgNode::semant(Environ* e) {
 
 	StmtSeqNode::reset(stmts->file, file_lab);
 
-	std::unique_ptr<Environ> env(d_new Environ(genLabel(), Type::int_type, 0, e));
+	std::unique_ptr<Environ> env(new Environ(genLabel(), Type::int_type, 0, e));
 
 	structs->proto(env->typeDecls, env.get());
 	consts->proto(env->decls, env.get());
@@ -75,7 +75,7 @@ void ProgNode::translate(Codegen* g, const std::vector<UserFunc>& usrfuncs) {
 	//leave main program
 	g->label(sem_env->funcLabel + "_leave");
 	t = deleteVars(sem_env);
-	if(g->debug) t = d_new TNode(IR_SEQ, call("__bbDebugLeave"), t);
+	if(g->debug) t = new TNode(IR_SEQ, call("__bbDebugLeave"), t);
 	g->leave(t, 0);
 
 	//structs

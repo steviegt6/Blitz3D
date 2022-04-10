@@ -317,7 +317,7 @@ void  bbRenderWorld(float tween) {
 		//This stuff is broken.
 		static int n;
 		std::string t = "screenshot" + itoa(++n) + ".bmp";
-		bbSaveBuffer(bbBackBuffer(), d_new BBStr(t));
+		bbSaveBuffer(bbBackBuffer(), new BBStr(t));
 	}
 
 	if(!stats_mode) return;
@@ -339,7 +339,7 @@ void  bbRenderWorld(float tween) {
 
 	std::string t = "FPS:" + t_fps + " UPS:" + t_ups + " RPS:" + t_rps + " TRIS:" + t_tris;
 
-	bbText(0, bbGraphicsHeight() - bbFontHeight(), d_new BBStr(t), 0, 0);
+	bbText(0, bbGraphicsHeight() - bbFontHeight(), new BBStr(t), 0, 0);
 #endif
 }
 
@@ -391,7 +391,7 @@ int bbAvailVirtual() {
 //
 Texture* bbLoadTexture(BBStr* file, int flags) {
 	debug3d();
-	Texture* t = d_new Texture(*file, flags); delete file;
+	Texture* t = new Texture(*file, flags); delete file;
 	if(!t->getCanvas(0)) { delete t; return 0; }
 	texture_set.insert(t);
 	return t;
@@ -399,7 +399,7 @@ Texture* bbLoadTexture(BBStr* file, int flags) {
 
 Texture* bbLoadAnimTexture(BBStr* file, int flags, int w, int h, int first, int cnt) {
 	debug3d();
-	Texture* t = d_new Texture(*file, flags, w, h, first, cnt);
+	Texture* t = new Texture(*file, flags, w, h, first, cnt);
 	delete file;
 	if(!t->getCanvas(0)) {
 		delete t;
@@ -416,7 +416,7 @@ Texture* bbCreateTexture(int w, int h, int flags, int frames) {
 			RTEX("Illegal number of texture frames!");
 		}
 	}
-	Texture* t = d_new Texture(w, h, flags, frames);
+	Texture* t = new Texture(w, h, flags, frames);
 	texture_set.insert(t);
 	return t;
 }
@@ -488,7 +488,7 @@ int  bbTextureHeight(Texture* t) {
 BBStr* bbTextureName(Texture* t) {
 	debugTexture(t);
 	CachedTexture* c = t->getCachedTexture();
-	return c ? d_new BBStr(c->getName().c_str()) : d_new BBStr("");
+	return c ? new BBStr(c->getName().c_str()) : new BBStr("");
 }
 
 void bbSetCubeFace(Texture* t, int face) {
@@ -530,7 +530,7 @@ void  bbTextureFilter(BBStr* t, int flags) {
 ////////////////////
 Brush* bbCreateBrush(float r, float g, float b) {
 	debug3d();
-	Brush* br = d_new Brush();
+	Brush* br = new Brush();
 	br->setColor(Vector(r * ctof, g * ctof, b * ctof));
 	brush_set.insert(br);
 	return br;
@@ -575,7 +575,7 @@ void  bbBrushTexture(Brush* b, Texture* t, int frame, int index) {
 
 Texture* bbGetBrushTexture(Brush* b, int index) {
 	debugBrush(b);
-	Texture* tex = d_new Texture(b->getTexture(index));
+	Texture* tex = new Texture(b->getTexture(index));
 	texture_set.insert(tex);
 	return tex;
 }
@@ -595,7 +595,7 @@ void  bbBrushFX(Brush* b, int fx) {
 ///////////////////
 Entity* bbCreateMesh(Entity* p) {
 	debugParent(p);
-	MeshModel* m = d_new MeshModel();
+	MeshModel* m = new MeshModel();
 	return insertEntity(m, p);
 }
 
@@ -605,7 +605,7 @@ Entity* bbLoadMesh(BBStr* f, Entity* p) {
 	delete f;
 
 	if(!e) return 0;
-	MeshModel* m = d_new MeshModel();
+	MeshModel* m = new MeshModel();
 	collapseMesh(m, e);
 	return insertEntity(m, p);
 }
@@ -650,7 +650,7 @@ Entity* bbCopyMesh(MeshModel* m, Entity* p) {
 	debugMesh(m);
 	debugParent(p);
 
-	MeshModel* t = d_new MeshModel();
+	MeshModel* t = new MeshModel();
 	t->add(*m);
 	return insertEntity(t, p);
 }
@@ -784,14 +784,14 @@ Surface* bbCreateSurface(MeshModel* m, Brush* b) {
 }
 
 Brush* bbGetSurfaceBrush(Surface* s) {
-	Brush* br = d_new Brush(s->getBrush());
+	Brush* br = new Brush(s->getBrush());
 	brush_set.insert(br);
 	return br;
 }
 
 Brush* bbGetEntityBrush(Model* m) {
 	debugModel(m);
-	Brush* br = d_new Brush(m->getBrush());
+	Brush* br = new Brush(m->getBrush());
 	brush_set.insert(br);
 	return br;
 }
@@ -913,7 +913,7 @@ Entity* bbCreateCamera(Entity* p) {
 	debugParent(p);
 	int x, y, w, h;
 	gx_canvas->getViewport(&x, &y, &w, &h);
-	Camera* c = d_new Camera();
+	Camera* c = new Camera();
 	c->setViewport(x, y, w, h);
 	return insertEntity(c, p);
 }
@@ -1145,7 +1145,7 @@ int  bbPickedTriangle() {
 ////////////////////
 Entity* bbCreateLight(int type, Entity* p) {
 	debugParent(p);
-	Light* t = new Light(type); //Changed the d_new to new because internally its just a def for new.
+	Light* t = new Light(type); //Changed the new to new because internally its just a def for new.
 	return insertEntity(t, p);
 }
 
@@ -1567,7 +1567,7 @@ int  bbAddAnimSeq(Object* o, int length) {
 		anim->addSeq(length);
 	}
 	else {
-		anim = d_new Animator(o, length);
+		anim = new Animator(o, length);
 		o->setAnimator(anim);
 	}
 	return anim->numSeqs() - 1;
@@ -2004,7 +2004,7 @@ void  bbNameEntity(Entity* e, BBStr* t) {
 
 BBStr* bbEntityName(Entity* e) {
 	debugEntity(e);
-	return d_new BBStr(e->getName());
+	return new BBStr(e->getName());
 }
 
 BBStr* bbEntityClass(Entity* e) {
@@ -2045,7 +2045,7 @@ int  bbActiveTextures() {
 void blitz3d_open() {
 	gx_scene = gx_graphics->createScene(0);
 	if(!gx_scene) RTEX("Unable to create gxScene instance!");
-	world = d_new World();
+	world = new World();
 	projected = Vector();
 	picked.collision = Collision();
 	picked.with = 0; picked.coords = Vector();

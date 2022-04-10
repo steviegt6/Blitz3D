@@ -59,17 +59,17 @@ int  bbMilliSecs() {
 }
 
 BBStr* bbCommandLine() {
-	return d_new BBStr(gx_runtime->commandLine());
+	return new BBStr(gx_runtime->commandLine());
 }
 
 BBStr* bbSystemProperty(BBStr* p) {
 	std::string t = gx_runtime->systemProperty(*p);
-	delete p; return d_new BBStr(t);
+	delete p; return new BBStr(t);
 }
 
 BBStr* bbGetEnv(BBStr* env_var) {
 	char* p = getenv(env_var->c_str());
-	BBStr* val = d_new BBStr(p ? p : "");
+	BBStr* val = new BBStr(p ? p : "");
 	delete env_var;
 	return val;
 }
@@ -110,10 +110,10 @@ BBStr* bbGetClipboardContents() {
 		char16_t* pszText = static_cast<char16_t*>(GlobalLock(data));
 		std::u16string wtext(pszText);
 		GlobalUnlock(data);
-		str = d_new BBStr(utf16_to_utf8(std::move(wtext)));
+		str = new BBStr(utf16_to_utf8(std::move(wtext)));
 	}
 	else {
-		str = d_new BBStr("");
+		str = new BBStr("");
 	}
 	CloseClipboard();
 	return str;

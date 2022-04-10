@@ -93,7 +93,7 @@ gxRuntime* gxRuntime::openRuntime(HINSTANCE hinst, const std::string& cmd_line, 
 
 	UpdateWindow(hwnd);
 
-	runtime = d_new gxRuntime(hinst, cmd_line, hwnd);
+	runtime = new gxRuntime(hinst, cmd_line, hwnd);
 	return runtime;
 }
 
@@ -714,7 +714,7 @@ gxAudio* gxRuntime::openAudio(int flags) {
 		return 0;
 	}
 
-	audio = d_new gxAudio(this);
+	audio = new gxAudio(this);
 	return audio;
 }
 
@@ -732,7 +732,7 @@ gxInput* gxRuntime::openInput(int flags) {
 
 	IDirectInput8* di;
 	if(DirectInput8Create(hinst, DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&di, 0) >= 0) {
-		input = d_new gxInput(this, di);
+		input = new gxInput(this, di);
 		acquireInput();
 	}
 	else {
@@ -847,7 +847,7 @@ gxGraphics* gxRuntime::openWindowedGraphics(int w, int h, int d, bool d3d) {
 								primSurf = ps;
 								mod_cnt = 0;
 								fs->AddRef();
-								return d_new gxGraphics(this, dd, fs, fs, d3d);
+								return new gxGraphics(this, dd, fs, fs, d3d);
 							}
 							fs->Release();
 						}
@@ -886,7 +886,7 @@ gxGraphics* gxRuntime::openExclusiveGraphics(int w, int h, int d, bool d3d) {
 				DDSCAPS2 caps = { sizeof caps };
 				caps.dwCaps = DDSCAPS_BACKBUFFER;
 				if(ps->GetAttachedSurface(&caps, &bs) >= 0) {
-					return d_new gxGraphics(this, dd, ps, bs, d3d);
+					return new gxGraphics(this, dd, ps, bs, d3d);
 				}
 				ps->Release();
 			}
@@ -1023,7 +1023,7 @@ int gxRuntime::desktopHeight() {
 gxFileSystem* gxRuntime::openFileSystem(int flags) {
 	if(fileSystem) return 0;
 
-	fileSystem = d_new gxFileSystem();
+	fileSystem = new gxFileSystem();
 	return fileSystem;
 }
 
@@ -1040,7 +1040,7 @@ void gxRuntime::closeFileSystem(gxFileSystem* f) {
 static HRESULT WINAPI enumMode(DDSURFACEDESC2* desc, void* context) {
 	int dp = desc->ddpfPixelFormat.dwRGBBitCount;
 	if(dp == 16 || dp == 24 || dp == 32) {
-		gxRuntime::GfxMode* m = d_new gxRuntime::GfxMode;
+		gxRuntime::GfxMode* m = new gxRuntime::GfxMode;
 		m->desc = *desc;
 		gxRuntime::GfxDriver* d = (gxRuntime::GfxDriver*)context;
 		d->modes.push_back(m);
@@ -1072,9 +1072,9 @@ static BOOL WINAPI enumDriver(GUID FAR* guid, LPSTR desc, LPSTR name, LPVOID con
 		dd->GetDisplayMode(&desktop_desc);
 	}
 
-	gxRuntime::GfxDriver* d = d_new gxRuntime::GfxDriver;
+	gxRuntime::GfxDriver* d = new gxRuntime::GfxDriver;
 
-	d->guid = guid ? d_new GUID(*guid) : 0;
+	d->guid = guid ? new GUID(*guid) : 0;
 	d->name = desc;//string( name )+" "+string( desc );
 
 	memset(&d->d3d_desc, 0, sizeof(d->d3d_desc));
@@ -1161,7 +1161,7 @@ void gxRuntime::windowedModeInfo(int* c) {
 }
 
 gxTimer* gxRuntime::createTimer(int hertz) {
-	gxTimer* t = d_new gxTimer(this, hertz);
+	gxTimer* t = new gxTimer(this, hertz);
 	timers.insert(t);
 	return t;
 }
@@ -1314,7 +1314,7 @@ int gxRuntime::callDll(const std::string& dll, const std::string& func, const vo
 	if(lib_it == libs.end()) {
 		HINSTANCE h = LoadLibrary(dll.c_str());
 		if(!h) return 0;
-		gxDll* t = d_new gxDll;
+		gxDll* t = new gxDll;
 		t->hinst = h;
 		lib_it = libs.insert(make_pair(dll, t)).first;
 	}

@@ -89,7 +89,7 @@ static const char* linkRuntime() {
 			if(!isalnum(s[k]) && s[k] != '_') break;
 		}
 		end = k;
-		DeclSeq* params = d_new DeclSeq();
+		DeclSeq* params = new DeclSeq();
 		std::string n = s.substr(start, end - start);
 		while(k < s.size()) {
 			Type* t = typeof(s[k++]);
@@ -102,25 +102,25 @@ static const char* linkRuntime() {
 				if(s[k] == '\"') {
 					for(++k; s[k] != '\"'; ++k) {}
 					std::string t = s.substr(from + 1, k - from - 1);
-					defType = d_new ConstType(t); ++k;
+					defType = new ConstType(t); ++k;
 				}
 				else {
 					if(s[k] == '-') ++k;
 					for(; isdigit(s[k]); ++k) {}
 					if(t == Type::int_type) {
 						int n = atoi(s.substr(from, k - from));
-						defType = d_new ConstType(n);
+						defType = new ConstType(n);
 					}
 					else {
 						float n = atof(s.substr(from, k - from));
-						defType = d_new ConstType(n);
+						defType = new ConstType(n);
 					}
 				}
 			}
 			Decl* d = params->insertDecl(str, t, DECL_PARAM, defType);
 		}
 
-		FuncType* f = d_new FuncType(t, params, false, cfunc);
+		FuncType* f = new FuncType(t, params, false, cfunc);
 		n = tolower(n);
 		runtimeEnviron->funcDecls->insertDecl(n, f, DECL_FUNC);
 		runtimeModule->addSymbol(("_f" + n).c_str(), pc);
@@ -174,7 +174,7 @@ static const char* loadUserLib(const std::string& userlib) {
 			if(ty) next(in);
 			else ty = Type::void_type;
 
-			DeclSeq* params = d_new DeclSeq();
+			DeclSeq* params = new DeclSeq();
 
 			if(curr != '(') return "expecting '(' after function identifier";
 			next(in);
@@ -205,7 +205,7 @@ static const char* loadUserLib(const std::string& userlib) {
 
 			keyWords.push_back(id);
 
-			FuncType* fn = d_new FuncType(ty, params, true, true);
+			FuncType* fn = new FuncType(ty, params, true, true);
 
 			runtimeEnviron->funcDecls->insertDecl(lower_id, fn, DECL_FUNC);
 
@@ -290,7 +290,7 @@ const char* openLibs() {
 	runtimeLib->startup(GetModuleHandle(0));
 
 	runtimeModule = linkerLib->createModule();
-	runtimeEnviron = d_new Environ("", Type::int_type, 0, 0);
+	runtimeEnviron = new Environ("", Type::int_type, 0, 0);
 
 	keyWords.clear();
 	userFuncs.clear();

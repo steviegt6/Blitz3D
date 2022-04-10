@@ -43,9 +43,9 @@ static inline void debugDir(gxDir* d) {
 
 static bbFile* open(BBStr* f, int n) {
 	std::string t = *f;
-	std::filebuf* buf = d_new std::filebuf();
+	std::filebuf* buf = new std::filebuf();
 	if(buf->open(t.c_str(), n | std::ios_base::binary)) {
-		bbFile* fl = d_new bbFile(buf);
+		bbFile* fl = new bbFile(buf);
 		file_set.insert(fl);
 		return fl;
 	}
@@ -90,11 +90,11 @@ void bbCloseDir(gxDir* d) {
 
 BBStr* bbNextFile(gxDir* d) {
 	debugDir(d);
-	return d_new BBStr(d->getNextFile());
+	return new BBStr(d->getNextFile());
 }
 
 BBStr* bbCurrentDir() {
-	return d_new BBStr(gx_filesys->getCurrentDir());
+	return new BBStr(gx_filesys->getCurrentDir());
 }
 
 void bbChangeDir(BBStr* d) {
@@ -126,8 +126,8 @@ int	bbFileSize(BBStr* f) {
 BBStr* bbFileExtension(BBStr* f) {
 	std::string t = *f; delete f;
 	if(t.find_last_of(".") != std::string::npos)
-		return d_new BBStr(t.substr(t.find_last_of(".") + 1));
-	return d_new BBStr("");
+		return new BBStr(t.substr(t.find_last_of(".") + 1));
+	return new BBStr("");
 }
 
 void bbCopyFile(BBStr* f, BBStr* to) {

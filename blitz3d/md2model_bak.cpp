@@ -74,7 +74,7 @@ struct MD2Model::Rep{
 
 		//read tex coords
 		in.pubseekpos( header.offsetTexCoords );
-		TexCoord *coords=d_new TexCoord[header.numTexCoords];
+		TexCoord *coords=new TexCoord[header.numTexCoords];
 		in.sgetn( (char*)coords,header.numTexCoords*sizeof(TexCoord) );
 
 		vector<VertInfo> verts;
@@ -109,7 +109,7 @@ struct MD2Model::Rep{
 
 		in.pubseekpos( header.offsetFrames );
 		frames.resize( header.numFrames );
-		MD2Vertex *md2_verts=d_new MD2Vertex[header.numVertices];
+		MD2Vertex *md2_verts=new MD2Vertex[header.numVertices];
 
 		for( k=0;k<frames.size();++k ){
 
@@ -259,7 +259,7 @@ ref_cnt(1),mesh(0){
 
 	//read tex coords
 	in.pubseekpos( header.offsetTexCoords );
-	TexCoord *coords=d_new TexCoord[header.numTexCoords];
+	TexCoord *coords=new TexCoord[header.numTexCoords];
 	in.sgetn( (char*)coords,header.numTexCoords*sizeof(TexCoord) );
 
 	vector<VertInfo> verts;
@@ -294,7 +294,7 @@ ref_cnt(1),mesh(0){
 
 	in.pubseekpos( header.offsetFrames );
 	frames.resize( header.numFrames );
-	MD2Vertex *md2_verts=d_new MD2Vertex[header.numVertices];
+	MD2Vertex *md2_verts=new MD2Vertex[header.numVertices];
 
 	for( k=0;k<frames.size();++k ){
 
@@ -386,7 +386,7 @@ void MD2Model::Rep::render( MD2Model *model,float render_t,int render_a,int rend
 }
 
 MD2Model::MD2Model( const string &f ):
-rep( d_new Rep( f ) ),
+rep( new Rep( f ) ),
 anim_mode(0),anim_time(0),
 render_a(0),render_b(0),render_t(0){
 }

@@ -64,10 +64,10 @@ void VarDeclNode::proto(DeclSeq* d, Environ* e) {
 		if(constant || (kind & DECL_PARAM)) {
 			ConstNode* c = expr->constNode();
 			if(!c) ex("Expression must be constant");
-			if(ty == Type::int_type) ty = d_new ConstType(c->intValue());
-			else if(ty == Type::float_type) ty = d_new ConstType(c->floatValue());
-			else if(ty->structType()) ty = d_new ConstType();
-			else ty = d_new ConstType(c->stringValue());
+			if(ty == Type::int_type) ty = new ConstType(c->intValue());
+			else if(ty == Type::float_type) ty = new ConstType(c->floatValue());
+			else if(ty->structType()) ty = new ConstType();
+			else ty = new ConstType(c->stringValue());
 			e->types.push_back(ty);
 			delete expr; expr = 0;
 		}
@@ -79,7 +79,7 @@ void VarDeclNode::proto(DeclSeq* d, Environ* e) {
 
 	Decl* decl = d->insertDecl(ident, ty, kind, defType);
 	if(!decl) ex("Duplicate variable name");
-	if(expr) sem_var = d_new DeclVarNode(decl);
+	if(expr) sem_var = new DeclVarNode(decl);
 }
 
 void VarDeclNode::semant(Environ* e) {
@@ -98,9 +98,9 @@ void VarDeclNode::translate(Codegen* g) {
 //////////////////////////
 void FuncDeclNode::proto(DeclSeq* d, Environ* e) {
 	Type* t = tagType(tag, e); if(!t) t = Type::int_type;
-	std::unique_ptr<DeclSeq> decls(d_new DeclSeq());
+	std::unique_ptr<DeclSeq> decls(new DeclSeq());
 	params->proto(decls.get(), e);
-	sem_type = d_new FuncType(t, decls.release(), false, false);
+	sem_type = new FuncType(t, decls.release(), false, false);
 	if(!d->insertDecl(ident, sem_type, DECL_FUNC)) {
 		delete sem_type; ex("duplicate identifier");
 	}
@@ -109,7 +109,7 @@ void FuncDeclNode::proto(DeclSeq* d, Environ* e) {
 
 void FuncDeclNode::semant(Environ* e) {
 
-	sem_env = d_new Environ(genLabel(), sem_type->returnType, 1, e);
+	sem_env = new Environ(genLabel(), sem_type->returnType, 1, e);
 	DeclSeq* decls = sem_env->decls;
 
 	int k;
@@ -148,7 +148,7 @@ void FuncDeclNode::translate(Codegen* g) {
 	//leave the function
 	g->label(sem_env->funcLabel + "_leave");
 	t = deleteVars(sem_env);
-	if(g->debug) t = d_new TNode(IR_SEQ, call("__bbDebugLeave"), t);
+	if(g->debug) t = new TNode(IR_SEQ, call("__bbDebugLeave"), t);
 	g->leave(t, sem_type->params->size() * 4);
 }
 
@@ -156,7 +156,7 @@ void FuncDeclNode::translate(Codegen* g) {
 // Type Declaration //
 //////////////////////
 void StructDeclNode::proto(DeclSeq* d, Environ* e) {
-	sem_type = d_new StructType(ident, d_new DeclSeq());
+	sem_type = new StructType(ident, new DeclSeq());
 	if(!d->insertDecl(ident, sem_type, DECL_STRUCT)) {
 		delete sem_type; ex("Duplicate identifier");
 	}
@@ -256,7 +256,7 @@ void VectorDeclNode::proto(DeclSeq* d, Environ* env) {
 		sizes.push_back(n);
 	}
 	std::string label = genLabel();
-	sem_type = d_new VectorType(label, ty, sizes);
+	sem_type = new VectorType(label, ty, sizes);
 	if(!d->insertDecl(ident, sem_type, kind)) {
 		delete sem_type; ex("Duplicate identifier");
 	}
