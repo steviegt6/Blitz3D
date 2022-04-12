@@ -704,9 +704,8 @@ void bbOval(int x, int y, int w, int h, int solid)
 }
 
 /*
-* to xPos: 0 = align left, 1 = align center, 2 = align right
+* xPos: 0 = align left, 1 = align center, 2 = align right
 * yPos: 0 = align top, 1 = align middle, 2 = align bottom
-* Any larger than 2 will do nothing (default)
 * 
 * If string is ANSI encoding(such as gfx's name in scpcb launcher),
 * then change its encode into utf8 to display

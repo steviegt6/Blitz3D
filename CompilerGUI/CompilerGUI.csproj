@@ -52,10 +52,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtraForm.cs" />
-    <Compile Include="ExtraForm.Designer.cs">
-      <DependentUpon>ExtraForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MainFormEvents.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,9 +59,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ExtraForm.resx">
-      <DependentUpon>ExtraForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

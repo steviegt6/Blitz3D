@@ -88,5 +88,7 @@ void math_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("#Rnd#from#to=0", bbRnd);
 	rtSym("%Rand%from%to=1", bbRand);
 	rtSym("SeedRnd%seed", bbSeedRnd);
+	rtSym("SetRndSeed%seed", bbSeedRnd);
 	rtSym("%RndSeed", bbRndSeed);
+	rtSym("%GetRndSeed", bbRndSeed);
 }

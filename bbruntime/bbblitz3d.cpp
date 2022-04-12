@@ -275,14 +275,13 @@ static int update_ms;
 void  bbUpdateWorld(float elapsed) {
 	debug3d();
 
-#ifndef BETA
-	world->update(elapsed);
-	return;
-#endif
 #ifdef BETA
 	update_ms = gx_runtime->getMilliSecs();
 	world->update(elapsed);
 	update_ms = gx_runtime->getMilliSecs() - update_ms;
+#else
+	world->update(elapsed);
+	return;
 #endif
 }
 
@@ -295,12 +294,6 @@ void  bbRenderWorld(float tween) {
 	debug3d();
 
 	//Should we remove this stuff?
-#ifndef BETA
-	tri_count = gx_scene->getTrianglesDrawn();
-	world->render(tween);
-	tri_count = gx_scene->getTrianglesDrawn() - tri_count;
-	return;
-#endif
 #ifdef BETA
 	int tris = gx_scene->getTrianglesDrawn();
 	int render_ms = gx_runtime->getMilliSecs();
@@ -340,6 +333,11 @@ void  bbRenderWorld(float tween) {
 	std::string t = "FPS:" + t_fps + " UPS:" + t_ups + " RPS:" + t_rps + " TRIS:" + t_tris;
 
 	bbText(0, bbGraphicsHeight() - bbFontHeight(), new BBStr(t), 0, 0);
+#else
+	tri_count = gx_scene->getTrianglesDrawn();
+	world->render(tween);
+	tri_count = gx_scene->getTrianglesDrawn() - tri_count;
+	return;
 #endif
 }
 

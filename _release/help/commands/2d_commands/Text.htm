@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <h1>Text x,y,string$,[center x],[center y]</h1>
+    <h1>Text x,y,string$,[x pos],[y pos],[encoding]</h1>
     <h1>Parameters</h1>
     <table>
         <tr>
@@ -16,9 +16,11 @@
                 <br />
                 string$ = string/text to print
                 <br />
-                center x = optional; true = center horizontally
+                x pos = optional; 0 = align left, 1 = align center, 2 = align right
                 <br />
-                center y = optional; true = center vertically
+                y pos = optional; 0 = align top, 1 = align middle, 2 = align bottom
+                <br />
+                encoding = optional; 0 = UTF-8, 1 = ANSI
             </td>
         </tr>
     </table>
@@ -27,13 +29,19 @@
         <tr>
             <td>
                 Prints a string at the designated screen coordinates. You can center the text on the coordiates by
-                setting center x/center y to TRUE. This draws the text in the current drawing color.
+                setting x pos/y pos to 1. This draws the text in the current drawing color.
 
                 <br />
 
                 <br />
                 Note: Printing a space with text will NOT render a block - a space is an empty value. So printing " "
                 will not make a box appear.
+
+                <br />
+
+                <br />
+
+                Display ANSI text will take a lot of time(require convert to UTF-8)
             </td>
         </tr>
     </table>
@@ -57,7 +65,8 @@
                 <br />
                 ;print the text, centered horizontally at x=400, y=0
                 <br />
-                Text 400,0,"Hello There!",True,False
+                Text 400,0,"Hello There!",1
+                Text 600,100,"ANSI: "+GfxDriverName(1),0,2,1
                 <br />
                 Wend
                 <br />
