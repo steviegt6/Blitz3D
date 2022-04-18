@@ -9,7 +9,6 @@ static Debugger* debugger;
 gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs, IDirectDrawSurface7* bs, bool d3d) :
 	runtime(rt), dirDraw(dd), dir3d(0), dir3dDev(0), def_font(0), gfx_lost(false), dummy_mesh(0) {
 	dirDraw->QueryInterface(IID_IDirectDraw, (void**)&ds_dirDraw);
-	std::string fontPath = getenv("blitzpath");
 
 	front_canvas = new gxCanvas(this, fs, 0);
 	back_canvas = new gxCanvas(this, bs, 0);
@@ -19,7 +18,7 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 
 	FT_Init_FreeType(&ftLibrary);
 
-	def_font = loadFont(fontPath+"\\cfg\\font.ttf", 12);
+	def_font = nullptr;
 
 	front_canvas->setFont(def_font);
 	back_canvas->setFont(def_font);
