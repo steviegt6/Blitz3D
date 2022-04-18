@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <link rel=stylesheet href=../css/commands.css type=text/css>
+    <link rel="stylesheet" href="../css/commands.css" type="text/css">
 </head>
 
 <body>
@@ -42,10 +42,16 @@
                 <br />
 
                 Display ANSI text will take a lot of time(require convert to UTF-8)
+
+                <br />
+
+                <br />
+
+                See Also: <a href="ConvertToANSI.htm">ConvertToANSI</a>, <a href="ConvertToUTF8.htm">ConvertToUTF8</a>
             </td>
         </tr>
     </table>
-    <h1><a href=../2d_examples/Text.bb>Example</a></h1>
+    <h1><a href="../2d_examples/Text.bb">Example</a></h1>
     <table>
         <tr>
             <td>
@@ -66,6 +72,7 @@
                 ;print the text, centered horizontally at x=400, y=0
                 <br />
                 Text 400,0,"Hello There!",1
+				<br />
                 Text 600,100,"ANSI: "+GfxDriverName(1),0,2,1
                 <br />
                 Wend

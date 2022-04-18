@@ -463,6 +463,57 @@ void bbTCPTimeouts(int rt, int at) {
 	accept_timeout = at;
 }
 
+std::string exec(char* cmd) {
+	FILE* pipe = _popen(cmd, "r");
+	if (!pipe) return "ERROR";
+	char buffer[128];
+	std::string result = "";
+	while (!feof(pipe)) {
+		if (fgets(buffer, 128, pipe) != NULL)
+			result = buffer;
+	}
+	_pclose(pipe);
+	return result;
+}
+
+std::string clearTabLeft(std::string src) {
+	int pos = 0;
+	std::string result = src;
+	for (;;) {
+		if (src[pos] == '	') {
+			result = src.substr(pos + 1);
+			pos++;
+		}
+		else {
+			break;
+		}
+	}
+	return result;
+}
+
+BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
+	std::string s1 = txt->c_str();
+	std::string s2 = name->c_str();
+	std::string result;
+	int n, a;
+	if ((n = s1.find(name->c_str())) != std::string::npos) result = s1.substr(n);
+	if ((a = result.find(';')) != std::string::npos) result = result.substr(s2.length()+1, a - s2.length()-1);
+	*txt = result.c_str();
+	return txt;
+}
+
+BBStr* bbGetDomainTXT(BBStr* domain) {
+	std::string cmd = "nslookup -qt=TXT ";
+	cmd += domain->c_str();
+	std::string result = exec((char*)cmd.data());
+	result = clearTabLeft(result);
+	if (result[0] == '\"') result = result.substr(1);
+	if (result[result.length() - 2] == '\"')result = result.substr(0, result.length() - 2);
+	if (result[result.length() - 1] != ';') result += ';';
+	*domain = result.c_str();
+	return domain;
+}
+
 bool sockets_create() {
 	socks_ok = WSAStartup(0x0101, &wsadata) == 0;
 	recv_timeout = 0;
@@ -502,4 +553,7 @@ void sockets_link(void(*rtSym)(const char*, void*)) {
 	rtSym("%TCPStreamIP%tcp_stream", bbTCPStreamIP);
 	rtSym("%TCPStreamPort%tcp_stream", bbTCPStreamPort);
 	rtSym("TCPTimeouts%read_millis%accept_millis", bbTCPTimeouts);
+
+	rtSym("$GetDomainTXT$domain", bbGetDomainTXT);
+	rtSym("$ParseDomainTXT$txt$name", bbParseDomainTXT);
 }

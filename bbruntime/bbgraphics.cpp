@@ -724,6 +724,20 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 	delete str;
 }
 
+BBStr* bbConvertToANSI(BBStr* str) 
+{
+	*str = UTF8::convertToANSI(str->c_str());
+	return str;
+	delete str;
+}
+
+BBStr* bbConvertToUTF8(BBStr* str)
+{
+	*str = UTF8::convertToUTF8(str->c_str());
+	return str;
+	delete str;
+}
+
 void bbCopyRect(int sx, int sy, int w, int h, int dx, int dy, gxCanvas* src, gxCanvas* dest)
 {
 	if(src) debugCanvas(src);
@@ -1508,6 +1522,8 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("Oval%x%y%width%height%solid=1", bbOval);
 	rtSym("Line%x1%y1%x2%y2", bbLine);
 	rtSym("Text%x%y$text%xPos=0%yPos=0%encoding=0", bbText);
+	rtSym("$ConvertToANSI$str", bbConvertToANSI);
+	rtSym("$ConvertToUTF8$str", bbConvertToUTF8);
 	rtSym("CopyRect%source_x%source_y%width%height%dest_x%dest_y%src_buffer=0%dest_buffer=0", bbCopyRect);
 	rtSym("CopyRectStretch%source_x%source_y%width%height%dest_x%dest_y%dest_w%dest_h%src_buffer=0%dest_buffer=0", bbCopyRectStretch);
 
