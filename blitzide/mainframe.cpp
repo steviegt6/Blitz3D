@@ -14,6 +14,7 @@
 IMPLEMENT_DYNAMIC(MainFrame, CFrameWnd)
 BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_WM_CREATE()
+	ON_WM_DROPFILES()
 	ON_WM_CLOSE()
 	ON_WM_DESTROY()
 	ON_WM_ERASEBKGND()
@@ -113,6 +114,8 @@ MainFrame::MainFrame() :exit_flag(false) {
 int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	CFrameWnd::OnCreate(lpCreateStruct);
 
+	this->DragAcceptFiles(TRUE);
+
 	HICON hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_MAIN_ICON));
 	SetIcon(hIcon, FALSE);
 
@@ -186,6 +189,16 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	}
 
 	return 0;
+}
+
+void MainFrame::OnDropFiles(HDROP hDropInfo) {
+	TCHAR szFileName[MAX_PATH + 1] = {};
+	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, szFileName, MAX_PATH);	//获取拖放文件的个数
+	for (int i = 0; i < nFiles; ++i)
+	{
+		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
+		open(szFileName);
+	}
 }
 
 void MainFrame::OnDestroy() {
