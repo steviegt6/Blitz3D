@@ -3,7 +3,11 @@
 
 To build Blitz3D TSS you will need:
 
-* Visual Studio Community 2019. Install "Desktop development with C++", "C++ MFC for latest v142 build tools (x86 & x64)", "C++ ATL for latest v142 build tools (x86 & x64)" and "ASP.NET and web development".
+* Visual Studio Community 2019
+  * Desktop development with C++
+  * C++ MFC for latest v142 build tools (x86 & x64)
+  * C++ ATL for latest v142 build tools (x86 & x64)
+  * ASP.NET and web development"
 
 **Too lazy to build? Grab the prebuilt version from the Releases tab.**
 
@@ -22,7 +26,7 @@ To build Blitz3D TSS you will need:
 **This is a fork of Blitz3D by Blitz Research.**
 
 # The zlib/libpng License
-
+```
 Copyright (c) 2013 Blitz Research Ltd
 
 This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
@@ -34,3 +38,4 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution.
+```
