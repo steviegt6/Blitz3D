@@ -60,7 +60,6 @@ static void makeKeywords()
 	alphaTokes["Interger"] = BBINT;
 	alphaTokes["Float"] = BBFLOAT;
 	alphaTokes["Str"] = BBSTR;
-	alphaTokes["String"] = BBSTR;
 	alphaTokes["Include"] = INCLUDE;
 
 	alphaTokes["New"] = BBNEW;
@@ -85,6 +84,23 @@ static void makeKeywords()
 	alphaTokes["Null"] = NULLCONST;
 	alphaTokes["Infinity"] = INFINITYCONST;
 	alphaTokes["PowTwo"] = POWTWO;
+
+	alphaTokes["Switch"] = SELECT;
+	alphaTokes["End Switch"] = ENDSELECT;
+	alphaTokes["Array"] = DIM;
+
+#if BETA
+	alphaTokes["Method"] = FUNCTION;
+	alphaTokes["Fun"] = FUNCTION;
+	alphaTokes["End Method"] = ENDFUNCTION;
+	alphaTokes["EndFun"] = ENDFUNCTION;
+	alphaTokes["End Fun"] = ENDFUNCTION;
+	alphaTokes["EndType"] = ENDTYPE;
+	alphaTokes["EndSwitch"] = ENDSELECT;
+	alphaTokes["EndSel"] = ENDSELECT;
+	alphaTokes["Final"] = BBCONST;
+	alphaTokes["End While"] = WEND;
+#endif
 
 	std::map<std::string, int>::const_iterator it;
 	for(it = alphaTokes.begin(); it != alphaTokes.end(); ++it)

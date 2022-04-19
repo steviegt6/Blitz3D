@@ -69,7 +69,6 @@
 #define ID_REEXECUTE                    40130
 #define ID_SUPPORT                      40131
 #define ID_NLAA                         40132
-#define ID_EDIT_NOBACKUP                40133
 #define ID_BACKUP                       40134
 
 // Next default values for new objects

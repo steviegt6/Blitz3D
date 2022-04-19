@@ -133,7 +133,7 @@ BEGIN
     "P",            ID_PRINT,               VIRTKEY, CONTROL, NOINVERT
     "R",            ID_REPLACE,             VIRTKEY, CONTROL, NOINVERT
     "S",            ID_SAVE,                VIRTKEY, CONTROL, NOINVERT
-    "B",            ID_EDIT_NOBACKUP,       VIRTKEY, SHIFT, NOINVERT
+    "B",            ID_BACKUP,              VIRTKEY, SHIFT, NOINVERT
     VK_ESCAPE,      ID_ESCAPE,              VIRTKEY, SHIFT, NOINVERT
     VK_F1,          ID_QUICKHELP,           VIRTKEY, NOINVERT
     VK_F12,         ID_MEMREPORT,           VIRTKEY, NOINVERT
