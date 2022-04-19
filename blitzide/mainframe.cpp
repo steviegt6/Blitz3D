@@ -193,11 +193,12 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 
 void MainFrame::OnDropFiles(HDROP hDropInfo) {
 	TCHAR szFileName[MAX_PATH + 1] = {};
-	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, szFileName, MAX_PATH);	//获取拖放文件的个数
+	UINT nFiles = DragQueryFile(hDropInfo, 0xFFFFFFFF, szFileName, MAX_PATH);
 	for (int i = 0; i < nFiles; ++i)
 	{
 		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
-		open(szFileName);
+		if (std::filesystem::path(szFileName).extension() == ".bb")
+			open(szFileName);
 	}
 }
 
@@ -251,10 +252,6 @@ void MainFrame::OnSize(UINT type, int sw, int sh) {
 static char* bbFilter =
 
 "Blitz Basic files (.bb)|*.bb|"
-
-"Image files (.bmp,.jpg,.png,.tga,.iff,.pcx)|*.bmp;*.jpg;*.png;*.tga;*.iff;*.pcx|"
-"Audio files (.wav,.mid,.mod,.mp3,.s3m,.xm,.it,.rmi,.sgt)|*.wav;*.mid;*.mod;*.mp3;*.s3m;*.xm;*.it;*.rmi;*.sgt|"
-"3D Mesh files (.x,.3ds,.md2)|*.x;*.3ds;*.md2|"
 
 "All files|*.*||";
 
@@ -399,13 +396,6 @@ bool MainFrame::open(const std::string& f) {
 		char buff[MAX_PATH], * p;
 		if (GetFullPathName(file.c_str(), MAX_PATH, buff, &p)) file = buff;
 		else file = f;
-	}
-
-	if (isMediaFile(tolower(file))) {
-		std::string t = prefs.homeDir + "/bin/mediaview.exe";
-		if ((int)ShellExecute(::GetDesktopWindow(), 0, t.c_str(), file.c_str(), 0, SW_SHOW) > 32) {
-		}
-		return false;
 	}
 
 	//is file already open?
