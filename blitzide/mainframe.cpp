@@ -55,6 +55,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_COMMAND(ID_HOME, helpHome)
 	ON_COMMAND(ID_BACK, helpBack)
 	ON_COMMAND(ID_FORWARD, helpForward)
+	ON_COMMAND(ID_OPENINI, openIni)
 	ON_COMMAND(ID_ABOUT, helpAbout)
 
 	ON_UPDATE_COMMAND_UI(ID_NEW, updateCmdUI)
@@ -818,6 +819,13 @@ void MainFrame::helpBack() {
 
 void MainFrame::helpForward() {
 	if (HtmlHelp* h = findHelp()) h->GoForward();
+}
+
+void MainFrame::openIni() {
+	std::string cmd = "notepad.exe \"";
+	cmd += getenv("blitzpath");
+	cmd += "/cfg/blitzide.ini\"";
+	WinExec(cmd.c_str(), SW_SHOW);
 }
 
 void MainFrame::helpAbout() {

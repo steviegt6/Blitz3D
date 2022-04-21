@@ -165,6 +165,8 @@ void Prefs::setDefault()
 	font_editor_height = 14;
 	font_debug = "consolas";
 	font_debug_height = 14;
+	font_tabs = "consolas";
+	font_tabs_height = 10;
 
 	rgb_bkgrnd = RGB(34, 85, 136);
 	rgb_string = RGB(0, 255, 102);
