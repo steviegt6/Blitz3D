@@ -1,7 +1,11 @@
 
 #include "std.h"
 #include "bbsockets.h"
+#include <wininet.h>
 
+#pragma comment (lib,"User32.lib")
+#pragma comment (lib,"Urlmon.lib")
+#pragma comment (lib, "wininet.lib")
 static bool socks_ok;
 static WSADATA wsadata;
 static int recv_timeout;
@@ -530,6 +534,43 @@ bool sockets_destroy() {
 	return true;
 }
 
+int bbDownloadFile(BBStr* url, BBStr* file)
+{
+	/* https://blog.csdn.net/HW140701/article/details/78207490 */
+	try {
+		byte Temp[1024];
+		ULONG Number = 1;
+
+		FILE* stream;
+		HINTERNET hSession = InternetOpen("RookIE/1.0", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+		if (hSession != NULL)
+		{
+			HINTERNET handle2 = InternetOpenUrl(hSession, url->c_str(), NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
+			if (handle2 != NULL)
+			{
+				if ((stream = fopen(file->c_str(), "wb")) != NULL)
+				{
+					while (Number > 0)
+					{
+						InternetReadFile(handle2, Temp, 1024 - 1, &Number);
+						fwrite(Temp, sizeof(char), Number, stream);
+					}
+					fclose(stream);
+				}
+
+				InternetCloseHandle(handle2);
+				handle2 = NULL;
+			}
+			InternetCloseHandle(hSession);
+			hSession = NULL;
+		}
+		return 1;
+	}
+	catch (_exception) {
+		return 0;
+	}
+}
+
 void sockets_link(void(*rtSym)(const char*, void*)) {
 	rtSym("$DottedIP%IP", bbDottedIP);
 	rtSym("%CountHostIPs$host_name", bbCountHostIPs);
@@ -556,4 +597,6 @@ void sockets_link(void(*rtSym)(const char*, void*)) {
 
 	rtSym("$GetDomainTXT$domain", bbGetDomainTXT);
 	rtSym("$ParseDomainTXT$txt$name", bbParseDomainTXT);
+
+	rtSym("DownloadFile$url$file", bbDownloadFile);
 }

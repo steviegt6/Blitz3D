@@ -13,7 +13,6 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(美国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -134,6 +133,7 @@ BEGIN
     "P",            ID_PRINT,               VIRTKEY, CONTROL, NOINVERT
     "R",            ID_REPLACE,             VIRTKEY, CONTROL, NOINVERT
     "S",            ID_SAVE,                VIRTKEY, CONTROL, NOINVERT
+    "W",            ID_CLOSE,               VIRTKEY, CONTROL, NOINVERT
     "B",            ID_BACKUP,              VIRTKEY, SHIFT, NOINVERT
     VK_ESCAPE,      ID_ESCAPE,              VIRTKEY, SHIFT, NOINVERT
     VK_F1,          ID_QUICKHELP,           VIRTKEY, NOINVERT
@@ -290,12 +290,11 @@ BEGIN
     IDR_DEBUGFRAME          "Blitz Basic Debugger"
 END
 
-#endif    // 英语(美国) resources
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// 英语(新西兰) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENZ)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_NZ
@@ -356,7 +355,7 @@ END
 
 IDB_BITMAP2             BITMAP                  "b3dlogo.bmp"
 
-#endif    // 英语(新西兰) resources
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 
