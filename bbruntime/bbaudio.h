@@ -7,15 +7,15 @@
 
 extern gxAudio* gx_audio;
 
-gxSound* bbLoadSound(BBStr* file);
+gxSound*	 bbLoadSound(BBStr* file);
 void		 bbFreeSound(gxSound* sound);
-gxChannel* bbPlaySound(gxSound* sound);
+gxChannel*	 bbPlaySound(gxSound* sound);
 void		 bbLoopSound(gxSound* sound);
 void		 bbSoundPitch(gxSound* sound, int pitch);
 void		 bbSoundVolume(gxSound* sound, float volume);
 void		 bbSoundPan(gxSound* sound, float pan);
-gxChannel* bbPlayMusic(BBStr* s, int mode);
-gxChannel* bbPlayCDTrack(int track, int mode);
+gxChannel*	 bbPlayMusic(BBStr* s, int mode);
+gxChannel*	 bbPlayCDTrack(int track, int mode);
 void		 bbStopChannel(gxChannel* channel);
 void		 bbPauseChannel(gxChannel* channel);
 void		 bbResumeChannel(gxChannel* channel);

@@ -6,7 +6,8 @@ gxAudio* gx_audio;
 
 static inline void debugSound(gxSound* s) {
 	if(debug) {
-		if(!gx_audio->verifySound(s)) RTEX("Sound does not exist");
+		if(!gx_audio->verifySound(s)) 
+			RTEX("Sound does not exist");
 	}
 }
 

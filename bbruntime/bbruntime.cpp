@@ -8,7 +8,6 @@
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
 int ErrorMessagePool::size = 0;
 
-
 void  bbEnd() {
 	RTEX(0);
 }

@@ -55,7 +55,7 @@ BBStr* bbTextInput(BBStr* s) {
 	std::vector<int> chars = gx_input->getChars();
 	for(int i = 0; i < chars.size(); i++) {
 		if(chars[i] == 8) { //backspace
-			if(t.size() > 0) { UTF8::popBack(t); }
+			if(t.size() > 0) UTF8::popBack(t);
 		}
 		else if(chars[i] == 127) {
 			t.clear();

@@ -31,13 +31,15 @@ static std::set<bbFile*> file_set;
 
 static inline void debugFile(bbFile* f) {
 	if(debug) {
-		if(!file_set.count(f)) RTEX("File does not exist");
+		if(!file_set.count(f)) 
+			RTEX("File does not exist");
 	}
 }
 
 static inline void debugDir(gxDir* d) {
 	if(debug) {
-		if(!gx_filesys->verifyDir(d)) RTEX("Directory does not exist");
+		if(!gx_filesys->verifyDir(d)) 
+			RTEX("Directory does not exist");
 	}
 }
 

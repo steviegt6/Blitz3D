@@ -1,31 +1,55 @@
-
 # Blitz3D TSS
 
-To build Blitz3D TSS you will need:
+***Stable. Easy. Friendly.***
 
-* Visual Studio Community 2019
-  * Desktop development with C++
-  * C++ MFC for latest v142 build tools (x86 & x64)
-  * C++ ATL for latest v142 build tools (x86 & x64)
-  * ASP.NET and web development"
+A fork of Blitz3D, with more functions, and easier to **localization**.
 
-**Too lazy to build? Grab the prebuilt version from the Releases tab.**
+This is a **fork** of [Blitz3D TSS](https://github.com/Saalvage/Blitz3D), made by [ZiYueCommentary](https://github.com/ZiYueCommentary/Blitz3D).
 
-# Building
+## What's new
 
-1) Open blitz3d.sln in Visual Studio 2019.
+- **UTF-8 Support**
+- **Get Domain's TXT answer**
+- **File Downloader**
+- ANSI Support(not suggest)
+- More keywords
+- Spare function name
+- *FastExt/FastText killer*
+- Custom Installer
+- ...and more! (maybe)
 
-2) Select Release or Debug config and rebuild the entire solution.
+### Blitz IDE
 
-3) All done! You can find output files in the _release and _release/bin dirs. Feel free to delete .pdb and .ilk files here.
+- Optinal Backup
+- Drop to open
+- Modern toolbar icons
 
-4) Note: Blitz3D TSS uses the dynamic version of the fmod audio lib. When redistributing programs built with Blitz3D TSS, you will need to also include the fmod.dll file found in the "bin" directory with your programs. This should be placed in the same directory as your program's executable.
+## How to Build
 
-**Blitz3D is released under the zlib/libpng license.**
+### Prepare
 
-**This is a fork of Blitz3D by Blitz Research.**
+- Visual Studio Community 2022
+  - Desktop development with C++
+  - C++ MFC for latest v142 build tools (x86 & x64)
+  - C++ ATL for latest v142 build tools (x86 & x64)
+  - ASP.NET and web development
 
-# The zlib/libpng License
+### Steps
+
+1. Open blitz3d.sln in Visual Studio 2022.
+2. Select Release or Debug config and rebuild the entire solution.
+3. All done! You can find output files in the `_release` and `_release/bin` dirs. Feel free to delete .pdb and .ilk files here.
+
+- **Note: **Blitz3D TSS uses the dynamic version of the fmod audio lib. 
+  
+  When redistributing programs built with Blitz3D TSS, you will need to also include the `fmod.dll` file found in the `bin` directory with your programs. 
+  
+  This should be placed in the same directory as your program's executable.
+
+## The zlib/libpng License
+
+Blitz3D is released under the zlib/libpng license.
+
 ```
 Copyright (c) 2013 Blitz Research Ltd
 

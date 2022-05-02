@@ -807,18 +807,18 @@ void Editor::formatLine(int ln) {
 
 	int* cf = 0;
 	std::string rep;
-	for(int k = 0; k < line.size(); ) {
+	for (int k = 0; k < line.size(); ) {
 		rep.resize(0);
 		int* pf = cf;
 		int from = k, c = line[k], sz = line.size();
-		if(!isgraph(c)) {
-			for(++k; k < sz && !isgraph(line[k]); ++k) {}
+		if (!isgraph(c)) {
+			for (++k; k < sz && !isgraph(line[k]); ++k) {}
 		}
-		else if(!isfmt(c, k + 1 < sz ? line[k + 1] : 0)) {
-			for(++k; k < sz && !isfmt(line[k], k + 1 < sz ? line[k + 1] : 0); ++k) {}
+		else if (!isfmt(c, k + 1 < sz ? line[k + 1] : 0)) {
+			for (++k; k < sz && !isfmt(line[k], k + 1 < sz ? line[k + 1] : 0); ++k) {}
 			cf = &prefs.rgb_default;
 		}
-		else if(c == ';') {					//comment?
+		else if (c == ';') {					//comment?
 			k = sz;
 			cf = &prefs.rgb_comment;
 		}
@@ -872,7 +872,7 @@ void Editor::formatLine(int ln) {
 		for(int k = 1; k < line.size(); ++k) {
 			if(isalpha(line[k])) {
 				int start = k;
-				for(++k; k < line.size() && isid(line[k]); ++k) {}
+				for (++k; k < line.size() && isid(line[k]); ++k) {}
 				labsList.insert(ln, tline.substr(start, k - start));
 				break;
 			}

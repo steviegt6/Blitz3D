@@ -198,8 +198,14 @@ void MainFrame::OnDropFiles(HDROP hDropInfo) {
 	for (int i = 0; i < nFiles; ++i)
 	{
 		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
-		if (std::filesystem::path(szFileName).extension() == ".bb")
+		if (std::filesystem::path(szFileName).extension() == ".htm" || std::filesystem::path(szFileName).extension() == ".html")
+		{
+			HtmlHelp* h = findHelp();
+			h->Navigate(szFileName);
+		} else if (std::filesystem::path(szFileName).extension() == ".bb")
 			open(szFileName);
+		else
+			ShellExecute(nullptr, "open", szFileName, "", "", SW_SHOW);
 	}
 }
 

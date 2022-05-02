@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbgraphics.h"
 #include "bbinput.h"
@@ -21,9 +20,7 @@ public:
 	~bbImage()
 	{
 		for(int k = 0; k < frames.size(); ++k)
-		{
 			gx_graphics->freeCanvas(frames[k]);
-		}
 	}
 	const std::vector<gxCanvas*>& getFrames()const
 	{
@@ -85,10 +82,7 @@ static inline void debugDriver(int n)
 {
 	if(debug)
 	{
-		if(n<1 || n>gx_runtime->numGraphicsDrivers())
-		{
-			RTEX("Illegal graphics driver index.");
-		}
+		if(n<1 || n>gx_runtime->numGraphicsDrivers()) RTEX("Illegal graphics driver index.");
 	}
 }
 
@@ -96,10 +90,7 @@ static inline void debugMode(int n)
 {
 	if(debug)
 	{
-		if(n<1 || n>gfx_modes.size())
-		{
-			RTEX("Illegal graphics mode index.");
-		}
+		if(n<1 || n>gfx_modes.size()) RTEX("Illegal graphics mode index.");
 	}
 }
 
@@ -425,9 +416,7 @@ static void graphics(int w, int h, int d, int flags)
 	gx_graphics = gx_runtime->openGraphics(w, h, d, gx_driver, flags);
 	if(!gx_runtime->idle()) RTEX(0);
 	if(!gx_graphics)
-	{
 		RTEX("Unable to create a gxGraphics instance.");
-	}
 	curr_clsColor = 0;
 	curr_color = 0xffffffff;
 	curr_font = gx_graphics->getDefaultFont();
@@ -722,6 +711,10 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 	if (yPos == 1) y -= curr_font->getHeight() / 2;
 	gx_canvas->text(x, y, *str);
 	delete str;
+}
+
+void bbSetChineseConvert(int c) {
+	//TODO: FIX ERROR WITH OPENCC
 }
 
 BBStr* bbConvertToANSI(BBStr* str) 
@@ -1522,6 +1515,7 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("Oval%x%y%width%height%solid=1", bbOval);
 	rtSym("Line%x1%y1%x2%y2", bbLine);
 	rtSym("Text%x%y$text%xPos=0%yPos=0%encoding=0", bbText);
+	//rtSym("SetChineseConvert%c", bbSetChineseConvert);
 	rtSym("$ConvertToANSI$str", bbConvertToANSI);
 	rtSym("$ConvertToUTF8$str", bbConvertToUTF8);
 	rtSym("CopyRect%source_x%source_y%width%height%dest_x%dest_y%src_buffer=0%dest_buffer=0", bbCopyRect);

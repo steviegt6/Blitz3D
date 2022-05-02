@@ -67,7 +67,7 @@ BEGIN
         MENUITEM "&New\tCtrl+N",                ID_NEW
         MENUITEM "&Open...\tCtrl+O",            ID_OPEN
         MENUITEM SEPARATOR
-        MENUITEM "&Close\tCtrl+F4",             ID_CLOSE
+        MENUITEM "&Close\tCtrl+W",             ID_CLOSE
         MENUITEM "Close All",                   ID_CLOSEALL
         MENUITEM SEPARATOR
         MENUITEM "&Save\tCtrl+S",               ID_SAVE
@@ -139,7 +139,6 @@ BEGIN
     VK_F1,          ID_QUICKHELP,           VIRTKEY, NOINVERT
     VK_F12,         ID_MEMREPORT,           VIRTKEY, NOINVERT
     VK_F3,          ID_FINDNEXT,            VIRTKEY, NOINVERT
-    VK_F4,          ID_CLOSE,               VIRTKEY, CONTROL, NOINVERT
     VK_F5,          ID_EXECUTE,             VIRTKEY, NOINVERT
     VK_F5,          ID_END,                 VIRTKEY, SHIFT, NOINVERT
     VK_F6,          ID_REEXECUTE,           VIRTKEY, NOINVERT
