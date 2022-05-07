@@ -13,7 +13,7 @@ WriteInt( fileout, 5 )
 ; Close the file
 CloseFile( fileout )
 
-DisplayFile( "The file as originally written", mydata.dat" )
+DisplayFile( "The file as originally written", "mydata.dat" )
 ; Open the file and change the Third Integer
 
 file = OpenFile("mydata.dat")

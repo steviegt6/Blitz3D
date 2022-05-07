@@ -28,6 +28,7 @@
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.ButtonNext = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ButtonFinish = new System.Windows.Forms.Button();
             this.ButtonBack = new System.Windows.Forms.Button();
             this.ButtonInstall = new System.Windows.Forms.Button();
             this.LabelArrow1 = new System.Windows.Forms.Label();
@@ -46,25 +47,24 @@
             this.LabelWarning = new System.Windows.Forms.Label();
             this.PageDirectory = new System.Windows.Forms.Panel();
             this.PageConfirm = new System.Windows.Forms.Panel();
+            this.PageDone = new System.Windows.Forms.Panel();
+            this.CheckGithub = new System.Windows.Forms.CheckBox();
+            this.CheckRun = new System.Windows.Forms.CheckBox();
+            this.LabelThanks = new System.Windows.Forms.Label();
+            this.LabelPageDone = new System.Windows.Forms.Label();
             this.LabelProgramFiles = new System.Windows.Forms.Label();
             this.CheckShortcut = new System.Windows.Forms.CheckBox();
             this.LabelFileWarn = new System.Windows.Forms.Label();
             this.LabelStatus = new System.Windows.Forms.Label();
             this.ProgressInstall = new System.Windows.Forms.ProgressBar();
             this.LableInstallWarn = new System.Windows.Forms.Label();
-            this.CheckAllowUninstall = new System.Windows.Forms.CheckBox();
+            this.CheckStartUpMenu = new System.Windows.Forms.CheckBox();
             this.CheckAssociation = new System.Windows.Forms.CheckBox();
             this.RBUnzip = new System.Windows.Forms.RadioButton();
             this.RBInstall = new System.Windows.Forms.RadioButton();
             this.LabelPath = new System.Windows.Forms.Label();
             this.LabelConfirmTitle = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.PageDone = new System.Windows.Forms.Panel();
-            this.LabelPageDone = new System.Windows.Forms.Label();
-            this.LabelThanks = new System.Windows.Forms.Label();
-            this.CheckRun = new System.Windows.Forms.CheckBox();
-            this.CheckGithub = new System.Windows.Forms.CheckBox();
-            this.ButtonFinish = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.Background.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.InstallerIcon)).BeginInit();
@@ -104,6 +104,13 @@
             this.panel1.Controls.Add(this.ButtonCancel);
             resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            // 
+            // ButtonFinish
+            // 
+            resources.ApplyResources(this.ButtonFinish, "ButtonFinish");
+            this.ButtonFinish.Name = "ButtonFinish";
+            this.ButtonFinish.UseVisualStyleBackColor = true;
+            this.ButtonFinish.Click += new System.EventHandler(this.ButtonFinish_Click);
             // 
             // ButtonBack
             // 
@@ -224,7 +231,7 @@
             this.PageConfirm.Controls.Add(this.LabelStatus);
             this.PageConfirm.Controls.Add(this.ProgressInstall);
             this.PageConfirm.Controls.Add(this.LableInstallWarn);
-            this.PageConfirm.Controls.Add(this.CheckAllowUninstall);
+            this.PageConfirm.Controls.Add(this.CheckStartUpMenu);
             this.PageConfirm.Controls.Add(this.CheckAssociation);
             this.PageConfirm.Controls.Add(this.RBUnzip);
             this.PageConfirm.Controls.Add(this.RBInstall);
@@ -232,6 +239,40 @@
             this.PageConfirm.Controls.Add(this.LabelConfirmTitle);
             resources.ApplyResources(this.PageConfirm, "PageConfirm");
             this.PageConfirm.Name = "PageConfirm";
+            // 
+            // PageDone
+            // 
+            this.PageDone.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.PageDone.Controls.Add(this.CheckGithub);
+            this.PageDone.Controls.Add(this.CheckRun);
+            this.PageDone.Controls.Add(this.LabelThanks);
+            this.PageDone.Controls.Add(this.LabelPageDone);
+            resources.ApplyResources(this.PageDone, "PageDone");
+            this.PageDone.Name = "PageDone";
+            // 
+            // CheckGithub
+            // 
+            resources.ApplyResources(this.CheckGithub, "CheckGithub");
+            this.CheckGithub.Name = "CheckGithub";
+            this.CheckGithub.UseVisualStyleBackColor = true;
+            // 
+            // CheckRun
+            // 
+            resources.ApplyResources(this.CheckRun, "CheckRun");
+            this.CheckRun.Checked = true;
+            this.CheckRun.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckRun.Name = "CheckRun";
+            this.CheckRun.UseVisualStyleBackColor = true;
+            // 
+            // LabelThanks
+            // 
+            resources.ApplyResources(this.LabelThanks, "LabelThanks");
+            this.LabelThanks.Name = "LabelThanks";
+            // 
+            // LabelPageDone
+            // 
+            resources.ApplyResources(this.LabelPageDone, "LabelPageDone");
+            this.LabelPageDone.Name = "LabelPageDone";
             // 
             // LabelProgramFiles
             // 
@@ -271,13 +312,13 @@
             this.LableInstallWarn.ForeColor = System.Drawing.Color.Red;
             this.LableInstallWarn.Name = "LableInstallWarn";
             // 
-            // CheckAllowUninstall
+            // CheckStartUpMenu
             // 
-            resources.ApplyResources(this.CheckAllowUninstall, "CheckAllowUninstall");
-            this.CheckAllowUninstall.Checked = true;
-            this.CheckAllowUninstall.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckAllowUninstall.Name = "CheckAllowUninstall";
-            this.CheckAllowUninstall.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.CheckStartUpMenu, "CheckStartUpMenu");
+            this.CheckStartUpMenu.Checked = true;
+            this.CheckStartUpMenu.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckStartUpMenu.Name = "CheckStartUpMenu";
+            this.CheckStartUpMenu.UseVisualStyleBackColor = true;
             // 
             // CheckAssociation
             // 
@@ -320,47 +361,6 @@
             this.toolTip.InitialDelay = 500;
             this.toolTip.ReshowDelay = 500;
             this.toolTip.ShowAlways = true;
-            // 
-            // PageDone
-            // 
-            this.PageDone.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.PageDone.Controls.Add(this.CheckGithub);
-            this.PageDone.Controls.Add(this.CheckRun);
-            this.PageDone.Controls.Add(this.LabelThanks);
-            this.PageDone.Controls.Add(this.LabelPageDone);
-            resources.ApplyResources(this.PageDone, "PageDone");
-            this.PageDone.Name = "PageDone";
-            // 
-            // LabelPageDone
-            // 
-            resources.ApplyResources(this.LabelPageDone, "LabelPageDone");
-            this.LabelPageDone.Name = "LabelPageDone";
-            // 
-            // LabelThanks
-            // 
-            resources.ApplyResources(this.LabelThanks, "LabelThanks");
-            this.LabelThanks.Name = "LabelThanks";
-            // 
-            // CheckRun
-            // 
-            resources.ApplyResources(this.CheckRun, "CheckRun");
-            this.CheckRun.Checked = true;
-            this.CheckRun.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckRun.Name = "CheckRun";
-            this.CheckRun.UseVisualStyleBackColor = true;
-            // 
-            // CheckGithub
-            // 
-            resources.ApplyResources(this.CheckGithub, "CheckGithub");
-            this.CheckGithub.Name = "CheckGithub";
-            this.CheckGithub.UseVisualStyleBackColor = true;
-            // 
-            // ButtonFinish
-            // 
-            resources.ApplyResources(this.ButtonFinish, "ButtonFinish");
-            this.ButtonFinish.Name = "ButtonFinish";
-            this.ButtonFinish.UseVisualStyleBackColor = true;
-            this.ButtonFinish.Click += new System.EventHandler(this.ButtonFinish_Click);
             // 
             // Index
             // 
@@ -418,7 +418,7 @@
         private System.Windows.Forms.RadioButton RBInstall;
         private System.Windows.Forms.Label LabelPath;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.CheckBox CheckAllowUninstall;
+        private System.Windows.Forms.CheckBox CheckStartUpMenu;
         private System.Windows.Forms.CheckBox CheckAssociation;
         private System.Windows.Forms.Label LableInstallWarn;
         private System.Windows.Forms.Label LabelStatus;

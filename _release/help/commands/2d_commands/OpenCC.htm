@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <link rel=stylesheet href=../css/commands.css type=text/css>
+    <meta charset="UTF-8">
+</head>
+
+<style>
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 13px;
+    }
+</style>
+
+<body>
+    <h1>OpenCC path$</h1>
+    <h1>Parameters參數</h1>
+    <table>
+        <tr>
+            <td>
+                path = 配置文件路徑
+            </td>
+        </tr>
+    </table>
+    <h1>Description描述</h1>
+    <table>
+        <tr>
+            <td>
+                <b>This feature only take effect in chinese.</b><br/>
+                <b>該功能僅適用于中文場景中。</b>
+                <br/>
+                初始化繁簡轉換。如您所見，該功能基於<a href="https://github.com/BYVoid/OpenCC" target="_blank">OpenCC</a>製作。
+                <br>
+                配置文件路徑應指向用於轉換的json文件，如果path為空（“”），則反初始化OpenCC。
+                <br>
+                預設配置文件可在<a href="../../../opencc/" target="_blank">此處</a>查看。
+                <br>
+                您需要將bin文件夾中的opencc.dll複製到您的軟體目錄中。
+                <br>
+                <b>該功能僅會在Text、Print、Write函數上應用，其他函數不受影響。</b>
+                <br>
+                <br>
+                See also另見: <a class=small href=Text.htm Function.htm>Text</a>，<a class=small href=Print.htm Function.htm>Print</a>，<a class=small href=Write.htm Function.htm>Write</a>
+            </td>
+        </tr>
+    </table>
+    <h1><a href=../2d_examples/OpenCC.bb>Example示例</a></h1>
+    <table>
+        <tr>
+            <td>
+                OpenCC "../../../opencc/s2t.json" ; 設置OpenCC配置<br />
+                DownloadFile("https://scpcbgame.cn/changelog.txt", "changelog.txt") ; 下載網絡文件，詳見DownloadFile<br />
+                Local ChangeLogFile = OpenFile("changelog.txt")<br />
+                While Not Eof(ChangeLogFile)<br />
+                	l$ = ReadLine(ChangeLogFile)<br />
+                	Print l ; 逐行掃描並打印<br />
+                	If l="" Then Exit ; 如果此行為空則退出循環<br />
+                Wend<br />
+                CloseFile(ChangeLogFile)<br />
+                DeleteFile("changelog.txt") ; 刪除文件<br />
+                WaitKey<br />
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a target=_top href=../index.htm>Index索引</a><br>
+</body>
+
+</html>

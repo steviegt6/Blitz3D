@@ -186,6 +186,27 @@
   <data name="&gt;&gt;ButtonNext.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
+  <data name="ButtonFinish.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 9pt</value>
+  </data>
+  <data name="ButtonFinish.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="ButtonFinish.Location" type="System.Drawing.Point, System.Drawing">
+    <value>474, 15</value>
+  </data>
+  <data name="ButtonFinish.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="ButtonFinish.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 27</value>
+  </data>
+  <data name="ButtonFinish.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="ButtonFinish.Text" xml:space="preserve">
+    <value>&amp;Finish</value>
+  </data>
   <data name="&gt;&gt;ButtonFinish.Name" xml:space="preserve">
     <value>ButtonFinish</value>
   </data>
@@ -197,114 +218,6 @@
   </data>
   <data name="&gt;&gt;ButtonFinish.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="&gt;&gt;ButtonBack.Name" xml:space="preserve">
-    <value>ButtonBack</value>
-  </data>
-  <data name="&gt;&gt;ButtonBack.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ButtonBack.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;ButtonBack.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;ButtonInstall.Name" xml:space="preserve">
-    <value>ButtonInstall</value>
-  </data>
-  <data name="&gt;&gt;ButtonInstall.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ButtonInstall.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;ButtonInstall.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow1.Name" xml:space="preserve">
-    <value>LabelArrow1</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow1.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow1.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow2.Name" xml:space="preserve">
-    <value>LabelArrow2</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow2.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;LabelArrow2.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;LabelDone.Name" xml:space="preserve">
-    <value>LabelDone</value>
-  </data>
-  <data name="&gt;&gt;LabelDone.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelDone.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;LabelDone.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;LabelConfirm.Name" xml:space="preserve">
-    <value>LabelConfirm</value>
-  </data>
-  <data name="&gt;&gt;LabelConfirm.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelConfirm.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;LabelConfirm.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;LabelDir.Name" xml:space="preserve">
-    <value>LabelDir</value>
-  </data>
-  <data name="&gt;&gt;LabelDir.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelDir.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;LabelDir.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 363</value>
-  </data>
-  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>579, 59</value>
-  </data>
-  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
-    <value>2</value>
   </data>
   <data name="ButtonBack.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -540,6 +453,48 @@
   <data name="&gt;&gt;LabelDir.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 363</value>
+  </data>
+  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>579, 59</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="InstallerIcon.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="InstallerIcon.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 91</value>
+  </data>
+  <data name="InstallerIcon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="InstallerIcon.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 128</value>
+  </data>
+  <data name="InstallerIcon.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>StretchImage</value>
+  </data>
+  <data name="InstallerIcon.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
   <data name="&gt;&gt;InstallerIcon.Name" xml:space="preserve">
     <value>InstallerIcon</value>
   </data>
@@ -575,36 +530,6 @@
   </data>
   <data name="&gt;&gt;Background.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="InstallerIcon.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="InstallerIcon.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 91</value>
-  </data>
-  <data name="InstallerIcon.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="InstallerIcon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 128</value>
-  </data>
-  <data name="InstallerIcon.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>StretchImage</value>
-  </data>
-  <data name="InstallerIcon.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;InstallerIcon.Name" xml:space="preserve">
-    <value>InstallerIcon</value>
-  </data>
-  <data name="&gt;&gt;InstallerIcon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;InstallerIcon.Parent" xml:space="preserve">
-    <value>Background</value>
-  </data>
-  <data name="&gt;&gt;InstallerIcon.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="TextBoxLicense.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 9pt</value>
@@ -778,6 +703,21 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;ButtonChoosePath.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="LabelWarning.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LabelWarning.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 59</value>
+  </data>
+  <data name="LabelWarning.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="LabelWarning.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 23</value>
+  </data>
+  <data name="LabelWarning.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
   <data name="&gt;&gt;LabelWarning.Name" xml:space="preserve">
     <value>LabelWarning</value>
   </data>
@@ -822,33 +762,6 @@ Permission is granted to anyone to use this software for any purpose, including 
   </data>
   <data name="&gt;&gt;BoxPath.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="LabelWarning.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="LabelWarning.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 59</value>
-  </data>
-  <data name="LabelWarning.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
-  </data>
-  <data name="LabelWarning.Size" type="System.Drawing.Size, System.Drawing">
-    <value>363, 23</value>
-  </data>
-  <data name="LabelWarning.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;LabelWarning.Name" xml:space="preserve">
-    <value>LabelWarning</value>
-  </data>
-  <data name="&gt;&gt;LabelWarning.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelWarning.Parent" xml:space="preserve">
-    <value>BoxPath</value>
-  </data>
-  <data name="&gt;&gt;LabelWarning.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="PageDirectory.Location" type="System.Drawing.Point, System.Drawing">
     <value>168, 1</value>
@@ -992,7 +905,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>Consolas, 9pt</value>
   </data>
   <data name="PageDone.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+    <value>0, 1</value>
   </data>
   <data name="PageDone.Size" type="System.Drawing.Size, System.Drawing">
     <value>410, 363</value>
@@ -1201,37 +1114,37 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;LableInstallWarn.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="CheckAllowUninstall.AutoSize" type="System.Boolean, mscorlib">
+  <data name="CheckStartUpMenu.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="CheckAllowUninstall.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="CheckStartUpMenu.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 9pt</value>
   </data>
-  <data name="CheckAllowUninstall.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="CheckStartUpMenu.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="CheckAllowUninstall.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="CheckStartUpMenu.Location" type="System.Drawing.Point, System.Drawing">
     <value>21, 162</value>
   </data>
-  <data name="CheckAllowUninstall.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 18</value>
+  <data name="CheckStartUpMenu.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 18</value>
   </data>
-  <data name="CheckAllowUninstall.TabIndex" type="System.Int32, mscorlib">
+  <data name="CheckStartUpMenu.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="CheckAllowUninstall.Text" xml:space="preserve">
-    <value>Allow uninstall from control panel</value>
+  <data name="CheckStartUpMenu.Text" xml:space="preserve">
+    <value>Save shortcut in Startup Menu</value>
   </data>
-  <data name="&gt;&gt;CheckAllowUninstall.Name" xml:space="preserve">
-    <value>CheckAllowUninstall</value>
+  <data name="&gt;&gt;CheckStartUpMenu.Name" xml:space="preserve">
+    <value>CheckStartUpMenu</value>
   </data>
-  <data name="&gt;&gt;CheckAllowUninstall.Type" xml:space="preserve">
+  <data name="&gt;&gt;CheckStartUpMenu.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;CheckAllowUninstall.Parent" xml:space="preserve">
+  <data name="&gt;&gt;CheckStartUpMenu.Parent" xml:space="preserve">
     <value>PageConfirm</value>
   </data>
-  <data name="&gt;&gt;CheckAllowUninstall.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;CheckStartUpMenu.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
   <data name="CheckAssociation.AutoSize" type="System.Boolean, mscorlib">
@@ -1267,9 +1180,6 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;CheckAssociation.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <data name="RBUnzip.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1291,6 +1201,9 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="RBUnzip.Text" xml:space="preserve">
     <value>Install as a zip file</value>
   </data>
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="RBUnzip.ToolTip" xml:space="preserve">
     <value>Install Blitz3D TSS and do nothing else.</value>
   </data>
@@ -1430,42 +1343,6 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>$this</value>
   </data>
   <data name="&gt;&gt;PageConfirm.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="ButtonFinish.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="ButtonFinish.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="ButtonFinish.Location" type="System.Drawing.Point, System.Drawing">
-    <value>474, 15</value>
-  </data>
-  <data name="ButtonFinish.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="ButtonFinish.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 27</value>
-  </data>
-  <data name="ButtonFinish.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="ButtonFinish.Text" xml:space="preserve">
-    <value>&amp;Finish</value>
-  </data>
-  <data name="&gt;&gt;ButtonFinish.Name" xml:space="preserve">
-    <value>ButtonFinish</value>
-  </data>
-  <data name="&gt;&gt;ButtonFinish.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ButtonFinish.Parent" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;ButtonFinish.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

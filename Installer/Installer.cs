@@ -87,7 +87,6 @@ namespace Installer
                     ButtonBack.Show();
                     LabelStatus.Hide();
                     ProgressInstall.Hide();
-                    CheckAllowUninstall.Hide();
                     ButtonFinish.Hide();
                     PageDone.Hide();
                     LabelPath.Text = "Install Directory: " + BoxDirectoryPath.Text;
@@ -151,8 +150,8 @@ namespace Installer
                 {
                 } 
             }
-            // TODO: Allow uninstall from control panel
             if (CheckShortcut.Checked) CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe");
+            if (CheckStartUpMenu.Checked) CreateStartupMenuShortcut("Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe", BoxDirectoryPath.Text + "\\Blitz3D.exe");
             ProgressInstall.Value += 15;
             ControlBox = true;
 
@@ -169,14 +168,14 @@ namespace Installer
             if (RBInstall.Checked)
             {
                 CheckAssociation.Enabled = true;
-                CheckAllowUninstall.Enabled = true;
+                CheckStartUpMenu.Enabled = true;
             }
             else
             {
                 CheckAssociation.Enabled = false;
-                CheckAllowUninstall.Enabled = false;
+                CheckStartUpMenu.Enabled = false;
                 CheckAssociation.Checked = false;
-                CheckAllowUninstall.Checked = false;
+                CheckStartUpMenu.Checked = false;
                 CheckShortcut.Checked = false;
             }
         }
@@ -206,6 +205,20 @@ namespace Installer
             shortcut.WindowStyle = 1;
             shortcut.Description = description;
             shortcut.IconLocation = string.IsNullOrWhiteSpace(iconLocation) ? targetPath : iconLocation;
+            shortcut.Save();
+        }
+
+        public static void CreateStartupMenuShortcut(string lnkName, string targetPath, string iconLocation)
+        {
+            string pathToExe = targetPath;
+            string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);//or Environment.GetFolderPath(Environment.SpecialFolder.Programs);
+            string appStartMenuPath = Path.Combine(commonStartMenuPath,"Programs"); 
+            if(!Directory.Exists(appStartMenuPath)) Directory.CreateDirectory(appStartMenuPath); 
+            string shortcutLocation = Path.Combine(appStartMenuPath,lnkName+".lnk"); 
+            WshShell shell = new WshShell(); 
+            IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation); 
+            shortcut.Description = "Blitz3D TSS"; //shortcut.IconLocation =@"C:\Program Files(x86)\TestApplTestApp.ico";//uncomment to set the icon of the shortcut
+            shortcut.TargetPath = pathToExe; 
             shortcut.Save();
         }
 
