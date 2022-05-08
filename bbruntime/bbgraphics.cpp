@@ -2,9 +2,15 @@
 #include "bbgraphics.h"
 #include "bbinput.h"
 #include "../gxruntime/gxutf8.h"
-#include "../opencc/include/opencc/opencc.h"
 
+#define OPENCC
+#ifdef OPENCC
+#include "../opencc/include/opencc/opencc.h"
 #pragma comment(lib, "../opencc/lib/opencc.lib")
+
+opencc::SimpleConverter* openCC = nullptr;
+bool useOpencc = false;
+#endif
 
 gxGraphics* gx_graphics;
 gxCanvas* gx_canvas;
@@ -55,9 +61,6 @@ static unsigned curr_color;
 static unsigned curr_clsColor;
 
 static std::vector<GfxMode> gfx_modes;
-
-opencc::SimpleConverter* openCC = nullptr;
-bool useOpencc = false;
 
 static inline void debugImage(bbImage* i, int frame = 0)
 {
@@ -715,11 +718,16 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 	if (xPos == 1) x -= curr_font->getWidth(*str) / 2;
 	if (yPos == 2) y -= curr_font->getHeight();
 	if (yPos == 1) y -= curr_font->getHeight() / 2;
+#ifdef OPENCC
 	if (useOpencc) gx_canvas->text(x, y, openCC->Convert(*str));
 	else gx_canvas->text(x, y, *str);
+#else
+	gx_canvas->text(x, y, *str);
+#endif
 	delete str;
 }
 
+#ifdef OPENCC
 void bbOpenCC(BBStr* path) {
 	std::string str = path->c_str();
 	if (str == "") useOpencc = false;
@@ -734,6 +742,7 @@ void bbOpenCC(BBStr* path) {
 		}
 	}
 }
+#endif
 
 BBStr* bbConvertToANSI(BBStr* str) 
 {
@@ -1247,8 +1256,12 @@ void bbWrite(BBStr* str, int encoding)
 {
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
+#ifdef OPENCC
 	if (useOpencc) c->text(curs_x, curs_y, openCC->Convert(*str));
 	else c->text(curs_x, curs_y, *str);
+#else
+	c->text(curs_x, curs_y, *str);
+#endif
 	curs_x += curr_font->getWidth(*str);
 	endPrinting(c);
 	delete str;
@@ -1258,8 +1271,12 @@ void bbPrint(BBStr* str, int encoding)
 {
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
+#ifdef OPENCC
 	if (useOpencc) c->text(curs_x, curs_y, openCC->Convert(*str));
-	else c->text(curs_x,  curs_y, *str);
+	else c->text(curs_x, curs_y, *str);
+#else
+	c->text(curs_x, curs_y, *str);
+#endif
 	curs_x = 0;
 	curs_y += curr_font->getHeight() + 3; //avoid multiline overlapping by adding 3 to the font height
 	endPrinting(c);
@@ -1535,7 +1552,6 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("Oval%x%y%width%height%solid=1", bbOval);
 	rtSym("Line%x1%y1%x2%y2", bbLine);
 	rtSym("Text%x%y$text%xPos=0%yPos=0%encoding=0", bbText);
-	rtSym("OpenCC$path", bbOpenCC);
 	rtSym("$ConvertToANSI$str", bbConvertToANSI);
 	rtSym("$ConvertToUTF8$str", bbConvertToUTF8);
 	rtSym("CopyRect%source_x%source_y%width%height%dest_x%dest_y%src_buffer=0%dest_buffer=0", bbCopyRect);
@@ -1604,6 +1620,10 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 
 	rtSym("%DesktopWidth", bbDesktopWidth);
 	rtSym("%DesktopHeight", bbDesktopHeight);
+
+#ifdef OPENCC
+	rtSym("OpenCC$path", bbOpenCC);
+#endif
 }
 
 extern "C" {
