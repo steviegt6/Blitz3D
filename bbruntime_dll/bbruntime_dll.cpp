@@ -32,6 +32,19 @@ static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
 
+//Allows userlibs to call DebugLog() and RuntimeError().
+//******************************************************
+__declspec(dllexport) void __cdecl BlitzDebugLog(const char* msg)
+{
+	if(gx_runtime) gx_runtime->debugLog(msg);
+}
+
+__declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
+{
+	bbruntime_panic(msg);
+}
+//******************************************************
+
 static void rtSym(const char* sym, void* pc) {
 	syms[sym] = pc;
 }
@@ -130,9 +143,6 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg) {
 
 	//Fix the issue of NTF Mod clipping outside monitor boundaries in "fullscreen" mode when you have the system scale set to
 	//something different than 100%.
-	//************************************************************************************************************************
-	//BUG (?): Debugger window also scales back down. If set to the game thread only, the graphics cut out since it seems to run on
-	//the debugger thread.
 	SetProcessDPIAware();
 
 	if(gx_runtime = gxRuntime::openRuntime(hinst, params, dbg)) {
