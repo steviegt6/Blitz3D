@@ -23,7 +23,7 @@ parameters can be assigned ANY object or bank, so BE CAREFUL!
 * The declaration must be followed by the C decorated name. This takes form of a `:` followed by the quoted decorated name. Example:
 ```
 MyFunction( text$ ):"_MyFunction@4"
-MessageBox%( hwnd,text$,title$,style ):"MessageBoxA"
+VecDistance#( x1#, y1#, z1#, x2#, y2#, z2# ):"_VecDistance@24"
 ```
 
 To get the list of exports from a DLL file, please check [this article](https://docs.microsoft.com/en-us/cpp/build/reference/dash-exports?view=msvc-170).
