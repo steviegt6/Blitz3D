@@ -3,19 +3,28 @@
 
 To build Blitz3D TSS you will need:
 
-* Visual Studio Community 2019. Install "Desktop development with C++", "C++ MFC for latest v142 build tools (x86 & x64)", "C++ ATL for latest v142 build tools (x86 & x64)" and "ASP.NET and web development".
+* Visual Studio Community (or Pro, whatever) 2022.
+* "Desktop development with C++". 
+* "C++ MFC for latest v142 build tools (x86 & x64)".
+* "C++ ATL for latest v142 build tools (x86 & x64)".
+* "ASP.NET and web development".
 
 **Too lazy to build? Grab the prebuilt version from the Releases tab.**
 
-# Building
+## Building
 
-1) Open blitz3d.sln in Visual Studio 2019.
+1) Open blitz3d.sln in Visual Studio 2022.
 
 2) Select Release or Debug config and rebuild the entire solution.
 
 3) All done! You can find output files in the _release and _release/bin dirs. Feel free to delete .pdb and .ilk files here.
 
-4) Note: Blitz3D TSS uses the dynamic version of the fmod audio lib. When redistributing programs built with Blitz3D TSS, you will need to also include the fmod.dll file found in the "bin" directory with your programs. This should be placed in the same directory as your program's executable.
+4) Note: Blitz3D TSS uses the dynamic version of the fmod audio lib. When redistributing programs built with Blitz3D TSS, you will need to also include the `fmod.dll` file found in the `bin` directory with your programs. This should be placed in the same directory as your program's executable.
+
+## Extending Blitz3D TSS
+Please read [this document](EXTENDING.md).
+
+## Acknowledgements 
 
 **Blitz3D is released under the zlib/libpng license.**
 
