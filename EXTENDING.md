@@ -47,6 +47,8 @@ Now HERE is how we would write a DLL:
 7. Place `MyLib.dll` and `MyLib.decls` in the `userlibs` folder of your Blitz3D TSS installation.
 8. Done!
 
+**ATTENTION!** When building a standalone executable for your game, you must place the userlib's DLL alongside the executable (you don't need the declarations file anymore, though).
+
 ## Sample Code
 
 **MyLib.h**
