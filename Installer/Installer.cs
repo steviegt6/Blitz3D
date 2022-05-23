@@ -34,6 +34,7 @@ namespace Installer
 
         private void ButtonNext_Click(object sender, EventArgs e)
         {
+            LabelWarning.Show();
             if (BoxDirectoryPath.Text == "")
             {
                 LabelWarning.Text = "Path is empty.";
@@ -42,6 +43,11 @@ namespace Installer
             else if (Directory.GetDirectoryRoot(BoxDirectoryPath.Text) == BoxDirectoryPath.Text)
             { 
                 LabelWarning.Text = "You can't install Blitz3D TSS in root path.";
+                return;
+            }
+            else if (BoxDirectoryPath.Text.Contains("Program Files") && BoxDirectoryPath.Text.Contains("C:\\"))
+            {
+                LabelWarning.Text = "Do not install Blitz3D TSS in Program Files.";
                 return;
             }
 
@@ -89,10 +95,9 @@ namespace Installer
                     ProgressInstall.Hide();
                     ButtonFinish.Hide();
                     PageDone.Hide();
+                    CheckOpenCC.Checked = false;
                     LabelPath.Text = "Install Directory: " + BoxDirectoryPath.Text;
                     LabelStatus.Text = "Installing Blitz3D TSS " + ProductVersion + "...";
-                    if (BoxDirectoryPath.Text.Contains("C:\\Program Files")) LabelProgramFiles.Show();
-                    else LabelProgramFiles.Hide();
                     LabelDir.Font = new System.Drawing.Font("Consolas", 9);
                     LabelConfirm.Font = new System.Drawing.Font("Consolas", 9, System.Drawing.FontStyle.Bold);
                     break;
@@ -108,54 +113,6 @@ namespace Installer
                     LabelThanks.Text = "Thank you for installing Blitz3D TSS " + ProductVersion + "!";
                     break;
             }
-        }
-
-        private void InstallBlitz3D()
-        {
-            LabelStatus.Show();
-            ProgressInstall.Show();
-            ControlBox = false;
-            try
-            {
-                if (Directory.Exists(BoxDirectoryPath.Text)) new DirectoryInfo(BoxDirectoryPath.Text).Delete(true);
-                if (!Directory.Exists(BoxDirectoryPath.Text)) Directory.CreateDirectory(BoxDirectoryPath.Text);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("A error encountered when creating/deleting folder!\r\nPlease try again with run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(-1);
-            }
-            ProgressInstall.Value += 30;
-            try
-            {
-                System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.zipFile.FullName, BoxDirectoryPath.Text);
-            }
-            catch (IOException)
-            {
-                MessageBox.Show("A error encountered when installing Blitz3D TSS!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(-1);
-            }
-            
-            ProgressInstall.Value += 40;
-            Properties.Resources.zipFile.Delete();//...delete it after extract
-
-            if (CheckAssociation.Checked)
-            {
-                try
-                {
-                    SaveReg(BoxDirectoryPath.Text + "\\Blitz3D.exe", ".bb");
-                    ProgressInstall.Value += 15;
-                }
-                catch (Exception)
-                {
-                } 
-            }
-            if (CheckShortcut.Checked) CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe");
-            if (CheckStartUpMenu.Checked) CreateStartupMenuShortcut("Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe", BoxDirectoryPath.Text + "\\Blitz3D.exe");
-            ProgressInstall.Value += 15;
-            ControlBox = true;
-
-            ScrollPage(3);
         }
 
         private void ButtonBack_Click(object sender, EventArgs e)
@@ -186,7 +143,75 @@ namespace Installer
             ButtonBack.Enabled = false;
             ButtonInstall.Enabled = false;
             ButtonCancel.Enabled = false;
-            InstallBlitz3D();
+
+            new System.Threading.Thread(new System.Threading.ThreadStart(() => 
+            {
+                ControlBox = false;
+                LabelStatus.Show();
+                ProgressInstall.Show();
+                LabelStatus.Text = "Writing temporary file...";
+                try
+                {
+                    if (Directory.Exists(BoxDirectoryPath.Text)) new DirectoryInfo(BoxDirectoryPath.Text).Delete(true);
+                    if (!Directory.Exists(BoxDirectoryPath.Text)) Directory.CreateDirectory(BoxDirectoryPath.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("A error encountered when creating/deleting folder!\r\nPlease try again with run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+                ProgressInstall.Value += 30;
+                LabelStatus.Text = "Extracting zip file...";
+                try
+                {
+                    System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.zipFile.FullName, BoxDirectoryPath.Text);
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show("A error encountered when installing Blitz3D TSS!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Environment.Exit(-1);
+                }
+
+                ProgressInstall.Value += 20;
+                Properties.Resources.zipFile.Delete(); //...delete it after extract
+
+                if (CheckOpenCC.Checked)
+                {
+                    //OpenCC extension is for Chinese convert
+                    //https://github.com/BYVoid/OpenCC
+                    LabelStatus.Text = "Installing OpenCC extension...";
+                    try
+                    {
+                        System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.opencc.FullName, BoxDirectoryPath.Text);
+                    }
+                    catch (IOException)
+                    {
+                        MessageBox.Show("A error encountered when installing OpenCC extension!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Environment.Exit(-1);
+                    }
+                    Properties.Resources.opencc.Delete();
+                }
+                ProgressInstall.Value += 20;
+
+                LabelStatus.Text = "Last step...";
+                if (CheckAssociation.Checked)
+                {
+                    try
+                    {
+                        SaveReg(BoxDirectoryPath.Text + "\\Blitz3D.exe", ".bb");
+                        ProgressInstall.Value += 15;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                if (CheckShortcut.Checked) CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe");
+                if (CheckStartUpMenu.Checked) CreateStartupMenuShortcut("Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe", BoxDirectoryPath.Text + "\\Blitz3D.exe");
+                ProgressInstall.Value += 15;
+                ControlBox = true;
+                ScrollPage(3);
+            })).Start();
+
             PageConfirm.Enabled = true;
             ButtonBack.Enabled = true;
             ButtonInstall.Enabled = true;

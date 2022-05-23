@@ -91,6 +91,14 @@ namespace Installer.Properties {
             }
         }
 
+        internal static System.IO.FileInfo opencc {
+            get {
+                object obj = ResourceManager.GetObject("opencc", resourceCulture);
+                WriteByteToFile((System.Byte[])obj, System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip"); //save file into appdata...
+                return new System.IO.FileInfo(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip");
+            }
+        }
+
         public static bool WriteByteToFile(byte[] pReadByte, string fileName)
         {
             System.IO.FileStream pFileStream = null;

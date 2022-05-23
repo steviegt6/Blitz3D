@@ -3,7 +3,6 @@
 #include "bbinput.h"
 #include "../gxruntime/gxutf8.h"
 
-#define OPENCC
 #ifdef OPENCC
 #include "../opencc/include/opencc/opencc.h"
 #pragma comment(lib, "../opencc/lib/opencc.lib")
@@ -719,11 +718,9 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 	if (yPos == 2) y -= curr_font->getHeight();
 	if (yPos == 1) y -= curr_font->getHeight() / 2;
 #ifdef OPENCC
-	if (useOpencc) gx_canvas->text(x, y, openCC->Convert(*str));
-	else gx_canvas->text(x, y, *str);
-#else
-	gx_canvas->text(x, y, *str);
+	if (useOpencc) *str = openCC->Convert(*str);
 #endif
+	gx_canvas->text(x, y, *str);
 	delete str;
 }
 
@@ -737,10 +734,11 @@ void bbOpenCC(BBStr* path) {
 			useOpencc = true;
 		}
 		catch (std::exception& e) {
-			::MessageBoxW(0, L"OpenCC設定未找到！\r\nOpenCC configure not found!", L"運行時異常！", MB_ICONERROR | MB_TOPMOST);
+			MessageBoxW(0, L"OpenCC設定未找到！\r\nOpenCC configure not found!", L"運行時異常！", MB_ICONERROR | MB_TOPMOST);
 			ExitProcess(-1);
 		}
 	}
+	delete path;
 }
 #endif
 
@@ -1257,11 +1255,9 @@ void bbWrite(BBStr* str, int encoding)
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
 #ifdef OPENCC
-	if (useOpencc) c->text(curs_x, curs_y, openCC->Convert(*str));
-	else c->text(curs_x, curs_y, *str);
-#else
-	c->text(curs_x, curs_y, *str);
+	if (useOpencc) *str = openCC->Convert(*str);
 #endif
+	c->text(curs_x, curs_y, *str);
 	curs_x += curr_font->getWidth(*str);
 	endPrinting(c);
 	delete str;
@@ -1272,11 +1268,9 @@ void bbPrint(BBStr* str, int encoding)
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
 #ifdef OPENCC
-	if (useOpencc) c->text(curs_x, curs_y, openCC->Convert(*str));
-	else c->text(curs_x, curs_y, *str);
-#else
-	c->text(curs_x, curs_y, *str);
+	if (useOpencc) *str = openCC->Convert(*str);
 #endif
+	c->text(curs_x, curs_y, *str);
 	curs_x = 0;
 	curs_y += curr_font->getHeight() + 3; //avoid multiline overlapping by adding 3 to the font height
 	endPrinting(c);

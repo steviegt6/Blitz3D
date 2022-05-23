@@ -2,6 +2,7 @@
 #include "std.h"
 #include "gxgraphics.h"
 #include "gxruntime.h"
+#include "../gxruntime/gxutf8.h"
 
 extern gxRuntime* gx_runtime;
 static Debugger* debugger;
@@ -231,10 +232,10 @@ int gxGraphics::getDepth()const {
 	return front_canvas->getDepth();
 }
 
-gxFont* gxGraphics::loadFont(const std::string& f, int height) {
+gxFont* gxGraphics::loadFont(std::string f, int height) {
 	std::string t;
 	int n = f.find('.');
-	if(n != std::string::npos) {
+	if(n == std::string::npos) {
 		t = fullfilename(f);
 		if(!font_res.count(t) && AddFontResource(t.c_str())) font_res.insert(t);
 		t = filenamefile(f.substr(0, n));

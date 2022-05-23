@@ -1,5 +1,6 @@
 #include "std.h"
 #include "gxutf8.h"
+#include <sstream>
 
 int UTF8::measureCodepoint(char chr) {
     if ((chr & 0x80) == 0x00) {
@@ -195,4 +196,72 @@ std::wstring UTF8::convertToUtf16(const std::string& str) {
     }
 
     return result;
+}
+
+std::string UTF8::GetSystemFontFile(const std::string& faceName) 
+{
+    static const char* fontRegistryPath = "Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
+    HKEY hKey;
+    LONG result;
+    std::string wsFaceName(faceName.begin(), faceName.end());
+
+    // Open Windows font registry key 
+    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, fontRegistryPath, 0, KEY_READ, &hKey);
+    if (result != ERROR_SUCCESS) {
+        return "";
+    }
+
+    DWORD maxValueNameSize, maxValueDataSize;
+    result = RegQueryInfoKey(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0);
+    if (result != ERROR_SUCCESS) {
+        return "";
+    }
+
+    DWORD valueIndex = 0;
+    LPSTR valueName = new CHAR[maxValueNameSize];
+    LPBYTE valueData = new BYTE[maxValueDataSize];
+    DWORD valueNameSize, valueDataSize, valueType;
+    std::string wsFontFile;
+
+    // Look for a matching font name 
+    do {
+        wsFontFile.clear();
+        valueDataSize = maxValueDataSize;
+        valueNameSize = maxValueNameSize;
+
+        result = RegEnumValue(hKey, valueIndex, valueName, &valueNameSize, 0, &valueType, valueData, &valueDataSize);
+
+        valueIndex++;
+
+        if (result != ERROR_SUCCESS || valueType != REG_SZ) {
+            continue;
+        }
+
+        std::string wsValueName(valueName, valueNameSize);
+
+        // Found a match 
+        if ((wsFaceName == wsValueName) == 0) {
+            wsFontFile.assign((LPSTR)valueData, valueDataSize);
+            break;
+        }
+    } while (result != ERROR_NO_MORE_ITEMS);
+
+    delete[] valueName;
+    delete[] valueData;
+
+    RegCloseKey(hKey);
+
+    if (wsFontFile.empty()) {
+        return "";
+    }
+
+    // Build full font file path 
+    CHAR winDir[MAX_PATH];
+    GetWindowsDirectory(winDir, MAX_PATH);
+
+    std::stringstream ss;
+    ss << winDir << "\\Fonts\\" << wsFontFile;
+    wsFontFile = ss.str();
+
+    return std::string(wsFontFile.begin(), wsFontFile.end());
 }

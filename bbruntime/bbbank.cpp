@@ -68,7 +68,10 @@ void  bbResizeBank(bbBank* b, int size) {
 }
 
 void  bbCopyBank(bbBank* src, int src_p, bbBank* dest, int dest_p, int count) {
-	if(debug) { debugBank(src, src_p + count - 1); debugBank(dest, dest_p + count - 1); }
+	if(debug) { 
+		debugBank(src, src_p + count - 1); 
+		debugBank(dest, dest_p + count - 1); 
+	}
 	memmove(dest->data + dest_p, src->data + src_p, count);
 }
 

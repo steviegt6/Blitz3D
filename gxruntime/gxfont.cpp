@@ -96,12 +96,12 @@ void gxFont::renderAtlas(int chr) {
 						needsNewAtlas = true;
 						break;
 					}
-					if(glyphHeight > maxHeight) { maxHeight = glyphHeight; }
+					if(glyphHeight > maxHeight) maxHeight = glyphHeight;
 
 					int bitPitch = glyphPitch * 8;
 					for(int j = 0; j < glyphPitch * glyphHeight; j++) {
 						for(int k = 0; k < 8; k++) {
-							if((j * 8 + k) % bitPitch >= glyphWidth) { continue; }
+							if((j * 8 + k) % bitPitch >= glyphWidth) continue;
 							int bufferPos = x + y * atlasDims;
 							bufferPos += (j * 8 + k) % bitPitch + ((j / glyphPitch) * atlasDims);
 							buffer[bufferPos] = (glyphBuffer[j] & (1 << (7 - k))) > 0;
@@ -144,9 +144,8 @@ void gxFont::renderAtlas(int chr) {
 		gxCanvas* newAtlas = graphics->createCanvas(atlasDims, atlasDims, 0);
 		newAtlas->lock();
 		for(int y = 0; y < atlasDims; y++) {
-			for(int x = 0; x < atlasDims; x++) {
+			for(int x = 0; x < atlasDims; x++)
 				newAtlas->setPixelFast(x, y, buffer[x + (y * atlasDims)] ? opaquePixel : transparentPixel);
-			}
 		}
 		newAtlas->unlock();
 		newAtlas->setMask(0xffffff);
@@ -155,9 +154,7 @@ void gxFont::renderAtlas(int chr) {
 		delete[] buffer;
 	}
 
-	if(needsNewAtlas) {
-		renderAtlas(chr);
-	}
+	if(needsNewAtlas) renderAtlas(chr);
 }
 
 void gxFont::render(gxCanvas* dest, unsigned color_argb, int x, int y, const std::string& text) {

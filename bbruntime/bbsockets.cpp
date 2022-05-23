@@ -466,6 +466,7 @@ void bbTCPTimeouts(int rt, int at) {
 }
 
 std::string exec(char* cmd) {
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	FILE* pipe = _popen(cmd, "r");
 	if (!pipe) return "ERROR";
 	char buffer[128];
@@ -475,6 +476,7 @@ std::string exec(char* cmd) {
 			result = buffer;
 	}
 	_pclose(pipe);
+	delete cmd;
 	return result;
 }
 
@@ -498,9 +500,12 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 	std::string s2 = name->c_str();
 	std::string result;
 	int n, a;
-	if ((n = s1.find(name->c_str())) != std::string::npos) result = s1.substr(n);
-	if ((a = result.find(';')) != std::string::npos) result = result.substr(s2.length()+1, a - s2.length()-1);
+	if ((n = s1.find(s2+"=")) != std::string::npos)
+		result = s1.substr(n);
+	if ((a = result.find(';')) != std::string::npos)
+		result = result.substr(s2.length()+1, a - s2.length()-1);
 	*txt = result.c_str();
+	delete name;
 	return txt;
 }
 
@@ -560,10 +565,9 @@ int bbDownloadFile(BBStr* url, BBStr* file)
 		InternetCloseHandle(hSession);
 		hSession = NULL;
 	}
-	
+	delete url, file;
 	std::ifstream fileStream(file->c_str(), std::ios::in);
-	int isOpen = 0;
-	isOpen = fileStream.is_open();
+	int isOpen = fileStream.is_open();
 	fileStream.close();
 	return isOpen;
 }

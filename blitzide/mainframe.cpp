@@ -198,11 +198,12 @@ void MainFrame::OnDropFiles(HDROP hDropInfo) {
 	for (int i = 0; i < nFiles; ++i)
 	{
 		DragQueryFile(hDropInfo, i, szFileName, MAX_PATH);
-		if (std::filesystem::path(szFileName).extension() == ".htm" || std::filesystem::path(szFileName).extension() == ".html")
+		std::filesystem::path extension = std::filesystem::path(szFileName).extension();
+		if (extension == ".htm" || extension == ".html")
 		{
 			HtmlHelp* h = findHelp();
 			h->Navigate(szFileName);
-		} else if (std::filesystem::path(szFileName).extension() == ".bb")
+		} else if (extension == ".bb" || extension == ".txt")
 			open(szFileName);
 		else
 			ShellExecute(nullptr, "open", szFileName, "", "", SW_SHOW);
@@ -386,20 +387,17 @@ bool MainFrame::open(const std::string& f) {
 
 	int attr = GetFileAttributes(file.c_str()); if (attr == -1) attr = 0;
 	if (!file.size() || (attr & FILE_ATTRIBUTE_DIRECTORY)) {
-
-		int n = OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST;
-		CFileDialog fd(true, "bb", filter.c_str(), n, bbFilter);
+		CFileDialog fd(true, "bb", filter.c_str(), OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST, bbFilter);
 		char* i_dir = strdup(file.c_str());
 		fd.m_ofn.lpstrInitialDir = i_dir;
 		fd.m_ofn.lpstrTitle = "Open Blitz Basic File...";
-		int nn = fd.DoModal(); free(i_dir);
+		int nn = fd.DoModal(); 
+		free(i_dir);
 		if (nn == IDCANCEL) return false;
-
 		file = fd.GetPathName();
-
 	}
-	else {
-
+	else
+	{
 		char buff[MAX_PATH], * p;
 		if (GetFullPathName(file.c_str(), MAX_PATH, buff, &p)) file = buff;
 		else file = f;
@@ -453,7 +451,6 @@ bool MainFrame::close(int n) {
 }
 
 bool MainFrame::save(int n) {
-
 	Editor* e = getEditor(n);
 	if (!e) return true;
 	std::string t = e->getName();
@@ -477,8 +474,7 @@ bool MainFrame::save(int n) {
 			CopyFile(t.c_str(), (t + "_bak1").c_str(), false);
 		}
 	}
-	int om = std::ios_base::binary | std::ios_base::out | std::ios_base::trunc;
-	std::ofstream out(t.c_str(), om);
+	std::ofstream out(t.c_str(), std::ios_base::binary | std::ios_base::out | std::ios_base::trunc);
 	if (!out.good())
 	{
 		std::string e = "Error writing file \"" + t + "\"";
@@ -828,10 +824,9 @@ void MainFrame::helpForward() {
 }
 
 void MainFrame::openIni() {
-	std::string cmd = "notepad.exe \"";
-	cmd += getenv("blitzpath");
-	cmd += "/cfg/blitzide.ini\"";
-	WinExec(cmd.c_str(), SW_SHOW);
+	std::string cmd = getenv("blitzpath");
+	cmd += "/cfg/blitzide.ini";
+	ShellExecute(nullptr, "open", cmd.c_str(), "", "", SW_SHOW);
 }
 
 void MainFrame::helpAbout() {
@@ -972,6 +967,7 @@ void MainFrame::quick_Help() {
 	if (Editor* e = getEditor()) {
 		//look for keyword at cursor...
 		std::string t = e->getKeyword(); if (!t.size()) return;
+		if (t.substr(0, 6) == "Blitz_") t = t.substr(6, t.size());
 		statusBar.SetPaneText(0, quickHelp(t).c_str());
 		if (t != last_quick_help) {
 			last_quick_help = t;

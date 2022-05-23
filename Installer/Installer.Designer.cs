@@ -52,7 +52,7 @@
             this.CheckRun = new System.Windows.Forms.CheckBox();
             this.LabelThanks = new System.Windows.Forms.Label();
             this.LabelPageDone = new System.Windows.Forms.Label();
-            this.LabelProgramFiles = new System.Windows.Forms.Label();
+            this.CheckOpenCC = new System.Windows.Forms.CheckBox();
             this.CheckShortcut = new System.Windows.Forms.CheckBox();
             this.LabelFileWarn = new System.Windows.Forms.Label();
             this.LabelStatus = new System.Windows.Forms.Label();
@@ -225,7 +225,7 @@
             // PageConfirm
             // 
             this.PageConfirm.Controls.Add(this.PageDone);
-            this.PageConfirm.Controls.Add(this.LabelProgramFiles);
+            this.PageConfirm.Controls.Add(this.CheckOpenCC);
             this.PageConfirm.Controls.Add(this.CheckShortcut);
             this.PageConfirm.Controls.Add(this.LabelFileWarn);
             this.PageConfirm.Controls.Add(this.LabelStatus);
@@ -274,12 +274,14 @@
             resources.ApplyResources(this.LabelPageDone, "LabelPageDone");
             this.LabelPageDone.Name = "LabelPageDone";
             // 
-            // LabelProgramFiles
+            // CheckOpenCC
             // 
-            resources.ApplyResources(this.LabelProgramFiles, "LabelProgramFiles");
-            this.LabelProgramFiles.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.LabelProgramFiles.ForeColor = System.Drawing.Color.Goldenrod;
-            this.LabelProgramFiles.Name = "LabelProgramFiles";
+            resources.ApplyResources(this.CheckOpenCC, "CheckOpenCC");
+            this.CheckOpenCC.Checked = true;
+            this.CheckOpenCC.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CheckOpenCC.Name = "CheckOpenCC";
+            this.toolTip.SetToolTip(this.CheckOpenCC, resources.GetString("CheckOpenCC.ToolTip"));
+            this.CheckOpenCC.UseVisualStyleBackColor = true;
             // 
             // CheckShortcut
             // 
@@ -341,7 +343,6 @@
             this.RBInstall.Checked = true;
             this.RBInstall.Name = "RBInstall";
             this.RBInstall.TabStop = true;
-            this.toolTip.SetToolTip(this.RBInstall, resources.GetString("RBInstall.ToolTip"));
             this.RBInstall.UseVisualStyleBackColor = true;
             this.RBInstall.CheckedChanged += new System.EventHandler(this.RBInstall_CheckedChanged);
             // 
@@ -392,46 +393,46 @@
 
         #endregion
 
-        private System.Windows.Forms.Button ButtonCancel;
-        private System.Windows.Forms.Button ButtonNext;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label LabelConfirm;
-        private System.Windows.Forms.Label LabelDir;
-        private System.Windows.Forms.Label LabelArrow2;
-        private System.Windows.Forms.Label LabelDone;
-        private System.Windows.Forms.Label LabelArrow1;
-        private System.Windows.Forms.Panel Background;
-        private System.Windows.Forms.PictureBox InstallerIcon;
-        private System.Windows.Forms.RichTextBox TextBoxLicense;
-        private System.Windows.Forms.TextBox BoxDirectoryPath;
-        private System.Windows.Forms.GroupBox BoxLicense;
-        private System.Windows.Forms.Label LabelWelcome;
-        private System.Windows.Forms.Button ButtonChoosePath;
-        private System.Windows.Forms.GroupBox BoxPath;
-        private System.Windows.Forms.Label LabelWarning;
-        private System.Windows.Forms.Panel PageDirectory;
-        private System.Windows.Forms.Panel PageConfirm;
-        private System.Windows.Forms.Button ButtonBack;
-        private System.Windows.Forms.Button ButtonInstall;
-        private System.Windows.Forms.Label LabelConfirmTitle;
-        private System.Windows.Forms.RadioButton RBUnzip;
-        private System.Windows.Forms.RadioButton RBInstall;
-        private System.Windows.Forms.Label LabelPath;
-        private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.CheckBox CheckStartUpMenu;
-        private System.Windows.Forms.CheckBox CheckAssociation;
-        private System.Windows.Forms.Label LableInstallWarn;
-        private System.Windows.Forms.Label LabelStatus;
-        private System.Windows.Forms.ProgressBar ProgressInstall;
-        private System.Windows.Forms.Label LabelFileWarn;
-        private System.Windows.Forms.CheckBox CheckShortcut;
-        private System.Windows.Forms.Label LabelProgramFiles;
-        private System.Windows.Forms.Label LabelThanks;
-        private System.Windows.Forms.Label LabelPageDone;
-        private System.Windows.Forms.Button ButtonFinish;
-        private System.Windows.Forms.CheckBox CheckGithub;
-        private System.Windows.Forms.CheckBox CheckRun;
-        private System.Windows.Forms.Panel PageDone;
+        public System.Windows.Forms.CheckBox CheckOpenCC;
+        public System.Windows.Forms.Button ButtonCancel;
+        public System.Windows.Forms.Button ButtonNext;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.Label LabelConfirm;
+        public System.Windows.Forms.Label LabelDir;
+        public System.Windows.Forms.Label LabelArrow2;
+        public System.Windows.Forms.Label LabelDone;
+        public System.Windows.Forms.Label LabelArrow1;
+        public System.Windows.Forms.Panel Background;
+        public System.Windows.Forms.PictureBox InstallerIcon;
+        public System.Windows.Forms.RichTextBox TextBoxLicense;
+        public System.Windows.Forms.TextBox BoxDirectoryPath;
+        public System.Windows.Forms.GroupBox BoxLicense;
+        public System.Windows.Forms.Label LabelWelcome;
+        public System.Windows.Forms.Button ButtonChoosePath;
+        public System.Windows.Forms.GroupBox BoxPath;
+        public System.Windows.Forms.Label LabelWarning;
+        public System.Windows.Forms.Panel PageDirectory;
+        public System.Windows.Forms.Panel PageConfirm;
+        public System.Windows.Forms.Button ButtonBack;
+        public System.Windows.Forms.Button ButtonInstall;
+        public System.Windows.Forms.Label LabelConfirmTitle;
+        public System.Windows.Forms.RadioButton RBUnzip;
+        public System.Windows.Forms.RadioButton RBInstall;
+        public System.Windows.Forms.Label LabelPath;
+        public System.Windows.Forms.ToolTip toolTip;
+        public System.Windows.Forms.CheckBox CheckStartUpMenu;
+        public System.Windows.Forms.CheckBox CheckAssociation;
+        public System.Windows.Forms.Label LableInstallWarn;
+        public System.Windows.Forms.Label LabelStatus;
+        public System.Windows.Forms.ProgressBar ProgressInstall;
+        public System.Windows.Forms.Label LabelFileWarn;
+        public System.Windows.Forms.CheckBox CheckShortcut;
+        public System.Windows.Forms.Label LabelThanks;
+        public System.Windows.Forms.Label LabelPageDone;
+        public System.Windows.Forms.Button ButtonFinish;
+        public System.Windows.Forms.CheckBox CheckGithub;
+        public System.Windows.Forms.CheckBox CheckRun;
+        public System.Windows.Forms.Panel PageDone;
     }
 }
 

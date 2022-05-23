@@ -925,37 +925,37 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;PageDone.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="LabelProgramFiles.AutoSize" type="System.Boolean, mscorlib">
+  <data name="CheckOpenCC.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="LabelProgramFiles.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="CheckOpenCC.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 9pt</value>
   </data>
-  <data name="LabelProgramFiles.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="CheckOpenCC.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="LabelProgramFiles.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 251</value>
+  <data name="CheckOpenCC.Location" type="System.Drawing.Point, System.Drawing">
+    <value>21, 209</value>
   </data>
-  <data name="LabelProgramFiles.Size" type="System.Drawing.Size, System.Drawing">
-    <value>364, 14</value>
+  <data name="CheckOpenCC.Size" type="System.Drawing.Size, System.Drawing">
+    <value>194, 18</value>
   </data>
-  <data name="LabelProgramFiles.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+  <data name="CheckOpenCC.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
   </data>
-  <data name="LabelProgramFiles.Text" xml:space="preserve">
-    <value>Install in "Program Files" maybe won't save config.</value>
+  <data name="CheckOpenCC.Text" xml:space="preserve">
+    <value>Install OpenCC extension</value>
   </data>
-  <data name="&gt;&gt;LabelProgramFiles.Name" xml:space="preserve">
-    <value>LabelProgramFiles</value>
+  <data name="&gt;&gt;CheckOpenCC.Name" xml:space="preserve">
+    <value>CheckOpenCC</value>
   </data>
-  <data name="&gt;&gt;LabelProgramFiles.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;CheckOpenCC.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;LabelProgramFiles.Parent" xml:space="preserve">
+  <data name="&gt;&gt;CheckOpenCC.Parent" xml:space="preserve">
     <value>PageConfirm</value>
   </data>
-  <data name="&gt;&gt;LabelProgramFiles.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;CheckOpenCC.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="CheckShortcut.AutoSize" type="System.Boolean, mscorlib">
@@ -1001,7 +1001,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>NoControl</value>
   </data>
   <data name="LabelFileWarn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 232</value>
+    <value>18, 249</value>
   </data>
   <data name="LabelFileWarn.Size" type="System.Drawing.Size, System.Drawing">
     <value>329, 14</value>
@@ -1091,7 +1091,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>NoControl</value>
   </data>
   <data name="LableInstallWarn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>18, 213</value>
+    <value>18, 230</value>
   </data>
   <data name="LableInstallWarn.Size" type="System.Drawing.Size, System.Drawing">
     <value>371, 14</value>
@@ -1201,9 +1201,9 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="RBUnzip.Text" xml:space="preserve">
     <value>Install as a zip file</value>
   </data>
-  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing">
     <value>17, 17</value>
-  </metadata>
+  </data>
   <data name="RBUnzip.ToolTip" xml:space="preserve">
     <value>Install Blitz3D TSS and do nothing else.</value>
   </data>
@@ -1239,9 +1239,6 @@ Permission is granted to anyone to use this software for any purpose, including 
   </data>
   <data name="RBInstall.Text" xml:space="preserve">
     <value>Install as a software</value>
-  </data>
-  <data name="RBInstall.ToolTip" xml:space="preserve">
-    <value>Install Blitz3D TSS, write to registry, for uninstall from control panel.</value>
   </data>
   <data name="&gt;&gt;RBInstall.Name" xml:space="preserve">
     <value>RBInstall</value>
@@ -1345,9 +1342,9 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;PageConfirm.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="$this.Localizable" type="System.Boolean, mscorlib">
     <value>True</value>
-  </metadata>
+  </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 14</value>
   </data>
@@ -2305,5 +2302,8 @@ Permission is granted to anyone to use this software for any purpose, including 
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CheckOpenCC.ToolTip" xml:space="preserve">
+    <value>OpenCC組件用於中文繁簡轉換。</value>
   </data>
 </root>
