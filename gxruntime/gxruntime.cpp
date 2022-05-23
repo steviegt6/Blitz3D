@@ -1075,7 +1075,7 @@ static BOOL WINAPI enumDriver(GUID FAR* guid, LPSTR desc, LPSTR name, LPVOID con
 	gxRuntime::GfxDriver* d = new gxRuntime::GfxDriver;
 
 	d->guid = guid ? new GUID(*guid) : 0;
-	d->name = desc;//string( name )+" "+string( desc );
+	d->name = desc;
 
 	memset(&d->d3d_desc, 0, sizeof(d->d3d_desc));
 	IDirect3D7* dir3d;

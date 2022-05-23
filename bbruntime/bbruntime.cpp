@@ -16,9 +16,14 @@ void  bbStop() {
 	if(!gx_runtime->idle()) RTEX(0);
 }
 
+void bbDisableClose() {
+	HMENU hmenu = GetSystemMenu(gx_runtime->hwnd, false);
+	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
+}
+
 void  bbAppTitle(BBStr* ti, BBStr* cp) {
 	gx_runtime->setTitle(*ti, *cp);
-	delete ti; delete cp;
+	delete ti, cp;
 }
 
 void  bbRuntimeError(BBStr* str) {
@@ -43,7 +48,8 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 }
 
 int   bbExecFile(BBStr* f) {
-	std::string t = *f; delete f;
+	std::string t = *f; 
+	delete f;
 	int n = gx_runtime->execute(t);
 	if(!gx_runtime->idle()) RTEX(0);
 	return n;
@@ -87,12 +93,14 @@ gxTimer* bbCreateTimer(int hertz) {
 
 int   bbWaitTimer(gxTimer* t) {
 	int n = t->wait();
+	delete t;
 	if(!gx_runtime->idle()) RTEX(0);
 	return n;
 }
 
 void  bbFreeTimer(gxTimer* t) {
 	gx_runtime->freeTimer(t);
+	delete t;
 }
 
 std::string utf16_to_utf8(std::u16string&& utf16_string) {
@@ -201,6 +209,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("$SystemProperty$property", bbSystemProperty);
 	rtSym("$GetEnv$env_var", bbGetEnv);
 	rtSym("SetEnv$env_var$value", bbSetEnv);
+	rtSym("DisableClose", bbDisableClose);
 
 	rtSym("%CreateTimer%hertz", bbCreateTimer);
 	rtSym("%WaitTimer%timer", bbWaitTimer);

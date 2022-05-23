@@ -468,7 +468,7 @@ void bbTCPTimeouts(int rt, int at) {
 std::string exec(char* cmd) {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	FILE* pipe = _popen(cmd, "r");
-	if (!pipe) return "ERROR";
+	if (!pipe) return "";
 	char buffer[128];
 	std::string result = "";
 	while (!feof(pipe)) {
@@ -498,7 +498,7 @@ std::string clearTabLeft(std::string src) {
 BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 	std::string s1 = txt->c_str();
 	std::string s2 = name->c_str();
-	std::string result;
+	std::string result = "";
 	int n, a;
 	if ((n = s1.find(s2+"=")) != std::string::npos)
 		result = s1.substr(n);
