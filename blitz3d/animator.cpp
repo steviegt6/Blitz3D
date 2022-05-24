@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "animator.h"
 #include "object.h"
@@ -216,4 +215,3 @@ void Animator::update(float elapsed) {
 
 	updateAnim();
 }
-

@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxinput.h"
 #include "gxruntime.h"

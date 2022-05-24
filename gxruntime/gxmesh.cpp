@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxmesh.h"
 #include "gxgraphics.h"

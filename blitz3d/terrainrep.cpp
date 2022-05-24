@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "terrainrep.h"
 #include <queue>
@@ -583,4 +582,3 @@ bool TerrainRep::collide(const Line& line, float radius, Collision* curr_coll, c
 		collide(line, radius, curr_coll, tform, 2, v1, v2, v0, box) |
 		collide(line, radius, curr_coll, tform, 3, v3, v0, v2, box);
 }
-

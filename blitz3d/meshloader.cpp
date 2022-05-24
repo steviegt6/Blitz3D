@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "meshloader.h"
 #include "meshmodel.h"

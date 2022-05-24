@@ -1,13 +1,12 @@
-
 #ifndef BBGRAPHICS_H
 #define BBGRAPHICS_H
 
 #include "bbsys.h"
 #include "../gxruntime/gxgraphics.h"
 
-extern gxGraphics *gx_graphics;
-extern gxCanvas *gx_canvas;
-extern gxScene *gx_scene;
+extern gxGraphics* gx_graphics;
+extern gxCanvas*   gx_canvas;
+extern gxScene*    gx_scene;
 
 class bbImage;
 
@@ -28,8 +27,8 @@ int		 bbTotalVidMem();
 
 //mode functions
 void	 bbGraphics( int w,int h,int d,int mode );
-gxCanvas * bbFrontBuffer();
-gxCanvas * bbBackBuffer();
+gxCanvas* bbFrontBuffer();
+gxCanvas* bbBackBuffer();
 void	 bbEndGraphics();
 int		 bbInFocus();
 int		 bbGraphicsLost();
@@ -39,7 +38,7 @@ void	 bbFlip( int vwait );
 
 //graphics buffer functions
 void	 bbSetBuffer( gxCanvas *buff );
-gxCanvas * bbGraphicsBuffer();
+gxCanvas* bbGraphicsBuffer();
 int		 bbLoadBuffer( gxCanvas *surf,BBStr *str );
 int		 bbSaveBuffer( gxCanvas *surf,BBStr *str );
 
@@ -63,7 +62,6 @@ void	 bbLine( int x1,int y1,int x2,int y2 );
 void	 bbRect( int x,int y,int w,int h,int solid );
 void	 bbOval( int x,int y,int w,int h,int solid );
 void	 bbText( int x,int y,BBStr *str,int xPos,int yPos,int encoding );
-void	 bbSetChineseConvert(int c);
 BBStr*	 bbConvertToANSI(BBStr* str);
 BBStr*	 bbConvertToUTF8(BBStr* str);
 void	 bbGetColor( int x,int y );
@@ -72,7 +70,7 @@ int		 bbColorGreen();
 int		 bbColorBlue();
 
 //font functions
-gxFont * bbLoadFont( BBStr *name,int height );
+gxFont*  bbLoadFont( BBStr *name,int height );
 void	 bbFreeFont( gxFont *f );
 void	 bbSetFont( gxFont *f );
 int		 bbFontWidth();
@@ -88,7 +86,7 @@ bbImage* bbLoadAnimImage( BBStr *s,int w,int h,int first,int cnt );
 void	 bbFreeImage( bbImage *i );
 int		 bbSaveImage( bbImage *i,BBStr *filename,int frame );
 void	 bbGrabImage( bbImage *i,int x,int y,int n );
-gxCanvas * bbImageBuffer( bbImage *i,int n );
+gxCanvas* bbImageBuffer( bbImage *i,int n );
 void	 bbDrawImage( bbImage *i,int x,int y,int frame );
 void	 bbDrawBlock( bbImage *i,int x,int y,int frame );
 void	 bbTileImage( bbImage *i,int x,int y,int frame );
@@ -117,7 +115,7 @@ int		 bbImageRectCollide( bbImage *i,int x,int y,int f,int r_x,int r_y,int r_w,i
 //simple print functions
 void	 bbWrite( BBStr *str,int encoding );
 void	 bbPrint( BBStr *str,int encoding );
-BBStr *	 bbInput( BBStr *prompt );
+BBStr*	 bbInput( BBStr *prompt );
 void	 bbLocate( int x,int y );
 
 #endif

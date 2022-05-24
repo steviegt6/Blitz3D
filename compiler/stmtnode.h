@@ -1,4 +1,3 @@
-
 #ifndef STMTNODE_H
 #define STMTNODE_H
 

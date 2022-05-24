@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "light.h"
 #include "../gxruntime/gxscene.h"

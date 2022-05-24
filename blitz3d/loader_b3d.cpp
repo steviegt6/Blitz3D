@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "loader_b3d.h"
 #include "meshmodel.h"

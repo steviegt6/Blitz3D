@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "mainframe.h"
 #include "resource.h"

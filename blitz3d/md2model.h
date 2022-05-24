@@ -1,4 +1,3 @@
-
 #ifndef MD2MODEL_H
 #define MD2MODEL_H
 

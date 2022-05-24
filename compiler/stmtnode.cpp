@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "nodes.h"
 
@@ -593,4 +592,3 @@ void ReadNode::translate(Codegen* g) {
 	else t = call("__bbReadStr");
 	g->code(var->store(g, t));
 }
-

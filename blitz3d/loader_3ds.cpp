@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "loader_3ds.h"
 #include "meshmodel.h"

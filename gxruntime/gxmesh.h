@@ -1,4 +1,3 @@
-
 #ifndef GXMESH_H
 #define GXMESH_H
 

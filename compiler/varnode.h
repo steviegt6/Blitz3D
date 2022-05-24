@@ -1,4 +1,3 @@
-
 #ifndef VARNODE_H
 #define VARNODE_H
 

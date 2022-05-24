@@ -1,4 +1,3 @@
-
 #ifndef GXDIR_H
 #define GXDIR_H
 

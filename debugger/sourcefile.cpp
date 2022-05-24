@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "sourcefile.h"
 #include "prefs.h"

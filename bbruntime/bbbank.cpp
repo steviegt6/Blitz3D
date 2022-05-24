@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbbank.h"
 #include "bbstream.h"
@@ -170,5 +169,3 @@ void bank_link(void(*rtSym)(const char*, void*)) {
 	rtSym("%WriteBytes%bank%file%offset%count", bbWriteBytes);
 	rtSym("%CallDLL$dll_name$func_name%in_bank=0%out_bank=0", bbCallDLL);
 }
-
-

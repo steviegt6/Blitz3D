@@ -1,4 +1,3 @@
-
 #ifndef GXCHANNEL_H
 #define GXCHANNEL_H
 

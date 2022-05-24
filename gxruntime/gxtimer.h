@@ -1,4 +1,3 @@
-
 #ifndef GXTIMER_H
 #define GXTIMER_H
 

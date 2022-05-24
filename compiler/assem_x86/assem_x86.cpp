@@ -1,10 +1,6 @@
-
 /*
-
   BlitzPC assembler.
-
   This REALLY needs some work - very slow.
-
 */
 
 #include "../std.h"

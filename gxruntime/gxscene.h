@@ -1,4 +1,3 @@
-
 #ifndef GXSCENE_H
 #define GXSCENE_H
 

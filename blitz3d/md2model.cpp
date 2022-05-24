@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "md2rep.h"
 #include "md2model.h"

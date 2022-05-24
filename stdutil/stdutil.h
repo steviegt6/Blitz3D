@@ -1,4 +1,3 @@
-
 #ifndef STDUTIL_H
 #define STDUTIL_H
 
@@ -19,7 +18,7 @@ void _cdecl operator delete(void* q);
 void _cdecl operator delete[](void* q);
 void _cdecl operator delete(void* q, const char* file, int line);
 void _cdecl operator delete[](void* q, const char* file, int line);
-#define new new( __FILE__,__LINE__ )
+#define d_new new( __FILE__,__LINE__ )
 
 #endif
 

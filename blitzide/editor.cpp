@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "blitzide.h"
 #include "editor.h"

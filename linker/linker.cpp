@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "linker.h"
 #include "image_util.h"

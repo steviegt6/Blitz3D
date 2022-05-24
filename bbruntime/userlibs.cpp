@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbsys.h"
 #include "userlibs.h"
@@ -92,5 +91,3 @@ void userlibs_link(void(*rtSym)(const char*, void*)) {
 	rtSym("_bbStrToCStr", _bbStrToCStr);
 	rtSym("_bbCStrToStr", _bbCStrToStr);
 }
-
-

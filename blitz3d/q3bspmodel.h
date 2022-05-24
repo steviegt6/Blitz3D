@@ -1,4 +1,3 @@
-
 #ifndef Q3BSPMODEL_H
 #define Q3BSPMODEL_H
 

@@ -1,4 +1,3 @@
-
 #ifndef PLANEMODEL_H
 #define PLANEMODEL_H
 

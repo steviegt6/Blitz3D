@@ -1,4 +1,3 @@
-
 #ifndef DECLNODE_H
 #define DECLNODE_H
 

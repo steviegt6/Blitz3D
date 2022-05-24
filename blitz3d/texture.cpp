@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "geom.h"
 #include "texture.h"

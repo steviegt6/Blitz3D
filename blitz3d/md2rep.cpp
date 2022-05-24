@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "md2rep.h"
 #include "md2norms.h"
@@ -263,4 +262,3 @@ void MD2Rep::render(Model* model, const Vert* v_a, int render_b, float render_t)
 
 	model->enqueue(mesh, 0, n_verts, 0, n_tris);
 }
-

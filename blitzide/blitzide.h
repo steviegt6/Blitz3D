@@ -1,4 +1,3 @@
-
 #ifndef BLITZIDE_H
 #define BLITZIDE_H
 

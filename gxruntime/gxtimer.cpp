@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxtimer.h"
 #include "gxruntime.h"
@@ -28,4 +27,3 @@ int gxTimer::wait() {
 	ticks_get += n;
 	return n;
 }
-

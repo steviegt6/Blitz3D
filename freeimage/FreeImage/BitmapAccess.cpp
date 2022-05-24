@@ -3,7 +3,7 @@
 //
 // Design and implementation by
 // - Floris van den Berg (flvdberg@wxs.nl)
-// - Hervé Drolon (drolon@iut.univ-lehavre.fr)
+// - Herv?Drolon (drolon@iut.univ-lehavre.fr)
 //
 // This file is part of FreeImage 2
 //

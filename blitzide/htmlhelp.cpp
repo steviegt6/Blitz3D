@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "htmlhelp.h"
 #include "mainframe.h"
@@ -43,4 +42,3 @@ void HtmlHelp::OnBeforeNavigate2(LPCTSTR url, DWORD flags, LPCTSTR target, CByte
 BOOL HtmlHelp::OnEraseBkgnd(CDC* dc) {
 	return true;
 }
-

@@ -1,4 +1,3 @@
-
 #ifndef BBAUDIO_H
 #define BBAUDIO_H
 
@@ -25,4 +24,3 @@ void		 bbChannelPan(gxChannel* channel, float pan);
 int			 bbChannelPlaying(gxChannel* channel);
 
 #endif
-

@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "nodes.h"
 
@@ -288,4 +287,3 @@ TNode* Node::jumpf(TNode* expr, const std::string& s) {
 TNode* Node::jumpge(TNode* l, TNode* r, const std::string& s) {
 	return new TNode(IR_JUMPGE, l, r, s);
 }
-

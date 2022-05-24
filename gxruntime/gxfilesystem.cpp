@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxfilesystem.h"
 
@@ -59,11 +58,6 @@ std::string gxFileSystem::getCurrentDir()const {
 }
 
 int gxFileSystem::getFileSize(const std::string& name)const {
-	/*WIN32_FIND_DATA findData;
-	HANDLE h=FindFirstFile( name.c_str(),&findData );
-	if( h==INVALID_HANDLE_VALUE ) return 0;
-	int n=findData.dwFileAttributes,sz=findData.nFileSizeLow;
-	FindClose( h );return n & FILE_ATTRIBUTE_DIRECTORY ? 0 : sz;*/
 	return std::filesystem::file_size(name);
 }
 

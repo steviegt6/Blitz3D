@@ -1,4 +1,3 @@
-
 #ifndef GXCANVAS_H
 #define GXCANVAS_H
 

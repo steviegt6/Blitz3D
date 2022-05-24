@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include <winreg.h>
 #include <iomanip>

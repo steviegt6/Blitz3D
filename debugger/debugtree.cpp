@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "debugtree.h"
 #include "prefs.h"
@@ -251,4 +250,3 @@ void LocalsTree::pushFrame(void* f, void* e, const char* func) {
 void LocalsTree::popFrame() {
 	frames.pop_back();
 }
-

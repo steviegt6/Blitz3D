@@ -1,4 +1,3 @@
-
 #ifndef GXGRAPHICS_H
 #define GXGRAPHICS_H
 

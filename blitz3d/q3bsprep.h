@@ -1,4 +1,3 @@
-
 #ifndef Q3BSPREP_H
 #define Q3BSPREP_H
 

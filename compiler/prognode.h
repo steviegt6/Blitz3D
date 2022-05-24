@@ -1,4 +1,3 @@
-
 #ifndef PROGNODE_H
 #define PROGNODE_H
 

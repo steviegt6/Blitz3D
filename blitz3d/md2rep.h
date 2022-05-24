@@ -1,4 +1,3 @@
-
 #ifndef MD2REP_H
 #define MD2REP_H
 

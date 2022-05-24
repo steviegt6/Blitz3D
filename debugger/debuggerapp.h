@@ -1,4 +1,3 @@
-
 #ifndef DEBUGGERAPP_H
 #define DEBUGGERAPP_H
 

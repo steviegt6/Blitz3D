@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbsockets.h"
 #include <wininet.h>

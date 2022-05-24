@@ -1,4 +1,3 @@
-
 #ifndef BBSTRING_H
 #define BBSTRING_H
 

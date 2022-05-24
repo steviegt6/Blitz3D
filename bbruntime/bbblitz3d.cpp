@@ -1,4 +1,3 @@
-
 #include "std.h"
 
 #include "bbblitz3d.h"
@@ -60,84 +59,101 @@ static std::map<std::string, Transform> loader_mat_map;
 static inline void debug3d() {
 	if(debug && !gx_scene) RTEX("3D Graphics mode not set.");
 }
+
 static inline void debugTexture(Texture* t) {
 	if(debug && !texture_set.count(t)) RTEX("Texture does not exist!");
 }
+
 static inline void debugBrush(Brush* b) {
 	if(debug && !brush_set.count(b)) RTEX("Brush does not exist!");
 }
+
 static inline void debugEntity(Entity* e) {
 	if(debug && !entity_set.count(e)) RTEX("Entity does not exist!");
 }
+
 static inline void debugParent(Entity* e) {
 	if(debug) {
 		debug3d();
 		if(e && !entity_set.count(e)) RTEX("Parent entity does not exist.");
 	}
 }
+
 static inline void debugMesh(MeshModel* m) {
 	if(debug) {
 		debugEntity(m); if(!m->getMeshModel()) RTEX("Entity is not a mesh!");
 	}
 }
+
 static inline void debugObject(Object* o) {
 	if(debug) {
 		debugEntity(o); if(!o->getObject()) RTEX("Entity is not an object!");
 	}
 }
+
 static inline void debugColl(Object* o, int index) {
 	if(debug) {
 		debugObject(o);
 		if(index<1 || index>o->getCollisions().size()) RTEX("Collision index out of range.");
 	}
 }
+
 static inline void debugCamera(Camera* c) {
 	if(debug) {
 		debugEntity(c); if(!c->getCamera()) RTEX("Entity is not a camera!");
 	}
 }
+
 static inline void debugLight(Light* l) {
 	if(debug) {
 		debugEntity(l); if(!l->getLight()) RTEX("Entity is not a light!");
 	}
 }
+
 static inline void debugModel(Model* m) {
 	if(debug) {
 		debugEntity(m); if(!m->getModel()) RTEX("Entity is not a model!");
 	}
 }
+
 static inline void debugSprite(Sprite* s) {
 	if(debug) {
 		debugModel(s); if(!s->getSprite()) RTEX("Entity is not a sprite!");
 	}
 }
+
 static inline void debugMD2(MD2Model* m) {
 	if(debug) {
 		debugModel(m); if(!m->getMD2Model()) RTEX("Entity is not an MD2 Model!");
 	}
 }
+
 static inline void debugBSP(Q3BSPModel* m) {
 	if(debug) {
 		debugModel(m); if(!m->getBSPModel()) RTEX("Entity is not a BSP Model!");
 	}
 }
+
 static inline void debugTerrain(Terrain* t) {
 	if(debug) {
 		debugModel(t); if(!t->getTerrain()) RTEX("Entity is not a terrain!");
 	}
 }
+
 static inline void debugSegs(int n) {
 	if(debug) {
 		debug3d();
 		if(n < 3 || n>50) RTEX("Illegal number of segments!");
 	}
 }
+
 static inline void debugVertex(Surface* s, int n) {
 	if(debug) {
 		debug3d();
 		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range.");
 	}
 }
+
 static inline void debugVertex(Surface* s, int n, int t) {
 	if(debug) {
 		debug3d();
@@ -145,6 +161,7 @@ static inline void debugVertex(Surface* s, int n, int t) {
 		if(t < 0 || t>1) RTEX("Texture coordinate set out of range.");
 	}
 }
+
 
 static Entity* loadEntity(std::string t, int hint) {
 	t = tolower(t);
@@ -213,68 +230,67 @@ static Entity* findChild(Entity* e, const std::string& t) {
 ///////////////////////////
 // GLOBAL WORLD COMMANDS //
 ///////////////////////////
-void  bbLoaderMatrix(BBStr* ext, float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz) {
+void bbLoaderMatrix(BBStr* ext, float xx, float xy, float xz, float yx, float yy, float yz, float zx, float zy, float zz) {
 	loader_mat_map.erase(*ext);
 	loader_mat_map[*ext] = Transform(Matrix(Vector(xx, xy, xz), Vector(yx, yy, yz), Vector(zx, zy, zz)));
 	delete ext;
 }
 
-int   bbHWTexUnits() {
+int bbHWTexUnits() {
 	debug3d();
 	return gx_scene->hwTexUnits();
 }
 
-int	  bbGfxDriverCaps3D() {
+int bbGfxDriverCaps3D() {
 	debug3d();
 	return gx_scene->gfxDriverCaps3D();
 }
 
-void  bbHWMultiTex(int enable) {
+void bbHWMultiTex(int enable) {
 	debug3d();
 	gx_scene->setHWMultiTex(!!enable);
 }
 
-void  bbWBuffer(int enable) {
+void bbWBuffer(int enable) {
 	debug3d();
 	gx_scene->setWBuffer(!!enable);
 }
 
-void  bbDither(int enable) {
+void bbDither(int enable) {
 	debug3d();
 	gx_scene->setDither(!!enable);
 }
 
-void  bbAntiAlias(int enable) {
+void bbAntiAlias(int enable) {
 	debug3d();
 	gx_scene->setAntialias(!!enable);
 }
 
-void  bbWireFrame(int enable) {
+void bbWireFrame(int enable) {
 	debug3d();
 	gx_scene->setWireframe(!!enable);
 }
 
-void  bbAmbientLight(float r, float g, float b) {
+void bbAmbientLight(float r, float g, float b) {
 	debug3d();
 	Vector t(r * ctof, g * ctof, b * ctof);
 	gx_scene->setAmbient(&(t.x));
 }
 
-void  bbClearCollisions() {
+void bbClearCollisions() {
 	debug3d();
 	world->clearCollisions();
 }
 
-void  bbCollisions(int src_type, int dest_type, int method, int response) {
+void bbCollisions(int src_type, int dest_type, int method, int response) {
 	debug3d();
 	world->addCollision(src_type, dest_type, method, response);
 }
 
 static int update_ms;
 
-void  bbUpdateWorld(float elapsed) {
+void bbUpdateWorld(float elapsed) {
 	debug3d();
-
 #ifdef BETA
 	update_ms = gx_runtime->getMilliSecs();
 	world->update(elapsed);
@@ -285,12 +301,12 @@ void  bbUpdateWorld(float elapsed) {
 #endif
 }
 
-void  bbCaptureWorld() {
+void bbCaptureWorld() {
 	debug3d();
 	world->capture();
 }
 
-void  bbRenderWorld(float tween) {
+void bbRenderWorld(float tween) {
 	debug3d();
 
 	//Should we remove this stuff?
@@ -341,11 +357,11 @@ void  bbRenderWorld(float tween) {
 #endif
 }
 
-int  bbTrisRendered() {
+int bbTrisRendered() {
 	return tri_count;
 }
 
-float  bbStats3D(int n) {
+float bbStats3D(int n) {
 	return stats3d[n];
 }
 
@@ -360,7 +376,6 @@ int bbRunningUnderWine() {
 ////////////////
 // MEMORYINFO //
 ////////////////
-
 int bbMemoryLoad() {
 	return gx_runtime->getMemoryLoad();
 }
@@ -386,7 +401,6 @@ int bbAvailVirtual() {
 //////////////////////
 
 //Note: modify canvas->backup() to NOT release backup image!
-//
 Texture* bbLoadTexture(BBStr* file, int flags) {
 	debug3d();
 	Texture* t = new Texture(*file, flags); delete file;
@@ -419,66 +433,66 @@ Texture* bbCreateTexture(int w, int h, int flags, int frames) {
 	return t;
 }
 
-void  bbFreeTexture(Texture* t) {
+void bbFreeTexture(Texture* t) {
 	if(!t) return;
 	debugTexture(t);
 	if(texture_set.erase(t)) delete t;
 }
 
-void  bbTextureBlend(Texture* t, int blend) {
+void bbTextureBlend(Texture* t, int blend) {
 	debugTexture(t);
 	t->setBlend(blend);
 }
 
-void  bbTextureCoords(Texture* t, int flags) {
+void bbTextureCoords(Texture* t, int flags) {
 	debugTexture(t);
 	t->setFlags(flags);
 }
 
-void  bbTextureBumpEnvMat(Texture* t, int x, int y, float envmat) {
+void bbTextureBumpEnvMat(Texture* t, int x, int y, float envmat) {
 	debugTexture(t);
 	t->setBumpEnvMat(x, y, envmat);
 }
 
-void  bbTextureBumpEnvScale(Texture* t, float envscale) {
+void bbTextureBumpEnvScale(Texture* t, float envscale) {
 	debugTexture(t);
 	t->setBumpEnvScale(envscale);
 }
 
-void  bbTextureBumpEnvOffset(Texture* t, float envoffset) {
+void bbTextureBumpEnvOffset(Texture* t, float envoffset) {
 	debugTexture(t);
 	t->setBumpEnvOffset(envoffset);
 }
 
-void  bbScaleTexture(Texture* t, float u_scale, float v_scale) {
+void bbScaleTexture(Texture* t, float u_scale, float v_scale) {
 	debugTexture(t);
 	t->setScale(1 / u_scale, 1 / v_scale);
 }
 
-void  bbRotateTexture(Texture* t, float angle) {
+void bbRotateTexture(Texture* t, float angle) {
 	debugTexture(t);
 	t->setRotation(-angle * dtor);
 }
 
-void  bbPositionTexture(Texture* t, float u_pos, float v_pos) {
+void bbPositionTexture(Texture* t, float u_pos, float v_pos) {
 	debugTexture(t);
 	t->setPosition(-u_pos, -v_pos);
 }
 
-void  bbTextureLodBias(float bias) {
+void bbTextureLodBias(float bias) {
 	gx_scene->textureLodBias = *((DWORD*)&bias);
 }
 
-void  bbTextureAnisotropic(int level) {
+void bbTextureAnisotropic(int level) {
 	gx_scene->textureAnisotropic = level;
 }
 
-int  bbTextureWidth(Texture* t) {
+int bbTextureWidth(Texture* t) {
 	debugTexture(t);
 	return t->getCanvas(0)->getWidth();
 }
 
-int  bbTextureHeight(Texture* t) {
+int bbTextureHeight(Texture* t) {
 	debugTexture(t);
 	return t->getCanvas(0)->getHeight();
 }

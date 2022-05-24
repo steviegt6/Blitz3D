@@ -1,4 +1,3 @@
-
 #include "libs.h"
 
 #include <iostream>

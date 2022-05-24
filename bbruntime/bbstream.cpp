@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbstream.h"
 
@@ -180,6 +179,3 @@ void stream_link(void(*rtSym)(const char*, void*)) {
 	rtSym("WriteLine%stream$string", bbWriteLine);
 	rtSym("CopyStream%src_stream%dest_stream%buffer_size=16384", bbCopyStream);
 }
-
-
-

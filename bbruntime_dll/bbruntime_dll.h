@@ -1,4 +1,3 @@
-
 /* Win32 runtime dynamic link lib */
 
 #ifndef BBRUNTIME_DLL_H

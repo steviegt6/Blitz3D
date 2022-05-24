@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 
 int atoi(const std::string& s) {

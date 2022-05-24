@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "bbsys.h"
 #include "bbruntime.h"
@@ -8,10 +7,11 @@
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
 int ErrorMessagePool::size = 0;
 
-void  bbEnd() {
+void bbEnd() {
 	RTEX(0);
 }
-void  bbStop() {
+
+void bbStop() {
 	gx_runtime->debugStop();
 	if(!gx_runtime->idle()) RTEX(0);
 }
@@ -21,12 +21,12 @@ void bbDisableClose() {
 	RemoveMenu(hmenu, SC_CLOSE, MF_BYCOMMAND);
 }
 
-void  bbAppTitle(BBStr* ti, BBStr* cp) {
+void bbAppTitle(BBStr* ti, BBStr* cp) {
 	gx_runtime->setTitle(*ti, *cp);
 	delete ti, cp;
 }
 
-void  bbRuntimeError(BBStr* str) {
+void bbRuntimeError(BBStr* str) {
 	std::string t = *str; delete str;
 	if(t.size() > 255) t[255] = 0;
 	static char err[256];
@@ -47,7 +47,7 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 	delete str;
 }
 
-int   bbExecFile(BBStr* f) {
+int bbExecFile(BBStr* f) {
 	std::string t = *f; 
 	delete f;
 	int n = gx_runtime->execute(t);
@@ -55,11 +55,11 @@ int   bbExecFile(BBStr* f) {
 	return n;
 }
 
-void  bbDelay(int ms) {
+void bbDelay(int ms) {
 	if(!gx_runtime->delay(ms)) RTEX(0);
 }
 
-int  bbMilliSecs() {
+int bbMilliSecs() {
 	return gx_runtime->getMilliSecs();
 }
 
@@ -79,7 +79,7 @@ BBStr* bbGetEnv(BBStr* env_var) {
 	return val;
 }
 
-void  bbSetEnv(BBStr* env_var, BBStr* val) {
+void bbSetEnv(BBStr* env_var, BBStr* val) {
 	std::string t = *env_var + "=" + *val;
 	putenv(t.c_str());
 	delete env_var;
@@ -91,14 +91,14 @@ gxTimer* bbCreateTimer(int hertz) {
 	return t;
 }
 
-int   bbWaitTimer(gxTimer* t) {
+int bbWaitTimer(gxTimer* t) {
 	int n = t->wait();
 	delete t;
 	if(!gx_runtime->idle()) RTEX(0);
 	return n;
 }
 
-void  bbFreeTimer(gxTimer* t) {
+void bbFreeTimer(gxTimer* t) {
 	gx_runtime->freeTimer(t);
 	delete t;
 }
@@ -137,21 +137,21 @@ void bbSetClipboardContents(BBStr* contents) {
 	CloseClipboard();
 }
 
-void  bbDebugLog(BBStr* t) {
+void bbDebugLog(BBStr* t) {
 	gx_runtime->debugLog(t->c_str());
 	delete t;
 }
 
-void  _bbDebugStmt(int pos, const char* file) {
+void _bbDebugStmt(int pos, const char* file) {
 	gx_runtime->debugStmt(pos, file);
 	if(!gx_runtime->idle()) RTEX(0);
 }
 
-void  _bbDebugEnter(void* frame, void* env, const char* func) {
+void _bbDebugEnter(void* frame, void* env, const char* func) {
 	gx_runtime->debugEnter(frame, env, func);
 }
 
-void  _bbDebugLeave() {
+void _bbDebugLeave() {
 	gx_runtime->debugLeave();
 }
 

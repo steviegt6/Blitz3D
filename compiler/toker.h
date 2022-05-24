@@ -1,9 +1,6 @@
-
 /*
-
   The Toker converts an inout stream into tokens for use by the parser.
-
-  */
+*/
 
 #ifndef TOKER_H
 #define TOKER_H

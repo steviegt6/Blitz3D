@@ -1,4 +1,3 @@
-
 #ifndef DDUTIL_H
 #define DDUTIL_H
 

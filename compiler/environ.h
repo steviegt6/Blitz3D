@@ -1,9 +1,6 @@
-
 /*
-
   An environ represent a stack frame block.
-
-  */
+*/
 
 #ifndef ENVIRON_H
 #define ENVIRON_H

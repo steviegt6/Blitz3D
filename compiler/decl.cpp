@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "decl.h"
 #include "type.h"
@@ -32,4 +31,3 @@ Decl* DeclSeq::insertDecl(const std::string& s, Type* t, int kind, ConstType* d)
 	decls.push_back(new Decl(s, t, kind, d));
 	return decls.back();
 }
-

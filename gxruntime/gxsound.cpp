@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxsound.h"
 #include "gxaudio.h"
@@ -47,4 +46,3 @@ void gxSound::setPan(float pan) {
 	def_pan = (pan + 1.0f) * 127.5f;
 	defs_valid = false;
 }
-

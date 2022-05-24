@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "q3bspmodel.h"
 #include "q3bsprep.h"

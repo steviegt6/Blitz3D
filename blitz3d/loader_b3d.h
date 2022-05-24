@@ -1,4 +1,3 @@
-
 #ifndef LOADER_B3D_H
 #define LOADER_B3D_H
 

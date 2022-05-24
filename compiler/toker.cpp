@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include <cctype>
 #include "toker.h"

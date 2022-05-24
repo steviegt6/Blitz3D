@@ -1,4 +1,3 @@
-
 #ifndef HTMLHELP_H
 #define HTMLHELP_H
 

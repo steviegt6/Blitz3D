@@ -1,4 +1,3 @@
-
 #ifndef GXINPUT_H
 #define GXINPUT_H
 

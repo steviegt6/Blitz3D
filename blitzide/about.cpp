@@ -1,4 +1,3 @@
-
 #include "stdafx.h"
 #include "prefs.h"
 #include "libs.h"
@@ -95,4 +94,3 @@ void aboutBlitz() {
 	about.EndDialog(0);
 	AfxGetMainWnd()->EnableWindow(1);
 }
-

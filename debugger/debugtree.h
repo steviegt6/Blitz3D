@@ -1,4 +1,3 @@
-
 #ifndef DEBUGTREE_H
 #define DEBUGTREE_H
 

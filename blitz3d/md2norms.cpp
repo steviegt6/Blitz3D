@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "md2norms.h"
 

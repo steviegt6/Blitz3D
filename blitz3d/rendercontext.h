@@ -1,4 +1,3 @@
-
 #ifndef RENDERCONTEXT_H
 #define RENDERCONTEXT_H
 

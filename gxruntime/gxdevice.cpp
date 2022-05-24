@@ -1,4 +1,3 @@
-
 #include "std.h"
 #include "gxdevice.h"
 #include "gxruntime.h"

@@ -1,4 +1,3 @@
-
 #ifndef GXDEVICE_H
 #define GXDEVICE_H
 

@@ -1,4 +1,3 @@
-
 #ifndef GXSOUND_H
 #define GXSOUND_H
 

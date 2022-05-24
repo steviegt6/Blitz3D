@@ -1,4 +1,3 @@
-
 #ifndef CACHEDTEXTURE_H
 #define CACHEDTEXTURE_H
 

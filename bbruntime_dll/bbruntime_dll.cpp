@@ -1,4 +1,3 @@
-
 #pragma warning( disable:4786 )
 
 #include "bbruntime_dll.h"
@@ -346,4 +345,3 @@ int __stdcall bbWinMain() {
 	ExitProcess(0);
 	return 0;
 }
-

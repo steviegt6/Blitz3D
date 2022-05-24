@@ -1,4 +1,3 @@
-
 #ifndef GXMOVIE_H
 #define GXMOVIE_H
 

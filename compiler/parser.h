@@ -1,8 +1,5 @@
-
 /*
-
   The parser builds an abstact syntax tree from input tokens.
-
 */
 
 #ifndef PARSER_H
