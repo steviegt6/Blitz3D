@@ -4,6 +4,8 @@
 
 #undef HtmlHelp
 
+#include <set>
+
 class HtmlHelp;
 
 class HelpListener {
@@ -17,6 +19,16 @@ public:
 	HtmlHelp(HelpListener* l) :listener(l) {}
 
 	std::string getTitle();
+
+	//Using this to prevent MFC from opening these on IE.
+	std::set<std::string> specialUrls =
+	{
+		"https://github.com/Saalvage/Blitz3D/blob/sth/EXTENDING.md",
+		"https://mojolabs.nz/",
+		"https://www.syntaxbomb.com/index.php",
+		"https://www.blitzcoder.org/forum/",
+		"https://aestheticalz.github.io/BlitzDocs/index.htm"
+	};
 
 	DECLARE_DYNAMIC(HtmlHelp)
 	DECLARE_MESSAGE_MAP()

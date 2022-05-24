@@ -39,6 +39,19 @@ static std::string functionList[999]; //a huge array
 * sym is a pointer, backup function name is pointer too.
 * So, variant of backup name's content will change by sym's content.
 */
+//Allows userlibs to call DebugLog() and RuntimeError().
+//******************************************************
+__declspec(dllexport) void __cdecl BlitzDebugLog(const char* msg)
+{
+	if(gx_runtime) gx_runtime->debugLog(msg);
+}
+
+__declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
+{
+	bbruntime_panic(msg);
+}
+//******************************************************
+
 static void rtSym(const char* sym, void* pc) {
 	syms[sym] = pc;
 	functionList[functionNumber] = sym;
@@ -142,9 +155,6 @@ void Runtime::execute(void (*pc)(), const char* args, Debugger* dbg) {
 
 	//Fix the issue of NTF Mod clipping outside monitor boundaries in "fullscreen" mode when you have the system scale set to
 	//something different than 100%.
-	//************************************************************************************************************************
-	//BUG (?): Debugger window also scales back down. If set to the game thread only, the graphics cut out since it seems to run on
-	//the debugger thread.
 	SetProcessDPIAware();
 
 	if(gx_runtime = gxRuntime::openRuntime(hinst, params, dbg)) {

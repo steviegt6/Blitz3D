@@ -6,23 +6,8 @@ A fork of Blitz3D, with more functions, and easier to **localization**.
 
 This is a **fork** of [Blitz3D TSS](https://github.com/Saalvage/Blitz3D), made by [ZiYueCommentary](https://github.com/ZiYueCommentary/Blitz3D).
 
-## What's new
-
-- **UTF-8 Support**
-- **Get Domain's TXT answer**
-- **File Downloader**
-- ANSI Support(not suggest)
-- More keywords
-- Spare function name
-- *FastExt/FastText killer*
-- Custom Installer
-- ...and more! (maybe)
-
-### Blitz IDE
-
-- Optinal Backup
-- Drop to open
-- Modern toolbar icons
+## Extending Blitz3D TSS
+Please read [this document](EXTENDING.md).
 
 ## How to Build
 
@@ -45,6 +30,24 @@ This is a **fork** of [Blitz3D TSS](https://github.com/Saalvage/Blitz3D), made b
   When redistributing programs built with Blitz3D TSS, you will need to also include the `fmod.dll` file found in the `bin` directory with your programs. 
   
   This should be placed in the same directory as your program's executable.
+
+## What's new
+
+- **UTF-8 Support**
+- **Get Domain's TXT answer**
+- **File Downloader**
+- ANSI Support(not suggest)
+- More keywords
+- Spare function name
+- *FastExt/FastText killer*
+- Custom Installer
+- ...and more! (maybe)
+
+### Blitz IDE
+
+- Optinal Backup
+- Drop to open
+- Modern toolbar icons
 
 ## The zlib/libpng License
 
