@@ -238,7 +238,7 @@ void Toker::nextline()
 			continue;
 		}
 		int n = line[k + 1];
-		if((c == '<' && n == '>') || (c == '>' && n == '<'))
+		if((c == '<' && n == '>') || (c == '>' && n == '<') || (c == '!' && n == '='))
 		{
 			tokes.push_back(Toke(NE, from, k += 2));
 			continue;
@@ -251,6 +251,27 @@ void Toker::nextline()
 		if((c == '>' && n == '=') || (c == '=' && n == '>'))
 		{
 			tokes.push_back(Toke(GE, from, k += 2));
+			continue;
+		}
+		//Modern logical operators: &, |, !, !=, ^
+		if (c == '&') {
+			if (n != ' ') line = line.insert(k, 1, ' ');
+			tokes.push_back(Toke(AND, from, k += 2));
+			continue;
+		}
+		if (c == '|') {
+			if (n != ' ') line = line.insert(k, 1, ' ');
+			tokes.push_back(Toke(OR, from, k += 2));
+			continue;
+		}
+		if (c == '!') {
+			if (n != ' ') line = line.insert(k, 1, ' ');
+			tokes.push_back(Toke(NOT, from, k += 2));
+			continue;
+		}
+		if (c == '^') {
+			if (n != ' ') line = line.insert(k, 1, ' ');
+			tokes.push_back(Toke(XOR, from, k += 2));
 			continue;
 		}
 		tokes.push_back(Toke(c, from, ++k));
