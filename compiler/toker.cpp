@@ -269,11 +269,6 @@ void Toker::nextline()
 			tokes.push_back(Toke(NOT, from, k += 2));
 			continue;
 		}
-		if (c == '^') {
-			if (n != ' ') line = line.insert(k, 1, ' ');
-			tokes.push_back(Toke(XOR, from, k += 2));
-			continue;
-		}
 		tokes.push_back(Toke(c, from, ++k));
 	}
 	if(!tokes.size()) exit(0);

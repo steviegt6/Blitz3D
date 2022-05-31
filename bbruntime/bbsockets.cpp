@@ -465,7 +465,6 @@ void bbTCPTimeouts(int rt, int at) {
 }
 
 std::string exec(char* cmd) {
-	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	FILE* pipe = _popen(cmd, "r");
 	if (!pipe) return "";
 	char buffer[128];
@@ -475,7 +474,6 @@ std::string exec(char* cmd) {
 			result = buffer;
 	}
 	_pclose(pipe);
-	delete cmd;
 	return result;
 }
 
