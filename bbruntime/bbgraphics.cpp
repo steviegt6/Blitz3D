@@ -6,9 +6,7 @@
 #ifdef OPENCC
 #include "../opencc/include/opencc/opencc.h"
 #pragma comment(lib, "../opencc/lib/opencc.lib")
-
-opencc::SimpleConverter* openCC = nullptr;
-bool useOpencc = false;
+opencc::SimpleConverter* OpenCC = nullptr;
 #endif
 
 gxGraphics* gx_graphics;
@@ -718,7 +716,7 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 	if (yPos == 2) y -= curr_font->getHeight();
 	if (yPos == 1) y -= curr_font->getHeight() / 2;
 #ifdef OPENCC
-	if (useOpencc) *str = openCC->Convert(*str);
+	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
 #endif
 	gx_canvas->text(x, y, *str);
 	delete str;
@@ -727,11 +725,10 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
 #ifdef OPENCC
 void bbOpenCC(BBStr* path) {
 	std::string str = path->c_str();
-	if (str == "") useOpencc = false;
+	if (str == "") OpenCC = nullptr;
 	else {
 		try {
-			openCC = new opencc::SimpleConverter(path->c_str());
-			useOpencc = true;
+			OpenCC = new opencc::SimpleConverter(path->c_str());
 		}
 		catch (std::exception& e) {
 			MessageBoxW(0, L"OpenCC設定未找到！\r\nOpenCC configure not found!", L"運行時異常！", MB_ICONERROR | MB_TOPMOST);
@@ -1255,7 +1252,7 @@ void bbWrite(BBStr* str, int encoding)
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
 #ifdef OPENCC
-	if (useOpencc) *str = openCC->Convert(*str);
+	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
 #endif
 	c->text(curs_x, curs_y, *str);
 	curs_x += curr_font->getWidth(*str);
@@ -1268,7 +1265,7 @@ void bbPrint(BBStr* str, int encoding)
 	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
 #ifdef OPENCC
-	if (useOpencc) *str = openCC->Convert(*str);
+	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
 #endif
 	c->text(curs_x, curs_y, *str);
 	curs_x = 0;
@@ -1307,7 +1304,6 @@ BBStr* bbInput(BBStr* prompt)
 
 	while(go)
 	{
-
 		//render all text
 		//calc curs x and width
 		int cx = curs_x + curr_font->getWidth(str.substr(0, curs));
