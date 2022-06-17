@@ -15,3 +15,5 @@ _release/*.ttf
 *.bb_bak1
 .vs
 */objs/*
+*.zip
+temp

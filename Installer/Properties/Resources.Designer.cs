@@ -79,14 +79,14 @@ namespace Installer.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
         internal static System.IO.FileInfo zipFile {
             get {
                 object obj = ResourceManager.GetObject("zipFile", resourceCulture);
-                WriteByteToFile((System.Byte[])obj, System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\Blitz3DTSS.zip"); //save file into appdata...
+                WriteByteToFile((System.Byte[])obj, System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip"); //save file into appdata...
                 return new System.IO.FileInfo(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip");
             }
         }
@@ -98,7 +98,6 @@ namespace Installer.Properties {
                 return new System.IO.FileInfo(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip");
             }
         }
-
         public static bool WriteByteToFile(byte[] pReadByte, string fileName)
         {
             System.IO.FileStream pFileStream = null;

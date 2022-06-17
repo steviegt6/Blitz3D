@@ -26,12 +26,12 @@ public:
 	virtual void internalLog(const char* msg) {}
 };
 
-static int functionNumber = 1;
 static HINSTANCE hinst;
 static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
-static std::string functionList[999]; //a huge array
+static std::string funList[999]; //a huge array
+static int funNum = 0;
 
 /*
 * If you using a single variant to handle function names, then you will get error
@@ -53,11 +53,11 @@ __declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
 
 static void rtSym(const char* sym, void* pc) {
 	syms[sym] = pc;
-	functionList[functionNumber] = sym;
-	if (sym[0] == '%' || sym[0] == '$' || sym[0] == '#') functionList[functionNumber] = functionList[functionNumber].insert(1, "Blitz_");
-	else functionList[functionNumber] = "Blitz_" + functionList[functionNumber];
-	syms[functionList[functionNumber].c_str()] = pc;
-	functionNumber++;
+	funList[funNum] = sym;
+	if (sym[0] == '%' || sym[0] == '$' || sym[0] == '#') funList[funNum] = funList[funNum].insert(1, "Blitz_");
+	else funList[funNum] = "Blitz_" + funList[funNum];
+	syms[funList[funNum].c_str()] = pc;
+	funNum++;
 }
 
 static void killer() {

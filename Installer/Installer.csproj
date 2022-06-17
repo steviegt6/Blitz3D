@@ -113,6 +113,7 @@
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
+    <None Include="Resources\opencc.zip" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />

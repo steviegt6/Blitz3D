@@ -144,74 +144,72 @@ namespace Installer
             ButtonInstall.Enabled = false;
             ButtonCancel.Enabled = false;
 
-            new System.Threading.Thread(new System.Threading.ThreadStart(() => 
+            ControlBox = false;
+            LabelStatus.Show();
+            ProgressInstall.Show();
+            LabelStatus.Text = "Writing temporary file...";
+            try
             {
-                ControlBox = false;
-                LabelStatus.Show();
-                ProgressInstall.Show();
-                LabelStatus.Text = "Writing temporary file...";
+                if (Directory.Exists(BoxDirectoryPath.Text)) Directory.Delete(BoxDirectoryPath.Text, true);
+                if (!Directory.Exists(BoxDirectoryPath.Text)) Directory.CreateDirectory(BoxDirectoryPath.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("A error encountered when creating/deleting folder!\r\nPlease try again with run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            }
+            ProgressInstall.Value += 30;
+            LabelStatus.Text = "Extracting zip file...";
+            try
+            {
+                System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.zipFile.FullName, BoxDirectoryPath.Text);
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("A error encountered when installing Blitz3D TSS!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Environment.Exit(-1);
+            }
+
+            ProgressInstall.Value += 20;
+            Properties.Resources.zipFile.Delete(); //...delete it after extract
+
+            if (CheckOpenCC.Checked)
+            {
+                //OpenCC extension is for Chinese convert
+                //https://github.com/BYVoid/OpenCC
+                LabelStatus.Text = "Installing OpenCC extension...";
                 try
                 {
-                    if (Directory.Exists(BoxDirectoryPath.Text)) new DirectoryInfo(BoxDirectoryPath.Text).Delete(true);
-                    if (!Directory.Exists(BoxDirectoryPath.Text)) Directory.CreateDirectory(BoxDirectoryPath.Text);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("A error encountered when creating/deleting folder!\r\nPlease try again with run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.Exit(-1);
-                }
-                ProgressInstall.Value += 30;
-                LabelStatus.Text = "Extracting zip file...";
-                try
-                {
-                    System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.zipFile.FullName, BoxDirectoryPath.Text);
+                    System.IO.File.Delete(BoxDirectoryPath.Text + "\\Blitz3D.exe");
+                    Directory.Delete(BoxDirectoryPath.Text + "\\bin", true);
+                    System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.opencc.FullName, BoxDirectoryPath.Text);
                 }
                 catch (IOException)
                 {
-                    MessageBox.Show("A error encountered when installing Blitz3D TSS!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("A error encountered when installing OpenCC extension!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Environment.Exit(-1);
                 }
+                Properties.Resources.opencc.Delete();
+            }
+            ProgressInstall.Value += 20;
 
-                ProgressInstall.Value += 20;
-                Properties.Resources.zipFile.Delete(); //...delete it after extract
-
-                if (CheckOpenCC.Checked)
+            LabelStatus.Text = "Last step...";
+            if (CheckAssociation.Checked)
+            {
+                try
                 {
-                    //OpenCC extension is for Chinese convert
-                    //https://github.com/BYVoid/OpenCC
-                    LabelStatus.Text = "Installing OpenCC extension...";
-                    try
-                    {
-                        System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.opencc.FullName, BoxDirectoryPath.Text);
-                    }
-                    catch (IOException)
-                    {
-                        MessageBox.Show("A error encountered when installing OpenCC extension!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        Environment.Exit(-1);
-                    }
-                    Properties.Resources.opencc.Delete();
+                    SaveReg(BoxDirectoryPath.Text + "\\Blitz3D.exe", ".bb");
+                    ProgressInstall.Value += 15;
                 }
-                ProgressInstall.Value += 20;
-
-                LabelStatus.Text = "Last step...";
-                if (CheckAssociation.Checked)
+                catch (Exception)
                 {
-                    try
-                    {
-                        SaveReg(BoxDirectoryPath.Text + "\\Blitz3D.exe", ".bb");
-                        ProgressInstall.Value += 15;
-                    }
-                    catch (Exception)
-                    {
-                    }
                 }
-                if (CheckShortcut.Checked) CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe");
-                if (CheckStartUpMenu.Checked) CreateStartupMenuShortcut("Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe", BoxDirectoryPath.Text + "\\Blitz3D.exe");
-                ProgressInstall.Value += 15;
-                ControlBox = true;
-                ScrollPage(3);
-            })).Start();
-
+            }
+            if (CheckShortcut.Checked) CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory), "Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe");
+            if (CheckStartUpMenu.Checked) CreateStartupMenuShortcut("Blitz3D TSS", BoxDirectoryPath.Text + "\\Blitz3D.exe", BoxDirectoryPath.Text + "\\Blitz3D.exe");
+            ProgressInstall.Value += 15;
+            ControlBox = true;
+            ScrollPage(3); 
             PageConfirm.Enabled = true;
             ButtonBack.Enabled = true;
             ButtonInstall.Enabled = true;
@@ -236,13 +234,13 @@ namespace Installer
         public static void CreateStartupMenuShortcut(string lnkName, string targetPath, string iconLocation)
         {
             string pathToExe = targetPath;
-            string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);//or Environment.GetFolderPath(Environment.SpecialFolder.Programs);
+            string commonStartMenuPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
             string appStartMenuPath = Path.Combine(commonStartMenuPath,"Programs"); 
             if(!Directory.Exists(appStartMenuPath)) Directory.CreateDirectory(appStartMenuPath); 
             string shortcutLocation = Path.Combine(appStartMenuPath,lnkName+".lnk"); 
             WshShell shell = new WshShell(); 
             IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(shortcutLocation); 
-            shortcut.Description = "Blitz3D TSS"; //shortcut.IconLocation =@"C:\Program Files(x86)\TestApplTestApp.ico";//uncomment to set the icon of the shortcut
+            shortcut.Description = "Blitz3D TSS";
             shortcut.TargetPath = pathToExe; 
             shortcut.Save();
         }
