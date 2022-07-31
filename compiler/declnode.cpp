@@ -1,5 +1,6 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
 
 //////////////////////////////
 // Sequence of declarations //
@@ -62,7 +63,7 @@ void VarDeclNode::proto(DeclSeq* d, Environ* e) {
 		expr = expr->castTo(ty, e);
 		if(constant || (kind & DECL_PARAM)) {
 			ConstNode* c = expr->constNode();
-			if(!c) ex("Expression must be constant");
+			if(!c) ex(MultiLang::expression_must_be_constant);
 			if(ty == Type::int_type) ty = new ConstType(c->intValue());
 			else if(ty == Type::float_type) ty = new ConstType(c->floatValue());
 			else if(ty->structType()) ty = new ConstType();
@@ -74,10 +75,10 @@ void VarDeclNode::proto(DeclSeq* d, Environ* e) {
 			defType = ty->constType(); ty = defType->valueType;
 		}
 	}
-	else if(constant) ex("Constants must be initialized");
+	else if(constant) ex(MultiLang::constants_must_initialized);
 
 	Decl* decl = d->insertDecl(ident, ty, kind, defType);
-	if(!decl) ex("Duplicate variable name");
+	if(!decl) ex(MultiLang::duplicate_variable_name);
 	if(expr) sem_var = new DeclVarNode(decl);
 }
 
@@ -101,7 +102,7 @@ void FuncDeclNode::proto(DeclSeq* d, Environ* e) {
 	params->proto(decls.get(), e);
 	sem_type = new FuncType(t, decls.release(), false, false);
 	if(!d->insertDecl(ident, sem_type, DECL_FUNC)) {
-		delete sem_type; ex("duplicate identifier");
+		delete sem_type; ex(MultiLang::duplicate_identifier);
 	}
 	e->types.push_back(sem_type);
 }
@@ -114,7 +115,7 @@ void FuncDeclNode::semant(Environ* e) {
 	int k;
 	for(k = 0; k < sem_type->params->size(); ++k) {
 		Decl* d = sem_type->params->decls[k];
-		if(!decls->insertDecl(d->name, d->type, d->kind)) ex("duplicate identifier");
+		if(!decls->insertDecl(d->name, d->type, d->kind)) ex(MultiLang::duplicate_identifier);
 	}
 
 	stmts->semant(sem_env);
@@ -141,7 +142,7 @@ void FuncDeclNode::translate(Codegen* g) {
 	stmts->translate(g);
 
 	for(int k = 0; k < sem_env->labels.size(); ++k) {
-		if(sem_env->labels[k]->def < 0)	ex("Undefined label", sem_env->labels[k]->ref);
+		if(sem_env->labels[k]->def < 0)	ex(MultiLang::undefined_label, sem_env->labels[k]->ref);
 	}
 
 	//leave the function
@@ -157,7 +158,7 @@ void FuncDeclNode::translate(Codegen* g) {
 void StructDeclNode::proto(DeclSeq* d, Environ* e) {
 	sem_type = new StructType(ident, new DeclSeq());
 	if(!d->insertDecl(ident, sem_type, DECL_STRUCT)) {
-		delete sem_type; ex("Duplicate identifier");
+		delete sem_type; ex(MultiLang::duplicate_identifier);
 	}
 	e->types.push_back(sem_type);
 }
@@ -211,7 +212,7 @@ void StructDeclNode::translate(Codegen* g) {
 void DataDeclNode::proto(DeclSeq* d, Environ* e) {
 	expr = expr->semant(e);
 	ConstNode* c = expr->constNode();
-	if(!c) ex("Data expression must be constant");
+	if(!c) ex(MultiLang::data_expression_must_be_constant);
 	if(expr->sem_type == Type::string_type) str_label = genLabel();
 }
 
@@ -249,15 +250,15 @@ void VectorDeclNode::proto(DeclSeq* d, Environ* env) {
 	for(int k = 0; k < exprs->size(); ++k) {
 		ExprNode* e = exprs->exprs[k] = exprs->exprs[k]->semant(env);
 		ConstNode* c = e->constNode();
-		if(!c) ex("Blitz array sizes must be constant");
+		if(!c) ex(MultiLang::blitz_array_sizes_must_be_constant);
 		int n = c->intValue();
-		if(n < 0) ex("Blitz array sizes must not be negative");
+		if(n < 0) ex(MultiLang::blitz_array_sizes_must_not_negative);
 		sizes.push_back(n + 1);
 	}
 	std::string label = genLabel();
 	sem_type = new VectorType(label, ty, sizes);
 	if(!d->insertDecl(ident, sem_type, kind)) {
-		delete sem_type; ex("Duplicate identifier");
+		delete sem_type; ex(MultiLang::duplicate_identifier);
 	}
 	env->types.push_back(sem_type);
 }

@@ -2,9 +2,11 @@
 #include "bbsys.h"
 #include "../gxruntime/gxutf8.h"
 #include <time.h>
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
-#define CHKPOS(x) if( (x)<0 ) RTEX( (std::string(__func__)+": parameter must be positive").c_str() );
-#define CHKOFF(x) if( (x)<=0 ) RTEX( (std::string(__func__)+": parameter must be greater than 0").c_str() );
+#define CHKPOS(x) if( (x)<0 ) RTEX( SFormat(MultiLang::string_parameter_positive, __func__).c_str() );
+#define CHKOFF(x) if( (x)<=0 ) RTEX( SFormat(MultiLang::string_parameter_greater, __func__ ).c_str() );
 
 BBStr* bbString(BBStr* s, int n) {
 	BBStr* t = new BBStr();
@@ -37,6 +39,10 @@ int bbInstr(BBStr* s, BBStr* t, int from) {
 	int n = UTF8::find(*s, *t, from);
 	delete s; delete t;
 	return n < 0 ? 0 : n + 1;
+}
+
+int bbFind(BBStr* string, BBStr* find) {
+	return UTF8::find(string->c_str(), find->c_str(), 0);
 }
 
 BBStr* bbMid(BBStr* s, int o, int n) {
@@ -145,6 +151,7 @@ void string_link(void(*rtSym)(const char*, void*)) {
 	rtSym("$String$string%repeat", bbString);
 	rtSym("$Left$string%count", bbLeft);
 	rtSym("$Right$string%count", bbRight);
+	rtSym("%Find$string$find", bbFind);
 	rtSym("$Replace$string$from$to", bbReplace);
 	rtSym("%Instr$string$find%from=1", bbInstr);
 	rtSym("$Mid$string%start%count=-1", bbMid);

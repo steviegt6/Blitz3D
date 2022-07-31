@@ -1,5 +1,6 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
 
 static std::string fileLabel;
 static std::map<std::string, std::string> fileMap;
@@ -89,12 +90,12 @@ void DimNode::semant(Environ* e) {
 	if(Decl* d = e->findDecl(ident)) {
 		ArrayType* a = d->type->arrayType();
 		if(!a || a->dims != exprs->size() || (t && a->elementType != t)) {
-			ex("Duplicate identifier");
+			ex(MultiLang::duplicate_identifier);
 		}
 		sem_type = a; sem_decl = 0;
 	}
 	else {
-		if(e->level > 0) ex("Array not found in main program");
+		if(e->level > 0) ex(MultiLang::array_not_found_in_main);
 		if(!t) t = Type::int_type;
 		sem_type = new ArrayType(t, exprs->size());
 		sem_decl = e->decls->insertDecl(ident, sem_type, DECL_ARRAY);
@@ -135,8 +136,8 @@ void DimNode::translate(Codegen* g) {
 ////////////////
 void AssNode::semant(Environ* e) {
 	var->semant(e);
-	if(var->sem_type->constType()) ex("Constants can not be assigned to");
-	if(var->sem_type->vectorType()) ex("Blitz arrays can not be assigned to");
+	if(var->sem_type->constType()) ex(MultiLang::constants_can_not_assigned_to);
+	if(var->sem_type->vectorType()) ex(MultiLang::blitz_arrays_can_not_assigned_to);
 	expr = expr->semant(e);
 	expr = expr->castTo(var->sem_type, e);
 }
@@ -163,7 +164,7 @@ void ExprStmtNode::translate(Codegen* g) {
 ////////////////
 void LabelNode::semant(Environ* e) {
 	if(Label* l = e->findLabel(ident)) {
-		if(l->def >= 0) ex("duplicate label");
+		if(l->def >= 0) ex(MultiLang::duplicate_label);
 		l->def = pos; l->data_sz = data_sz;
 	}
 	else e->insertLabel(ident, pos, -1, data_sz);
@@ -211,7 +212,7 @@ void GotoNode::translate(Codegen* g) {
 // Gosub statement //
 /////////////////////
 void GosubNode::semant(Environ* e) {
-	if(e->level > 0) ex("'Gosub' may not be used inside a function");
+	if(e->level > 0) ex(MultiLang::gosub_may_not_used_inside_function);
 	if(!e->findLabel(ident)) e->insertLabel(ident, -1, pos, -1);
 	ident = e->funcLabel + ident;
 }
@@ -255,7 +256,7 @@ void IfNode::translate(Codegen* g) {
 ///////////
 void ExitNode::semant(Environ* e) {
 	sem_brk = e->breakLabel;
-	if(!sem_brk.size()) ex("break must appear inside a loop");
+	if(!sem_brk.size()) ex(MultiLang::break_must_appear_inside_loop);
 }
 
 void ExitNode::translate(Codegen* g) {
@@ -311,9 +312,9 @@ ForNode::~ForNode() {
 void ForNode::semant(Environ* e) {
 	var->semant(e);
 	Type* ty = var->sem_type;
-	if(ty->constType()) ex("Index variable can not be constant");
+	if(ty->constType()) ex(MultiLang::index_variable_can_not_constant);
 	if(ty != Type::int_type && ty != Type::float_type) {
-		ex("index variable must be integer or real");
+		ex(MultiLang::index_variable_must_integer_or_real);
 	}
 	fromExpr = fromExpr->semant(e);
 	fromExpr = fromExpr->castTo(ty, e);
@@ -322,7 +323,7 @@ void ForNode::semant(Environ* e) {
 	stepExpr = stepExpr->semant(e);
 	stepExpr = stepExpr->castTo(ty, e);
 
-	if(!stepExpr->constNode()) ex("Step value must be constant");
+	if(!stepExpr->constNode()) ex(MultiLang::step_value_must_constant);
 
 	std::string brk = e->setBreak(sem_brk = genLabel());
 	stmts->semant(e);
@@ -364,10 +365,10 @@ void ForEachNode::semant(Environ* e) {
 	var->semant(e);
 	Type* ty = var->sem_type;
 
-	if(ty->structType() == 0) ex("Index variable is not a NewType");
+	if(ty->structType() == 0) ex(MultiLang::index_variable_is_not_newtype);
 	Type* t = e->findType(typeIdent);
-	if(!t) ex("Type name not found");
-	if(t != ty) ex("Type mismatch");
+	if(!t) ex(MultiLang::type_name_not_found);
+	if (t != ty) ex(MultiLang::type_mismatch);
 
 	std::string brk = e->setBreak(sem_brk = genLabel());
 	stmts->semant(e);
@@ -409,7 +410,7 @@ void ForEachNode::translate(Codegen* g) {
 ////////////////////////////
 void ReturnNode::semant(Environ* e) {
 	if(e->level <= 0 && expr) {
-		ex("Main program cannot return a value");
+		ex(MultiLang::main_cannot_return_value);
 	}
 	if(e->level > 0) {
 		if(!expr) {
@@ -453,7 +454,7 @@ void ReturnNode::translate(Codegen* g) {
 //////////////////////
 void DeleteNode::semant(Environ* e) {
 	expr = expr->semant(e);
-	if(expr->sem_type->structType() == 0) ex("Can't delete non-Newtype");
+	if(expr->sem_type->structType() == 0) ex(MultiLang::cant_delete_non_newtype);
 }
 
 void DeleteNode::translate(Codegen* g) {
@@ -466,7 +467,7 @@ void DeleteNode::translate(Codegen* g) {
 ///////////////////////////
 void DeleteEachNode::semant(Environ* e) {
 	Type* t = e->findType(typeIdent);
-	if(!t || t->structType() == 0) ex("Specified name is not a NewType name");
+	if(!t || t->structType() == 0) ex(MultiLang::specified_name_is_not_newtype_name);
 }
 
 void DeleteEachNode::translate(Codegen* g) {
@@ -481,8 +482,8 @@ void InsertNode::semant(Environ* e) {
 	expr2 = expr2->semant(e);
 	StructType* t1 = expr1->sem_type->structType();
 	StructType* t2 = expr2->sem_type->structType();
-	if(!t1 || !t2) ex("Illegal expression type");
-	if(t1 != t2) ex("Objects types are differnt");
+	if(!t1 || !t2) ex(MultiLang::illegal_expression_type);
+	if(t1 != t2) ex(MultiLang::objects_types_are_different);
 }
 
 void InsertNode::translate(Codegen* g) {
@@ -500,7 +501,7 @@ void InsertNode::translate(Codegen* g) {
 void SelectNode::semant(Environ* e) {
 	expr = expr->semant(e);
 	Type* ty = expr->sem_type;
-	if(ty->structType()) ex("Select cannot be used with objects");
+	if(ty->structType()) ex(MultiLang::select_cannot_used_with_objects);
 
 	//we need a temp var
 	Decl* d = e->decls->insertDecl(genLabel(), expr->sem_type, DECL_LOCAL);
@@ -581,8 +582,8 @@ void RepeatNode::translate(Codegen* g) {
 ///////////////
 void ReadNode::semant(Environ* e) {
 	var->semant(e);
-	if(var->sem_type->constType()) ex("Constants can not be modified");
-	if(var->sem_type->structType()) ex("Data can not be read into an object");
+	if(var->sem_type->constType()) ex(MultiLang::constants_can_not_modified);
+	if(var->sem_type->structType()) ex(MultiLang::data_can_not_read_into_object);
 }
 
 void ReadNode::translate(Codegen* g) {

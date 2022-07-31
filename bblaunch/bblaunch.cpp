@@ -1,8 +1,6 @@
 #include <string>
 #include <Windows.h>
-
-static const char* bb_err =
-"Error when creating BlitzIDE process. Please make sure ide.exe is inside the \"bin\" folder.";
+#include "../MultiLang/MultiLang.h"
 
 static std::string getAppDir() {
 	char buffer[MAX_PATH];
@@ -13,7 +11,7 @@ static std::string getAppDir() {
 }
 
 static void fail(const char* p) {
-	::MessageBox(0, p, "Blitz Error", MB_SETFOREGROUND | MB_TOPMOST | MB_ICONERROR);
+	::MessageBox(0, p, MultiLang::bb_err, MB_SETFOREGROUND | MB_TOPMOST | MB_ICONERROR);
 	ExitProcess(-1);
 }
 
@@ -33,7 +31,7 @@ int WINAPI WinMain(_In_ HINSTANCE inst, _In_opt_ HINSTANCE prev, _In_ char* cmd,
 	ZeroMemory(&processInfo, sizeof(processInfo));
 
 	if(!CreateProcess(NULL, (char*)basedir.c_str(), NULL, NULL, FALSE, 0, NULL, NULL, &startupInfo, &processInfo)) {
-		fail(bb_err);
+		fail(MultiLang::init_err);
 	}
 
 	//Wait until BlitzIDE enters an idle state, then close bblaunch.

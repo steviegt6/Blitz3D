@@ -11,6 +11,10 @@
 
 #include "../gxruntime/gxutf8.h"
 
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
+#include "../bbruntime/bbsys.h"
+
 class DummyDebugger : public Debugger {
 public:
 	virtual void debugRun() {}
@@ -20,7 +24,7 @@ public:
 	virtual void debugLeave() {}
 	virtual void debugLog(const char* msg) {}
 	virtual void debugMsg(const char* e, bool serious) {
-		if(serious) MessageBoxW(0, UTF8::convertToUtf16(e).c_str(), L"Catastrophic Error!", MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
+		if(serious) MessageBoxW(0, UTF8::convertToUtf16(e).c_str(), MultiLang::runtime_error, MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 	virtual void debugSys(void* msg) {}
 	virtual void internalLog(const char* msg) {}
@@ -47,7 +51,7 @@ __declspec(dllexport) void __cdecl BlitzDebugLog(const char* msg)
 
 __declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
 {
-	bbruntime_panic(msg);
+	RTEX(msg);
 }
 //******************************************************
 
@@ -67,11 +71,11 @@ static void killer() {
 static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 	switch(u) {
 		case EXCEPTION_INT_DIVIDE_BY_ZERO:
-			bbruntime_panic("Integer divide by zero.");
+			bbruntime_panic(MultiLang::integer_divide_zero);
 			break;
 		case EXCEPTION_ACCESS_VIOLATION:
 			if(ErrorMessagePool::memoryAccessViolation == 0) {
-				bbruntime_panic("Memory Access Violation!\nThe program attempted to read or write to a protected memory address.");
+				bbruntime_panic(MultiLang::memory_access_violation);
 			}
 			else {
 				std::string s = "";
@@ -80,26 +84,26 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 						s = s + ErrorMessagePool::memoryAccessViolation[i] + "\n";
 					}
 				}
-				bbruntime_panic(s.c_str());
+				RTEX(s.c_str());
 			}
 			break;
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
-			bbruntime_panic("Illegal instruction.\nProcess tried to execute an invalid CPU instruction.");
+			bbruntime_panic(MultiLang::illegal_instruction);
 			break;
 		case EXCEPTION_STACK_OVERFLOW:
-			bbruntime_panic("Stack overflow.\nMake sure there is no recursion without a base case.");
+			bbruntime_panic(MultiLang::stack_overflow);
 			break;
 		case EXCEPTION_INT_OVERFLOW:
-			bbruntime_panic("Integer overflow!\nMake sure the integer doesnt exceed a value of 2147483647.");
+			bbruntime_panic(MultiLang::integer_overflow);
 			break;
 		case EXCEPTION_FLT_OVERFLOW:
-			bbruntime_panic("Float overflow!\nMake sure the float doesn't exceed a value of 3.40282347e+38F.");
+			bbruntime_panic(MultiLang::float_overflow);
 			break;
 		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-			bbruntime_panic("Float divide by zero.");
+			bbruntime_panic(MultiLang::float_divide_zero);
 			break;
 	}
-	bbruntime_panic("Unknown runtime exception.");
+	bbruntime_panic(MultiLang::unknown_runtime_exception);
 }
 
 int Runtime::version() {
@@ -200,7 +204,7 @@ static std::map<std::string, int> runtime_syms;
 static Runtime* runtime;
 
 static void fail() {
-	MessageBox(0, "Unable to run Blitz Basic module.", 0, 0);
+	MessageBox(0, MultiLang::unable_run_module, 0, 0);
 	ExitProcess(-1);
 }
 
@@ -225,7 +229,7 @@ static int findSym(const std::string& t) {
 	it = runtime_syms.find(t);
 	if(it != runtime_syms.end()) return it->second;
 
-	std::string err = "Can't find symbol: " + t;
+	std::string err = SFormat(MultiLang::cant_find_symbol, t);
 	MessageBox(0, err.c_str(), 0, 0);
 	ExitProcess(0);
 	return 0;
@@ -310,8 +314,8 @@ int __stdcall bbWinMain() {
 
 #ifdef BETA
 	int ver = VERSION & 0x7fff;
-	string t = "Created with Blitz3D Beta V" + itoa(ver / 100) + "." + itoa(ver % 100);
-	MessageBox(GetDesktopWindow(), t.c_str(), "Blitz3D Message", MB_OK);
+	string t = SFormat(MultiLang::created_with_beta, itoa(ver / 100), itoa(ver % 100));
+	MessageBox(GetDesktopWindow(), t.c_str(), MultiLang::blitz3d_message, MB_OK);
 #endif
 
 	runtime = runtimeGetRuntime();

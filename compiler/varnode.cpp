@@ -1,5 +1,7 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
 //////////////////////////////////
 // Common get/set for variables //
@@ -52,11 +54,11 @@ void IdentVarNode::semant(Environ* e) {
 	Type* t = tagType(tag, e); if(!t) t = Type::int_type;
 	if(sem_decl = e->findDecl(ident)) {
 		if(!(sem_decl->kind & (DECL_GLOBAL | DECL_LOCAL | DECL_PARAM))) {
-			ex("Identifier '" + sem_decl->name + "' may not be used like this");
+			ex(SFormat(MultiLang::identifier_not_used_like_this, sem_decl->name));
 		}
 		Type* ty = sem_decl->type;
 		if(ty->constType()) ty = ty->constType()->valueType;
-		if(tag.size() && t != ty) ex("Variable type mismatch");
+		if(tag.size() && t != ty) ex(MultiLang::variable_type_mismatch);
 	}
 	else {
 		//ugly auto decl!
@@ -73,10 +75,10 @@ void ArrayVarNode::semant(Environ* e) {
 	exprs->castTo(Type::int_type, e);
 	Type* t = e->findType(tag);
 	sem_decl = e->findDecl(ident);
-	if(!sem_decl || !(sem_decl->kind & DECL_ARRAY)) ex("Array not found");
+	if(!sem_decl || !(sem_decl->kind & DECL_ARRAY)) ex(MultiLang::array_not_found);
 	ArrayType* a = sem_decl->type->arrayType();
-	if(t && t != a->elementType) ex("array type mismtach");
-	if(a->dims != exprs->size()) ex("incorrect number of dimensions");
+	if(t && t != a->elementType) ex(MultiLang::array_type_mismatch);
+	if(a->dims != exprs->size()) ex(MultiLang::incorrect_number_of_dimensions);
 	sem_type = a->elementType;
 }
 
@@ -104,9 +106,9 @@ TNode* ArrayVarNode::translate(Codegen* g) {
 void FieldVarNode::semant(Environ* e) {
 	expr = expr->semant(e);
 	StructType* s = expr->sem_type->structType();
-	if(!s) ex("Variable must be a Type");
+	if(!s) ex(MultiLang::variable_must_be_type);
 	sem_field = s->fields->findDecl(ident);
-	if(!sem_field) ex("Type field not found");
+	if(!sem_field) ex(MultiLang::type_field_not_found);
 	sem_type = sem_field->type;
 }
 
@@ -123,14 +125,14 @@ TNode* FieldVarNode::translate(Codegen* g) {
 void VectorVarNode::semant(Environ* e) {
 	expr = expr->semant(e);
 	vec_type = expr->sem_type->vectorType();
-	if(!vec_type) ex("Variable must be a Blitz array");
-	if(vec_type->sizes.size() != exprs->size()) ex("Incorrect number of subscripts");
+	if(!vec_type) ex(MultiLang::variable_must_a_blitz_array);
+	if(vec_type->sizes.size() != exprs->size()) ex(MultiLang::incorrect_number_of_subscripts);
 	exprs->semant(e);
 	exprs->castTo(Type::int_type, e);
 	for(int k = 0; k < exprs->size(); ++k) {
 		if(ConstNode* t = exprs->exprs[k]->constNode()) {
 			if(t->intValue() >= vec_type->sizes[k]) {
-				ex("Blitz array subscript out of range");
+				ex(MultiLang::blitz_array_subscript_out_of_range);
 			}
 		}
 	}

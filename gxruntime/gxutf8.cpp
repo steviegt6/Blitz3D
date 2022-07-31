@@ -116,7 +116,7 @@ void UTF8::UTF8toANSI(CString& strUTF8) {
 CString UTF8::convertToUTF8(CString str) {
     UTF8::ANSItoUTF8(str); //change encoding...
     return str; //return string after convert
-    delete str; //delete used string
+    delete str; //delete used string, maybe useless.
 }
 
 CString UTF8::convertToANSI(CString str) {

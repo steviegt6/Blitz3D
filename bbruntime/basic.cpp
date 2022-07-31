@@ -1,5 +1,8 @@
 #include "std.h"
 #include "bbsys.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
+#include "bbruntime.h"
 
 //how many strings allocated
 static int stringCnt;
@@ -175,7 +178,7 @@ void _bbVecFree(void* vec, BBVecType* type) {
 }
 
 void _bbVecBoundsEx() {
-	RTEX("Blitz array index out of bounds.");
+	RTEX(MultiLang::array_bounds_ex);
 }
 
 void _bbUndimArray(BBArray* array) {
@@ -428,7 +431,7 @@ BBObj* _bbObjFromHandle(int handle, BBObjType* type) {
 }
 
 void _bbNullObjEx() {
-	RTEX("Object does not exist!");
+	RTEX(MultiLang::null_obj_ex);
 }
 
 void _bbRestore(BBData* data) {
@@ -437,31 +440,31 @@ void _bbRestore(BBData* data) {
 
 int _bbReadInt() {
 	switch(dataPtr->fieldType) {
-	case BBTYPE_END:RTEX("Out of data!"); return 0;
+	case BBTYPE_END:RTEX(MultiLang::out_of_data); return 0;
 	case BBTYPE_INT:return dataPtr++->field.INT;
 	case BBTYPE_FLT:return dataPtr++->field.FLT;
 	case BBTYPE_CSTR:return atoi(dataPtr++->field.CSTR);
-	default:RTEX("Bad data type! Type is not a float, string or an integer."); return 0;
+	default:RTEX(MultiLang::bad_data_type); return 0;
 	}
 }
 
 float _bbReadFloat() {
 	switch(dataPtr->fieldType) {
-	case BBTYPE_END:RTEX("Out of data!"); return 0;
+	case BBTYPE_END:RTEX(MultiLang::out_of_data); return 0;
 	case BBTYPE_INT:return dataPtr++->field.INT;
 	case BBTYPE_FLT:return dataPtr++->field.FLT;
 	case BBTYPE_CSTR:return atof(dataPtr++->field.CSTR);
-	default:RTEX("Bad data type! Type is not a float, string or an integer."); return 0;
+	default:RTEX(MultiLang::bad_data_type); return 0;
 	}
 }
 
 BBStr* _bbReadStr() {
 	switch(dataPtr->fieldType) {
-	case BBTYPE_END:RTEX("Out of data!"); return 0;
+	case BBTYPE_END:RTEX(MultiLang::out_of_data); return 0;
 	case BBTYPE_INT:return new BBStr(itoa(dataPtr++->field.INT));
 	case BBTYPE_FLT:return new BBStr(ftoa(dataPtr++->field.FLT));
 	case BBTYPE_CSTR:return new BBStr(dataPtr++->field.CSTR);
-	default:RTEX("Bad data type! Type is not a float, string or an integer."); return 0;
+	default:RTEX(MultiLang::bad_data_type); return 0;
 	}
 }
 
@@ -474,9 +477,13 @@ float _bbFPow(float x, float y) {
 }
 
 void bbRuntimeStats() {
-	gx_runtime->debugLog(("Active strings :" + itoa(stringCnt)).c_str());
-	gx_runtime->debugLog(("Active objects :" + itoa(objCnt)).c_str());
-	gx_runtime->debugLog(("Unreleased objs:" + itoa(unrelObjCnt)).c_str());
+	gx_runtime->debugLog(SFormat(MultiLang::stats_strings, stringCnt).c_str());
+	gx_runtime->debugLog(SFormat(MultiLang::stats_objects, objCnt).c_str());
+	gx_runtime->debugLog(SFormat(MultiLang::stats_unreleased, unrelObjCnt).c_str());
+}
+
+void bbMav() {
+	bbruntime_panic(MultiLang::memory_access_violation);
 }
 
 bool basic_create() {
@@ -546,4 +553,5 @@ void basic_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("_bbFMod", _bbFMod);
 	rtSym("_bbFPow", _bbFPow);
 	rtSym("RuntimeStats", bbRuntimeStats);
+	//rtSym("MAV", bbMav);
 }

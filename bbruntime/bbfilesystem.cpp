@@ -2,6 +2,7 @@
 #include "bbfilesystem.h"
 #include "bbstream.h"
 #include <fstream>
+#include "../MultiLang/MultiLang.h"
 
 gxFileSystem* gx_filesys;
 
@@ -31,14 +32,14 @@ static std::set<bbFile*> file_set;
 static inline void debugFile(bbFile* f) {
 	if(debug) {
 		if(!file_set.count(f)) 
-			RTEX("File does not exist");
+			RTEX(MultiLang::file_not_exist);
 	}
 }
 
 static inline void debugDir(gxDir* d) {
 	if(debug) {
 		if(!gx_filesys->verifyDir(d)) 
-			RTEX("Directory does not exist");
+			RTEX(MultiLang::directory_not_exist);
 	}
 }
 

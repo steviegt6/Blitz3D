@@ -1,5 +1,5 @@
 #include "libs.h"
-
+#include "../MultiLang/MultiLang.h"
 #include <Windows.h>
 
 int bcc_ver;
@@ -141,27 +141,27 @@ static const char* loadUserLib(const std::string& userlib) {
 
 		if(curr == '.') {
 
-			if(next(in) != -1) return "expecting identifier after '.'";
+			if(next(in) != -1) return MultiLang::expect_identifier;
 
 			if(text == "lib") {
-				if(next(in) != -2) return "expecting string after lib directive";
+				if(next(in) != -2) return MultiLang::expect_string_afrer_directive;
 				lib = text;
 
 			}
 			else {
-				return "unknown decl directive";
+				return MultiLang::unknown_decl_directive;
 			}
 			next(in);
 
 		}
 		else if(curr == -1) {
 
-			if(!lib.size()) return "function decl without lib directive";
+			if(!lib.size()) return MultiLang::function_decl_without_directive;
 
 			std::string id = text;
 			std::string lower_id = tolower(id);
 
-			if(_ulibkws.count(lower_id)) return "duplicate identifier";
+			if(_ulibkws.count(lower_id)) return MultiLang::duplicate_identifier;
 			_ulibkws.insert(lower_id);
 
 			Type* ty = 0;
@@ -175,7 +175,7 @@ static const char* loadUserLib(const std::string& userlib) {
 
 			DeclSeq* params = new DeclSeq();
 
-			if(curr != '(') return "expecting '(' after function identifier";
+			if(curr != '(') return MultiLang::expect_left_bracket_after_function_identifier;
 			next(in);
 			if(curr != ')') {
 				for(;;) {
@@ -200,7 +200,7 @@ static const char* loadUserLib(const std::string& userlib) {
 					next(in);
 				}
 			}
-			if(curr != ')') return "expecting ')' after function decl";
+			if(curr != ')') return MultiLang::expect_right_bracket_after_function_identifier;
 
 			keyWords.push_back(id);
 
@@ -210,7 +210,7 @@ static const char* loadUserLib(const std::string& userlib) {
 
 			if(next(in) == ':') {	//real name?
 				next(in);
-				if(curr != -1 && curr != -2) return "expecting identifier or string after alias";
+				if(curr != -1 && curr != -2) return MultiLang::expect_identifier_or_string_after_alias;
 				id = text;
 				next(in);
 			}
@@ -263,19 +263,19 @@ const char* openLibs() {
 	}
 
 	linkerHMOD = LoadLibrary((home + "/bin/linker.dll").c_str());
-	if(!linkerHMOD) return "Unable to open linker.dll";
+	if(!linkerHMOD) return MultiLang::unable_open_linker_dll;
 
 	typedef Linker* (_cdecl* GetLinker)();
 	GetLinker gl = (GetLinker)GetProcAddress(linkerHMOD, "linkerGetLinker");
-	if(!gl) return "Error in linker.dll";
+	if(!gl) return MultiLang::error_in_linker_dll;
 	linkerLib = gl();
 
 	runtimeHMOD = LoadLibrary((home + "/bin/runtime.dll").c_str());
-	if(!runtimeHMOD) return "Unable to open runtime.dll";
+	if(!runtimeHMOD) return MultiLang::unable_open_runtime_dll;
 
 	typedef Runtime* (_cdecl* GetRuntime)();
 	GetRuntime gr = (GetRuntime)GetProcAddress(runtimeHMOD, "runtimeGetRuntime");
-	if(!gr) return "Error in runtime.dll";
+	if(!gr) return MultiLang::error_in_runtime_dll;
 	runtimeLib = gr();
 
 	bcc_ver = VERSION;
@@ -284,7 +284,7 @@ const char* openLibs() {
 
 	if((lnk_ver >> 16) != (bcc_ver >> 16) ||
 		(run_ver >> 16) != (bcc_ver >> 16) ||
-		(lnk_ver >> 16) != (bcc_ver >> 16)) return "Library version error";
+		(lnk_ver >> 16) != (bcc_ver >> 16)) return MultiLang::library_version_error;
 
 	runtimeLib->startup(GetModuleHandle(0));
 

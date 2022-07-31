@@ -1,11 +1,12 @@
 #include "std.h"
 #include "bbaudio.h"
+#include "../MultiLang/MultiLang.h"
 
 gxAudio* gx_audio;
 
 static inline void debugSound(gxSound* s) {
 	if(debug) {
-		if(!gx_audio->verifySound(s)) RTEX("Sound does not exist");
+		if(!gx_audio->verifySound(s)) RTEX(MultiLang::sound_not_exist);
 	}
 }
 

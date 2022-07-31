@@ -2,6 +2,7 @@
 #include "../ex.h"
 #include "operand.h"
 #include "insts.h"
+#include "../../MultiLang/MultiLang.h"
 
 static const char* regs[] = {
 	"al","cl","dl","bl","ah","ch","dh","bh",
@@ -10,11 +11,11 @@ static const char* regs[] = {
 };
 
 static void opError() {
-	throw Ex("error in operand");
+	throw Ex(MultiLang::error_in_operand);
 }
 
 static void sizeError() {
-	throw Ex("illegal operand size");
+	throw Ex(MultiLang::illegal_operand_size);
 }
 
 Operand::Operand()
@@ -140,7 +141,7 @@ void Operand::parse() {
 	for(;;) {
 		int n; std::string l;
 		if(parseReg(&n)) {
-			if(n < 16) throw Ex("register must be 32 bit");
+			if(n < 16) throw Ex(MultiLang::register_must_be_32_bit);
 			n &= 7;
 			if(parseChar('*')) {
 				if(n == 4) break;		//esp cannot be index reg!

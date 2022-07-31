@@ -1,5 +1,7 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
 #include <math.h>
 #include <float.h>
@@ -9,7 +11,7 @@
 //////////////////////////////////
 ExprNode* ExprNode::castTo(Type* ty, Environ* e) {
 	if(!sem_type->canCastTo(ty)) {
-		ex("Illegal type conversion (" + sem_type->name() + " -> " + ty->name() + ")");
+		ex(SFormat(MultiLang::illegal_type_conversion, sem_type->name(), ty->name()));
 	}
 
 	ExprNode* cast = new CastNode(this, ty);
@@ -112,7 +114,7 @@ TNode* ExprSeqNode::translate(Codegen* g, bool cfunc) {
 }
 
 void ExprSeqNode::castTo(DeclSeq* decls, Environ* e, bool cfunc) {
-	if(exprs.size() > decls->size()) ex("Too many parameters");
+	if(exprs.size() > decls->size()) ex(MultiLang::too_many_parameters);
 	for(int k = 0; k < decls->size(); ++k) {
 		Decl* d = decls->decls[k];
 		if(k < exprs.size() && exprs[k]) {
@@ -124,7 +126,7 @@ void ExprSeqNode::castTo(DeclSeq* decls, Environ* e, bool cfunc) {
 					exprs[k]->sem_type = Type::void_type;
 				}
 				else {
-					ex("Illegal type conversion (" + exprs[k]->sem_type->name() + " -> " + d->type->name() + ")");
+					ex(SFormat(MultiLang::illegal_type_conversion, exprs[k]->sem_type->name(), d->type->name()));
 				}
 				continue;
 			}
@@ -133,7 +135,7 @@ void ExprSeqNode::castTo(DeclSeq* decls, Environ* e, bool cfunc) {
 
 		}
 		else {
-			if(!d->defType) ex("Not enough parameters");
+			if(!d->defType) ex(MultiLang::not_enough_parameters);
 			ExprNode* expr = constValue(d->defType);
 			if(k < exprs.size()) exprs[k] = expr;
 			else exprs.push_back(expr);
@@ -153,9 +155,9 @@ void ExprSeqNode::castTo(Type* t, Environ* e) {
 ExprNode* CallNode::semant(Environ* e) {
 	Type* t = e->findType(tag);
 	sem_decl = e->findFunc(ident);
-	if(!sem_decl || !(sem_decl->kind & DECL_FUNC)) ex("Function '" + ident + "' not found");
+	if(!sem_decl || !(sem_decl->kind & DECL_FUNC)) ex(SFormat(MultiLang::function_not_found, ident));
 	FuncType* f = sem_decl->type->funcType();
-	if(t && f->returnType != t) ex("incorrect function return type");
+	if(t && f->returnType != t) ex(MultiLang::incorrect_function_return_type);
 	exprs->semant(e);
 	exprs->castTo(f->params, e, f->cfunc);
 	sem_type = f->returnType;
@@ -241,17 +243,17 @@ TNode* NullConstNode::translate(Codegen* g) {
 }
 
 int NullConstNode::intValue() {
-	ex("Can't convert null to int");
+	ex(MultiLang::cant_convert_null_to_int);
 	return 0;
 }
 
 float NullConstNode::floatValue() {
-	ex("Can't convert null to float");
+	ex(MultiLang::cant_convert_null_to_float);
 	return 0.f;
 }
 
 std::string NullConstNode::stringValue() {
-	ex("Can't convert null to string");
+	ex(MultiLang::cant_convert_null_to_string);
 	return std::string("");
 }
 
@@ -317,7 +319,7 @@ std::string StringConstNode::stringValue() {
 ExprNode* UniExprNode::semant(Environ* e) {
 	expr = expr->semant(e);
 	sem_type = expr->sem_type;
-	if(sem_type != Type::int_type && sem_type != Type::float_type) ex("Illegal operator for type");
+	if(sem_type != Type::int_type && sem_type != Type::float_type) ex(MultiLang::illegal_operator_for_type);
 	if(ConstNode* c = expr->constNode()) {
 		ExprNode* e;
 		if(sem_type == Type::int_type) {
@@ -485,11 +487,11 @@ ExprNode* ArithExprNode::semant(Environ* e) {
 	lhs = lhs->semant(e);
 	rhs = rhs->semant(e);
 	if(lhs->sem_type->structType() || rhs->sem_type->structType()) {
-		ex("Arithmetic operator cannot be applied to custom type objects");
+		ex(MultiLang::arithmetic_operator_custom_type);
 	}
 	if(lhs->sem_type == Type::string_type || rhs->sem_type == Type::string_type) {
 		//one side is a string - only + operator...
-		if(op != '+') ex("Operator cannot be applied to strings");
+		if(op != '+') ex(MultiLang::operator_cannot_applied_to_strings);
 		sem_type = Type::string_type;
 	}
 	else if(op == '^' || lhs->sem_type == Type::float_type || rhs->sem_type == Type::float_type) {
@@ -505,7 +507,7 @@ ExprNode* ArithExprNode::semant(Environ* e) {
 	ConstNode* lc = lhs->constNode(), * rc = rhs->constNode();
 	if(rc && (op == '/' || op == MOD)) {
 		if((sem_type == Type::int_type && !rc->intValue()) || (sem_type == Type::float_type && !rc->floatValue())) {
-			ex("Division by zero.");
+			ex(MultiLang::division_by_zero);
 		}
 	}
 	if(lc && rc) {
@@ -570,7 +572,7 @@ ExprNode* RelExprNode::semant(Environ* e) {
 	lhs = lhs->semant(e);
 	rhs = rhs->semant(e);
 	if(lhs->sem_type->structType() || rhs->sem_type->structType()) {
-		if(op != '=' && op != NE) ex("Illegal operator for custom type objects");
+		if(op != '=' && op != NE) ex(MultiLang::illegal_operator_for_type);
 		opType = lhs->sem_type != Type::null_type ? lhs->sem_type : rhs->sem_type;
 	}
 	else if(lhs->sem_type == Type::string_type || rhs->sem_type == Type::string_type) {
@@ -635,8 +637,8 @@ TNode* RelExprNode::translate(Codegen* g) {
 ////////////////////
 ExprNode* NewNode::semant(Environ* e) {
 	sem_type = e->findType(ident);
-	if(!sem_type) ex("custom type name not found");
-	if(sem_type->structType() == 0) ex("type is not a custom type");
+	if(!sem_type) ex(MultiLang::custom_type_not_found);
+	if(sem_type->structType() == 0) ex(MultiLang::type_is_not_custom_type);
 	return this;
 }
 
@@ -649,7 +651,7 @@ TNode* NewNode::translate(Codegen* g) {
 ////////////////////
 ExprNode* FirstNode::semant(Environ* e) {
 	sem_type = e->findType(ident);
-	if(!sem_type) ex("custom type name name not found");
+	if(!sem_type) ex(MultiLang::custom_type_not_found);
 	return this;
 }
 
@@ -662,7 +664,7 @@ TNode* FirstNode::translate(Codegen* g) {
 ///////////////////
 ExprNode* LastNode::semant(Environ* e) {
 	sem_type = e->findType(ident);
-	if(!sem_type) ex("custom type name not found");
+	if(!sem_type) ex(MultiLang::custom_type_not_found);
 	return this;
 }
 
@@ -675,8 +677,8 @@ TNode* LastNode::translate(Codegen* g) {
 ////////////////////
 ExprNode* AfterNode::semant(Environ* e) {
 	expr = expr->semant(e);
-	if(expr->sem_type == Type::null_type) ex("'After' cannot be used on 'Null'");
-	if(expr->sem_type->structType() == 0) ex("'After' must be used with a custom type object");
+	if(expr->sem_type == Type::null_type) ex(MultiLang::after_cannot_used_on_null);
+	if(expr->sem_type->structType() == 0) ex(MultiLang::after_must_used_with_custom_type);
 	sem_type = expr->sem_type;
 	return this;
 }
@@ -692,8 +694,8 @@ TNode* AfterNode::translate(Codegen* g) {
 ////////////////////
 ExprNode* BeforeNode::semant(Environ* e) {
 	expr = expr->semant(e);
-	if(expr->sem_type == Type::null_type) ex("'Before' cannot be used with 'Null'");
-	if(expr->sem_type->structType() == 0) ex("'Before' must be used with a custom type object");
+	if(expr->sem_type == Type::null_type) ex(MultiLang::before_cannot_used_with_null);
+	if(expr->sem_type->structType() == 0) ex(MultiLang::before_must_used_with_custom_type);
 	sem_type = expr->sem_type;
 	return this;
 }
@@ -711,8 +713,8 @@ ExprNode* ObjectCastNode::semant(Environ* e) {
 	expr = expr->semant(e);
 	expr = expr->castTo(Type::int_type, e);
 	sem_type = e->findType(type_ident);
-	if(!sem_type) ex("custom type name not found");
-	if(!sem_type->structType()) ex("type is not a custom type");
+	if(!sem_type) ex(MultiLang::custom_type_not_found);
+	if(!sem_type->structType()) ex(MultiLang::type_is_not_custom_type);
 	return this;
 }
 
@@ -727,7 +729,7 @@ TNode* ObjectCastNode::translate(Codegen* g) {
 ///////////////////
 ExprNode* ObjectHandleNode::semant(Environ* e) {
 	expr = expr->semant(e);
-	if(!expr->sem_type->structType()) ex("'ObjectHandle' must be used with an object");
+	if(!expr->sem_type->structType()) ex(MultiLang::objecthandle_must_used_with_object);
 	sem_type = Type::int_type;
 	return this;
 }

@@ -1,11 +1,12 @@
 #include "std.h"
 #include "bbstream.h"
+#include "../MultiLang/MultiLang.h"
 
 static std::set<bbStream*> stream_set;
 
 void debugStream(bbStream* s) {
 	if(stream_set.count(s)) return;
-	RTEX("Stream does not exist");
+	RTEX(MultiLang::stream_not_exist);
 }
 
 bbStream::bbStream() {
@@ -34,7 +35,7 @@ int bbReadByte(bbStream* s) {
 		return n;
 	}
 	catch(std::exception& ex) {
-		RTEX("ReadByte couldn't read a valid byte.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX(MultiLang::readbyte_invalid_byte);
 	}
 }
 
@@ -46,7 +47,7 @@ int bbReadShort(bbStream* s) {
 		return n;
 	}
 	catch(std::exception& ex) {
-		RTEX("ReadShort couldn't read a valid short.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX(MultiLang::readshort_invalid_short);
 	}
 }
 
@@ -58,7 +59,7 @@ int bbReadInt(bbStream* s) {
 		return n;
 	}
 	catch(std::exception& ex) {
-		RTEX("ReadInt couldn't read a valid integer.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX(MultiLang::readint_invalid_int);
 	}
 }
 
@@ -70,7 +71,7 @@ float bbReadFloat(bbStream* s) {
 		return n;
 	}
 	catch(std::exception& ex) {
-		RTEX("ReadFloat couldn't read a valid float.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX(MultiLang::readfloat_invalid_float);
 	}
 }
 
@@ -89,7 +90,7 @@ BBStr* bbReadString(bbStream* s) {
 		return str;
 	}
 	catch(std::exception& ex) {
-		RTEX("ReadString couldn't read a valid string.\nMake sure the file you attempted to read isn't corrupted.");
+		RTEX(MultiLang::readstring_invalid_string);
 	}
 }
 
@@ -143,7 +144,7 @@ void bbWriteLine(bbStream* s, BBStr* t) {
 void bbCopyStream(bbStream* s, bbStream* d, int buff_size) {
 	if(debug) {
 		debugStream(s); debugStream(d);
-		if(buff_size < 1 || buff_size>1024 * 1024) RTEX("Illegal buffer size");
+		if(buff_size < 1 || buff_size>1024 * 1024) RTEX(MultiLang::illegal_buffer_size);
 	}
 	char* buff = new char[buff_size];
 	while(s->eof() == 0 && d->eof() == 0) {

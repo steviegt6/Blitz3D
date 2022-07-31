@@ -2,23 +2,10 @@
 #include "prefs.h"
 #include "libs.h"
 #include "resource.h"
+#include "../MultiLang/MultiLang.h"
 
 #include <mmsystem.h>
 
-char _credits[] =
-"\r\n"
-"Programming and design: Mark Sibly\r\n"
-"Keeping this thing alive: juanjp600, Saalvage, VaneBrain, AestheticalZ and ZiYueCommentary\r\n"
-".INI loading using a modified version of \"IniPP\", originally by Matthias C. M. Troffaes\r\n"
-"Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n"
-"Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n"
-"Image loader courtesy of FreeImage by Floris van den berg\r\n"
-#ifdef OPENCC
-"OpenCC extension is based on OpenCC\r\n"
-"´ËBlitz3D TSS°üº¬OpenCC½M¼þ£¡\r\n";
-#else
-;
-#endif
 
 class Dialog : public CDialog {
 	bool _quit;
@@ -68,9 +55,13 @@ void aboutBlitz() {
 
 	about.Create(IDD_ABOUT);
 
-	std::string credits;
+	std::string credits = MultiLang::current_language;
 
-	credits += _credits;
+	credits += MultiLang::credits;
+
+#ifdef OPENCC
+	credits += MultiLang::with_opencc;
+#endif
 
 	about.GetDlgItem(IDC_CREDITS)->SetWindowText(credits.c_str());
 
@@ -79,9 +70,9 @@ void aboutBlitz() {
 	t += "Blitz3D";
 
 #ifdef OPENCC
-	t += " - with OpenCC extension\n\n";
+	t += MultiLang::title_with_opencc;
 #else
-	t += " - Release Version\n\n";
+	t += MultiLang::title_release;
 #endif
 
 	about.GetDlgItem(IDC_PRODUCT)->SetWindowText(t.c_str());

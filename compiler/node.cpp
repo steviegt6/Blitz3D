@@ -1,5 +1,7 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
 std::set<std::string> Node::usedfuncs;
 
@@ -7,7 +9,7 @@ std::set<std::string> Node::usedfuncs;
 // generic exception thrower //
 ///////////////////////////////
 void Node::ex() {
-	ex("INTERNAL COMPILER ERROR");
+	ex(MultiLang::internal_compiler_error);
 }
 
 void Node::ex(const std::string& e) {
@@ -170,7 +172,7 @@ Type* Node::tagType(const std::string& tag, Environ* e) {
 	Type* t;
 	if(tag.size()) {
 		t = e->findType(tag);
-		if(!t) ex("Type \"" + tag + "\" not found");
+		if(!t) ex(SFormat(MultiLang::type_not_found, tag));
 	}
 	else t = 0;
 	return t;

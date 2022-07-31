@@ -67,7 +67,7 @@ BEGIN
         MENUITEM "&New\tCtrl+N",                ID_NEW
         MENUITEM "&Open...\tCtrl+O",            ID_OPEN
         MENUITEM SEPARATOR
-        MENUITEM "&Close\tCtrl+W",             ID_CLOSE
+        MENUITEM "&Close\tCtrl+W",              ID_CLOSE
         MENUITEM "Close All",                   ID_CLOSEALL
         MENUITEM SEPARATOR
         MENUITEM "&Save\tCtrl+S",               ID_SAVE
@@ -289,11 +289,12 @@ BEGIN
     IDR_DEBUGFRAME          "Blitz Basic Debugger"
 END
 
-#endif
+#endif    // 英语(美国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
+// 英语(新西兰) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENZ)
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_NZ
@@ -354,7 +355,7 @@ END
 
 IDB_BITMAP2             BITMAP                  "b3dlogo.bmp"
 
-#endif
+#endif    // 英语(新西兰) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

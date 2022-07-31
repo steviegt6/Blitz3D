@@ -1,6 +1,7 @@
 #include "std.h"
 #include "bbsockets.h"
 #include <wininet.h>
+#include "../MultiLang/MultiLang.h"
 
 #pragma comment (lib, "wininet.lib")
 static bool socks_ok;
@@ -274,19 +275,19 @@ void TCPServer::remove(TCPStream* s) {
 
 static inline void debugUDPStream(UDPStream* p) {
 	if(debug && !udp_set.count(p)) {
-		RTEX("UDP Stream does not exist");
+		RTEX(MultiLang::udp_stream_not_exist);
 	}
 }
 
 static inline void debugTCPStream(TCPStream* p) {
 	if(debug && !tcp_set.count(p)) {
-		RTEX("TCP Stream does not exist");
+		RTEX(MultiLang::tcp_stream_not_exist);
 	}
 }
 
 static inline void debugTCPServer(TCPServer* p) {
 	if(debug && !server_set.count(p)) {
-		RTEX("TCP Server does not exist");
+		RTEX(MultiLang::tcp_server_not_exist);
 	}
 }
 
@@ -304,7 +305,7 @@ int bbCountHostIPs(BBStr* host) {
 int bbHostIP(int index) {
 	if(debug) {
 		if(index<1 || index>host_ips.size()) {
-			RTEX("Host index out of range");
+			RTEX(MultiLang::host_out_of_range);
 		}
 	}
 	return host_ips[index - 1];

@@ -3,6 +3,7 @@
 #include "resource.h"
 #include "debuggerapp.h"
 #include "prefs.h"
+#include "../MultiLang/MultiLang.h"
 
 #include "../gxruntime/gxutf8.h"
 
@@ -115,9 +116,9 @@ int MainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 		TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS,
 		CRect(0, 0, 0, 0), &tabber2, 3);
 
-	tabber2.insert(0, &locals_tree, "Locals");
-	tabber2.insert(1, &globals_tree, "Globals");
-	tabber2.insert(2, &consts_tree, "Consts");
+	tabber2.insert(0, &locals_tree, MultiLang::debugger_locals);
+	tabber2.insert(1, &globals_tree, MultiLang::debugger_globals);
+	tabber2.insert(2, &consts_tree, MultiLang::debugger_consts);
 	tabber2.setCurrent(0);
 
 	setState(STARTING);
@@ -209,10 +210,10 @@ void MainFrame::debugLeave() {
 
 void MainFrame::debugMsg(const char* msg, bool serious) {
 	if(serious) {
-		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Catastrophic Error!", MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), MultiLang::runtime_error, MB_OK | MB_ICONWARNING | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 	else {
-		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), L"Runtime Message", MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SETFOREGROUND);
+		::MessageBoxW(0, UTF8::convertToUtf16(msg).c_str(), MultiLang::runtime_message, MB_OK | MB_ICONINFORMATION | MB_TOPMOST | MB_SETFOREGROUND);
 	}
 }
 
@@ -255,7 +256,7 @@ void MainFrame::cmdStepOut() {
 }
 
 SourceFile* MainFrame::sourceFile(const char* file) {
-	if(!file) file = "<unknown>";
+	if(!file) file = MultiLang::debugger_unknown;
 
 	std::map<const char*, SourceFile*>::const_iterator it = files.find(file);
 

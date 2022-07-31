@@ -1,6 +1,8 @@
 #include "std.h"
 #include <cstdlib>
 #include "parser.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
 static const int TEXTLIMIT = 1024 * 1024 - 1;
 
@@ -41,21 +43,21 @@ void Parser::ex(const std::string& s) {
 
 void Parser::exp(const std::string& s) {
 	switch(toker->curr()) {
-		case NEXT:ex("'Next' without 'For'");
-		case WEND:ex("'Wend' without 'While'");
-		case ELSE:case ELSEIF:ex("'Else' without 'If'");
-		case ENDIF:ex("'Endif' without 'If'");
-		case ENDFUNCTION:ex("'End Function' without 'Function'");
-		case UNTIL:ex("'Until' without 'Repeat'");
-		case FOREVER:ex("'Forever' without 'Repeat'");
-		case CASE:ex("'Case' without 'Select'");
-		case ENDSELECT:ex("'End Select' without 'Select'");
+		case NEXT:ex(MultiLang::next_without_for);
+		case WEND:ex(MultiLang::wend_without_while);
+		case ELSE:case ELSEIF:ex(MultiLang::else_without_if);
+		case ENDIF:ex(MultiLang::endif_without_if);
+		case ENDFUNCTION:ex(MultiLang::end_function_without_function);
+		case UNTIL:ex(MultiLang::until_without_repeat);
+		case FOREVER:ex(MultiLang::forever_without_repeat);
+		case CASE:ex(MultiLang::case_without_select);
+		case ENDSELECT:ex(MultiLang::end_select_without_select);
 	}
-	ex("Expecting " + s);
+	ex(SFormat(MultiLang::expecting, s));
 }
 
 std::string Parser::parseIdent() {
-	if(toker->curr() != IDENT) exp("identifier");
+	if(toker->curr() != IDENT) exp(MultiLang::identifier);
 	std::string t = toker->text();
 	toker->next();
 	return t;
@@ -83,7 +85,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 		switch(toker->curr()) {
 			case INCLUDE:
 			{
-				if(toker->next() != STRINGCONST) exp("include filename");
+				if(toker->next() != STRINGCONST) exp(MultiLang::include_filename);
 				std::string inc = toker->text(); toker->next();
 				inc = inc.substr(1, inc.size() - 2);
 
@@ -95,7 +97,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				if(included.find(inc) != included.end()) break;
 
 				std::ifstream i_stream(inc.c_str());
-				if(!i_stream.good()) ex("Unable to open include file");
+				if(!i_stream.good()) ex(MultiLang::unable_open_include_file);
 
 				Toker i_toker(i_stream);
 
@@ -105,7 +107,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				included.insert(incfile);
 
 				std::unique_ptr<StmtSeqNode> ss(parseStmtSeq(scope, debug));
-				if(toker->curr() != EOF) exp("end-of-file");
+				if(toker->curr() != EOF) exp(MultiLang::end_of_file);
 
 				result = new IncludeNode(incfile, ss.release());
 
@@ -126,7 +128,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 						int nest = 1, k;
 						for(k = 1;; ++k) {
 							int c = toker->lookAhead(k);
-							if(isTerm(c)) ex("Mismatched brackets");
+							if(isTerm(c)) ex(MultiLang::mismatched_brackets);
 							else if(c == '(') ++nest;
 							else if(c == ')' && !--nest) break;
 						}
@@ -148,7 +150,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				else {
 					//must be a var
 					std::unique_ptr<VarNode> var(parseVar(ident, tag));
-					if(toker->curr() != '=') exp("variable assignment");
+					if(toker->curr() != '=') exp(MultiLang::variable_assignment);
 					toker->next(); ExprNode* expr = parseExpr(false);
 					result = new AssNode(var.release(), expr);
 				}
@@ -177,7 +179,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
 				int curr = toker->curr();
 				int pos = toker->pos();
-				if(curr != UNTIL && curr != FOREVER) exp("'Until' or 'Forever'");
+				if(curr != UNTIL && curr != FOREVER) exp(MultiLang::until_or_forever);
 				toker->next(); if(curr == UNTIL) expr = parseExpr(false);
 				result = new RepeatNode(stmts.release(), expr, pos);
 			}
@@ -191,7 +193,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 					if(toker->curr() == CASE) {
 						toker->next();
 						std::unique_ptr<ExprSeqNode> exprs(parseExprSeq());
-						if(!exprs->size()) exp("expression sequence");
+						if(!exprs->size()) exp(MultiLang::expression_sequence);
 						std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
 						selNode->push_back(new CaseNode(exprs.release(), stmts.release()));
 						continue;
@@ -206,7 +208,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 					else if(toker->curr() == ENDSELECT) {
 						break;
 					}
-					exp("'Case', 'Default' or 'End Select'");
+					exp(MultiLang::case_default_or_end_select);
 				}
 				toker->next();
 				result = selNode.release();
@@ -218,7 +220,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				std::unique_ptr<StmtSeqNode> stmts;
 				toker->next();
 				var = std::unique_ptr<VarNode>(parseVar());
-				if(toker->curr() != '=') exp("variable assignment");
+				if(toker->curr() != '=') exp(MultiLang::variable_assignment);
 				if(toker->next() == EACH) {
 					toker->next();
 					std::string ident = parseIdent();
@@ -282,7 +284,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 			{
 				toker->next();
 				std::unique_ptr<ExprNode> expr1(parseExpr(false));
-				if(toker->curr() != BEFORE && toker->curr() != AFTER) exp("'Before' or 'After'");
+				if(toker->curr() != BEFORE && toker->curr() != AFTER) exp(MultiLang::before_or_after);
 				bool before = toker->curr() == BEFORE; toker->next();
 				std::unique_ptr<ExprNode> expr2(parseExpr(false));
 				result = new InsertNode(expr1.release(), expr2.release(), before);
@@ -303,7 +305,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				else result = new RestoreNode("");
 				break;
 			case DATA:
-				if(scope != STMTS_PROG) ex("'Data' can only appear in main program");
+				if(scope != STMTS_PROG) ex(MultiLang::data_can_only_appear_in_main);
 				do {
 					toker->next();
 					ExprNode* expr = parseExpr(false);
@@ -311,17 +313,17 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				} while(toker->curr() == ',');
 				break;
 			case TYPE:
-				if(scope != STMTS_PROG) ex("'Type' can only appear in main program");
+				if(scope != STMTS_PROG) ex(MultiLang::type_can_only_appear_in_main);
 				toker->next(); structs->push_back(parseStructDecl());
 				break;
 			case BBCONST:
-				if(scope != STMTS_PROG) ex("'Const' can only appear in main program");
+				if(scope != STMTS_PROG) ex(MultiLang::const_can_only_appear_in_main);
 				do {
 					toker->next(); consts->push_back(parseVarDecl(DECL_GLOBAL, true));
 				} while(toker->curr() == ',');
 				break;
 			case FUNCTION:
-				if(scope != STMTS_PROG) ex("'Function' can only appear in main program");
+				if(scope != STMTS_PROG) ex(MultiLang::function_can_only_appear_in_main);
 				toker->next(); funcs->push_back(parseFuncDecl(debug));
 				break;
 			case DIM:
@@ -342,7 +344,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 				} while(toker->curr() == ',');
 				break;
 			case GLOBAL:
-				if(scope != STMTS_PROG) ex("'Global' can only appear in main program");
+				if(scope != STMTS_PROG) ex(MultiLang::global_can_only_appear_in_main);
 				do {
 					toker->next();
 					DeclNode* d = parseVarDecl(DECL_GLOBAL, false);
@@ -424,7 +426,7 @@ DeclNode* Parser::parseVarDecl(int kind, bool constant) {
 	std::string tag = parseTypeTag();
 	DeclNode* d;
 	if(toker->curr() == '[') {
-		if(constant) ex("Blitz arrays may not be constant");
+		if(constant) ex(MultiLang::blitz_arrays_may_not_be_constant);
 		toker->next();
 		std::unique_ptr<ExprSeqNode> exprs(parseExprSeq());
 		if(exprs->size() != 1 || toker->curr() != ']') exp("']'");
@@ -436,7 +438,7 @@ DeclNode* Parser::parseVarDecl(int kind, bool constant) {
 		if(toker->curr() == '=') {
 			toker->next(); expr = parseExpr(false);
 		}
-		else if(constant) ex("Constants must be initialized");
+		else if(constant) ex(MultiLang::constants_must_initialized);
 		d = new VarDeclNode(ident, tag, kind, constant, expr);
 	}
 	d->pos = pos; d->file = incfile;
@@ -450,7 +452,7 @@ DimNode* Parser::parseArrayDecl() {
 	if(toker->curr() != '(') exp("'('");
 	toker->next(); std::unique_ptr<ExprSeqNode> exprs(parseExprSeq());
 	if(toker->curr() != ')') exp("')'");
-	if(!exprs->size()) ex("can't have a 0 dimensional array");
+	if(!exprs->size()) ex(MultiLang::cant_have_zero_dimension_array);
 	toker->next();
 	DimNode* d = new DimNode(ident, tag, exprs.release());
 	arrayDecls[ident] = d;
@@ -494,7 +496,7 @@ DeclNode* Parser::parseStructDecl() {
 		} while(toker->curr() == ',');
 		while(toker->curr() == '\n') toker->next();
 	}
-	if(toker->curr() != ENDTYPE) exp("'Field' or 'End Type'");
+	if(toker->curr() != ENDTYPE) exp(MultiLang::field_or_end_type);
 	toker->next();
 	DeclNode* d = new StructDeclNode(ident, fields.release());
 	d->pos = pos; d->file = incfile;
@@ -523,10 +525,10 @@ IfNode* Parser::parseIf(bool debug) {
 		toker->next();
 		elseOpt = std::unique_ptr<StmtSeqNode>(parseStmtSeq(blkif ? STMTS_BLOCK : STMTS_LINE, debug));
 	}
-	if(blkif) {
-		if(toker->curr() != ENDIF) exp("'EndIf'");
+	if (blkif) {
+		if (toker->curr() != ENDIF) exp("'EndIf'");
 	}
-	else if(toker->curr() != '\n') exp("end-of-line");
+	else if (toker->curr() != '\n') exp(MultiLang::end_of_file);
 
 	return new IfNode(expr.release(), stmts.release(), elseOpt.release());
 }
@@ -771,7 +773,7 @@ ExprNode* Parser::parsePrimary(bool opt) {
 			}
 			break;
 		default:
-			if(!opt) exp("expression");
+			if(!opt) exp(MultiLang::expression);
 	}
 	return result;
 }

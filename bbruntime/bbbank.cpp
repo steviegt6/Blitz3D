@@ -1,6 +1,7 @@
 #include "std.h"
 #include "bbbank.h"
 #include "bbstream.h"
+#include "../MultiLang/MultiLang.h"
 
 struct bbBank {
 	char* data;
@@ -35,14 +36,14 @@ static std::set<bbBank*> bank_set;
 
 static inline void debugBank(bbBank* b) {
 	if(debug) {
-		if(!bank_set.count(b)) RTEX("bbBank does not exist");
+		if(!bank_set.count(b)) RTEX(MultiLang::bank_not_exist);
 	}
 }
 
 static inline void debugBank(bbBank* b, int offset) {
 	if(debug) {
 		debugBank(b);
-		if(offset >= b->size) RTEX("Offset out of range");
+		if (offset >= b->size) RTEX(MultiLang::offset_out_of_range);
 	}
 }
 

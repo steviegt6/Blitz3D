@@ -1,6 +1,7 @@
 #include "std.h"
 #include "bbsys.h"
 #include "userlibs.h"
+#include "../MultiLang/MultiLang.h"
 
 #include <Windows.h>
 
@@ -15,11 +16,11 @@ static Str _strs[256];
 static int _nextStr;
 
 static void libNotFound() {
-	RTEX("User lib not found");
+	RTEX(MultiLang::userlib_not_found);
 }
 
 static void procNotFound() {
-	RTEX("User lib function not found");
+	RTEX(MultiLang::userlib_function_not_found);
 }
 
 void _bbLoadLibs(char* p) {

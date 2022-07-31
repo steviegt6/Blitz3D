@@ -6,6 +6,7 @@
 #include "../std.h"
 #include "../ex.h"
 #include "assem_x86.h"
+#include "../../MultiLang/MultiLang.h"
 
 #include <iomanip>
 
@@ -70,7 +71,7 @@ void Assem_x86::emitd(int n) {
 
 void Assem_x86::emitImm(const Operand& o, int size) {
 
-	if(size < 4 && o.immLabel.size()) throw Ex("immediate value cannot by a label");
+	if(size < 4 && o.immLabel.size()) throw Ex(MultiLang::immediate_value_cannot_by_label);
 
 	switch(size) {
 		case 1:emit(o.imm); return;
@@ -82,7 +83,7 @@ void Assem_x86::emitImm(const Operand& o, int size) {
 void Assem_x86::emitImm(const std::string& s, int size) {
 
 	Operand op(s); op.parse();
-	if(!(op.mode & IMM)) throw Ex("operand must be immediate");
+	if(!(op.mode & IMM)) throw Ex(MultiLang::operand_must_be_immediate);
 	emitImm(op, size);
 }
 
@@ -121,15 +122,15 @@ void Assem_x86::assemInst(const std::string& name, const std::string& lhs, const
 	}
 
 	if(inst) {
-		if(!(lop.mode & inst->lmode) || !(rop.mode & inst->rmode)) throw Ex("illegal addressing mode");
+		if(!(lop.mode & inst->lmode) || !(rop.mode & inst->rmode)) throw Ex(MultiLang::illegal_addressing_mode);
 	}
 	else {
 		InstIter it = instMap.find(name);
-		if(it == instMap.end()) throw Ex("unrecognized instruction");
+		if(it == instMap.end()) throw Ex(MultiLang::unrecognized_instruction);
 		inst = it->second;
 		for(;;) {
 			if((lop.mode & inst->lmode) && (rop.mode & inst->rmode)) break;
-			if((++inst)->name) throw Ex("illegal addressing mode");
+			if((++inst)->name) throw Ex(MultiLang::illegal_addressing_mode);
 		}
 	}
 
@@ -209,12 +210,12 @@ void Assem_x86::assemInst(const std::string& name, const std::string& lhs, const
 
 void Assem_x86::assemDir(const std::string& name, const std::string& op) {
 
-	if(!op.size()) throw Ex("operand error");
+	if(!op.size()) throw Ex(MultiLang::operand_error);
 
 	if(name == ".db") {
 		if(op[0] != '\"') emitImm(op, 1);
 		else {
-			if(op.size() < 2 || op[op.size() - 1] != '\"') throw Ex("operand error");
+			if(op.size() < 2 || op[op.size() - 1] != '\"') throw Ex(MultiLang::operand_error);
 			for(int k = 1; k < op.size() - 1; ++k) emit(op[k]);
 		}
 	}
@@ -226,11 +227,11 @@ void Assem_x86::assemDir(const std::string& name, const std::string& op) {
 	}
 	else if(name == ".align") {
 		Operand o(op); o.parse();
-		if(!(o.mode & IMM)) throw Ex("operand must be immediate");
+		if(!(o.mode & IMM)) throw Ex(MultiLang::operand_must_be_immediate);
 		align(o.imm);
 	}
 	else {
-		throw Ex("unrecognized assembler directive");
+		throw Ex(MultiLang::unrecognized_instruction);
 	}
 }
 
@@ -244,7 +245,7 @@ void Assem_x86::assemLine(const std::string& line) {
 	if(!isspace(line[i])) {
 		while(!isspace(line[i])) ++i;
 		std::string lab = line.substr(0, i);
-		if(!mod->addSymbol(lab.c_str(), mod->getPC())) throw Ex("duplicate label");
+		if(!mod->addSymbol(lab.c_str(), mod->getPC())) throw Ex(MultiLang::duplicate_label);
 	}
 
 	//skip space
@@ -264,7 +265,7 @@ void Assem_x86::assemLine(const std::string& line) {
 		int from = i;
 		if(line[i] == '\"') {
 			for(++i; line[i] != '\"' && line[i] != '\n'; ++i) {}
-			if(line[i++] != '\"') throw Ex("missing close quote");
+			if(line[i++] != '\"') throw Ex(MultiLang::missing_close_quote);
 		}
 		else {
 			for(++i; line[i] != ',' && line[i] != ';' && line[i] != '\n'; ++i) {}
@@ -278,7 +279,7 @@ void Assem_x86::assemLine(const std::string& line) {
 		while(isspace(line[i]) && line[i] != '\n') ++i;
 		if(line[i] == '\n' || line[i] == ';') break;
 
-		if(line[i++] != ',') throw Ex("expecting ','");
+		if(line[i++] != ',') throw Ex(MultiLang::expect_comma);
 	}
 
 	//pseudo op?
@@ -288,7 +289,7 @@ void Assem_x86::assemLine(const std::string& line) {
 	}
 
 	//normal instruction!
-	if(ops.size() > 2) throw Ex("Too many operands");
+	if(ops.size() > 2) throw Ex(MultiLang::too_many_operands);
 	ops.push_back(""); ops.push_back("");
 	assemInst(name, ops[0], ops[1]);
 }

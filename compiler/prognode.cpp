@@ -1,5 +1,7 @@
 #include "std.h"
 #include "nodes.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 
 //////////////////
 // The program! //
@@ -68,7 +70,7 @@ void ProgNode::translate(Codegen* g, const std::vector<UserFunc>& usrfuncs) {
 
 	//check labels
 	for(k = 0; k < sem_env->labels.size(); ++k) {
-		if(sem_env->labels[k]->def < 0)	ex("Undefined label '" + sem_env->labels[k]->name + "'", sem_env->labels[k]->ref, stmts->file);
+		if(sem_env->labels[k]->def < 0)	ex(SFormat(MultiLang::undefined_label_check, sem_env->labels[k]->name), sem_env->labels[k]->ref, stmts->file);
 	}
 
 	//leave main program

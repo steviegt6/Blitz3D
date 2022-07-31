@@ -2,6 +2,8 @@
 #include "bbsys.h"
 #include "bbruntime.h"
 #include "../gxruntime/gxutf8.h"
+#include "../MultiLang/MultiLang.h"
+#include "../MultiLang/sformat.h"
 #include <codecvt>
 
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
@@ -238,8 +240,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 
 //start up error
 static void sue(const char* t) {
-	std::string p = std::string("Startup Error: ") + t;
-	//gx_runtime->debugInfo(p.c_str());
+	std::string p = SFormat(MultiLang::startup_error, t);
 	gx_runtime->debugError(p.c_str());
 }
 
@@ -278,12 +279,12 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg) {
 	debug = dbg;
 	gx_runtime = rt;
 
-	if(!bbruntime_create()) return "Unable to start program! A required module could not be started.";
+	if(!bbruntime_create()) return MultiLang::unable_start_program;
 	const char* t = 0;
 	try {
 		if(!gx_runtime->idle()) RTEX(0);
 		pc();
-		gx_runtime->debugInfo("Program has ended.");
+		gx_runtime->debugInfo(MultiLang::program_ended);
 	}
 	catch(bbEx x) {
 		t = x.err;
@@ -292,12 +293,13 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg) {
 		t = e.what();
 	}
 	catch(...) {
-		t = "Unknown/non-standard exception thrown!";
+		t = MultiLang::unknown_exception_thrown;
 	}
 	bbruntime_destroy();
 	return t;
 }
 
-void bbruntime_panic(const char* err) {
-	RTEX(err);
+void bbruntime_panic(const wchar_t* err) {
+	MessageBoxW(0, err, MultiLang::runtime_error, 0);
+	ExitProcess(-1);
 }

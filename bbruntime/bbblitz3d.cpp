@@ -20,6 +20,7 @@
 #include "../blitz3d/terrain.h"
 #include "../blitz3d/listener.h"
 #include "../blitz3d/cachedtexture.h"
+#include "../MultiLang/MultiLang.h"
 
 
 //Why is everything static?
@@ -57,108 +58,108 @@ static Loader_B3D loader_b3d;
 static std::map<std::string, Transform> loader_mat_map;
 
 static inline void debug3d() {
-	if(debug && !gx_scene) RTEX("3D Graphics mode not set.");
+	if(debug && !gx_scene) RTEX(MultiLang::graphics_not_set);
 }
 
 static inline void debugTexture(Texture* t) {
-	if(debug && !texture_set.count(t)) RTEX("Texture does not exist!");
+	if(debug && !texture_set.count(t)) RTEX(MultiLang::texture_not_exist);
 }
 
 static inline void debugBrush(Brush* b) {
-	if(debug && !brush_set.count(b)) RTEX("Brush does not exist!");
+	if(debug && !brush_set.count(b)) RTEX(MultiLang::brush_not_exist);
 }
 
 static inline void debugEntity(Entity* e) {
-	if(debug && !entity_set.count(e)) RTEX("Entity does not exist!");
+	if(debug && !entity_set.count(e)) RTEX(MultiLang::entity_not_exist);
 }
 
 static inline void debugParent(Entity* e) {
 	if(debug) {
 		debug3d();
-		if(e && !entity_set.count(e)) RTEX("Parent entity does not exist.");
+		if(e && !entity_set.count(e)) RTEX(MultiLang::parent_entity_not_exist);
 	}
 }
 
 static inline void debugMesh(MeshModel* m) {
 	if(debug) {
-		debugEntity(m); if(!m->getMeshModel()) RTEX("Entity is not a mesh!");
+		debugEntity(m); if(!m->getMeshModel()) RTEX(MultiLang::entity_not_mesh);
 	}
 }
 
 static inline void debugObject(Object* o) {
 	if(debug) {
-		debugEntity(o); if(!o->getObject()) RTEX("Entity is not an object!");
+		debugEntity(o); if(!o->getObject()) RTEX(MultiLang::entity_not_object);
 	}
 }
 
 static inline void debugColl(Object* o, int index) {
 	if(debug) {
 		debugObject(o);
-		if(index<1 || index>o->getCollisions().size()) RTEX("Collision index out of range.");
+		if(index<1 || index>o->getCollisions().size()) RTEX(MultiLang::collision_out_of_range);
 	}
 }
 
 static inline void debugCamera(Camera* c) {
 	if(debug) {
-		debugEntity(c); if(!c->getCamera()) RTEX("Entity is not a camera!");
+		debugEntity(c); if(!c->getCamera()) RTEX(MultiLang::entity_not_camera);
 	}
 }
 
 static inline void debugLight(Light* l) {
 	if(debug) {
-		debugEntity(l); if(!l->getLight()) RTEX("Entity is not a light!");
+		debugEntity(l); if(!l->getLight()) RTEX(MultiLang::entity_not_light);
 	}
 }
 
 static inline void debugModel(Model* m) {
 	if(debug) {
-		debugEntity(m); if(!m->getModel()) RTEX("Entity is not a model!");
+		debugEntity(m); if(!m->getModel()) RTEX(MultiLang::entity_not_model);
 	}
 }
 
 static inline void debugSprite(Sprite* s) {
 	if(debug) {
-		debugModel(s); if(!s->getSprite()) RTEX("Entity is not a sprite!");
+		debugModel(s); if(!s->getSprite()) RTEX(MultiLang::entity_not_sprite);
 	}
 }
 
 static inline void debugMD2(MD2Model* m) {
 	if(debug) {
-		debugModel(m); if(!m->getMD2Model()) RTEX("Entity is not an MD2 Model!");
+		debugModel(m); if(!m->getMD2Model()) RTEX(MultiLang::entity_not_md2_model);
 	}
 }
 
 static inline void debugBSP(Q3BSPModel* m) {
 	if(debug) {
-		debugModel(m); if(!m->getBSPModel()) RTEX("Entity is not a BSP Model!");
+		debugModel(m); if(!m->getBSPModel()) RTEX(MultiLang::entity_not_bsp_model);
 	}
 }
 
 static inline void debugTerrain(Terrain* t) {
 	if(debug) {
-		debugModel(t); if(!t->getTerrain()) RTEX("Entity is not a terrain!");
+		debugModel(t); if(!t->getTerrain()) RTEX(MultiLang::entity_not_terrain);
 	}
 }
 
 static inline void debugSegs(int n) {
 	if(debug) {
 		debug3d();
-		if(n < 3 || n>50) RTEX("Illegal number of segments!");
+		if(n < 3 || n>50) RTEX(MultiLang::illegal_number_segments);
 	}
 }
 
 static inline void debugVertex(Surface* s, int n) {
 	if(debug) {
 		debug3d();
-		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range.");
+		if(n < 0 || n >= s->numVertices()) RTEX(MultiLang::vertex_out_of_range);
 	}
 }
 
 static inline void debugVertex(Surface* s, int n, int t) {
 	if(debug) {
 		debug3d();
-		if(n < 0 || n >= s->numVertices()) RTEX("Vertex index out of range.");
-		if(t < 0 || t>1) RTEX("Texture coordinate set out of range.");
+		if (n < 0 || n >= s->numVertices()) RTEX(MultiLang::vertex_out_of_range);
+		if(t < 0 || t>1) RTEX(MultiLang::texture_coordinate_out_of_range);
 	}
 }
 
@@ -425,7 +426,7 @@ Texture* bbCreateTexture(int w, int h, int flags, int frames) {
 	if(debug) {
 		debug3d();
 		if(frames <= 0) {
-			RTEX("Illegal number of texture frames!");
+			RTEX(MultiLang::illegal_texture_frames);
 		}
 	}
 	Texture* t = new Texture(w, h, flags, frames);
@@ -722,7 +723,7 @@ void  bbPaintMesh(MeshModel* m, Brush* b) {
 void  bbAddMesh(MeshModel* src, MeshModel* dest) {
 	if(debug) {
 		debugMesh(src); debugMesh(dest);
-		if(src == dest) RTEX("A mesh cannot be added to itself!");
+		if(src == dest) RTEX(MultiLang::mesh_cannot_add_to_self);
 	}
 
 	dest->add(*src);
@@ -767,7 +768,7 @@ Surface* bbGetSurface(MeshModel* m, int index) {
 	if(debug) {
 		debugMesh(m);
 		if(index<1 || index>m->getSurfaces().size()) {
-			RTEX("Surface Index out of range.");
+			RTEX(MultiLang::surface_out_of_range);
 		}
 	}
 	return m->getSurfaces()[index - 1];
@@ -1336,7 +1337,7 @@ Entity* bbCreateTerrain(int n, Entity* p) {
 	debugParent(p);
 	int shift = 0;
 	while((1 << shift) < n) ++shift;
-	if((1 << shift) != n) RTEX("Illegal terrain size!");
+	if((1 << shift) != n) RTEX(MultiLang::illegal_terrain_size);
 	Terrain* t = new Terrain(shift);
 	return insertEntity(t, p);
 }
@@ -1344,12 +1345,12 @@ Entity* bbCreateTerrain(int n, Entity* p) {
 Entity* bbLoadTerrain(BBStr* file, Entity* p) {
 	debugParent(p);
 	gxCanvas* c = gx_graphics->loadCanvas(*file, gxCanvas::CANVAS_HIGHCOLOR);
-	if(!c) RTEX("Unable to load heightmap image.");
+	if(!c) RTEX(MultiLang::unable_load_heightmap);
 	int w = c->getWidth(), h = c->getHeight();
-	if(w != h) RTEX("Terrain must be square!");
+	if(w != h) RTEX(MultiLang::terrain_must_be_square);
 	int shift = 0;
 	while((1 << shift) < w) ++shift;
-	if((1 << shift) != w) RTEX("Illegal terrain size.");
+	if((1 << shift) != w) RTEX(MultiLang::illegal_terrain_size);
 	Terrain* t = new Terrain(shift);
 	c->lock();
 	for(int y = 0; y < h; ++y) {
@@ -1411,7 +1412,7 @@ void  bbModifyTerrain(Terrain* t, int x, int z, float h, int realtime) {
 Entity* bbCreateListener(Entity* p, float roll, float dopp, float dist) {
 	if(debug) {
 		debugParent(p);
-		if(listener) RTEX("Listener already created!");
+		if(listener) RTEX(MultiLang::listener_already_created);
 	}
 	listener = new Listener(roll, dopp, dist);
 	return insertEntity(listener, p);
@@ -1420,7 +1421,7 @@ Entity* bbCreateListener(Entity* p, float roll, float dopp, float dist) {
 gxChannel* bbEmitSound(gxSound* sound, Object* o) {
 	if(debug) {
 		debugObject(o);
-		if(!listener) RTEX("No Listener created.");
+		if(!listener) RTEX(MultiLang::no_listener_created);
 	}
 	return o->emitSound(sound);
 }
@@ -1472,7 +1473,7 @@ void  bbEntityParent(Entity* e, Entity* p, int global) {
 		Entity* t = p;
 		while(t) {
 			if(t == e) {
-				RTEX("Entity cannot be parented to itself!");
+				RTEX(MultiLang::entity_cannot_parented_itself);
 			}
 			t = t->getParent();
 		}
@@ -1540,7 +1541,7 @@ void  bbSetAnimTime(Object* o, float time, int seq) {
 		anim->setAnimTime(time, seq);
 	}
 	else {
-		RTEX("Entity has no animations.");
+		RTEX(MultiLang::entity_no_animations);
 	}
 }
 
@@ -1550,7 +1551,7 @@ void  bbAnimate(Object* o, int mode, float speed, int seq, float trans) {
 		anim->animate(mode, speed, seq, trans);
 	}
 	else {
-		RTEX("Entity has no animations.");
+		RTEX(MultiLang::entity_no_animations);
 	}
 }
 
@@ -1660,7 +1661,7 @@ void  bbEntityOrder(Object* o, int n) {
 	if(debug) {
 		debugEntity(o);
 		if(!o->getModel() && !o->getCamera()) {
-			RTEX("Entity is not a model or camera!");
+			RTEX(MultiLang::entity_not_model_or_camera);
 		}
 	}
 	o->setOrder(n);
@@ -1807,7 +1808,7 @@ static void entityType(Entity* e, int type) {
 void  bbEntityType(Object* o, int type, int recurs) {
 	if(debug) {
 		debugObject(o);
-		if(type < 0 || type>999) RTEX("EntityType ID must be a number from 0 to 999.");
+		if(type < 0 || type>999) RTEX(MultiLang::entitytype_id_range);
 	}
 	if(recurs) entityType(o, type);
 	else {
@@ -2056,7 +2057,7 @@ int  bbActiveTextures() {
 
 void blitz3d_open() {
 	gx_scene = gx_graphics->createScene(0);
-	if(!gx_scene) RTEX("Unable to create gxScene instance!");
+	if(!gx_scene) RTEX(MultiLang::unable_create_gxscene_instance);
 	world = new World();
 	projected = Vector();
 	picked.collision = Collision();
