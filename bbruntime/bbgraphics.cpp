@@ -4,12 +4,6 @@
 #include "../gxruntime/gxutf8.h"
 #include "../MultiLang/MultiLang.h"
 
-#ifdef OPENCC
-#include "../opencc/include/opencc/opencc.h"
-#pragma comment(lib, "../opencc/lib/opencc.lib")
-opencc::SimpleConverter* OpenCC = nullptr;
-#endif
-
 gxGraphics* gx_graphics;
 gxCanvas* gx_canvas;
 
@@ -702,55 +696,14 @@ void bbOval(int x, int y, int w, int h, int solid)
 /*
 * xPos: 0 = align left, 1 = align center, 2 = align right
 * yPos: 0 = align top, 1 = align middle, 2 = align bottom
-* 
-* If string is ANSI encoding(such as gfx's name in scpcb launcher),
-* then change its encode into utf8 to display
-* encoding: 0 = no convert, 1 = ANSI to UTF8
-* 
-* NOTE: ANSI TO UTF8 WILL TAKE A LOT OF TIME
 */
-void bbText(int x, int y, BBStr* str, int xPos, int yPos, int encoding)
+void bbText(int x, int y, BBStr* str, int xPos, int yPos)
 {
-	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	if (xPos == 2) x -= curr_font->getWidth(*str);
 	if (xPos == 1) x -= curr_font->getWidth(*str) / 2;
 	if (yPos == 2) y -= curr_font->getHeight();
 	if (yPos == 1) y -= curr_font->getHeight() / 2;
-#ifdef OPENCC
-	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
-#endif
 	gx_canvas->text(x, y, *str);
-	delete str;
-}
-
-#ifdef OPENCC
-void bbOpenCC(BBStr* path) {
-	std::string str = path->c_str();
-	if (str == "") OpenCC = nullptr;
-	else {
-		try {
-			OpenCC = new opencc::SimpleConverter(path->c_str());
-		}
-		catch (std::exception& e) {
-			MessageBoxW(0, MultiLang::opencc_configure_not_found, MultiLang::runtime_error, MB_ICONERROR | MB_TOPMOST);
-			ExitProcess(-1);
-		}
-	}
-	delete path;
-}
-#endif
-
-BBStr* bbConvertToANSI(BBStr* str) 
-{
-	*str = UTF8::convertToANSI(str->c_str());
-	return str;
-	delete str;
-}
-
-BBStr* bbConvertToUTF8(BBStr* str)
-{
-	*str = UTF8::convertToUTF8(str->c_str());
-	return str;
 	delete str;
 }
 
@@ -1248,26 +1201,18 @@ static void endPrinting(gxCanvas* c)
 	if(!gx_runtime->idle()) RTEX(0);
 }
 
-void bbWrite(BBStr* str, int encoding)
+void bbWrite(BBStr* str)
 {
-	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
-#ifdef OPENCC
-	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
-#endif
 	c->text(curs_x, curs_y, *str);
 	curs_x += curr_font->getWidth(*str);
 	endPrinting(c);
 	delete str;
 }
 
-void bbPrint(BBStr* str, int encoding)
+void bbPrint(BBStr* str)
 {
-	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	gxCanvas* c = startPrinting();
-#ifdef OPENCC
-	if (OpenCC != nullptr) *str = OpenCC->Convert(*str);
-#endif
 	c->text(curs_x, curs_y, *str);
 	curs_x = 0;
 	curs_y += curr_font->getHeight() + 3; //avoid multiline overlapping by adding 3 to the font height
@@ -1542,7 +1487,7 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("Rect%x%y%width%height%solid=1", bbRect);
 	rtSym("Oval%x%y%width%height%solid=1", bbOval);
 	rtSym("Line%x1%y1%x2%y2", bbLine);
-	rtSym("Text%x%y$text%xPos=0%yPos=0%encoding=0", bbText);
+	rtSym("Text%x%y$text%xPos=0%yPos=0", bbText);
 	rtSym("$ConvertToANSI$str", bbConvertToANSI);
 	rtSym("$ConvertToUTF8$str", bbConvertToUTF8);
 	rtSym("CopyRect%source_x%source_y%width%height%dest_x%dest_y%src_buffer=0%dest_buffer=0", bbCopyRect);
@@ -1601,8 +1546,8 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("%ImageRectOverlap%image%x%y%rect_x%rect_y%rect_width%rect_height", bbImageRectOverlap);
 	rtSym("%ImageRectCollide%image%x%y%frame%rect_x%rect_y%rect_width%rect_height", bbImageRectCollide);
 
-	rtSym("Write$string%encoding=0", bbWrite);
-	rtSym("Print$string=\"\"%encoding=0", bbPrint);
+	rtSym("Write$string", bbWrite);
+	rtSym("Print$string=\"\"", bbPrint);
 	rtSym("$Input$prompt=\"\"", bbInput);
 	rtSym("Locate%x%y", bbLocate);
 

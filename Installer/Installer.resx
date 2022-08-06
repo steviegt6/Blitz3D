@@ -477,6 +477,147 @@
   <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="CheckGithub.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CheckGithub.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="CheckGithub.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 109</value>
+  </data>
+  <data name="CheckGithub.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 18</value>
+  </data>
+  <data name="CheckGithub.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="CheckGithub.Text" xml:space="preserve">
+    <value>View Github Repository</value>
+  </data>
+  <data name="&gt;&gt;CheckGithub.Name" xml:space="preserve">
+    <value>CheckGithub</value>
+  </data>
+  <data name="&gt;&gt;CheckGithub.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CheckGithub.Parent" xml:space="preserve">
+    <value>PageDone</value>
+  </data>
+  <data name="&gt;&gt;CheckGithub.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="CheckRun.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="CheckRun.Location" type="System.Drawing.Point, System.Drawing">
+    <value>28, 83</value>
+  </data>
+  <data name="CheckRun.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 18</value>
+  </data>
+  <data name="CheckRun.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="CheckRun.Text" xml:space="preserve">
+    <value>Run Blitz3D TSS</value>
+  </data>
+  <data name="&gt;&gt;CheckRun.Name" xml:space="preserve">
+    <value>CheckRun</value>
+  </data>
+  <data name="&gt;&gt;CheckRun.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;CheckRun.Parent" xml:space="preserve">
+    <value>PageDone</value>
+  </data>
+  <data name="&gt;&gt;CheckRun.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="LabelThanks.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LabelThanks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>25, 55</value>
+  </data>
+  <data name="LabelThanks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>273, 14</value>
+  </data>
+  <data name="LabelThanks.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="LabelThanks.Text" xml:space="preserve">
+    <value>Thank you for installing Blitz 3D TSS!</value>
+  </data>
+  <data name="&gt;&gt;LabelThanks.Name" xml:space="preserve">
+    <value>LabelThanks</value>
+  </data>
+  <data name="&gt;&gt;LabelThanks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LabelThanks.Parent" xml:space="preserve">
+    <value>PageDone</value>
+  </data>
+  <data name="&gt;&gt;LabelThanks.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="LabelPageDone.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LabelPageDone.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 14.25pt, style=Bold</value>
+  </data>
+  <data name="LabelPageDone.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LabelPageDone.Location" type="System.Drawing.Point, System.Drawing">
+    <value>14, 18</value>
+  </data>
+  <data name="LabelPageDone.Size" type="System.Drawing.Size, System.Drawing">
+    <value>60, 22</value>
+  </data>
+  <data name="LabelPageDone.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="LabelPageDone.Text" xml:space="preserve">
+    <value>Done!</value>
+  </data>
+  <data name="&gt;&gt;LabelPageDone.Name" xml:space="preserve">
+    <value>LabelPageDone</value>
+  </data>
+  <data name="&gt;&gt;LabelPageDone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LabelPageDone.Parent" xml:space="preserve">
+    <value>PageDone</value>
+  </data>
+  <data name="&gt;&gt;LabelPageDone.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="PageDone.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Consolas, 9pt</value>
+  </data>
+  <data name="PageDone.Location" type="System.Drawing.Point, System.Drawing">
+    <value>166, 1</value>
+  </data>
+  <data name="PageDone.Size" type="System.Drawing.Size, System.Drawing">
+    <value>410, 363</value>
+  </data>
+  <data name="PageDone.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;PageDone.Name" xml:space="preserve">
+    <value>PageDone</value>
+  </data>
+  <data name="&gt;&gt;PageDone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PageDone.Parent" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="&gt;&gt;PageDone.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="InstallerIcon.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -505,7 +646,7 @@
     <value>Background</value>
   </data>
   <data name="&gt;&gt;InstallerIcon.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="Background.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -784,180 +925,6 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;PageDirectory.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="CheckGithub.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="CheckGithub.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="CheckGithub.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 109</value>
-  </data>
-  <data name="CheckGithub.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 18</value>
-  </data>
-  <data name="CheckGithub.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="CheckGithub.Text" xml:space="preserve">
-    <value>View Github Repository</value>
-  </data>
-  <data name="&gt;&gt;CheckGithub.Name" xml:space="preserve">
-    <value>CheckGithub</value>
-  </data>
-  <data name="&gt;&gt;CheckGithub.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;CheckGithub.Parent" xml:space="preserve">
-    <value>PageDone</value>
-  </data>
-  <data name="&gt;&gt;CheckGithub.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="CheckRun.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="CheckRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>28, 83</value>
-  </data>
-  <data name="CheckRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 18</value>
-  </data>
-  <data name="CheckRun.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="CheckRun.Text" xml:space="preserve">
-    <value>Run Blitz3D TSS</value>
-  </data>
-  <data name="&gt;&gt;CheckRun.Name" xml:space="preserve">
-    <value>CheckRun</value>
-  </data>
-  <data name="&gt;&gt;CheckRun.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;CheckRun.Parent" xml:space="preserve">
-    <value>PageDone</value>
-  </data>
-  <data name="&gt;&gt;CheckRun.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="LabelThanks.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="LabelThanks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>25, 55</value>
-  </data>
-  <data name="LabelThanks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>273, 14</value>
-  </data>
-  <data name="LabelThanks.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="LabelThanks.Text" xml:space="preserve">
-    <value>Thank you for installing Blitz 3D TSS!</value>
-  </data>
-  <data name="&gt;&gt;LabelThanks.Name" xml:space="preserve">
-    <value>LabelThanks</value>
-  </data>
-  <data name="&gt;&gt;LabelThanks.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelThanks.Parent" xml:space="preserve">
-    <value>PageDone</value>
-  </data>
-  <data name="&gt;&gt;LabelThanks.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="LabelPageDone.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="LabelPageDone.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 14.25pt, style=Bold</value>
-  </data>
-  <data name="LabelPageDone.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="LabelPageDone.Location" type="System.Drawing.Point, System.Drawing">
-    <value>14, 18</value>
-  </data>
-  <data name="LabelPageDone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 22</value>
-  </data>
-  <data name="LabelPageDone.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="LabelPageDone.Text" xml:space="preserve">
-    <value>Done!</value>
-  </data>
-  <data name="&gt;&gt;LabelPageDone.Name" xml:space="preserve">
-    <value>LabelPageDone</value>
-  </data>
-  <data name="&gt;&gt;LabelPageDone.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;LabelPageDone.Parent" xml:space="preserve">
-    <value>PageDone</value>
-  </data>
-  <data name="&gt;&gt;LabelPageDone.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="PageDone.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="PageDone.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 1</value>
-  </data>
-  <data name="PageDone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>410, 363</value>
-  </data>
-  <data name="PageDone.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;PageDone.Name" xml:space="preserve">
-    <value>PageDone</value>
-  </data>
-  <data name="&gt;&gt;PageDone.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;PageDone.Parent" xml:space="preserve">
-    <value>PageConfirm</value>
-  </data>
-  <data name="&gt;&gt;PageDone.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="CheckOpenCC.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="CheckOpenCC.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="CheckOpenCC.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="CheckOpenCC.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 209</value>
-  </data>
-  <data name="CheckOpenCC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 18</value>
-  </data>
-  <data name="CheckOpenCC.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="CheckOpenCC.Text" xml:space="preserve">
-    <value>Install OpenCC extension</value>
-  </data>
-  <data name="&gt;&gt;CheckOpenCC.Name" xml:space="preserve">
-    <value>CheckOpenCC</value>
-  </data>
-  <data name="&gt;&gt;CheckOpenCC.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;CheckOpenCC.Parent" xml:space="preserve">
-    <value>PageConfirm</value>
-  </data>
-  <data name="&gt;&gt;CheckOpenCC.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="CheckShortcut.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -989,7 +956,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;CheckShortcut.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>0</value>
   </data>
   <data name="LabelFileWarn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1022,7 +989,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;LabelFileWarn.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>1</value>
   </data>
   <data name="LabelStatus.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1055,7 +1022,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;LabelStatus.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="ProgressInstall.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1079,7 +1046,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;ProgressInstall.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>3</value>
   </data>
   <data name="LableInstallWarn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1112,7 +1079,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;LableInstallWarn.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>4</value>
   </data>
   <data name="CheckStartUpMenu.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1145,7 +1112,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;CheckStartUpMenu.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>5</value>
   </data>
   <data name="CheckAssociation.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1178,7 +1145,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;CheckAssociation.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>6</value>
   </data>
   <data name="RBUnzip.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1201,9 +1168,9 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="RBUnzip.Text" xml:space="preserve">
     <value>Install as a zip file</value>
   </data>
-  <data name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  <metadata name="toolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </data>
+  </metadata>
   <data name="RBUnzip.ToolTip" xml:space="preserve">
     <value>Install Blitz3D TSS and do nothing else.</value>
   </data>
@@ -1217,7 +1184,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;RBUnzip.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>7</value>
   </data>
   <data name="RBInstall.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1250,7 +1217,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;RBInstall.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>8</value>
   </data>
   <data name="LabelPath.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1283,7 +1250,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;LabelPath.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>9</value>
   </data>
   <data name="LabelConfirmTitle.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1316,7 +1283,7 @@ Permission is granted to anyone to use this software for any purpose, including 
     <value>PageConfirm</value>
   </data>
   <data name="&gt;&gt;LabelConfirmTitle.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>10</value>
   </data>
   <data name="PageConfirm.Font" type="System.Drawing.Font, System.Drawing">
     <value>Consolas, 14.25pt</value>
@@ -1342,9 +1309,9 @@ Permission is granted to anyone to use this software for any purpose, including 
   <data name="&gt;&gt;PageConfirm.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="$this.Localizable" type="System.Boolean, mscorlib">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
+  </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 14</value>
   </data>
@@ -2302,8 +2269,5 @@ Permission is granted to anyone to use this software for any purpose, including 
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="CheckOpenCC.ToolTip" xml:space="preserve">
-    <value>OpenCC組件用於中文繁簡轉換。</value>
   </data>
 </root>

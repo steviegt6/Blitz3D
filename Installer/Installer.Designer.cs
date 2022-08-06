@@ -52,7 +52,6 @@
             this.CheckRun = new System.Windows.Forms.CheckBox();
             this.LabelThanks = new System.Windows.Forms.Label();
             this.LabelPageDone = new System.Windows.Forms.Label();
-            this.CheckOpenCC = new System.Windows.Forms.CheckBox();
             this.CheckShortcut = new System.Windows.Forms.CheckBox();
             this.LabelFileWarn = new System.Windows.Forms.Label();
             this.LabelStatus = new System.Windows.Forms.Label();
@@ -156,6 +155,7 @@
             // Background
             // 
             this.Background.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(243)))), ((int)(((byte)(249)))));
+            this.Background.Controls.Add(this.PageDone);
             this.Background.Controls.Add(this.InstallerIcon);
             resources.ApplyResources(this.Background, "Background");
             this.Background.Name = "Background";
@@ -224,8 +224,6 @@
             // 
             // PageConfirm
             // 
-            this.PageConfirm.Controls.Add(this.PageDone);
-            this.PageConfirm.Controls.Add(this.CheckOpenCC);
             this.PageConfirm.Controls.Add(this.CheckShortcut);
             this.PageConfirm.Controls.Add(this.LabelFileWarn);
             this.PageConfirm.Controls.Add(this.LabelStatus);
@@ -273,15 +271,6 @@
             // 
             resources.ApplyResources(this.LabelPageDone, "LabelPageDone");
             this.LabelPageDone.Name = "LabelPageDone";
-            // 
-            // CheckOpenCC
-            // 
-            resources.ApplyResources(this.CheckOpenCC, "CheckOpenCC");
-            this.CheckOpenCC.Checked = true;
-            this.CheckOpenCC.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.CheckOpenCC.Name = "CheckOpenCC";
-            this.toolTip.SetToolTip(this.CheckOpenCC, resources.GetString("CheckOpenCC.ToolTip"));
-            this.CheckOpenCC.UseVisualStyleBackColor = true;
             // 
             // CheckShortcut
             // 
@@ -392,8 +381,6 @@
         }
 
         #endregion
-
-        public System.Windows.Forms.CheckBox CheckOpenCC;
         public System.Windows.Forms.Button ButtonCancel;
         public System.Windows.Forms.Button ButtonNext;
         public System.Windows.Forms.Panel panel1;

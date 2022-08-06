@@ -7,5 +7,4 @@ Graphics 800,600,16
 While Not KeyHit(1)
 ;print the text, centered horizontally at x=400, y=0
 Text 400,0,"Hello There!",1,0
-Text 600,100,"ANSI: "+GfxDriverName(1),0,2,1 
 Wend

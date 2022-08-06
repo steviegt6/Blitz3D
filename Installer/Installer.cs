@@ -173,24 +173,6 @@ namespace Installer
             ProgressInstall.Value += 20;
             Properties.Resources.zipFile.Delete(); //...delete it after extract
 
-            if (CheckOpenCC.Checked)
-            {
-                //OpenCC extension is for Chinese convert
-                //https://github.com/BYVoid/OpenCC
-                LabelStatus.Text = "Installing OpenCC extension...";
-                try
-                {
-                    System.IO.File.Delete(BoxDirectoryPath.Text + "\\Blitz3D.exe");
-                    Directory.Delete(BoxDirectoryPath.Text + "\\bin", true);
-                    System.IO.Compression.ZipFile.ExtractToDirectory(Properties.Resources.opencc.FullName, BoxDirectoryPath.Text);
-                }
-                catch (IOException)
-                {
-                    MessageBox.Show("A error encountered when installing OpenCC extension!\r\nPlease delete target directory manual or run as Administrator.", "Catastrophic error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.Exit(-1);
-                }
-                Properties.Resources.opencc.Delete();
-            }
             ProgressInstall.Value += 20;
 
             LabelStatus.Text = "Last step...";

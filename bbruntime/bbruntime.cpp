@@ -44,7 +44,7 @@ void bbInitErrorMsgs(int number) {
 
 void bbSetErrorMsg(int pos, BBStr* str) {
 	if(ErrorMessagePool::memoryAccessViolation != 0 && pos < ErrorMessagePool::size) {
-		ErrorMessagePool::memoryAccessViolation[pos] = *str;
+		ErrorMessagePool::memoryAccessViolation[pos] = UTF8::convertToANSI(str->c_str());
 	}
 	delete str;
 }

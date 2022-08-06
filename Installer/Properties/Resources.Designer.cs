@@ -79,43 +79,15 @@ namespace Installer.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static System.IO.FileInfo zipFile {
+        internal static byte[] zipFile {
             get {
                 object obj = ResourceManager.GetObject("zipFile", resourceCulture);
-                WriteByteToFile((System.Byte[])obj, System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip"); //save file into appdata...
-                return new System.IO.FileInfo(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip");
+                return ((byte[])(obj));
             }
-        }
-
-        internal static System.IO.FileInfo opencc {
-            get {
-                object obj = ResourceManager.GetObject("opencc", resourceCulture);
-                WriteByteToFile((System.Byte[])obj, System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip"); //save file into appdata...
-                return new System.IO.FileInfo(System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\Blitz3DTSS.zip");
-            }
-        }
-        public static bool WriteByteToFile(byte[] pReadByte, string fileName)
-        {
-            System.IO.FileStream pFileStream = null;
-            try
-            {
-                pFileStream = new System.IO.FileStream(fileName, System.IO.FileMode.OpenOrCreate);
-                pFileStream.Write(pReadByte, 0, pReadByte.Length);
-            }
-            catch
-            {
-                return false;
-            }
-            finally
-            {
-                if (pFileStream != null)
-                    pFileStream.Close();
-            }
-            return true;
         }
     }
 }

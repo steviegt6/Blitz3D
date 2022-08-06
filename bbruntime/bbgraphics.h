@@ -61,9 +61,7 @@ void	 bbPlot( int x,int y );
 void	 bbLine( int x1,int y1,int x2,int y2 );
 void	 bbRect( int x,int y,int w,int h,int solid );
 void	 bbOval( int x,int y,int w,int h,int solid );
-void	 bbText( int x,int y,BBStr *str,int xPos,int yPos,int encoding );
-BBStr*	 bbConvertToANSI(BBStr* str);
-BBStr*	 bbConvertToUTF8(BBStr* str);
+void	 bbText( int x,int y,BBStr *str,int xPos,int yPos );
 void	 bbGetColor( int x,int y );
 int		 bbColorRed();
 int		 bbColorGreen();
@@ -113,8 +111,8 @@ int		 bbImageRectOverlap( bbImage *i,int x,int y,int r_x,int r_y,int r_w,int r_h
 int		 bbImageRectCollide( bbImage *i,int x,int y,int f,int r_x,int r_y,int r_w,int r_h );
 
 //simple print functions
-void	 bbWrite( BBStr *str,int encoding );
-void	 bbPrint( BBStr *str,int encoding );
+void	 bbWrite( BBStr *str );
+void	 bbPrint( BBStr *str );
 BBStr*	 bbInput( BBStr *prompt );
 void	 bbLocate( int x,int y );
 

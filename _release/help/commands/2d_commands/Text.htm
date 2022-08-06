@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <h1>Text x,y,string$,[x pos],[y pos],[encoding]</h1>
+    <h1>Text x,y,string$,[x pos],[y pos]</h1>
     <h1>Parameters</h1>
     <table>
         <tr>
@@ -19,8 +19,6 @@
                 x pos = optional; 0 = align left, 1 = align center, 2 = align right
                 <br />
                 y pos = optional; 0 = align top, 1 = align middle, 2 = align bottom
-                <br />
-                encoding = optional; 0 = UTF-8, 1 = ANSI
             </td>
         </tr>
     </table>
@@ -38,10 +36,6 @@
                 will not make a box appear.
 
                 <br />
-
-                <br />
-
-                Display ANSI text will take a lot of time(require convert to UTF-8)
 
                 <br />
 
@@ -72,8 +66,6 @@
                 ;print the text, centered horizontally at x=400, y=0
                 <br />
                 Text 400,0,"Hello There!",1
-				<br />
-                Text 600,100,"ANSI: "+GfxDriverName(1),0,2,1
                 <br />
                 Wend
                 <br />
