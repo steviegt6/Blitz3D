@@ -34,13 +34,13 @@ static HINSTANCE hinst;
 static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
-static std::string funList[999]; //a huge array
-static int funNum = 0;
 
 /*
 * If you using a single variant to handle function names, then you will get error
 * sym is a pointer, backup function name is pointer too.
 * So, variant of backup name's content will change by sym's content.
+* 
+* How it works?
 */
 //Allows userlibs to call DebugLog() and RuntimeError().
 //******************************************************
@@ -55,13 +55,19 @@ __declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
 }
 //******************************************************
 
+const char* getCharPtr(std::string str) {
+	char* cha = new char[str.size() + 1];
+	memcpy(cha, str.c_str(), str.size() + 1);
+	const char* p = cha;
+	return p;
+}
+
 static void rtSym(const char* sym, void* pc) {
 	syms[sym] = pc;
-	funList[funNum] = sym;
-	if (sym[0] == '%' || sym[0] == '$' || sym[0] == '#') funList[funNum] = funList[funNum].insert(1, "Blitz_");
-	else funList[funNum] = "Blitz_" + funList[funNum];
-	syms[funList[funNum].c_str()] = pc;
-	funNum++;
+	std::string symSpare = sym;
+	if (sym[0] == '%' || sym[0] == '$' || sym[0] == '#') symSpare = symSpare.insert(1, "Blitz_");
+	else symSpare = symSpare.insert(0, "Blitz_");
+	syms[getCharPtr(symSpare)] = pc;
 }
 
 static void killer() {

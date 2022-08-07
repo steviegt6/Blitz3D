@@ -1,6 +1,7 @@
 #include "std.h"
 #include "bbsockets.h"
 #include <wininet.h>
+#include "../MultiLang/sformat.h"
 #include "../MultiLang/MultiLang.h"
 
 #pragma comment (lib, "wininet.lib")
@@ -465,7 +466,7 @@ void bbTCPTimeouts(int rt, int at) {
 	accept_timeout = at;
 }
 
-std::string exec(char* cmd) {
+std::string exec(const char* cmd) {
 	FILE* pipe = _popen(cmd, "r");
 	if (!pipe) return "";
 	char buffer[128];
@@ -498,23 +499,21 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 	std::string s2 = name->c_str();
 	std::string result = "";
 	int n, a;
-	if ((n = s1.find(s2+"=")) != std::string::npos)
+	if ((n = s1.find(s2 + "=")) != std::string::npos)
 		result = s1.substr(n);
 	if ((a = result.find(';')) != std::string::npos)
-		result = result.substr(s2.length()+1, a - s2.length()-1);
+		result = result.substr(s2.length()+1, a - s2.length() - 1);
 	*txt = result.c_str();
 	delete name;
 	return txt;
 }
 
 BBStr* bbGetDomainTXT(BBStr* domain) {
-	std::string cmd = "nslookup -qt=TXT ";
-	cmd += domain->c_str();
-	std::string result = exec((char*)cmd.data());
+	std::string result = exec(SFormat("nslookup -qt=TXT {0}", domain->c_str()).data());
 	result = clearTabLeft(result);
 	if (result[0] == '\"') result = result.substr(1);
-	if (result[result.length() - 2] == '\"')result = result.substr(0, result.length() - 2);
-	if (result[result.length() - 1] != ';') result += ';';
+	if (result[result.length() - 2] == '\"') result = result.substr(0, result.length() - 2);
+	if (result[result.length() - 1] != ';')  result += ';';
 	*domain = result.c_str();
 	return domain;
 }
@@ -563,6 +562,7 @@ int bbDownloadFile(BBStr* url, BBStr* file)
 		InternetCloseHandle(hSession);
 		hSession = NULL;
 	}
+
 	delete url, file;
 	std::ifstream fileStream(file->c_str(), std::ios::in);
 	int isOpen = fileStream.is_open();

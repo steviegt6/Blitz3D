@@ -685,12 +685,12 @@ void bbLine(int x1, int y1, int x2, int y2)
 
 void bbRect(int x, int y, int w, int h, int solid)
 {
-	gx_canvas->rect(x, y, w, h, solid ? true : false);
+	gx_canvas->rect(x, y, w, h, solid);
 }
 
 void bbOval(int x, int y, int w, int h, int solid)
 {
-	gx_canvas->oval(x, y, w, h, solid ? true : false);
+	gx_canvas->oval(x, y, w, h, solid);
 }
 
 /*

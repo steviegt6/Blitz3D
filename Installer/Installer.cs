@@ -95,7 +95,6 @@ namespace Installer
                     ProgressInstall.Hide();
                     ButtonFinish.Hide();
                     PageDone.Hide();
-                    CheckOpenCC.Checked = false;
                     LabelPath.Text = "Install Directory: " + BoxDirectoryPath.Text;
                     LabelStatus.Text = "Installing Blitz3D TSS " + ProductVersion + "...";
                     LabelDir.Font = new System.Drawing.Font("Consolas", 9);
