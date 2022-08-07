@@ -707,6 +707,20 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos)
 	delete str;
 }
 
+BBStr* bbConvertToANSI(BBStr* str)
+{
+	*str = UTF8::convertToANSI(str->c_str());
+	return str;
+	delete str;
+}
+
+BBStr* bbConvertToUTF8(BBStr* str)
+{
+	*str = UTF8::convertToUTF8(str->c_str());
+	return str;
+	delete str;
+}
+
 void bbCopyRect(int sx, int sy, int w, int h, int dx, int dy, gxCanvas* src, gxCanvas* dest)
 {
 	if(src) debugCanvas(src);

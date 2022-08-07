@@ -67,6 +67,9 @@ int		 bbColorRed();
 int		 bbColorGreen();
 int		 bbColorBlue();
 
+BBStr* bbConvertToANSI(BBStr* str);
+BBStr* bbConvertToUTF8(BBStr* str);
+
 //font functions
 gxFont*  bbLoadFont( BBStr *name,int height );
 void	 bbFreeFont( gxFont *f );

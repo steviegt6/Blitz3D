@@ -49,6 +49,12 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 	delete str;
 }
 
+BBStr* bbGetUserLanguage() {
+	wchar_t buf[6]; // should enough
+	GetUserDefaultLocaleName(buf, 6);
+	return new BBStr(std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(buf));
+}
+
 int bbExecFile(BBStr* f) {
 	std::string t = *f; 
 	delete f;
@@ -212,6 +218,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("$GetEnv$env_var", bbGetEnv);
 	rtSym("SetEnv$env_var$value", bbSetEnv);
 	rtSym("DisableClose", bbDisableClose);
+	rtSym("$GetUserLanguage", bbGetUserLanguage);
 
 	rtSym("%CreateTimer%hertz", bbCreateTimer);
 	rtSym("%WaitTimer%timer", bbWaitTimer);
