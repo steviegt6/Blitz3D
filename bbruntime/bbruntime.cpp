@@ -3,7 +3,6 @@
 #include "bbruntime.h"
 #include "../gxruntime/gxutf8.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
 #include <codecvt>
 
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
@@ -53,6 +52,12 @@ BBStr* bbGetUserLanguage() {
 	wchar_t buf[6]; // should enough
 	GetUserDefaultLocaleName(buf, 6);
 	return new BBStr(std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(buf));
+}
+
+BBStr* bbGetLocaleInfo() {
+	char szLangName[10];
+	GetLocaleInfoA(GetSystemDefaultLCID(), LOCALE_SABBREVLANGNAME, szLangName, sizeof(szLangName) / sizeof(szLangName[0]));
+	return new BBStr(szLangName);
 }
 
 int bbExecFile(BBStr* f) {
@@ -219,6 +224,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("SetEnv$env_var$value", bbSetEnv);
 	rtSym("DisableClose", bbDisableClose);
 	rtSym("$GetUserLanguage", bbGetUserLanguage);
+	rtSym("$GetLocaleInfo", bbGetLocaleInfo);
 
 	rtSym("%CreateTimer%hertz", bbCreateTimer);
 	rtSym("%WaitTimer%timer", bbWaitTimer);
@@ -247,7 +253,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 
 //start up error
 static void sue(const char* t) {
-	std::string p = SFormat(MultiLang::startup_error, t);
+	std::string p = std::format(MultiLang::startup_error, t);
 	gx_runtime->debugError(p.c_str());
 }
 

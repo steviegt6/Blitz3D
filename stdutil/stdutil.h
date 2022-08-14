@@ -8,6 +8,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 #ifdef MEMDEBUG
 
 void* _cdecl operator new(size_t size);

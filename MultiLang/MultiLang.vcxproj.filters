@@ -18,9 +18,6 @@
     <ClInclude Include="MultiLang.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="sformat.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="English.cpp">

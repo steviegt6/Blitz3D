@@ -1,7 +1,7 @@
 #include "std.h"
 #include "nodes.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
+#include <format>
 
 std::set<std::string> Node::usedfuncs;
 
@@ -172,7 +172,7 @@ Type* Node::tagType(const std::string& tag, Environ* e) {
 	Type* t;
 	if(tag.size()) {
 		t = e->findType(tag);
-		if(!t) ex(SFormat(MultiLang::type_not_found, tag));
+		if(!t) ex(std::format(MultiLang::type_not_found, tag));
 	}
 	else t = 0;
 	return t;

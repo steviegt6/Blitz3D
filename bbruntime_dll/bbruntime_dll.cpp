@@ -12,7 +12,6 @@
 #include "../gxruntime/gxutf8.h"
 
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
 #include "../bbruntime/bbsys.h"
 
 class DummyDebugger : public Debugger {
@@ -235,7 +234,7 @@ static int findSym(const std::string& t) {
 	it = runtime_syms.find(t);
 	if(it != runtime_syms.end()) return it->second;
 
-	std::string err = SFormat(MultiLang::cant_find_symbol, t);
+	std::string err = std::format(MultiLang::cant_find_symbol, t);
 	MessageBox(0, err.c_str(), 0, 0);
 	ExitProcess(0);
 	return 0;

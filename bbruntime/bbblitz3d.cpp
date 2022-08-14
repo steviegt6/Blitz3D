@@ -1011,7 +1011,7 @@ int  bbCameraProject(Camera* c, float x, float y, float z) {
 		float nr = c->getFrustumNear();
 		float nr_w = c->getFrustumWidth();
 		float nr_h = c->getFrustumHeight();
-		projected = Vector((v.x / nr_w + .5f) * vp_w, (.5f - v.y / nr_h) * vp_h, nr);
+		::projected = Vector((v.x / nr_w + .5f) * vp_w, (.5f - v.y / nr_h) * vp_h, nr);
 		return 1;
 	}
 	if(v.z > 0) {
@@ -1022,26 +1022,26 @@ int  bbCameraProject(Camera* c, float x, float y, float z) {
 			float nr = c->getFrustumNear();
 			float nr_w = c->getFrustumWidth();
 			float nr_h = c->getFrustumHeight();
-			projected = Vector(
+			::projected = Vector(
 				(v.x * nr / v.z / nr_w + .5f) * vp_w,
 				(.5f - v.y * nr / v.z / nr_h) * vp_h, nr);
 			return 1;
 		}
 	}
-	projected = Vector();
+	::projected = Vector();
 	return 0;
 }
 
 float  bbProjectedX() {
-	return projected.x;
+	return ::projected.x;
 }
 
 float  bbProjectedY() {
-	return projected.y;
+	return ::projected.y;
 }
 
 float  bbProjectedZ() {
-	return projected.z;
+	return ::projected.z;
 }
 
 static Object* doPick(const Line& l, float radius) {
@@ -2059,7 +2059,7 @@ void blitz3d_open() {
 	gx_scene = gx_graphics->createScene(0);
 	if(!gx_scene) RTEX(MultiLang::unable_create_gxscene_instance);
 	world = new World();
-	projected = Vector();
+	::projected = Vector();
 	picked.collision = Collision();
 	picked.with = 0; picked.coords = Vector();
 	Texture::clearFilters();

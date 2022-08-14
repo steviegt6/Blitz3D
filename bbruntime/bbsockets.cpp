@@ -1,7 +1,6 @@
 #include "std.h"
 #include "bbsockets.h"
 #include <wininet.h>
-#include "../MultiLang/sformat.h"
 #include "../MultiLang/MultiLang.h"
 
 #pragma comment (lib, "wininet.lib")
@@ -509,7 +508,7 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 }
 
 BBStr* bbGetDomainTXT(BBStr* domain) {
-	std::string result = exec(SFormat("nslookup -qt=TXT {0}", domain->c_str()).data());
+	std::string result = exec(std::format("nslookup -qt=TXT {0}", domain->c_str()).data());
 	result = clearTabLeft(result);
 	if (result[0] == '\"') result = result.substr(1);
 	if (result[result.length() - 2] == '\"') result = result.substr(0, result.length() - 2);

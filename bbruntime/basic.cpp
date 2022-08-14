@@ -1,7 +1,6 @@
 #include "std.h"
 #include "bbsys.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
 #include "bbruntime.h"
 
 //how many strings allocated
@@ -477,9 +476,9 @@ float _bbFPow(float x, float y) {
 }
 
 void bbRuntimeStats() {
-	gx_runtime->debugLog(SFormat(MultiLang::stats_strings, stringCnt).c_str());
-	gx_runtime->debugLog(SFormat(MultiLang::stats_objects, objCnt).c_str());
-	gx_runtime->debugLog(SFormat(MultiLang::stats_unreleased, unrelObjCnt).c_str());
+	gx_runtime->debugLog(std::format(MultiLang::stats_strings, stringCnt).c_str());
+	gx_runtime->debugLog(std::format(MultiLang::stats_objects, objCnt).c_str());
+	gx_runtime->debugLog(std::format(MultiLang::stats_unreleased, unrelObjCnt).c_str());
 }
 
 void bbMav() {

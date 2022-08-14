@@ -256,7 +256,7 @@ void MainFrame::OnSize(UINT type, int sw, int sh) {
 	tabber.MoveWindow(x, y, w, h);
 }
 
-static char* bbFilter =
+static const char* bbFilter =
 
 "Blitz Basic files (.bb)|*.bb|"
 
@@ -704,7 +704,7 @@ void MainFrame::build(bool exec, bool publish) {
 			exe = "untitled";
 		}
 
-		static char* exeFilter = "Executable files (*.exe)|*.exe||";
+		static const char* exeFilter = "Executable files (*.exe)|*.exe||";
 		int t = OFN_NOCHANGEDIR | OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 		CFileDialog fd(false, "exe", exe.c_str(), t, exeFilter);
 		fd.m_ofn.lpstrTitle = "Select executable filename";
@@ -943,15 +943,15 @@ void MainFrame::updateCmdUI(CCmdUI* ui) {
 
 static std::string commandURL(const std::string& t) {
 
-	static char* dirs[] = {
+	static const char* dirs[] = {
 		"help\\commands\\2d_commands\\",
 		"help\\commands\\3d_commands\\",
 		0
 	};
 
-	char** dir_p = dirs;
+	const char** dir_p = dirs;
 
-	while (char* dir = *dir_p++) {
+	while (const char* dir = *dir_p++) {
 		WIN32_FIND_DATA fd;
 		std::string path = prefs.homeDir + "/" + dir + t + ".htm";
 		HANDLE h = FindFirstFile(path.c_str(), &fd);

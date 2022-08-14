@@ -104,7 +104,7 @@ bool isMediaFile(const std::string& f) {
 	return false;
 #endif
 
-	static char* exts[] = {
+	static const char* exts[] = {
 		"bmp","jpg","png","tga","iff","pcx",
 		"wav","mid","mp3","mod","s3m","xm","it","rmi","sgt",
 		"x","3ds",0
@@ -113,7 +113,7 @@ bool isMediaFile(const std::string& f) {
 	int i = f.rfind('.');
 	if(i == std::string::npos || i + 1 == f.size()) return false;
 	std::string ext = f.substr(i + 1);
-	char** p = exts;
+	const char** p = exts;
 	while(const char* e = *p++) {
 		std::string t(e);
 		if(i + t.size() + 1 != f.size()) continue;

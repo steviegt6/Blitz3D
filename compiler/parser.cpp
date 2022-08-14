@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include "parser.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
+#include <format>
 
 static const int TEXTLIMIT = 1024 * 1024 - 1;
 
@@ -53,7 +53,7 @@ void Parser::exp(const std::string& s) {
 		case CASE:ex(MultiLang::case_without_select);
 		case ENDSELECT:ex(MultiLang::end_select_without_select);
 	}
-	ex(SFormat(MultiLang::expecting, s));
+	ex(std::format(MultiLang::expecting, s));
 }
 
 std::string Parser::parseIdent() {

@@ -127,7 +127,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="MultiLang.h" />
-    <ClInclude Include="sformat.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="English.cpp" />

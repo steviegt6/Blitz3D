@@ -21,7 +21,7 @@ public:
     static void popBack(std::string& str);
     static std::string substr(const std::string& str, int start, int length);
     static std::wstring convertToUtf16(const std::string& str);
-    static std::string UTF8::GetSystemFontFile(const std::string& faceName);
+    static std::string GetSystemFontFile(const std::string& faceName);
 };
 
 #endif

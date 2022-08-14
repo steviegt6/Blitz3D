@@ -1,12 +1,12 @@
 #include "std.h"
 #include "bbsys.h"
 #include "../gxruntime/gxutf8.h"
+#include "../bbruntime/bbgraphics.h"
 #include <time.h>
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
 
-#define CHKPOS(x) if( (x)<0 ) RTEX( SFormat(MultiLang::string_parameter_positive, __func__).c_str() );
-#define CHKOFF(x) if( (x)<=0 ) RTEX( SFormat(MultiLang::string_parameter_greater, __func__ ).c_str() );
+#define CHKPOS(x) if( (x)<0 ) RTEX( std::format(MultiLang::string_parameter_positive, __func__).c_str() );
+#define CHKOFF(x) if( (x)<=0 ) RTEX( std::format(MultiLang::string_parameter_greater, __func__ ).c_str() );
 
 BBStr* bbString(BBStr* s, int n) {
 	BBStr* t = new BBStr();

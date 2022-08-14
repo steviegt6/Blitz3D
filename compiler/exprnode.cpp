@@ -1,17 +1,16 @@
 #include "std.h"
 #include "nodes.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
-
 #include <math.h>
 #include <float.h>
+#include <format>
 
 //////////////////////////////////
 // Cast an expression to a type //
 //////////////////////////////////
 ExprNode* ExprNode::castTo(Type* ty, Environ* e) {
 	if(!sem_type->canCastTo(ty)) {
-		ex(SFormat(MultiLang::illegal_type_conversion, sem_type->name(), ty->name()));
+		ex(std::format(MultiLang::illegal_type_conversion, sem_type->name(), ty->name()));
 	}
 
 	ExprNode* cast = new CastNode(this, ty);
@@ -126,7 +125,7 @@ void ExprSeqNode::castTo(DeclSeq* decls, Environ* e, bool cfunc) {
 					exprs[k]->sem_type = Type::void_type;
 				}
 				else {
-					ex(SFormat(MultiLang::illegal_type_conversion, exprs[k]->sem_type->name(), d->type->name()));
+					ex(std::format(MultiLang::illegal_type_conversion, exprs[k]->sem_type->name(), d->type->name()));
 				}
 				continue;
 			}
@@ -155,7 +154,7 @@ void ExprSeqNode::castTo(Type* t, Environ* e) {
 ExprNode* CallNode::semant(Environ* e) {
 	Type* t = e->findType(tag);
 	sem_decl = e->findFunc(ident);
-	if(!sem_decl || !(sem_decl->kind & DECL_FUNC)) ex(SFormat(MultiLang::function_not_found, ident));
+	if(!sem_decl || !(sem_decl->kind & DECL_FUNC)) ex(std::format(MultiLang::function_not_found, ident));
 	FuncType* f = sem_decl->type->funcType();
 	if(t && f->returnType != t) ex(MultiLang::incorrect_function_return_type);
 	exprs->semant(e);

@@ -1,7 +1,7 @@
 #include "std.h"
 #include "nodes.h"
 #include "../MultiLang/MultiLang.h"
-#include "../MultiLang/sformat.h"
+#include <format>
 
 //////////////////////////////////
 // Common get/set for variables //
@@ -54,7 +54,7 @@ void IdentVarNode::semant(Environ* e) {
 	Type* t = tagType(tag, e); if(!t) t = Type::int_type;
 	if(sem_decl = e->findDecl(ident)) {
 		if(!(sem_decl->kind & (DECL_GLOBAL | DECL_LOCAL | DECL_PARAM))) {
-			ex(SFormat(MultiLang::identifier_not_used_like_this, sem_decl->name));
+			ex(std::format(MultiLang::identifier_not_used_like_this, sem_decl->name));
 		}
 		Type* ty = sem_decl->type;
 		if(ty->constType()) ty = ty->constType()->valueType;
