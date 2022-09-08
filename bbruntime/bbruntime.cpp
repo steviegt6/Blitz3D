@@ -32,7 +32,7 @@ void bbRuntimeError(BBStr* str) {
 	if(t.size() > 255) t[255] = 0;
 	static char err[256];
 	strcpy(err, t.c_str());
-	RTEX(err);
+	RTEX(UTF8::convertToANSI(err));
 }
 
 void bbInitErrorMsgs(int number) {

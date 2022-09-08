@@ -59,21 +59,13 @@ void aboutBlitz() {
 
 	credits += MultiLang::credits;
 
-#ifdef OPENCC
-	credits += MultiLang::with_opencc;
-#endif
-
 	about.GetDlgItem(IDC_CREDITS)->SetWindowText(credits.c_str());
 
 	std::string t = "";
 
 	t += "Blitz3D";
 
-#ifdef OPENCC
-	t += MultiLang::title_with_opencc;
-#else
 	t += MultiLang::title_release;
-#endif
 
 	about.GetDlgItem(IDC_PRODUCT)->SetWindowText(t.c_str());
 
