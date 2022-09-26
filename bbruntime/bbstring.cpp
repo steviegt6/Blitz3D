@@ -45,6 +45,10 @@ int bbFind(BBStr* string, BBStr* find) {
 	return UTF8::find(string->c_str(), find->c_str(), 0);
 }
 
+BBStr* bbSubstr(BBStr* string, int start, int length) {
+	return new BBStr(UTF8::substr(string->c_str(), start, length));
+}
+
 BBStr* bbMid(BBStr* s, int o, int n) {
 	CHKOFF(o); --o;
 	if(o > s->size()) o = s->size();
@@ -72,8 +76,8 @@ BBStr* bbTrim(BBStr* s) {
 	int n = 0;
 	int p = s->size();
 	// currently all characters above the standard ASCII range are simply not trimmed
-	while(n < s->size() && !isgraph_safe((unsigned char)(*s)[n])) ++n;
-	while(p > n && !isgraph_safe((unsigned char)(*s)[p - 1])) --p;
+	while(n < s->size() && !isgraph_safe((byte)(*s)[n])) ++n;
+	while(p > n && !isgraph_safe((byte)(*s)[p - 1])) --p;
 	*s = UTF8::substr(*s, n, p - n);
 	return s;
 }
@@ -154,6 +158,7 @@ void string_link(void(*rtSym)(const char*, void*)) {
 	rtSym("%Find$string$find", bbFind);
 	rtSym("$Replace$string$from$to", bbReplace);
 	rtSym("%Instr$string$find%from=1", bbInstr);
+	rtSym("$Substr$string%start%length", bbSubstr);
 	rtSym("$Mid$string%start%count=-1", bbMid);
 	rtSym("$Upper$string", bbUpper);
 	rtSym("$Lower$string", bbLower);

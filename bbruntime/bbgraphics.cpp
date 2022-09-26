@@ -711,14 +711,12 @@ BBStr* bbConvertToANSI(BBStr* str)
 {
 	*str = UTF8::convertToANSI(str->c_str());
 	return str;
-	delete str;
 }
 
 BBStr* bbConvertToUTF8(BBStr* str)
 {
 	*str = UTF8::convertToUTF8(str->c_str());
 	return str;
-	delete str;
 }
 
 void bbCopyRect(int sx, int sy, int w, int h, int dx, int dy, gxCanvas* src, gxCanvas* dest)
@@ -761,6 +759,10 @@ int bbFontWidth()
 int bbFontHeight()
 {
 	return curr_font->getHeight();
+}
+
+gxFont* bbCurrentFont() {
+	return curr_font;
 }
 
 int bbStringWidth(BBStr* str, int encoding)
@@ -1510,6 +1512,7 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 
 	//fonts
 	rtSym( "%LoadFont$fontname%height=12",bbLoadFont );
+	rtSym( "%CurrentFont",bbCurrentFont );
 	rtSym( "FreeFont%font",bbFreeFont );
 	rtSym( "%FontWidth",bbFontWidth );
 	rtSym( "%FontHeight",bbFontHeight );

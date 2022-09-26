@@ -533,7 +533,7 @@ bool sockets_destroy() {
 	return true;
 }
 
-int bbDownloadFile(BBStr* url, BBStr* file)
+bool bbDownloadFile(BBStr* url, BBStr* file)
 {
 	/* https://blog.csdn.net/HW140701/article/details/78207490 */
 	byte Temp[1024];
@@ -564,9 +564,7 @@ int bbDownloadFile(BBStr* url, BBStr* file)
 
 	delete url, file;
 	std::ifstream fileStream(file->c_str(), std::ios::in);
-	int isOpen = fileStream.is_open();
-	fileStream.close();
-	return isOpen;
+	return fileStream.is_open();
 }
 
 void sockets_link(void(*rtSym)(const char*, void*)) {

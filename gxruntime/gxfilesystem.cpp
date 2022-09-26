@@ -58,7 +58,7 @@ std::string gxFileSystem::getCurrentDir()const {
 }
 
 int gxFileSystem::getFileSize(const std::string& name)const {
-	return std::filesystem::file_size(name);
+	return std::filesystem::exists(name) ? std::filesystem::file_size(name) : 0;
 }
 
 int gxFileSystem::getFileType(const std::string& name)const {
