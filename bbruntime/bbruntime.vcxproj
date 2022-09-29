@@ -167,7 +167,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">std.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="unzip.cpp" />
     <ClCompile Include="userlibs.cpp" />
+    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic.h" />
@@ -185,7 +187,9 @@
     <ClInclude Include="bbsys.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="std.h" />
+    <ClInclude Include="unzip.h" />
     <ClInclude Include="userlibs.h" />
+    <ClInclude Include="zip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

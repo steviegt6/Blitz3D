@@ -3,6 +3,7 @@
 #include "bbstream.h"
 #include <fstream>
 #include "../MultiLang/MultiLang.h"
+#include "unzip.h"
 
 gxFileSystem* gx_filesys;
 
@@ -148,6 +149,21 @@ void bbDeleteFile(BBStr* f) {
 	delete f;
 }
 
+void UnZip(BBStr* src, BBStr* dst, BBStr* password) {
+	HZIP hz = OpenZip(src->c_str(), password->c_str());
+	SetUnzipBaseDir(hz, dst->c_str());
+	ZIPENTRY ze;
+	GetZipItem(hz, -1, &ze);
+	int numitems = ze.index; // no register :(
+	for (int zi = 0; zi < numitems; zi++)
+	{
+		GetZipItem(hz, zi, &ze);
+		UnzipItem(hz, zi, ze.name);
+	}
+	CloseZip(hz);
+	delete src, dst, password;
+}
+
 bool filesystem_create() {
 	if(gx_filesys = gx_runtime->openFileSystem(0)) {
 		return true;
@@ -183,4 +199,6 @@ void filesystem_link(void(*rtSym)(const char*, void*)) {
 	rtSym("CopyFile$file$to", bbCopyFile);
 	rtSym("DeleteFile$file", bbDeleteFile);
 	rtSym("CreateFile$filename", bbCreateFile);
+
+	rtSym("UnZip$src$dst$password=\"\"", UnZip);
 }
