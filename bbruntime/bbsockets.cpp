@@ -465,7 +465,7 @@ void bbTCPTimeouts(int rt, int at) {
 	accept_timeout = at;
 }
 
-std::string exec(const char* cmd) {
+inline std::string exec(const char* cmd) {
 	FILE* pipe = _popen(cmd, "r");
 	if (!pipe) return "";
 	char buffer[128];
@@ -478,7 +478,7 @@ std::string exec(const char* cmd) {
 	return result;
 }
 
-std::string clearTabLeft(std::string src) {
+inline std::string clearTabLeft(std::string src) {
 	int pos = 0;
 	std::string result = src;
 	for (;;) {
@@ -508,7 +508,7 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 }
 
 BBStr* bbGetDomainTXT(BBStr* domain) {
-	std::string result = exec(std::format("nslookup -qt=TXT {0}", domain->c_str()).data());
+	std::string result = exec(("nslookup -qt=TXT {0}"s + domain->c_str()).data());
 	result = clearTabLeft(result);
 	if (result[0] == '\"') result = result.substr(1);
 	if (result[result.length() - 2] == '\"') result = result.substr(0, result.length() - 2);

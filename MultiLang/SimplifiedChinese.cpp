@@ -59,7 +59,6 @@ static constexpr MultiLang::string illegal_graphics_mode = "非法显示模式，显示模
 static constexpr MultiLang::string illegal_graphics3d_mode = "非法3D显示模式，显示模式为0到7之间的值。";
 static constexpr MultiLang::string unable_close_gxgraphics_instance = "无法关闭gxGraphics实例";
 static constexpr MultiLang::wstring runtime_error = L"运行时错误！";
-static constexpr MultiLang::wstring opencc_configure_not_found = L"找不到OpenCC设置！";
 static constexpr MultiLang::string illegal_frame_count = "非法帧数";
 static constexpr MultiLang::string illegal_first_frame = "非法第一帧";
 static constexpr MultiLang::string not_enough_frames_bitmap = "位图帧数不足";

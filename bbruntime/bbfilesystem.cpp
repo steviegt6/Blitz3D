@@ -115,6 +115,60 @@ void bbDeleteDir(BBStr* d) {
 	delete d;
 }
 
+inline bool IsDirectory(const char* pDir)
+{
+	char szCurPath[500];
+	ZeroMemory(szCurPath, 500);
+	sprintf_s(szCurPath, 500, "%s//*", pDir);
+	WIN32_FIND_DATAA FindFileData;
+	ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
+
+	HANDLE hFile = FindFirstFileA(szCurPath, &FindFileData);
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		FindClose(hFile);
+		return false;
+	}
+	else
+	{
+		FindClose(hFile);
+		return true;
+	}
+}
+
+void bbDeleteFolder(BBStr* d) {
+	char szCurPath[MAX_PATH];
+	_snprintf(szCurPath, MAX_PATH, "%s//*.*", d->c_str());
+	WIN32_FIND_DATAA FindFileData;
+	ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
+	HANDLE hFile = FindFirstFileA(szCurPath, &FindFileData);
+	bool IsFinded = true;
+	while (IsFinded)
+	{
+		IsFinded = FindNextFile(hFile, &FindFileData);
+		if (strcmp(FindFileData.cFileName, ".") && strcmp(FindFileData.cFileName, ".."))
+		{
+			std::string strFileName = "";
+			strFileName = strFileName + d->c_str() + "//"s + FindFileData.cFileName;
+			std::string strTemp;
+			strTemp = strFileName;
+			if (IsDirectory(strFileName.c_str()))
+			{
+				bbDeleteFolder(new BBStr(strTemp));
+			}
+			else
+			{
+				DeleteFile(strTemp.c_str());
+			}
+		}
+	}
+	FindClose(hFile);
+
+	RemoveDirectory(d->c_str());
+	delete d;
+}
+
 int bbFileType(BBStr* f) {
 	std::string t = *f; delete f;
 	int n = gx_filesys->getFileType(t);
@@ -128,8 +182,9 @@ int	bbFileSize(BBStr* f) {
 
 BBStr* bbFileExtension(BBStr* f) {
 	std::string t = *f; delete f;
-	if(t.find_last_of(".") != std::string::npos)
+	if (t.find_last_of(".") != std::string::npos) {
 		return new BBStr(t.substr(t.find_last_of(".") + 1));
+	}
 	return new BBStr("");
 }
 
@@ -149,7 +204,7 @@ void bbDeleteFile(BBStr* f) {
 	delete f;
 }
 
-void UnZip(BBStr* src, BBStr* dst, BBStr* password) {
+void bbUnzip(BBStr* src, BBStr* dst, BBStr* password) {
 	HZIP hz = OpenZip(src->c_str(), password->c_str());
 	SetUnzipBaseDir(hz, dst->c_str());
 	ZIPENTRY ze;
@@ -162,6 +217,12 @@ void UnZip(BBStr* src, BBStr* dst, BBStr* password) {
 	}
 	CloseZip(hz);
 	delete src, dst, password;
+}
+
+BBStr* bbAbsolutePath(BBStr* path) {
+	std::string file = path->c_str();
+	delete path;
+	return new BBStr(std::filesystem::absolute(file).generic_string());
 }
 
 bool filesystem_create() {
@@ -192,6 +253,7 @@ void filesystem_link(void(*rtSym)(const char*, void*)) {
 	rtSym("ChangeDir$dir", bbChangeDir);
 	rtSym("CreateDir$dir", bbCreateDir);
 	rtSym("DeleteDir$dir", bbDeleteDir);
+	rtSym("DeleteFolder$dir", bbDeleteFolder);
 
 	rtSym("%FileSize$file", bbFileSize);
 	rtSym("%FileType$file", bbFileType);
@@ -199,6 +261,7 @@ void filesystem_link(void(*rtSym)(const char*, void*)) {
 	rtSym("CopyFile$file$to", bbCopyFile);
 	rtSym("DeleteFile$file", bbDeleteFile);
 	rtSym("CreateFile$filename", bbCreateFile);
+	rtSym("$AbsolutePath$path", bbAbsolutePath);
 
-	rtSym("UnZip$src$dst$password=\"\"", UnZip);
+	rtSym("Unzip$src$dst$password=\"\"", bbUnzip);
 }
