@@ -19,47 +19,47 @@ static bool collapse, animonly;
 static void parseAnimKey(IDirectXFileData* fileData, MeshModel* e) {
 
 	DWORD sz; int* data;
-	if(fileData->GetData(0, &sz, (void**)&data) < 0) return;
+	if (fileData->GetData(0, &sz, (void**)&data) < 0) return;
 
 	int type = *data++;
 	int cnt = *data++;
 	Animation anim = e->getAnimation();
-	for(int k = 0; k < cnt; ++k) {
+	for (int k = 0; k < cnt; ++k) {
 		int time = *data++;
 		int n = *data++;
-		if(time > anim_len) anim_len = time;
-		switch(type) {
-			case 0:
-				if(n == 4) {
-					Quat rot = *(Quat*)data;
-					if(conv) {
-						if(fabs(rot.w) < 1 - EPSILON) {
-							rot.normalize();
-							//quat-to-axis/angle
-							float half = acosf(rot.w);
-							if(flip_tris) half = -half;
-							rot = Quat(cosf(half), (conv_tform.m * rot.v).normalized() * sinf(half));
-						}
-						else rot = Quat();
+		if (time > anim_len) anim_len = time;
+		switch (type) {
+		case 0:
+			if (n == 4) {
+				Quat rot = *(Quat*)data;
+				if (conv) {
+					if (fabs(rot.w) < 1 - EPSILON) {
+						rot.normalize();
+						//quat-to-axis/angle
+						float half = acosf(rot.w);
+						if (flip_tris) half = -half;
+						rot = Quat(cosf(half), (conv_tform.m * rot.v).normalized() * sinf(half));
 					}
-					anim.setRotationKey(time, rot);
+					else rot = Quat();
 				}
-				break;
-			case 1:
-				if(n == 3) {
-					Vector scl = *(Vector*)data;
-					if(conv) scl = conv_tform.m * scl;
-					scl.x = fabs(scl.x); scl.y = fabs(scl.y); scl.z = fabs(scl.z);
-					anim.setScaleKey(time, scl);
-				}
-				break;
-			case 2:
-				if(n == 3) {
-					Vector pos = *(Vector*)data;
-					if(conv) pos = conv_tform * pos;
-					anim.setPositionKey(time, pos);
-				}
-				break;
+				anim.setRotationKey(time, rot);
+			}
+			break;
+		case 1:
+			if (n == 3) {
+				Vector scl = *(Vector*)data;
+				if (conv) scl = conv_tform.m * scl;
+				scl.x = fabs(scl.x); scl.y = fabs(scl.y); scl.z = fabs(scl.z);
+				anim.setScaleKey(time, scl);
+			}
+			break;
+		case 2:
+			if (n == 3) {
+				Vector pos = *(Vector*)data;
+				if (conv) pos = conv_tform * pos;
+				anim.setPositionKey(time, pos);
+			}
+			break;
 		}
 		data += n;
 	}
@@ -74,15 +74,15 @@ static void parseAnim(IDirectXFileData* fileData) {
 	MeshModel* frame = 0;
 
 	//find the frame reference
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileDataReference, (void**)&childRef) >= 0) {
-			if(childRef->Resolve(&childData) >= 0) {
-				if(childData->GetType(&guid) >= 0) {
-					if(*guid == TID_D3DRMFrame) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileDataReference, (void**)&childRef) >= 0) {
+			if (childRef->Resolve(&childData) >= 0) {
+				if (childData->GetType(&guid) >= 0) {
+					if (*guid == TID_D3DRMFrame) {
 						char name[80]; DWORD len = 80;
-						if(childData->GetName(name, &len) >= 0) {
+						if (childData->GetName(name, &len) >= 0) {
 							std::map<std::string, MeshModel*>::iterator it = frames_map.find(name);
-							if(it != frames_map.end()) frame = it->second;
+							if (it != frames_map.end()) frame = it->second;
 						}
 					}
 				}
@@ -90,9 +90,9 @@ static void parseAnim(IDirectXFileData* fileData) {
 			}
 			childRef->Release();
 		}
-		else if(frame && childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) >= 0) {
-			if(childData->GetType(&guid) >= 0) {
-				if(*guid == TID_D3DRMAnimationKey) {
+		else if (frame && childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) >= 0) {
+			if (childData->GetType(&guid) >= 0) {
+				if (*guid == TID_D3DRMAnimationKey) {
 					parseAnimKey(childData, frame);
 				}
 			}
@@ -106,10 +106,10 @@ static void parseAnimSet(IDirectXFileData* fileData) {
 	IDirectXFileObject* childObj;
 	IDirectXFileData* childData;
 
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
-		if(childData->GetType(&guid) >= 0) {
-			if(*guid == TID_D3DRMAnimation) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
+		if (childData->GetType(&guid) >= 0) {
+			if (*guid == TID_D3DRMAnimation) {
 				parseAnim(childData);
 			}
 		}
@@ -125,17 +125,17 @@ static Brush parseMaterial(IDirectXFileData* fileData) {
 	Brush brush;
 
 	DWORD sz; float* data;
-	if(fileData->GetData(0, &sz, (void**)&data) < 0) return brush;
+	if (fileData->GetData(0, &sz, (void**)&data) < 0) return brush;
 
 	brush.setColor(Vector(data[0], data[1], data[2]));
-	if(data[3]) brush.setAlpha(data[3]);
+	if (data[3]) brush.setAlpha(data[3]);
 
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
-		if(childData->GetType(&guid) >= 0) {
-			if(*guid == TID_D3DRMTextureFilename) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
+		if (childData->GetType(&guid) >= 0) {
+			if (*guid == TID_D3DRMTextureFilename) {
 				DWORD sz; char** data;
-				if(childData->GetData(0, &sz, (void**)&data) >= 0) {
+				if (childData->GetData(0, &sz, (void**)&data) >= 0) {
 					brush.setTexture(0, Texture(*data, 0), 0);
 					brush.setColor(Vector(1, 1, 1));
 				}
@@ -155,19 +155,19 @@ static void parseMaterialList(IDirectXFileData* fileData, std::vector<Brush>& ma
 	IDirectXFileDataReference* childRef;
 
 	//iterate through child objects...
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) >= 0) {
-			if(childData->GetType(&guid) >= 0) {
-				if(*guid == TID_D3DRMMaterial) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) >= 0) {
+			if (childData->GetType(&guid) >= 0) {
+				if (*guid == TID_D3DRMMaterial) {
 					mats.push_back(parseMaterial(childData));
 				}
 			}
 			childData->Release();
 		}
-		else if(childObj->QueryInterface(IID_IDirectXFileDataReference, (void**)&childRef) >= 0) {
-			if(childRef->Resolve(&childData) >= 0) {
-				if(childData->GetType(&guid) >= 0) {
-					if(*guid == TID_D3DRMMaterial) {
+		else if (childObj->QueryInterface(IID_IDirectXFileDataReference, (void**)&childRef) >= 0) {
+			if (childRef->Resolve(&childData) >= 0) {
+				if (childData->GetType(&guid) >= 0) {
+					if (*guid == TID_D3DRMMaterial) {
 						mats.push_back(parseMaterial(childData));
 					}
 				}
@@ -190,7 +190,7 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 	IDirectXFileData* childData;
 
 	DWORD sz; int* data;
-	if(fileData->GetData(0, &sz, (void**)&data) < 0) return;
+	if (fileData->GetData(0, &sz, (void**)&data) < 0) return;
 
 	//stuff...
 	std::vector<FaceX> faces;
@@ -201,10 +201,10 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 	//setup vertices
 	int num_verts = *data++;
 	int k;
-	for(k = 0; k < num_verts; ++k) {
+	for (k = 0; k < num_verts; ++k) {
 		Surface::Vertex v;
 		v.coords = *(Vector*)data;
-		if(conv) v.coords = conv_tform * v.coords;
+		if (conv) v.coords = conv_tform * v.coords;
 		v.color = 0xffffffff;//Vector(1,1,1);
 		MeshLoader::addVertex(v);
 		data += 3;
@@ -212,7 +212,7 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 
 	//setup faces
 	int num_faces = *data++;
-	for(k = 0; k < num_faces; ++k) {
+	for (k = 0; k < num_faces; ++k) {
 		faces.push_back(FaceX(data));
 		data += *data + 1;
 	}
@@ -220,24 +220,24 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 	bool normals = false;
 
 	//get material and texture info
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
-		if(childData->GetType(&guid) >= 0) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
+		if (childData->GetType(&guid) >= 0) {
 			DWORD sz; int* data;
-			if(childData->GetData(0, &sz, (void**)&data) >= 0) {
-				if(*guid == TID_D3DRMMeshMaterialList) {
+			if (childData->GetData(0, &sz, (void**)&data) >= 0) {
+				if (*guid == TID_D3DRMMeshMaterialList) {
 					int num_mats = *data++;
 					int num_faces = *data++;
-					for(int k = 0; k < num_faces; ++k) {
+					for (int k = 0; k < num_faces; ++k) {
 						faces[k].mat_index = *data++;
 					}
 					parseMaterialList(childData, mats);
 				}
-				else if(*guid == TID_D3DRMMeshTextureCoords) {
+				else if (*guid == TID_D3DRMMeshTextureCoords) {
 					int num_coords = *data++;
-					if(num_coords == num_verts) {
+					if (num_coords == num_verts) {
 						float* coords = (float*)data;
-						for(int k = 0; k < num_coords; ++k) {
+						for (int k = 0; k < num_coords; ++k) {
 							Surface::Vertex& v = MeshLoader::refVertex(k);
 							float tu = *coords++; float tv = *coords++;
 							v.tex_coords[0][0] = v.tex_coords[1][0] = tu;
@@ -245,10 +245,10 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 						}
 					}
 				}
-				else if(*guid == TID_D3DRMMeshVertexColors) {
+				else if (*guid == TID_D3DRMMeshVertexColors) {
 					int num_colors = *data++;
-					if(num_colors == num_verts) {
-						for(int k = 0; k < num_colors; ++k) {
+					if (num_colors == num_verts) {
+						for (int k = 0; k < num_colors; ++k) {
 							Surface::Vertex& v = MeshLoader::refVertex(*data++);
 							float* t = (float*)data;
 							v.color = 0xff000000 | (int(t[0] * 255) << 16) | (int(t[1] * 255) << 8) | int(t[2] * 255);
@@ -256,11 +256,11 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 						}
 					}
 				}
-				else if(*guid == TID_D3DRMMeshNormals) {
+				else if (*guid == TID_D3DRMMeshNormals) {
 					int num_normals = *data++;
-					if(num_normals == num_verts) {
+					if (num_normals == num_verts) {
 						Matrix co = conv_tform.m.cofactor();
-						for(int k = 0; k < num_normals; ++k) {
+						for (int k = 0; k < num_normals; ++k) {
 							Surface::Vertex& v = MeshLoader::refVertex(k);
 							v.normal = (co * *(Vector*)data).normalized();
 							data += 3;
@@ -272,15 +272,15 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 		}
 		childData->Release();
 	}
-	if(!mats.size()) mats.push_back(Brush());
+	if (!mats.size()) mats.push_back(Brush());
 
-	for(k = 0; k < faces.size(); ++k) {
+	for (k = 0; k < faces.size(); ++k) {
 		const FaceX& f = faces[k];
 		int* data = f.data;
-		int cnt = *data++; if(cnt < 3) continue;
+		int cnt = *data++; if (cnt < 3) continue;
 		int tri[3];
 		tri[0] = data[0];
-		for(int j = 2; j < cnt; ++j) {
+		for (int j = 2; j < cnt; ++j) {
 			tri[1] = data[j - 1 + flip_tris];
 			tri[2] = data[j - flip_tris];
 			MeshLoader::addTriangle(tri, mats[f.mat_index]);
@@ -289,7 +289,7 @@ static void parseMesh(IDirectXFileData* fileData, MeshModel* mesh) {
 
 	MeshLoader::endMesh(mesh);
 
-	if(!normals) mesh->updateNormals();
+	if (!normals) mesh->updateNormals();
 }
 
 static MeshModel* parseFrame(IDirectXFileData* fileData) {
@@ -301,31 +301,31 @@ static MeshModel* parseFrame(IDirectXFileData* fileData) {
 	IDirectXFileData* childData;
 
 	char name[80]; DWORD len = 80;
-	if(fileData->GetName(name, &len) < 0) return e;
+	if (fileData->GetName(name, &len) < 0) return e;
 
 	e->setName(name);
 	frames_map[name] = e;
 
 	//iterate through child objects...
-	for(; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
-		if(childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
-		if(childData->GetType(&guid) >= 0) {
-			if(*guid == TID_D3DRMFrameTransformMatrix) {
+	for (; fileData->GetNextObject(&childObj) >= 0; childObj->Release()) {
+		if (childObj->QueryInterface(IID_IDirectXFileData, (void**)&childData) < 0) continue;
+		if (childData->GetType(&guid) >= 0) {
+			if (*guid == TID_D3DRMFrameTransformMatrix) {
 				DWORD size; D3DMATRIX* data;
-				if(childData->GetData(0, &size, (void**)&data) >= 0) {
+				if (childData->GetData(0, &size, (void**)&data) >= 0) {
 					Transform tform = Transform(Matrix(
 						Vector(data->_11, data->_12, data->_13),
 						Vector(data->_21, data->_22, data->_23),
 						Vector(data->_31, data->_32, data->_33)),
 						Vector(data->_41, data->_42, data->_43));
-					if(conv) tform = conv_tform * tform * -conv_tform;
+					if (conv) tform = conv_tform * tform * -conv_tform;
 					e->setLocalTform(tform);
 				}
 			}
-			else if(*guid == TID_D3DRMMesh) {
-				if(!animonly) parseMesh(childData, e);
+			else if (*guid == TID_D3DRMMesh) {
+				if (!animonly) parseMesh(childData, e);
 			}
-			else if(*guid == TID_D3DRMFrame) {
+			else if (*guid == TID_D3DRMFrame) {
 				MeshModel* t = parseFrame(childData);
 				t->setParent(e);
 			}
@@ -342,33 +342,33 @@ static MeshModel* parseFile(const std::string& file) {
 	IDirectXFileData* fileData;
 	IDirectXFileEnumObject* enumObj;
 
-	if(DirectXFileCreate(&xfile) < 0) return 0;
+	if (DirectXFileCreate(&xfile) < 0) return 0;
 
-	if(xfile->RegisterTemplates((VOID*)D3DRM_XTEMPLATES, D3DRM_XTEMPLATE_BYTES) < 0) {
+	if (xfile->RegisterTemplates((VOID*)D3DRM_XTEMPLATES, D3DRM_XTEMPLATE_BYTES) < 0) {
 		xfile->Release(); return 0;
 	}
-	if(xfile->CreateEnumObject((void*)file.c_str(), DXFILELOAD_FROMFILE, &enumObj) < 0) {
+	if (xfile->CreateEnumObject((void*)file.c_str(), DXFILELOAD_FROMFILE, &enumObj) < 0) {
 		xfile->Release(); return 0;
 	}
 
 	anim_len = 0;
 	MeshModel* e = new MeshModel();
-	for(; enumObj->GetNextDataObject(&fileData) >= 0; fileData->Release()) {
-		if(fileData->GetType(&guid) < 0) continue;
+	for (; enumObj->GetNextDataObject(&fileData) >= 0; fileData->Release()) {
+		if (fileData->GetType(&guid) < 0) continue;
 
-		if(*guid == TID_D3DRMMesh) {
-			if(!animonly) parseMesh(fileData, e);
+		if (*guid == TID_D3DRMMesh) {
+			if (!animonly) parseMesh(fileData, e);
 		}
-		else if(*guid == TID_D3DRMFrame) {
+		else if (*guid == TID_D3DRMFrame) {
 			MeshModel* t = parseFrame(fileData);
 			t->setParent(e);
 		}
-		else if(*guid == TID_D3DRMAnimationSet) {
-			if(!collapse) parseAnimSet(fileData);
+		else if (*guid == TID_D3DRMAnimationSet) {
+			if (!collapse) parseAnimSet(fileData);
 		}
 	}
 
-	if(!collapse) {
+	if (!collapse) {
 		e->setAnimator(new Animator(e, anim_len));
 	}
 
@@ -380,9 +380,9 @@ static MeshModel* parseFile(const std::string& file) {
 MeshModel* Loader_X::load(const std::string& filename, const Transform& t, int hint) {
 	conv_tform = t;
 	conv = flip_tris = false;
-	if(conv_tform != Transform()) {
+	if (conv_tform != Transform()) {
 		conv = true;
-		if(conv_tform.m.i.cross(conv_tform.m.j).dot(conv_tform.m.k) < 0) flip_tris = true;
+		if (conv_tform.m.i.cross(conv_tform.m.j).dot(conv_tform.m.k) < 0) flip_tris = true;
 	}
 	collapse = !!(hint & MeshLoader::HINT_COLLAPSE);
 	animonly = !!(hint & MeshLoader::HINT_ANIMONLY);

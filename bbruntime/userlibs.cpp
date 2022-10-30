@@ -27,17 +27,17 @@ void _bbLoadLibs(char* p) {
 
 	std::string home;
 
-	if(const char* t = getenv("blitzpath")) home = t;
+	if (const char* t = getenv("blitzpath")) home = t;
 
-	while(*p) {
+	while (*p) {
 		HMODULE mod = LoadLibrary(p);
-		if(!mod && home.size()) {
+		if (!mod && home.size()) {
 			mod = LoadLibrary((home + "/userlibs/" + p).c_str());
 		}
 		p += strlen(p) + 1;
-		if(mod) {
+		if (mod) {
 			_mods.push_back(mod);
-			while(*p) {
+			while (*p) {
 				void* proc = GetProcAddress(mod, p);
 				p += strlen(p) + 1;
 				void* ptr = *(void**)p;
@@ -46,7 +46,7 @@ void _bbLoadLibs(char* p) {
 			}
 		}
 		else {
-			while(*p) {
+			while (*p) {
 				p += strlen(p) + 1;
 				void* ptr = *(void**)p;
 				p += 4;
@@ -63,7 +63,7 @@ const char* _bbStrToCStr(BBStr* str) {
 
 	int size = str->size();
 
-	if(!t.p || t.size < size) {
+	if (!t.p || t.size < size) {
 		delete[] t.p;
 		t.p = new char[size + 1];
 		t.size = size;
@@ -84,7 +84,7 @@ bool userlibs_create() {
 }
 
 void userlibs_destroy() {
-	for(; _mods.size(); _mods.pop_back()) FreeLibrary(_mods.back());
+	for (; _mods.size(); _mods.pop_back()) FreeLibrary(_mods.back());
 }
 
 void userlibs_link(void(*rtSym)(const char*, void*)) {

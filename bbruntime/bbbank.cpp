@@ -34,16 +34,16 @@ struct bbBank {
 
 static std::set<bbBank*> bank_set;
 
-static inline void debugBank(bbBank* b) {
-	if(debug) {
-		if(!bank_set.count(b)) RTEX(MultiLang::bank_not_exist);
+static inline void debugBank(bbBank* b, std::string function) {
+	if (!bank_set.count(b)) {
+		ErrorLog(function, MultiLang::bank_not_exist);
 	}
 }
 
-static inline void debugBank(bbBank* b, int offset) {
-	if(debug) {
-		debugBank(b);
-		if (offset >= b->size) RTEX(MultiLang::offset_out_of_range);
+static inline void debugBank(bbBank* b, std::string function, int offset) {
+	debugBank(b, function);
+	if (offset >= b->size) { 
+		ErrorLog(function, MultiLang::offset_out_of_range);
 	}
 }
 
@@ -58,84 +58,76 @@ void bbFreeBank(bbBank* b) {
 }
 
 int bbBankSize(bbBank* b) {
-	debugBank(b);
+	debugBank(b, "BankSize");
 	return b->size;
 }
 
 void  bbResizeBank(bbBank* b, int size) {
-	debugBank(b);
+	debugBank(b, "ResizeBank");
 	b->resize(size);
 }
 
 void  bbCopyBank(bbBank* src, int src_p, bbBank* dest, int dest_p, int count) {
-	if(debug) { 
-		debugBank(src, src_p + count - 1); 
-		debugBank(dest, dest_p + count - 1); 
-	}
+	debugBank(src, "CopyBank", src_p + count - 1);
+	debugBank(dest, "CopyBank", dest_p + count - 1);
 	memmove(dest->data + dest_p, src->data + src_p, count);
 }
 
 int  bbPeekByte(bbBank* b, int offset) {
-	debugBank(b, offset);
+	debugBank(b, "PeekByte", offset);
 	return *(unsigned char*)(b->data + offset);
 }
 
 int  bbPeekShort(bbBank* b, int offset) {
-	debugBank(b, offset + 1);
+	debugBank(b, "PeekShort", offset + 1);
 	return *(unsigned short*)(b->data + offset);
 }
 
 int  bbPeekInt(bbBank* b, int offset) {
-	debugBank(b, offset + 3);
+	debugBank(b, "PeekInt", offset + 3);
 	return *(int*)(b->data + offset);
 }
 
 float  bbPeekFloat(bbBank* b, int offset) {
-	debugBank(b, offset + 3);
+	debugBank(b, "PeekFloat", offset + 3);
 	return *(float*)(b->data + offset);
 }
 
 void  bbPokeByte(bbBank* b, int offset, int value) {
-	debugBank(b, offset);
+	debugBank(b, "PokeByte", offset);
 	*(char*)(b->data + offset) = value;
 }
 
 void  bbPokeShort(bbBank* b, int offset, int value) {
-	debugBank(b, offset);
+	debugBank(b, "PokeShort", offset);
 	*(unsigned short*)(b->data + offset) = value;
 }
 
 void  bbPokeInt(bbBank* b, int offset, int value) {
-	debugBank(b, offset);
+	debugBank(b, "PokeInt", offset);
 	*(int*)(b->data + offset) = value;
 }
 
 void  bbPokeFloat(bbBank* b, int offset, float value) {
-	debugBank(b, offset);
+	debugBank(b, "PokeFloat", offset);
 	*(float*)(b->data + offset) = value;
 }
 
 int   bbReadBytes(bbBank* b, bbStream* s, int offset, int count) {
-	if(debug) {
-		debugBank(b, offset + count - 1);
-		debugStream(s);
-	}
+	debugBank(b, "ReadBytes", offset + count - 1);
+	debugStream(s, "ReadBytes");
 	return s->read(b->data + offset, count);
 }
 
 int   bbWriteBytes(bbBank* b, bbStream* s, int offset, int count) {
-	if(debug) {
-		debugBank(b, offset + count - 1);
-		debugStream(s);
-	}
+	debugBank(b, "WriteBytes", offset + count - 1);
+	debugStream(s, "WriteBytes");
 	return s->write(b->data + offset, count);
 }
 
 int  bbCallDLL(BBStr* dll, BBStr* fun, bbBank* in, bbBank* out) {
-	if(debug) {
-		if(in) debugBank(in);
-		if(out) debugBank(out);
-	}
+	if(in) debugBank(in, "CallDLL");
+	if(out) debugBank(out, "CallDLL");
 	int t = gx_runtime->callDll(*dll, *fun,
 		in ? in->data : 0, in ? in->size : 0,
 		out ? out->data : 0, out ? out->size : 0);

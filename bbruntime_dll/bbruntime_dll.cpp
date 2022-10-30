@@ -34,13 +34,6 @@ static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
 
-/*
-* If you using a single variant to handle function names, then you will get error
-* sym is a pointer, backup function name is pointer too.
-* So, variant of backup name's content will change by sym's content.
-* 
-* How it works?
-*/
 //Allows userlibs to call DebugLog() and RuntimeError().
 //******************************************************
 __declspec(dllexport) void __cdecl BlitzDebugLog(const char* msg)
@@ -54,11 +47,23 @@ __declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
 }
 //******************************************************
 
-const char* getCharPtr(std::string str) {
+inline const char* getCharPtr(std::string str) {
 	char* cha = new char[str.size() + 1];
 	memcpy(cha, str.c_str(), str.size() + 1);
 	const char* p = cha;
 	return p;
+}
+
+inline std::string replace_all(const std::string& string, const std::string& pattern, const std::string& newpat) {
+	std::string str = string;
+	const uint32_t nsize = newpat.size();
+	const uint32_t psize = pattern.size();
+
+	for (uint32_t pos = str.find(pattern, 0); pos != std::string::npos; pos = str.find(pattern, pos + nsize))
+	{
+		str.replace(pos, psize, newpat);
+	}
+	return str;
 }
 
 static void rtSym(const char* sym, void* pc) {
@@ -89,6 +94,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 						s = s + ErrorMessagePool::memoryAccessViolation[i] + "\n";
 					}
 				}
+				if (ErrorMessagePool::caughtError) s = replace_all(s, "_CaughtError_", error_logs[error_logs.size() - 1]);
 				RTEX(s.c_str());
 			}
 			break;

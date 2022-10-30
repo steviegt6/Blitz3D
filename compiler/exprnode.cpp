@@ -684,7 +684,7 @@ ExprNode* AfterNode::semant(Environ* e) {
 
 TNode* AfterNode::translate(Codegen* g) {
 	TNode* t = expr->translate(g);
-	if(g->debug) t = jumpf(t, "__bbNullObjEx");
+	//if(g->debug) t = jumpf(t, "__bbNullObjEx");
 	return call("__bbObjNext", t);
 }
 
@@ -701,7 +701,7 @@ ExprNode* BeforeNode::semant(Environ* e) {
 
 TNode* BeforeNode::translate(Codegen* g) {
 	TNode* t = expr->translate(g);
-	if(g->debug) t = jumpf(t, "__bbNullObjEx");
+	//if(g->debug) t = jumpf(t, "__bbNullObjEx");
 	return call("__bbObjPrev", t);
 }
 

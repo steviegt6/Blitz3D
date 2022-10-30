@@ -11,7 +11,7 @@ static int read_timeout;
 static int accept_timeout;
 
 static void close(SOCKET sock, int e) {
-	if(e < 0) {
+	if (e < 0) {
 		int opt = 1;
 		setsockopt(sock, SOL_SOCKET, SO_DONTLINGER, (char*)&opt, sizeof(opt));
 	}
@@ -61,22 +61,22 @@ UDPStream::~UDPStream() {
 }
 
 int UDPStream::read(char* buff, int size) {
-	if(e) return 0;
+	if (e) return 0;
 	int n = in_buf.size() - in_get;
-	if(n < size) size = n;
+	if (n < size) size = n;
 	memcpy(buff, &in_buf[in_get], size);
 	in_get += size;
 	return size;
 }
 
 int UDPStream::write(const char* buff, int size) {
-	if(e) return 0;
+	if (e) return 0;
 	out_buf.insert(out_buf.end(), buff, buff + size);
 	return size;
 }
 
 int UDPStream::avail() {
-	if(e) return 0;
+	if (e) return 0;
 	return in_buf.size() - in_get;
 }
 
@@ -86,26 +86,26 @@ int UDPStream::eof() {
 
 //fill buffer, return sender
 int UDPStream::recv() {
-	if(e) return 0;
+	if (e) return 0;
 	int tout;
-	if(recv_timeout) tout = gx_runtime->getMilliSecs() + recv_timeout;
-	for(;;) {
+	if (recv_timeout) tout = gx_runtime->getMilliSecs() + recv_timeout;
+	for (;;) {
 		int dt = 0;
-		if(recv_timeout) {
+		if (recv_timeout) {
 			dt = tout - gx_runtime->getMilliSecs();
-			if(dt < 0) dt = 0;
+			if (dt < 0) dt = 0;
 		}
 		fd_set fd = { 1,sock };
 		timeval tv = { dt / 1000,(dt % 1000) * 1000 };
 		int n = ::select(0, &fd, 0, 0, &tv);
-		if(!n) return 0;
-		if(n != 1) { e = -1; return 0; }
+		if (!n) return 0;
+		if (n != 1) { e = -1; return 0; }
 		unsigned long sz = -1;
-		if(ioctlsocket(sock, FIONREAD, &sz)) { e = -1; return 0; }
+		if (ioctlsocket(sock, FIONREAD, &sz)) { e = -1; return 0; }
 		in_buf.resize(sz); in_get = 0;
 		int len = sizeof(in_addr);
 		n = ::recvfrom(sock, (char*)in_buf.data(), sz, 0, (sockaddr*)&in_addr, &len);
-		if(n == SOCKET_ERROR) continue;	//{ e=-1;return 0; }
+		if (n == SOCKET_ERROR) continue;	//{ e=-1;return 0; }
 		in_buf.resize(n);
 		return getMsgIP();
 	}
@@ -114,12 +114,12 @@ int UDPStream::recv() {
 
 //send, empty buffer
 int UDPStream::send(int ip, int port) {
-	if(e) return 0;
+	if (e) return 0;
 	int sz = out_buf.size();
 	out_addr.sin_addr.S_un.S_addr = htonl(ip);
 	out_addr.sin_port = htons(port ? port : addr.sin_port);
 	int n = ::sendto(sock, (char*)out_buf.data(), sz, 0, (sockaddr*)&out_addr, sizeof(out_addr));
-	if(n != sz) return e = -1;
+	if (n != sz) return e = -1;
 	out_buf.clear();
 	return sz;
 }
@@ -177,7 +177,7 @@ private:
 TCPStream::TCPStream(SOCKET s, TCPServer* t) :sock(s), server(t), e(0) {
 	sockaddr_in addr;
 	int len = sizeof(addr);
-	if(getpeername(s, (sockaddr*)&addr, &len)) {
+	if (getpeername(s, (sockaddr*)&addr, &len)) {
 		ip = port = 0;
 		return;
 	}
@@ -186,55 +186,55 @@ TCPStream::TCPStream(SOCKET s, TCPServer* t) :sock(s), server(t), e(0) {
 }
 
 TCPStream::~TCPStream() {
-	if(server) server->remove(this);
+	if (server) server->remove(this);
 	close(sock, e);
 }
 
 int TCPStream::read(char* buff, int size) {
-	if(e) return 0;
+	if (e) return 0;
 	char* b = buff, * l = buff + size;
 	int tout;
-	if(read_timeout) tout = gx_runtime->getMilliSecs() + read_timeout;
-	while(b < l) {
+	if (read_timeout) tout = gx_runtime->getMilliSecs() + read_timeout;
+	while (b < l) {
 		int dt = 0;
-		if(read_timeout) {
+		if (read_timeout) {
 			dt = tout - gx_runtime->getMilliSecs();
-			if(dt < 0) dt = 0;
+			if (dt < 0) dt = 0;
 		}
 		fd_set fd = { 1,sock };
 		timeval tv = { dt / 1000,(dt % 1000) * 1000 };
 		int n = ::select(0, &fd, 0, 0, &tv);
-		if(n != 1) { e = -1; break; }
+		if (n != 1) { e = -1; break; }
 		n = ::recv(sock, b, l - b, 0);
-		if(n == 0) { e = 1; break; }
-		if(n == SOCKET_ERROR) { e = -1; break; }
+		if (n == 0) { e = 1; break; }
+		if (n == SOCKET_ERROR) { e = -1; break; }
 		b += n;
 	}
 	return b - buff;
 }
 
 int TCPStream::write(const char* buff, int size) {
-	if(e) return 0;
+	if (e) return 0;
 	int n = ::send(sock, buff, size, 0);
-	if(n == SOCKET_ERROR) { e = -1; return 0; }
+	if (n == SOCKET_ERROR) { e = -1; return 0; }
 	return n;
 }
 
 int TCPStream::avail() {
 	unsigned long t;
 	int n = ::ioctlsocket(sock, FIONREAD, &t);
-	if(n == SOCKET_ERROR) { e = -1; return 0; }
+	if (n == SOCKET_ERROR) { e = -1; return 0; }
 	return t;
 }
 
 int TCPStream::eof() {
-	if(e) return e;
+	if (e) return e;
 	fd_set fd = { 1,sock };
 	timeval tv = { 0,0 };
-	switch(::select(0, &fd, 0, 0, &tv)) {
-		case 0:break;
-		case 1:if(!avail()) e = 1; break;
-		default:e = -1;
+	switch (::select(0, &fd, 0, 0, &tv)) {
+	case 0:break;
+	case 1:if (!avail()) e = 1; break;
+	default:e = -1;
 	}
 	return e;
 }
@@ -251,19 +251,19 @@ TCPServer::TCPServer(SOCKET s) :sock(s), e(0) {
 }
 
 TCPServer::~TCPServer() {
-	while(accepted_set.size()) delete* accepted_set.begin();
+	while (accepted_set.size()) delete* accepted_set.begin();
 	close(sock, e);
 }
 
 TCPStream* TCPServer::accept() {
-	if(e) return 0;
+	if (e) return 0;
 	fd_set fd = { 1,sock };
 	timeval tv = { accept_timeout / 1000,(accept_timeout % 1000) * 1000 };
 	int n = ::select(0, &fd, 0, 0, &tv);
-	if(n == 0) return 0;
-	if(n != 1) { e = -1; return 0; }
+	if (n == 0) return 0;
+	if (n != 1) { e = -1; return 0; }
 	SOCKET t = ::accept(sock, 0, 0);
-	if(t == INVALID_SOCKET) { e = -1; return 0; }
+	if (t == INVALID_SOCKET) { e = -1; return 0; }
 	TCPStream* s = new TCPStream(t, this);
 	accepted_set.insert(s);
 	return s;
@@ -273,21 +273,21 @@ void TCPServer::remove(TCPStream* s) {
 	accepted_set.erase(s);
 }
 
-static inline void debugUDPStream(UDPStream* p) {
-	if(debug && !udp_set.count(p)) {
-		RTEX(MultiLang::udp_stream_not_exist);
+static inline void debugUDPStream(UDPStream* p, std::string function) {
+	if (!udp_set.count(p)) {
+		ErrorLog(function, MultiLang::udp_stream_not_exist);
 	}
 }
 
-static inline void debugTCPStream(TCPStream* p) {
-	if(debug && !tcp_set.count(p)) {
-		RTEX(MultiLang::tcp_stream_not_exist);
+static inline void debugTCPStream(TCPStream* p, std::string function) {
+	if (!tcp_set.count(p)) {
+		ErrorLog(function, MultiLang::tcp_stream_not_exist);
 	}
 }
 
-static inline void debugTCPServer(TCPServer* p) {
-	if(debug && !server_set.count(p)) {
-		RTEX(MultiLang::tcp_server_not_exist);
+static inline void debugTCPServer(TCPServer* p, std::string function) {
+	if (!server_set.count(p)) {
+		ErrorLog(function, MultiLang::tcp_server_not_exist);
 	}
 }
 
@@ -296,27 +296,25 @@ static std::vector<int> host_ips;
 int bbCountHostIPs(BBStr* host) {
 	host_ips.clear();
 	HOSTENT* h = gethostbyname(host->c_str());
-	delete host; if(!h) return 0;
+	delete host; if (!h) return 0;
 	char** p = h->h_addr_list;
-	while(char* t = *p++) host_ips.push_back(ntohl(*(int*)t));
+	while (char* t = *p++) host_ips.push_back(ntohl(*(int*)t));
 	return host_ips.size();
 }
 
 int bbHostIP(int index) {
-	if(debug) {
-		if(index<1 || index>host_ips.size()) {
-			RTEX(MultiLang::host_out_of_range);
-		}
+	if (index<1 || index>host_ips.size()) {
+		ErrorLog("HostIP", MultiLang::host_out_of_range);
 	}
 	return host_ips[index - 1];
 }
 
 UDPStream* bbCreateUDPStream(int port) {
-	if(!socks_ok) return 0;
+	if (!socks_ok) return 0;
 	SOCKET s = ::socket(AF_INET, SOCK_DGRAM, 0);
-	if(s != INVALID_SOCKET) {
+	if (s != INVALID_SOCKET) {
 		sockaddr_in addr = { AF_INET,htons(port) };
-		if(!::bind(s, (sockaddr*)&addr, sizeof(addr))) {
+		if (!::bind(s, (sockaddr*)&addr, sizeof(addr))) {
 			UDPStream* p = new UDPStream(s);
 			udp_set.insert(p);
 			return p;
@@ -327,38 +325,38 @@ UDPStream* bbCreateUDPStream(int port) {
 }
 
 void bbCloseUDPStream(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "CloseUDPStream");
 	udp_set.erase(p);
 	delete p;
 }
 
 int bbRecvUDPMsg(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "RecvUDPMsg");
 	return p->recv();
 }
 
 void bbSendUDPMsg(UDPStream* p, int ip, int port) {
-	debugUDPStream(p);
+	debugUDPStream(p, "SendUDPMsg");
 	p->send(ip, port);
 }
 
 int bbUDPStreamIP(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "UDPStreamIP");
 	return p->getIP();
 }
 
 int bbUDPStreamPort(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "UDPStreamPort");
 	return p->getPort();
 }
 
 int bbUDPMsgIP(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "UDPMsgIP");
 	return p->getMsgIP();
 }
 
 int bbUDPMsgPort(UDPStream* p) {
-	debugUDPStream(p);
+	debugUDPStream(p, "UDPMsgPort");
 	return p->getMsgPort();
 }
 
@@ -374,35 +372,35 @@ BBStr* bbDottedIP(int ip) {
 
 static int findHostIP(const std::string& t) {
 	int ip = inet_addr(t.c_str());
-	if(ip != INADDR_NONE) return ip;
+	if (ip != INADDR_NONE) return ip;
 	HOSTENT* h = gethostbyname(t.c_str());
-	if(!h) return -1;
+	if (!h) return -1;
 	char* p;
-	for(char** list = h->h_addr_list; p = *list; ++list) {
+	for (char** list = h->h_addr_list; p = *list; ++list) {
 		return *(int*)p;
 	}
 	return 0;
 }
 
 TCPStream* bbOpenTCPStream(BBStr* server, int port, int local_port) {
-	if(!socks_ok) {
+	if (!socks_ok) {
 		delete server;
 		return 0;
 	}
 	int ip = findHostIP(*server); delete server;
-	if(ip == -1) return 0;
+	if (ip == -1) return 0;
 	SOCKET s = ::socket(AF_INET, SOCK_STREAM, 0);
-	if(s != INVALID_SOCKET) {
-		if(local_port) {
+	if (s != INVALID_SOCKET) {
+		if (local_port) {
 			sockaddr_in addr = { AF_INET,htons(local_port) };
-			if(::bind(s, (sockaddr*)&addr, sizeof(addr))) {
+			if (::bind(s, (sockaddr*)&addr, sizeof(addr))) {
 				::closesocket(s);
 				return 0;
 			}
 		}
 		sockaddr_in addr = { AF_INET,htons(port) };
 		addr.sin_addr.S_un.S_addr = ip;
-		if(!::connect(s, (sockaddr*)&addr, sizeof(addr))) {
+		if (!::connect(s, (sockaddr*)&addr, sizeof(addr))) {
 			TCPStream* p = new TCPStream(s, 0);
 			tcp_set.insert(p);
 			return p;
@@ -413,17 +411,17 @@ TCPStream* bbOpenTCPStream(BBStr* server, int port, int local_port) {
 }
 
 void bbCloseTCPStream(TCPStream* p) {
-	debugTCPStream(p);
+	debugTCPStream(p, "CloseTCPStream");
 	tcp_set.erase(p);
 	delete p;
 }
 
 TCPServer* bbCreateTCPServer(int port) {
 	SOCKET s = ::socket(AF_INET, SOCK_STREAM, 0);
-	if(s != INVALID_SOCKET) {
+	if (s != INVALID_SOCKET) {
 		sockaddr_in addr = { AF_INET,htons(port) };
-		if(!::bind(s, (sockaddr*)&addr, sizeof(addr))) {
-			if(!::listen(s, SOMAXCONN)) {
+		if (!::bind(s, (sockaddr*)&addr, sizeof(addr))) {
+			if (!::listen(s, SOMAXCONN)) {
 				TCPServer* p = new TCPServer(s);
 				server_set.insert(p);
 				return p;
@@ -435,15 +433,15 @@ TCPServer* bbCreateTCPServer(int port) {
 }
 
 void  bbCloseTCPServer(TCPServer* p) {
-	debugTCPServer(p);
+	debugTCPServer(p, "CloseTCPServer");
 	server_set.erase(p);
 	delete p;
 }
 
 TCPStream* bbAcceptTCPStream(TCPServer* server) {
-	debugTCPServer(server);
-	if(!gx_runtime->idle()) RTEX(0);
-	if(TCPStream* tcp = server->accept()) {
+	debugTCPServer(server, "AcceptTCPStream");
+	if (!gx_runtime->idle()) RTEX(0);
+	if (TCPStream* tcp = server->accept()) {
 		tcp_set.insert(tcp);
 		return tcp;
 	}
@@ -451,12 +449,12 @@ TCPStream* bbAcceptTCPStream(TCPServer* server) {
 }
 
 int bbTCPStreamIP(TCPStream* p) {
-	debugTCPStream(p);
+	debugTCPStream(p, "TCPStreamIP");
 	return p->getIP();
 }
 
 int bbTCPStreamPort(TCPStream* p) {
-	debugTCPStream(p);
+	debugTCPStream(p, "TCPStreamPort");
 	return p->getPort();
 }
 
@@ -501,7 +499,7 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 	if ((n = s1.find(s2 + "=")) != std::string::npos)
 		result = s1.substr(n);
 	if ((a = result.find(';')) != std::string::npos)
-		result = result.substr(s2.length()+1, a - s2.length() - 1);
+		result = result.substr(s2.length() + 1, a - s2.length() - 1);
 	*txt = result.c_str();
 	delete name;
 	return txt;
@@ -526,10 +524,10 @@ bool sockets_create() {
 }
 
 bool sockets_destroy() {
-	while(udp_set.size()) bbCloseUDPStream(*udp_set.begin());
-	while(tcp_set.size()) bbCloseTCPStream(*tcp_set.begin());
-	while(server_set.size()) bbCloseTCPServer(*server_set.begin());
-	if(socks_ok) WSACleanup();
+	while (udp_set.size()) bbCloseUDPStream(*udp_set.begin());
+	while (tcp_set.size()) bbCloseTCPStream(*tcp_set.begin());
+	while (server_set.size()) bbCloseTCPServer(*server_set.begin());
+	if (socks_ok) WSACleanup();
 	return true;
 }
 

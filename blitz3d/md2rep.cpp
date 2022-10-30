@@ -61,9 +61,9 @@ MD2Rep::MD2Rep(const std::string& f) :
 	std::filebuf in;
 	md2_header header;
 
-	if(!in.open(f.c_str(), std::ios_base::in | std::ios_base::binary)) return;
-	if(in.sgetn((char*)&header, sizeof(header)) != sizeof(header)) return;
-	if(header.magic != '2PDI' || header.version != 8) return;
+	if (!in.open(f.c_str(), std::ios_base::in | std::ios_base::binary)) return;
+	if (in.sgetn((char*)&header, sizeof(header)) != sizeof(header)) return;
+	if (header.magic != '2PDI' || header.version != 8) return;
 
 	n_frames = header.numFrames;
 	n_tris = header.numTriangles;
@@ -85,14 +85,14 @@ MD2Rep::MD2Rep(const std::string& f) :
 	std::map<t_vert, int> t_map;
 
 	int k;
-	for(k = 0; k < n_tris; ++k) {
+	for (k = 0; k < n_tris; ++k) {
 		t_tri tr;
-		for(int j = 0; j < 3; ++j) {
+		for (int j = 0; j < 3; ++j) {
 			t_vert t;
 			t.i = md2_tris[k].verts[j];
 			t.uv = md2_tris[k].uvs[j];
 			std::map<t_vert, int>::iterator it = t_map.find(t);
-			if(it == t_map.end()) {
+			if (it == t_map.end()) {
 				//create new vert
 				tr.verts[j] = t_map[t] = t_verts.size();
 				t_verts.push_back(t);
@@ -118,7 +118,7 @@ MD2Rep::MD2Rep(const std::string& f) :
 	md2_verts.resize(header.numVertices);
 
 	//read in frames
-	for(k = 0; k < n_frames; ++k) {
+	for (k = 0; k < n_frames; ++k) {
 		char t_buff[16];
 		Frame* fr = &frames[k];
 		in.sgetn((char*)&fr->scale, 12);
@@ -132,7 +132,7 @@ MD2Rep::MD2Rep(const std::string& f) :
 		in.sgetn((char*)md2_verts.data(), header.numVertices * sizeof(md2_vert));
 
 		fr->verts.resize(n_verts);
-		for(int j = 0; j < n_verts; ++j) {
+		for (int j = 0; j < n_verts; ++j) {
 			Vertex* v = &fr->verts[j];
 			const t_vert& tv = t_verts[j];
 			const md2_vert& mv = md2_verts[tv.i];
@@ -147,23 +147,23 @@ MD2Rep::MD2Rep(const std::string& f) :
 	//create mesh and setup tris
 	mesh = gx_graphics->createMesh(n_verts, n_tris, 0);
 	mesh->lock(true);
-	for(k = 0; k < n_tris; ++k) {
+	for (k = 0; k < n_tris; ++k) {
 		const t_tri& t = t_tris[k];
 		mesh->setTriangle(k, t.verts[0], t.verts[2], t.verts[1]);
 	}
 	mesh->unlock();
 
 	//build normals
-	if(!normals) {
+	if (!normals) {
 		normals = (Vector*)md2norms;
-		for(int k = 0; k < sizeof(md2norms) / 12; ++k) {
+		for (int k = 0; k < sizeof(md2norms) / 12; ++k) {
 			normals[k] = Vector(normals[k].y, normals[k].z, normals[k].x);
 		}
 	}
 }
 
 MD2Rep::~MD2Rep() {
-	if(mesh) gx_graphics->freeMesh(mesh);
+	if (mesh) gx_graphics->freeMesh(mesh);
 }
 
 void MD2Rep::render(Vert* v, int frame, float time) {
@@ -172,7 +172,7 @@ void MD2Rep::render(Vert* v, int frame, float time) {
 	const Vertex* v_b = frame_b.verts.data();
 	const Vector scale_b = frame_b.scale, trans_b = frame_b.trans;
 
-	for(int k = 0; k < n_verts; ++v, ++v_b, ++k) {
+	for (int k = 0; k < n_verts; ++v, ++v_b, ++k) {
 
 		const Vector t_b(v_b->x * scale_b.x + trans_b.x, v_b->y * scale_b.y + trans_b.y, v_b->z * scale_b.z + trans_b.z);
 		const Vector& n_b = normals[v_b->n];
@@ -192,7 +192,7 @@ void MD2Rep::render(Vert* v, int render_a, int render_b, float render_t) {
 	const Vertex* v_a = frame_a.verts.data();
 	const Vertex* v_b = frame_b.verts.data();
 
-	for(int k = 0; k < n_verts; ++v, ++v_a, ++v_b, ++k) {
+	for (int k = 0; k < n_verts; ++v, ++v_a, ++v_b, ++k) {
 
 		const Vector t_a(v_a->x * scale_a.x + trans_a.x, v_a->y * scale_a.y + trans_a.y, v_a->z * scale_a.z + trans_a.z);
 		const Vector t_b(v_b->x * scale_b.x + trans_b.x, v_b->y * scale_b.y + trans_b.y, v_b->z * scale_b.z + trans_b.z);
@@ -216,7 +216,7 @@ void MD2Rep::render(Model* model, int render_a, int render_b, float render_t) {
 	const Vertex* v_b = frame_b.verts.data();
 
 	mesh->lock(true);
-	for(int k = 0; k < n_verts; ++uv, ++v_a, ++v_b, ++k) {
+	for (int k = 0; k < n_verts; ++uv, ++v_a, ++v_b, ++k) {
 
 		const Vector t_a(v_a->x * scale_a.x + trans_a.x, v_a->y * scale_a.y + trans_a.y, v_a->z * scale_a.z + trans_a.z);
 		const Vector t_b(v_b->x * scale_b.x + trans_b.x, v_b->y * scale_b.y + trans_b.y, v_b->z * scale_b.z + trans_b.z);
@@ -245,7 +245,7 @@ void MD2Rep::render(Model* model, const Vert* v_a, int render_b, float render_t)
 	const Vertex* v_b = frame_b.verts.data();
 
 	mesh->lock(true);
-	for(int k = 0; k < n_verts; ++uv, ++v_a, ++v_b, ++k) {
+	for (int k = 0; k < n_verts; ++uv, ++v_a, ++v_b, ++k) {
 
 		const Vector t_b(v_b->x * scale_b.x + trans_b.x, v_b->y * scale_b.y + trans_b.y, v_b->z * scale_b.z + trans_b.z);
 		const Vector t((t_b - v_a->coords) * render_t + v_a->coords);

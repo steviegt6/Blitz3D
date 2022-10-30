@@ -222,3 +222,4 @@ static constexpr MultiLang::string unable_start_program = "ÎÞ·¨Æô¶¯³ÌÐò£¡ÎÞ·¨Æô¶
 static constexpr MultiLang::string program_ended = "³ÌÐòÒÑ½áÊø";
 static constexpr MultiLang::string unknown_exception_thrown = "Î´Öª/·Ç±ê×¼Òì³£Å×³ö£¡";
 static constexpr MultiLang::string startup_error = "Æô¶¯´íÎó£º{0}";
+static constexpr MultiLang::string array_index_out_of_bounds = "Êý×éË÷Òý³¬³ö·¶Î§";

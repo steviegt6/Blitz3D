@@ -16,4 +16,6 @@
 
 #include <cmath>
 
+#define ErrorLog(function, log) if (debug) { RTEX(log) } else { error_logs.push_back(std::format("{0}: {1}", function, log)); }
+
 #endif

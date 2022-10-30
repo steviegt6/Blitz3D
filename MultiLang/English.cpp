@@ -209,14 +209,15 @@ static constexpr MultiLang::string debugger_cant_access_appdata = "Couldn't acce
 static constexpr MultiLang::string debugger_cant_create_folder = "Couldn't create a folder for the preferences!\nThe IDE will use the default values.";
 static constexpr MultiLang::string debugger_empty_ini = "blitzide.ini is empty!\nDefaults will be set.";
 static constexpr char credits[] =
-	"Programming and design: Mark Sibly\r\n"
-	"Keeping this thing alive: juanjp600, Saalvage, VaneBrain, AestheticalZ and ZiYueCommentary\r\n"
-	".INI loading using a modified version of \"IniPP\", originally by Matthias C. M. Troffaes\r\n"
-	"Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n"
-	"Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n"
-	"Image loader courtesy of FreeImage by Floris van den berg\r\n";
+"Programming and design: Mark Sibly\r\n"
+"Keeping this thing alive: juanjp600, Saalvage, VaneBrain, AestheticalZ and ZiYueCommentary\r\n"
+".INI loading using a modified version of \"IniPP\", originally by Matthias C. M. Troffaes\r\n"
+"Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n"
+"Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n"
+"Image loader courtesy of FreeImage by Floris van den berg\r\n";
 static constexpr MultiLang::string title_release = " - Release Version\n\n";
 static constexpr MultiLang::string unable_start_program = "Unable to start program! A required module could not be started.";
 static constexpr MultiLang::string program_ended = "Program has ended.";
 static constexpr MultiLang::string unknown_exception_thrown = "Unknown/non-standard exception thrown!";
 static constexpr MultiLang::string startup_error = "Startup Error: {0}";
+static constexpr MultiLang::string array_index_out_of_bounds = "Array index out of bounds.";

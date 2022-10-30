@@ -7,6 +7,7 @@
 
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
 int ErrorMessagePool::size = 0;
+bool ErrorMessagePool::caughtError = false;
 
 void bbEnd() {
 	RTEX(0);
@@ -35,10 +36,11 @@ void bbRuntimeError(BBStr* str) {
 	RTEX(UTF8::convertToANSI(err));
 }
 
-void bbInitErrorMsgs(int number) {
+void bbInitErrorMsgs(int number, bool caughtError) {
 	delete[] ErrorMessagePool::memoryAccessViolation;
 	ErrorMessagePool::memoryAccessViolation = new std::string[number];
 	ErrorMessagePool::size = number;
+	ErrorMessagePool::caughtError = caughtError;
 }
 
 void bbSetErrorMsg(int pos, BBStr* str) {
@@ -46,6 +48,15 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 		ErrorMessagePool::memoryAccessViolation[pos] = UTF8::convertToANSI(str->c_str());
 	}
 	delete str;
+}
+
+BBStr* bbErrorLog() {
+	std::string str = "";
+	if (error_logs.size()) {
+		str = error_logs[0];
+		error_logs.erase(error_logs.begin());
+	}
+	return new BBStr(str);
 }
 
 BBStr* bbGetUserLanguage() {
@@ -217,8 +228,9 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("Stop", bbStop);
 	rtSym("AppTitle$title$close_prompt=\"\"", bbAppTitle);
 	rtSym("RuntimeError$message", bbRuntimeError);
-	rtSym("InitErrorMsgs%number", bbInitErrorMsgs);
+	rtSym("InitErrorMsgs%number%caughtError=0", bbInitErrorMsgs);
 	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
+	rtSym("$ErrorLog", bbErrorLog);
 	rtSym("ExecFile$command", bbExecFile);
 	rtSym("Delay%millisecs", bbDelay);
 	rtSym("%MilliSecs", bbMilliSecs);

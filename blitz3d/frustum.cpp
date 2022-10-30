@@ -19,24 +19,24 @@ Frustum::Frustum(float nr, float fr, float w, float h) {
 }
 
 Frustum::Frustum(const Frustum& f, const Transform& t) {
-	for(int k = 0; k < 9; ++k) {
+	for (int k = 0; k < 9; ++k) {
 		verts[k] = t * f.verts[k];
 	}
 	makePlanes();
 }
 
 bool Frustum::cull(const Vector v[], int cnt)const {
-	for(int n = 0; n < 6; ++n) {
+	for (int n = 0; n < 6; ++n) {
 		int k;
-		for(k = 0; k < cnt && planes[n].distance(v[k]) < 0; ++k) {}
-		if(k == cnt) return false;
+		for (k = 0; k < cnt && planes[n].distance(v[k]) < 0; ++k) {}
+		if (k == cnt) return false;
 	}
 	return true;
 }
 
 bool Frustum::cull(const Box& b)const {
 	Vector v[8];
-	for(int k = 0; k < 8; ++k) v[k] = b.corner(k);
+	for (int k = 0; k < 8; ++k) v[k] = b.corner(k);
 	return cull(v, 8);
 }
 
@@ -47,7 +47,7 @@ void Frustum::makePlanes() {
 	planes[PLANE_RIGHT] = Plane(verts[VERT_EYE], verts[VERT_BRFAR], verts[VERT_TRFAR]);
 	planes[PLANE_NEAR] = Plane(verts[VERT_TRNEAR], verts[VERT_TLNEAR], verts[VERT_BLNEAR]);
 	planes[PLANE_FAR] = Plane(verts[VERT_TLFAR], verts[VERT_TRFAR], verts[VERT_BRFAR]);
-	if(planes[PLANE_NEAR].distance(verts[VERT_EYE]) > 0) {
-		for(int k = 0; k < 6; ++k) planes[k] = -planes[k];
+	if (planes[PLANE_NEAR].distance(verts[VERT_EYE]) > 0) {
+		for (int k = 0; k < 6; ++k) planes[k] = -planes[k];
 	}
 }

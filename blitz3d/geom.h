@@ -78,8 +78,8 @@ public:
 		x -= q.x; y -= q.y; z -= q.z; return *this;
 	}
 	bool operator<(const Vector& q)const {
-		if(fabs(x - q.x) > EPSILON) return x < q.x ? true : false;
-		if(fabs(y - q.y) > EPSILON) return y < q.y ? true : false;
+		if (fabs(x - q.x) > EPSILON) return x < q.x ? true : false;
+		if (fabs(y - q.y) > EPSILON) return y < q.y ? true : false;
 		return fabs(z - q.z) > EPSILON && z < q.z;
 	}
 	bool operator==(const Vector& q)const {
@@ -105,12 +105,12 @@ public:
 	}
 	Vector normalized()const {
 		float l = length();
-		if(abs(l) < EPSILON) return Vector(x / EPSILON, y / EPSILON, z / EPSILON);
+		if (abs(l) < EPSILON) return Vector(x / EPSILON, y / EPSILON, z / EPSILON);
 		return Vector(x / l, y / l, z / l);
 	}
 	void normalize() {
 		float l = length();
-		if(abs(l) < EPSILON) {
+		if (abs(l) < EPSILON) {
 			x /= EPSILON; y /= EPSILON; z /= EPSILON;
 		}
 		else {
@@ -226,7 +226,7 @@ struct Quat {
 	}
 	void normalize() {
 		float l = length();
-		if(l < EPSILON) {
+		if (l < EPSILON) {
 			*this = *this / EPSILON;
 		}
 		else {
@@ -235,14 +235,14 @@ struct Quat {
 	}
 	Quat normalized()const {
 		float l = length();
-		if(l < EPSILON) return *this / EPSILON;
+		if (l < EPSILON) return *this / EPSILON;
 		return *this / l;
 	}
 	Quat slerpTo(const Quat& q, float a)const {
 		Quat t = q;
 		float d = dot(q), b = 1 - a;
-		if(d < 0) { t.w = -t.w; t.v = -t.v; d = -d; }
-		if(d < 1 - EPSILON) {
+		if (d < 0) { t.w = -t.w; t.v = -t.v; d = -d; }
+		if (d < 1 - EPSILON) {
 			float om = acosf(d);
 			float si = sinf(om);
 			a = sinf(a * om) / si;
@@ -382,12 +382,12 @@ public:
 		return Vector(((n & 1) ? b : a).x, ((n & 2) ? b : a).y, ((n & 4) ? b : a).z);
 	}
 	void update(const Vector& q) {
-		if(q.x < a.x) a.x = q.x; if(q.y < a.y) a.y = q.y; if(q.z < a.z) a.z = q.z;
-		if(q.x > b.x) b.x = q.x; if(q.y > b.y) b.y = q.y; if(q.z > b.z) b.z = q.z;
+		if (q.x < a.x) a.x = q.x; if (q.y < a.y) a.y = q.y; if (q.z < a.z) a.z = q.z;
+		if (q.x > b.x) b.x = q.x; if (q.y > b.y) b.y = q.y; if (q.z > b.z) b.z = q.z;
 	}
 	void update(const Box& q) {
-		if(q.a.x < a.x) a.x = q.a.x; if(q.a.y < a.y) a.y = q.a.y; if(q.a.z < a.z) a.z = q.a.z;
-		if(q.b.x > b.x) b.x = q.b.x; if(q.b.y > b.y) b.y = q.b.y; if(q.b.z > b.z) b.z = q.b.z;
+		if (q.a.x < a.x) a.x = q.a.x; if (q.a.y < a.y) a.y = q.a.y; if (q.a.z < a.z) a.z = q.a.z;
+		if (q.b.x > b.x) b.x = q.b.x; if (q.b.y > b.y) b.y = q.b.y; if (q.b.z > b.z) b.z = q.b.z;
 	}
 	bool overlaps(const Box& q)const {
 		return
@@ -446,7 +446,7 @@ public:
 	}
 	Box operator*(const Box& q)const {
 		Box t((*this * q.corner(0)));
-		for(int k = 1; k < 8; ++k) t.update(*this * q.corner(k));
+		for (int k = 1; k < 8; ++k) t.update(*this * q.corner(k));
 		return t;
 	}
 	Transform& operator*(const Transform& q)const {
@@ -537,21 +537,21 @@ inline Quat matrixQuat(const Matrix& p) {
 	Matrix m = p;
 	m.orthogonalize();
 	float t = m.i.x + m.j.y + m.k.z, w, x, y, z;
-	if(t > EPSILON) {
+	if (t > EPSILON) {
 		t = sqrtf(t + 1) * 2;
 		x = (m.k.y - m.j.z) / t;
 		y = (m.i.z - m.k.x) / t;
 		z = (m.j.x - m.i.y) / t;
 		w = t / 4;
 	}
-	else if(m.i.x > m.j.y && m.i.x > m.k.z) {
+	else if (m.i.x > m.j.y && m.i.x > m.k.z) {
 		t = sqrtf(m.i.x - m.j.y - m.k.z + 1) * 2;
 		x = t / 4;
 		y = (m.j.x + m.i.y) / t;
 		z = (m.i.z + m.k.x) / t;
 		w = (m.k.y - m.j.z) / t;
 	}
-	else if(m.j.y > m.k.z) {
+	else if (m.j.y > m.k.z) {
 		t = sqrtf(m.j.y - m.k.z - m.i.x + 1) * 2;
 		x = (m.j.x + m.i.y) / t;
 		y = t / 4;

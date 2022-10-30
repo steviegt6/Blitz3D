@@ -4,10 +4,8 @@
 
 gxAudio* gx_audio;
 
-static inline void debugSound(gxSound* s) {
-	if(debug) {
-		if(!gx_audio->verifySound(s)) RTEX(MultiLang::sound_not_exist);
-	}
+static inline void debugSound(gxSound* s, std::string function) {
+	if (!gx_audio->verifySound(s)) ErrorLog(function, MultiLang::sound_not_exist);
 }
 
 static gxSound* loadSound(BBStr* f, bool use_3d) {
@@ -25,38 +23,38 @@ gxSound* bbLoadSound(BBStr* f) {
 }
 
 void bbFreeSound(gxSound* sound) {
-	if(!sound) return;
-	debugSound(sound);
+	if (!sound) return;
+	debugSound(sound, "FreeSound");
 	gx_audio->freeSound(sound);
 }
 
 void bbLoopSound(gxSound* sound) {
-	if(!sound) return;
-	debugSound(sound);
+	if (!sound) return;
+	debugSound(sound, "LoopSound");
 	sound->setLoop(true);
 }
 
 void bbSoundPitch(gxSound* sound, int pitch) {
-	if(!sound) return;
-	debugSound(sound);
+	if (!sound) return;
+	debugSound(sound, "SoundPitch");
 	sound->setPitch(pitch);
 }
 
 void bbSoundVolume(gxSound* sound, float volume) {
-	if(!sound) return;
-	debugSound(sound);
+	if (!sound) return;
+	debugSound(sound, "SoundVolume");
 	sound->setVolume(volume);
 }
 
 void bbSoundPan(gxSound* sound, float pan) {
-	if(!sound) return;
-	debugSound(sound);
+	if (!sound) return;
+	debugSound(sound, "SoundPan");
 	sound->setPan(pan);
 }
 
 gxChannel* bbPlaySound(gxSound* sound) {
-	if(!sound) return 0;
-	debugSound(sound);
+	if (!sound) return 0;
+	debugSound(sound, "PlaySound");
 	return sound->play();
 }
 
@@ -69,32 +67,32 @@ gxChannel* bbPlayCDTrack(int track, int mode) {
 }
 
 void bbStopChannel(gxChannel* channel) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->stop();
 }
 
 void bbPauseChannel(gxChannel* channel) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->setPaused(true);
 }
 
 void bbResumeChannel(gxChannel* channel) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->setPaused(false);
 }
 
 void bbChannelPitch(gxChannel* channel, int pitch) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->setPitch(pitch);
 }
 
 void bbChannelVolume(gxChannel* channel, float volume) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->setVolume(volume);
 }
 
 void bbChannelPan(gxChannel* channel, float pan) {
-	if(!channel) return;
+	if (!channel) return;
 	channel->setPan(pan);
 }
 
@@ -112,7 +110,7 @@ bool audio_create() {
 }
 
 bool audio_destroy() {
-	if(gx_audio) gx_runtime->closeAudio(gx_audio);
+	if (gx_audio) gx_runtime->closeAudio(gx_audio);
 	gx_audio = 0;
 	return true;
 }

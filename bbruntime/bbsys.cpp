@@ -3,3 +3,4 @@
 
 bool debug;
 gxRuntime* gx_runtime;
+std::vector<std::string> error_logs;

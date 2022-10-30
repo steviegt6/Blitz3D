@@ -59,7 +59,7 @@ void Camera::setFogMode(int mode) {
 }
 
 const Frustum& Camera::getFrustum()const {
-	if(!local_valid) {
+	if (!local_valid) {
 		float ar = (float)vp_h / vp_w;
 		frustum_w = frustum_nr * 2 / zoom;
 		frustum_h = frustum_nr * 2 / zoom * ar;
@@ -98,11 +98,11 @@ void Camera::getViewport(int* x, int* y, int* w, int* h)const {
 }
 
 bool Camera::beginRenderFrame() {
-	if(!proj_mode) return false;
+	if (!proj_mode) return false;
 	getFrustum();
 	gx_scene->setViewport(vp_x, vp_y, vp_w, vp_h);
 	gx_scene->clear(&(cls_color.x), 1, 1, cls_argb, cls_z);
-	if(proj_mode == PROJ_ORTHO) {
+	if (proj_mode == PROJ_ORTHO) {
 		gx_scene->setOrthoProj(frustum_nr, frustum_fr, frustum_w, frustum_h);
 	}
 	else {

@@ -6,11 +6,12 @@
 
 extern bool debug;
 extern gxRuntime* gx_runtime;
+extern std::vector<std::string> error_logs;
 
 struct bbEx {
 	const char* err;
 	bbEx(const char* e) :err(e) {
-		if(e) gx_runtime->debugError(e);
+		if (e) gx_runtime->debugError(e);
 	}
 };
 

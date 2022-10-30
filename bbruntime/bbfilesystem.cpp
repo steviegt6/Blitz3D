@@ -30,24 +30,22 @@ struct bbFile : public bbStream {
 
 static std::set<bbFile*> file_set;
 
-static inline void debugFile(bbFile* f) {
-	if(debug) {
-		if(!file_set.count(f)) 
-			RTEX(MultiLang::file_not_exist);
+static inline void debugFile(bbFile* f, std::string function) {
+	if (!file_set.count(f)) {
+		ErrorLog(function, MultiLang::file_not_exist);
 	}
 }
 
-static inline void debugDir(gxDir* d) {
-	if(debug) {
-		if(!gx_filesys->verifyDir(d)) 
-			RTEX(MultiLang::directory_not_exist);
+static inline void debugDir(gxDir* d, std::string function) {
+	if (!gx_filesys->verifyDir(d)) {
+		ErrorLog(function, MultiLang::directory_not_exist);
 	}
 }
 
 static bbFile* open(BBStr* f, int n) {
 	std::string t = *f;
 	std::filebuf* buf = new std::filebuf();
-	if(buf->open(t.c_str(), n | std::ios_base::binary)) {
+	if (buf->open(t.c_str(), n | std::ios_base::binary)) {
 		bbFile* fl = new bbFile(buf);
 		file_set.insert(fl);
 		return fl;
@@ -69,7 +67,7 @@ bbFile* bbOpenFile(BBStr* f) {
 }
 
 void bbCloseFile(bbFile* f) {
-	debugFile(f);
+	debugFile(f, "CloseFile");
 	file_set.erase(f);
 	delete f;
 }
@@ -92,7 +90,7 @@ void bbCloseDir(gxDir* d) {
 }
 
 BBStr* bbNextFile(gxDir* d) {
-	debugDir(d);
+	debugDir(d, "NextFile");
 	return new BBStr(d->getNextFile());
 }
 
@@ -226,14 +224,14 @@ BBStr* bbAbsolutePath(BBStr* path) {
 }
 
 bool filesystem_create() {
-	if(gx_filesys = gx_runtime->openFileSystem(0)) {
+	if (gx_filesys = gx_runtime->openFileSystem(0)) {
 		return true;
 	}
 	return false;
 }
 
 bool filesystem_destroy() {
-	while(file_set.size()) bbCloseFile(*file_set.begin());
+	while (file_set.size()) bbCloseFile(*file_set.begin());
 	gx_runtime->closeFileSystem(gx_filesys);
 	return true;
 }

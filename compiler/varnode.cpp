@@ -114,9 +114,9 @@ void FieldVarNode::semant(Environ* e) {
 
 TNode* FieldVarNode::translate(Codegen* g) {
 	TNode* t = expr->translate(g);
-	if(g->debug) t = jumpf(t, "__bbNullObjEx");
-	t = mem(t); if(g->debug) t = jumpf(t, "__bbNullObjEx");
-	return add(t, iconst(sem_field->offset));
+	t = call("__bbObjLoad", t);
+	t = call("__bbFieldPtrAdd", t, iconst(sem_field->offset));
+	return t;
 }
 
 ////////////////

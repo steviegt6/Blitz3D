@@ -21,14 +21,14 @@ struct Brush::Rep {
 
 	Rep(const Rep& t) :
 		ref_cnt(1), blend(t.blend), max_tex(t.max_tex), rs(t.rs), blend_valid(t.blend_valid) {
-		for(int k = 0; k < max_tex; ++k) texs[k] = t.texs[k];
+		for (int k = 0; k < max_tex; ++k) texs[k] = t.texs[k];
 	}
 
 	void* operator new(size_t sz) {
 		static const int GROW = 64;
-		if(!pool) {
+		if (!pool) {
 			pool = new Rep[GROW];
-			for(int k = 0; k < GROW - 1; ++k) pool[k].next = &pool[k + 1];
+			for (int k = 0; k < GROW - 1; ++k) pool[k].next = &pool[k + 1];
 			pool[GROW - 1].next = 0;
 		}
 		Rep* p = pool;
@@ -62,14 +62,14 @@ Brush::Brush(const Brush& a, const Brush& b) :
 	rep->rs.alpha *= b.rep->rs.alpha;
 	rep->rs.shininess += b.rep->rs.shininess;
 
-	if(b.rep->blend) rep->blend = b.rep->blend;
+	if (b.rep->blend) rep->blend = b.rep->blend;
 
 	rep->rs.fx |= b.rep->rs.fx;
 
-	if(b.rep->max_tex > rep->max_tex) rep->max_tex = b.rep->max_tex;
+	if (b.rep->max_tex > rep->max_tex) rep->max_tex = b.rep->max_tex;
 
-	for(int k = 0; k < rep->max_tex; ++k) {
-		if(b.rep->rs.tex_states[k].canvas) {
+	for (int k = 0; k < rep->max_tex; ++k) {
+		if (b.rep->rs.tex_states[k].canvas) {
 			rep->rs.tex_states[k].canvas = b.rep->rs.tex_states[k].canvas;
 			rep->texs[k] = b.rep->texs[k];
 		}
@@ -79,17 +79,17 @@ Brush::Brush(const Brush& a, const Brush& b) :
 }
 
 Brush::~Brush() {
-	if(!--rep->ref_cnt) delete rep;
+	if (!--rep->ref_cnt) delete rep;
 }
 
 Brush& Brush::operator=(const Brush& t) {
 	++t.rep->ref_cnt;
-	if(!--rep->ref_cnt) delete rep;
+	if (!--rep->ref_cnt) delete rep;
 	rep = t.rep; return *this;
 }
 
 Brush::Rep* Brush::write()const {
-	if(rep->ref_cnt > 1) {
+	if (rep->ref_cnt > 1) {
 		--rep->ref_cnt;
 		rep = new Rep(*rep);
 	}
@@ -103,7 +103,7 @@ void Brush::setColor(const Vector& color) {
 void Brush::setAlpha(float alpha) {
 	float a = rep->rs.alpha;
 	write()->rs.alpha = alpha;
-	if((a < 1) != (alpha < 1)) rep->blend_valid = false;
+	if ((a < 1) != (alpha < 1)) rep->blend_valid = false;
 }
 
 void Brush::setShininess(float n) {
@@ -128,8 +128,8 @@ void Brush::setTexture(int index, const Texture& t, int n) {
 	rs.tex_states[index].canvas = t.getCanvas(n);
 
 	rep->max_tex = 0;
-	for(int k = 0; k < gxScene::MAX_TEXTURES; ++k) {
-		if(rs.tex_states[k].canvas) rep->max_tex = k + 1;
+	for (int k = 0; k < gxScene::MAX_TEXTURES; ++k) {
+		if (rs.tex_states[k].canvas) rep->max_tex = k + 1;
 	}
 	rep->blend_valid = false;
 }
@@ -147,14 +147,14 @@ float Brush::getShininess()const {
 }
 
 int Brush::getBlend()const {
-	if(rep->blend_valid) return rep->rs.blend;
+	if (rep->blend_valid) return rep->rs.blend;
 
 	rep->blend_valid = true;	//well, it will be...
 
 	gxScene::RenderState& rs = rep->rs;
 
 	//alphatest
-	if(rep->texs[0].getCanvasFlags() & gxCanvas::CANVAS_TEX_MASK) {
+	if (rep->texs[0].getCanvasFlags() & gxCanvas::CANVAS_TEX_MASK) {
 		rs.fx |= gxScene::FX_ALPHATEST;
 	}
 	else {
@@ -165,23 +165,23 @@ int Brush::getBlend()const {
 	//1 = alpha
 	//2 = multiply
 	//3 = add
-	if(rep->blend) {
-		if(rep->blend != gxScene::BLEND_ALPHA) {
+	if (rep->blend) {
+		if (rep->blend != gxScene::BLEND_ALPHA) {
 			return rs.blend = rep->blend;
 		}
-		for(int k = 0; k < rep->max_tex; ++k) {
-			if(rep->texs[k].isTransparent()) {
+		for (int k = 0; k < rep->max_tex; ++k) {
+			if (rep->texs[k].isTransparent()) {
 				return rs.blend = gxScene::BLEND_ALPHA;
 			}
 		}
 	}
-	else if(rep->max_tex == 1 && rep->texs[0].isTransparent()) {
+	else if (rep->max_tex == 1 && rep->texs[0].isTransparent()) {
 		//single transparent texture?
 		return rs.blend = gxScene::BLEND_ALPHA;
 	}
 
 	//vertex alpha or entityalpha?
-	if((rs.fx & gxScene::FX_VERTEXALPHA) || rs.alpha < 1) {
+	if ((rs.fx & gxScene::FX_VERTEXALPHA) || rs.alpha < 1) {
 		return rs.blend = gxScene::BLEND_ALPHA;
 	}
 
@@ -198,7 +198,7 @@ Texture Brush::getTexture(int index)const {
 
 const gxScene::RenderState& Brush::getRenderState()const {
 	getBlend();
-	for(int k = 0; k < rep->max_tex; ++k) {
+	for (int k = 0; k < rep->max_tex; ++k) {
 		gxScene::RenderState::TexState* ts = &rep->rs.tex_states[k];
 		ts->matrix = rep->texs[k].getMatrix();
 		ts->blend = rep->texs[k].getBlend();

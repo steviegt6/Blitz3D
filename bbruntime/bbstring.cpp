@@ -5,29 +5,29 @@
 #include <time.h>
 #include "../MultiLang/MultiLang.h"
 
-#define CHKPOS(x) if( (x)<0 ) RTEX( std::format(MultiLang::string_parameter_positive, __func__).c_str() );
-#define CHKOFF(x) if( (x)<=0 ) RTEX( std::format(MultiLang::string_parameter_greater, __func__ ).c_str() );
+#define CHKPOS(x, func) if(x < 0) ErrorLog(func, MultiLang::string_parameter_positive);
+#define CHKOFF(x, func) if(x <= 0) ErrorLog(func, MultiLang::string_parameter_greater);
 
 BBStr* bbString(BBStr* s, int n) {
 	BBStr* t = new BBStr();
-	while(n-- > 0) *t += *s;
+	while (n-- > 0) *t += *s;
 	delete s; return t;
 }
 
 BBStr* bbLeft(BBStr* s, int n) {
-	CHKPOS(n);
+	CHKPOS(n, "Left");
 	*s = UTF8::substr(*s, 0, n); return s;
 }
 
 BBStr* bbRight(BBStr* s, int n) {
-	CHKPOS(n);
-	n = UTF8::length(*s) - n; if(n < 0) n = 0;
+	CHKPOS(n, "Right");
+	n = UTF8::length(*s) - n; if (n < 0) n = 0;
 	*s = UTF8::substr(*s, n, s->size()); return s;
 }
 
 BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
 	int n = 0, from_sz = from->size(), to_sz = to->size();
-	while(n < s->size() && (n = s->find(*from, n)) != std::string::npos) {
+	while (n < s->size() && (n = s->find(*from, n)) != std::string::npos) {
 		s->replace(n, from_sz, *to);
 		n += to_sz;
 	}
@@ -35,7 +35,7 @@ BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
 }
 
 int bbInstr(BBStr* s, BBStr* t, int from) {
-	CHKOFF(from); --from;
+	CHKOFF(from, "Instr"); --from;
 	int n = UTF8::find(*s, *t, from);
 	delete s; delete t;
 	return n < 0 ? 0 : n + 1;
@@ -50,25 +50,25 @@ BBStr* bbSubstr(BBStr* string, int start, int length) {
 }
 
 BBStr* bbMid(BBStr* s, int o, int n) {
-	CHKOFF(o); --o;
-	if(o > s->size()) o = s->size();
-	if(n >= 0) *s = UTF8::substr(*s, o, n);
+	CHKOFF(o, "Mid"); --o;
+	if (o > s->size()) o = s->size();
+	if (n >= 0) *s = UTF8::substr(*s, o, n);
 	else *s = UTF8::substr(*s, o, s->size());
 	return s;
 }
 
 BBStr* bbUpper(BBStr* s) {
-	for(int k = 0; k < s->size(); ++k) (*s)[k] = toupper((*s)[k]);
+	for (int k = 0; k < s->size(); ++k) (*s)[k] = toupper((*s)[k]);
 	return s;
 }
 
 BBStr* bbLower(BBStr* s) {
-	for(int k = 0; k < s->size(); ++k) (*s)[k] = tolower((*s)[k]);
+	for (int k = 0; k < s->size(); ++k) (*s)[k] = tolower((*s)[k]);
 	return s;
 }
 
 bool isgraph_safe(int chr) {
-	if(chr > 127) { return true; }
+	if (chr > 127) { return true; }
 	return isgraph(chr);
 }
 
@@ -76,26 +76,26 @@ BBStr* bbTrim(BBStr* s) {
 	int n = 0;
 	int p = s->size();
 	// currently all characters above the standard ASCII range are simply not trimmed
-	while(n < s->size() && !isgraph_safe((byte)(*s)[n])) ++n;
-	while(p > n && !isgraph_safe((byte)(*s)[p - 1])) --p;
+	while (n < s->size() && !isgraph_safe((byte)(*s)[n])) ++n;
+	while (p > n && !isgraph_safe((byte)(*s)[p - 1])) --p;
 	*s = UTF8::substr(*s, n, p - n);
 	return s;
 }
 
 BBStr* bbLSet(BBStr* s, int n) {
-	CHKPOS(n);
-	if(s->size() > n) *s = s->substr(0, n);
+	CHKPOS(n, "LSet");
+	if (s->size() > n) *s = s->substr(0, n);
 	else {
-		while(s->size() < n) *s += ' ';
+		while (s->size() < n) *s += ' ';
 	}
 	return s;
 }
 
 BBStr* bbRSet(BBStr* s, int n) {
-	CHKPOS(n);
-	if(s->size() > n) *s = s->substr(s->size() - n);
+	CHKPOS(n, "RSet");
+	if (s->size() > n) *s = s->substr(s->size() - n);
 	else {
-		while(s->size() < n) *s = ' ' + *s;
+		while (s->size() < n) *s = ' ' + *s;
 	}
 	return s;
 }

@@ -9,27 +9,27 @@ enum {
 };
 
 void Entity::remove() {
-	if(_parent) {
-		if(_parent->_children == this) _parent->_children = _succ;
-		if(_parent->_last_child == this) _parent->_last_child = _pred;
+	if (_parent) {
+		if (_parent->_children == this) _parent->_children = _succ;
+		if (_parent->_last_child == this) _parent->_last_child = _pred;
 	}
 	else {
-		if(_orphans == this) _orphans = _succ;
-		if(_last_orphan == this) _last_orphan = _pred;
+		if (_orphans == this) _orphans = _succ;
+		if (_last_orphan == this) _last_orphan = _pred;
 	}
-	if(_succ) _succ->_pred = _pred;
-	if(_pred) _pred->_succ = _succ;
+	if (_succ) _succ->_pred = _pred;
+	if (_pred) _pred->_succ = _succ;
 }
 
 void Entity::insert() {
 	_succ = 0;
-	if(_parent) {
-		if(_pred = _parent->_last_child) _pred->_succ = this;
+	if (_parent) {
+		if (_pred = _parent->_last_child) _pred->_succ = this;
 		else _parent->_children = this;
 		_parent->_last_child = this;
 	}
 	else {
-		if(_pred = _last_orphan) _pred->_succ = this;
+		if (_pred = _last_orphan) _pred->_succ = this;
 		else _orphans = this;
 		_last_orphan = this;
 	}
@@ -54,14 +54,14 @@ Entity::Entity(const Entity& e) :
 }
 
 Entity::~Entity() {
-	while(children()) delete children();
+	while (children()) delete children();
 	remove();
 }
 
 void Entity::invalidateWorld() {
-	if(invalid & INVALID_WORLDTFORM) return;
+	if (invalid & INVALID_WORLDTFORM) return;
 	invalid |= INVALID_WORLDTFORM;
-	for(Entity* e = _children; e; e = e->_succ) {
+	for (Entity* e = _children; e; e = e->_succ) {
 		e->invalidateWorld();
 	}
 }
@@ -72,7 +72,7 @@ void Entity::invalidateLocal() {
 }
 
 const Transform& Entity::getLocalTform()const {
-	if(invalid & INVALID_LOCALTFORM) {
+	if (invalid & INVALID_LOCALTFORM) {
 		local_tform.m = Matrix(local_rot);
 		local_tform.m.i *= local_scl.x;
 		local_tform.m.j *= local_scl.y;
@@ -84,7 +84,7 @@ const Transform& Entity::getLocalTform()const {
 }
 
 const Transform& Entity::getWorldTform()const {
-	if(invalid & INVALID_WORLDTFORM) {
+	if (invalid & INVALID_WORLDTFORM) {
 		world_tform = _parent ? _parent->getWorldTform() * getLocalTform() : getLocalTform();
 		invalid &= ~INVALID_WORLDTFORM;
 	}
@@ -92,7 +92,7 @@ const Transform& Entity::getWorldTform()const {
 }
 
 void Entity::setParent(Entity* p) {
-	if(_parent == p) return;
+	if (_parent == p) return;
 
 	remove();
 
@@ -116,17 +116,17 @@ void Entity::setEnabled(bool enabled) {
 }
 
 void Entity::enumVisible(std::vector<Object*>& out) {
-	if(!_visible) return;
-	if(Object* o = getObject()) out.push_back(o);
-	for(Entity* e = _children; e; e = e->_succ) {
+	if (!_visible) return;
+	if (Object* o = getObject()) out.push_back(o);
+	for (Entity* e = _children; e; e = e->_succ) {
 		e->enumVisible(out);
 	}
 }
 
 void Entity::enumEnabled(std::vector<Object*>& out) {
-	if(!_enabled) return;
-	if(Object* o = getObject()) out.push_back(o);
-	for(Entity* e = _children; e; e = e->_succ) {
+	if (!_enabled) return;
+	if (Object* o = getObject()) out.push_back(o);
+	for (Entity* e = _children; e; e = e->_succ) {
 		e->enumEnabled(out);
 	}
 }

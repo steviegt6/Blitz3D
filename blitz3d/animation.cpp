@@ -24,9 +24,9 @@ struct Animation::Rep {
 		//for( next=keys.begin();next!=keys.end() && time>=next->first;++next ){}
 		next = keys.upper_bound((int)time);
 
-		if(next == keys.begin()) return next->second.v;
+		if (next == keys.begin()) return next->second.v;
 		curr = next; --curr;
-		if(next == keys.end()) return curr->second.v;
+		if (next == keys.end()) return curr->second.v;
 
 		float delta = (time - curr->first) / (next->first - curr->first);
 		return (next->second.v - curr->second.v) * delta + curr->second.v;
@@ -38,9 +38,9 @@ struct Animation::Rep {
 		//for( next=keys.begin();next!=keys.end() && time>=next->first;++next ){}
 		next = keys.upper_bound((int)time);
 
-		if(next == keys.begin()) return next->second;
+		if (next == keys.begin()) return next->second;
 		curr = next; --curr;
-		if(next == keys.end()) return curr->second;
+		if (next == keys.end()) return curr->second;
 
 		float delta = (time - curr->first) / (next->first - curr->first);
 		return curr->second.slerpTo(next->second, delta);
@@ -63,33 +63,33 @@ Animation::Animation(const Animation& t) :
 Animation::Animation(const Animation& t, int first, int last) :
 	rep(new Rep()) {
 	Rep::KeyList::const_iterator it;
-	for(it = t.rep->pos_anim.begin(); it != t.rep->pos_anim.end(); ++it) {
-		if(it->first<first || it->first>last) continue;
+	for (it = t.rep->pos_anim.begin(); it != t.rep->pos_anim.end(); ++it) {
+		if (it->first<first || it->first>last) continue;
 		rep->setKey(rep->pos_anim, it->first - first, it->second);
 	}
-	for(it = t.rep->scale_anim.begin(); it != t.rep->scale_anim.end(); ++it) {
-		if(it->first<first || it->first>last) continue;
+	for (it = t.rep->scale_anim.begin(); it != t.rep->scale_anim.end(); ++it) {
+		if (it->first<first || it->first>last) continue;
 		rep->setKey(rep->scale_anim, it->first - first, it->second);
 	}
-	for(it = t.rep->rot_anim.begin(); it != t.rep->rot_anim.end(); ++it) {
-		if(it->first<first || it->first>last) continue;
+	for (it = t.rep->rot_anim.begin(); it != t.rep->rot_anim.end(); ++it) {
+		if (it->first<first || it->first>last) continue;
 		rep->setKey(rep->rot_anim, it->first - first, it->second);
 	}
 }
 
 Animation::~Animation() {
-	if(!--rep->ref_cnt) delete rep;
+	if (!--rep->ref_cnt) delete rep;
 }
 
 Animation& Animation::operator=(const Animation& t) {
 	++t.rep->ref_cnt;
-	if(!--rep->ref_cnt) delete rep;
+	if (!--rep->ref_cnt) delete rep;
 	rep = t.rep;
 	return *this;
 }
 
 Animation::Rep* Animation::write() {
-	if(rep->ref_cnt > 1) {
+	if (rep->ref_cnt > 1) {
 		--rep->ref_cnt;
 		rep = new Rep(*rep);
 	}
@@ -124,16 +124,16 @@ int Animation::numPositionKeys()const {
 }
 
 Vector Animation::getScale(float time)const {
-	if(!rep->scale_anim.size()) return Vector(1, 1, 1);
+	if (!rep->scale_anim.size()) return Vector(1, 1, 1);
 	return rep->getLinearValue(rep->scale_anim, time);
 }
 
 Vector Animation::getPosition(float time)const {
-	if(!rep->pos_anim.size()) return Vector(0, 0, 0);
+	if (!rep->pos_anim.size()) return Vector(0, 0, 0);
 	return rep->getLinearValue(rep->pos_anim, time);
 }
 
 Quat Animation::getRotation(float time)const {
-	if(!rep->rot_anim.size()) return Quat();
+	if (!rep->rot_anim.size()) return Quat();
 	return rep->getSlerpValue(rep->rot_anim, time);
 }
