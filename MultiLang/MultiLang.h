@@ -1,20 +1,14 @@
 #ifndef MULTILANG
 #define MULTILANG
 
-#define ENGLISH
-
 namespace MultiLang {
 	typedef const char* string;
 	typedef const wchar_t* wstring;
 #ifdef CHINESE_SIMP
-	#undef ENGLISH
 	#include "SimplifiedChinese.cpp"
-#endif
-#ifdef CHINESE_TRAD
-	#undef ENGLISH
+#elif defined CHINESE_TRAD
 	#include "TraditionalChinese.cpp"
-#endif
-#ifdef ENGLISH
+#else
 	#include "English.cpp"
 #endif
 };

@@ -211,12 +211,12 @@ static constexpr MultiLang::string debugger_cant_access_appdata = "无法访问AppDa
 static constexpr MultiLang::string debugger_cant_create_folder = "无法为配置文件创建文件夹！\nIDE将使用默认值";
 static constexpr MultiLang::string debugger_empty_ini = "blitzide.ini为空！\n将使用默认设置";
 static constexpr char credits[] =
-	"编程及设计：Mark Sibly\r\n"
-	"项目续命：juanjp600、Saalvage、VaneBrain、AestheticalZ和ZiYueCommentary\r\n"
-	".INI加载器使用\"IniPP\"的修改版本，原版由Matthias C. M. Troffaes制作\r\n"
-	"文档：Mark Sibly、Simon Harrison、Paul Gerfen、Shane Monroe和Blitz文档撰写团队\r\n"
-	"测试及支持：James Boyd、Simon Armstrong和Blitz开发团队\r\n"
-	"图像加载器：Floris van den berg制作的FreeImage\r\n";
+"编程及设计：Mark Sibly\r\n"
+"项目续命：juanjp600、Saalvage、VaneBrain、AestheticalZ和ZiYueCommentary\r\n"
+".INI加载器使用\"IniPP\"的修改版本，原版由Matthias C. M. Troffaes制作\r\n"
+"文档：Mark Sibly、Simon Harrison、Paul Gerfen、Shane Monroe和Blitz文档撰写团队\r\n"
+"测试及支持：James Boyd、Simon Armstrong和Blitz开发团队\r\n"
+"图像加载器：Floris van den berg制作的FreeImage\r\n";
 static constexpr MultiLang::string title_release = " - 发布版本\n\n";
 static constexpr MultiLang::string unable_start_program = "无法启动程序！无法启动所需模块";
 static constexpr MultiLang::string program_ended = "程序已结束";
