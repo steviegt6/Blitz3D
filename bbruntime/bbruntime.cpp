@@ -7,7 +7,7 @@
 
 std::string* ErrorMessagePool::memoryAccessViolation = 0;
 int ErrorMessagePool::size = 0;
-bool ErrorMessagePool::caughtError = false;
+bool ErrorMessagePool::hasMacro = false;
 
 void bbEnd() {
 	RTEX(0);
@@ -36,11 +36,11 @@ void bbRuntimeError(BBStr* str) {
 	RTEX(UTF8::convertToANSI(err));
 }
 
-void bbInitErrorMsgs(int number, bool caughtError) {
+void bbInitErrorMsgs(int number, bool hasMacro) {
 	delete[] ErrorMessagePool::memoryAccessViolation;
 	ErrorMessagePool::memoryAccessViolation = new std::string[number];
 	ErrorMessagePool::size = number;
-	ErrorMessagePool::caughtError = caughtError;
+	ErrorMessagePool::hasMacro = hasMacro;
 }
 
 void bbSetErrorMsg(int pos, BBStr* str) {
@@ -228,7 +228,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("Stop", bbStop);
 	rtSym("AppTitle$title$close_prompt=\"\"", bbAppTitle);
 	rtSym("RuntimeError$message", bbRuntimeError);
-	rtSym("InitErrorMsgs%number%caughtError=0", bbInitErrorMsgs);
+	rtSym("InitErrorMsgs%number%hasMacro=0", bbInitErrorMsgs);
 	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
 	rtSym("$ErrorLog", bbErrorLog);
 	rtSym("ExecFile$command", bbExecFile);

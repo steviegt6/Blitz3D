@@ -94,7 +94,11 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 						s = s + ErrorMessagePool::memoryAccessViolation[i] + "\n";
 					}
 				}
-				if (ErrorMessagePool::caughtError) s = replace_all(s, "_CaughtError_", error_logs[error_logs.size() - 1]);
+				if (ErrorMessagePool::hasMacro) {
+					s = replace_all(s, "_CaughtError_", error_logs[error_logs.size() - 1]);
+					s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
+					s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
+				}
 				RTEX(s.c_str());
 			}
 			break;
