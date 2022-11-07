@@ -50,15 +50,6 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 	delete str;
 }
 
-BBStr* bbErrorLog() {
-	std::string str = "";
-	if (error_logs.size()) {
-		str = error_logs[0];
-		error_logs.erase(error_logs.begin());
-	}
-	return new BBStr(str);
-}
-
 BBStr* bbGetUserLanguage() {
 	wchar_t buf[6]; // should enough
 	GetUserDefaultLocaleName(buf, 6);
@@ -230,7 +221,6 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("RuntimeError$message", bbRuntimeError);
 	rtSym("InitErrorMsgs%number%hasMacro=0", bbInitErrorMsgs);
 	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
-	rtSym("$ErrorLog", bbErrorLog);
 	rtSym("ExecFile$command", bbExecFile);
 	rtSym("Delay%millisecs", bbDelay);
 	rtSym("%MilliSecs", bbMilliSecs);

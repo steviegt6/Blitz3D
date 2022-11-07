@@ -16,6 +16,6 @@
 
 #include <cmath>
 
-#define ErrorLog(function, log) if (debug) { RTEX(log) } else { if(error_logs.size() > 100) error_logs.clear(); error_logs.push_back(std::format("{0}: {1}", function, log)); }
+#define ErrorLog(function, log) if (debug) { RTEX(log) } else { errorlog = std::format("{0}: {1}", function, log); }
 
 #endif

@@ -95,7 +95,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 					}
 				}
 				if (ErrorMessagePool::hasMacro) {
-					s = replace_all(s, "_CaughtError_", error_logs[error_logs.size() - 1]);
+					s = replace_all(s, "_CaughtError_", errorlog);
 					s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
 					s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
 				}
