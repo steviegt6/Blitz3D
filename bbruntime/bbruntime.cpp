@@ -36,6 +36,11 @@ void bbRuntimeError(BBStr* str) {
 	RTEX(UTF8::convertToANSI(err));
 }
 
+void bbMemoryAccessViolation() {
+	extern void throwMAV();
+	throwMAV();
+}
+
 void bbInitErrorMsgs(int number, bool hasMacro) {
 	delete[] ErrorMessagePool::memoryAccessViolation;
 	ErrorMessagePool::memoryAccessViolation = new std::string[number];
@@ -219,6 +224,7 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("Stop", bbStop);
 	rtSym("AppTitle$title$close_prompt=\"\"", bbAppTitle);
 	rtSym("RuntimeError$message", bbRuntimeError);
+	rtSym("MemoryAccessViolation", bbMemoryAccessViolation);
 	rtSym("InitErrorMsgs%number%hasMacro=0", bbInitErrorMsgs);
 	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
 	rtSym("ExecFile$command", bbExecFile);

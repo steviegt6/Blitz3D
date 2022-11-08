@@ -34,19 +34,6 @@ static std::map<const char*, void*> syms;
 std::map<const char*, void*>::iterator sym_it;
 static gxRuntime* gx_runtime;
 
-//Allows userlibs to call DebugLog() and RuntimeError().
-//******************************************************
-__declspec(dllexport) void __cdecl BlitzDebugLog(const char* msg)
-{
-	if(gx_runtime) gx_runtime->debugLog(msg);
-}
-
-__declspec(dllexport) void __cdecl BlitzRuntimeError(const char* msg)
-{
-	RTEX(msg);
-}
-//******************************************************
-
 inline const char* getCharPtr(std::string str) {
 	char* cha = new char[str.size() + 1];
 	memcpy(cha, str.c_str(), str.size() + 1);
@@ -64,6 +51,26 @@ inline std::string replace_all(const std::string& string, const std::string& pat
 		str.replace(pos, psize, newpat);
 	}
 	return str;
+}
+
+inline void throwMAV() {
+	if (ErrorMessagePool::memoryAccessViolation == 0) {
+		bbruntime_panic(MultiLang::memory_access_violation);
+	}
+	else {
+		std::string s = "";
+		for (int i = 0; i < ErrorMessagePool::size; i++) {
+			if (!ErrorMessagePool::memoryAccessViolation[i].empty()) {
+				s = s + ErrorMessagePool::memoryAccessViolation[i] + "\n";
+			}
+		}
+		if (ErrorMessagePool::hasMacro) {
+			s = replace_all(s, "_CaughtError_", errorlog);
+			s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
+			s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
+		}
+		RTEX(s.c_str());
+	}
 }
 
 static void rtSym(const char* sym, void* pc) {
@@ -84,23 +91,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 			bbruntime_panic(MultiLang::integer_divide_zero);
 			break;
 		case EXCEPTION_ACCESS_VIOLATION:
-			if(ErrorMessagePool::memoryAccessViolation == 0) {
-				bbruntime_panic(MultiLang::memory_access_violation);
-			}
-			else {
-				std::string s = "";
-				for(int i = 0; i < ErrorMessagePool::size; i++) {
-					if(!ErrorMessagePool::memoryAccessViolation[i].empty()) {
-						s = s + ErrorMessagePool::memoryAccessViolation[i] + "\n";
-					}
-				}
-				if (ErrorMessagePool::hasMacro) {
-					s = replace_all(s, "_CaughtError_", errorlog);
-					s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
-					s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
-				}
-				RTEX(s.c_str());
-			}
+			throwMAV();
 			break;
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
 			bbruntime_panic(MultiLang::illegal_instruction);
