@@ -41,10 +41,6 @@ int bbInstr(BBStr* s, BBStr* t, int from) {
 	return n < 0 ? 0 : n + 1;
 }
 
-int bbFind(BBStr* string, BBStr* find) {
-	return UTF8::find(string->c_str(), find->c_str(), 0);
-}
-
 BBStr* bbSubstr(BBStr* string, int start, int length) {
 	return new BBStr(UTF8::substr(string->c_str(), start, length));
 }
@@ -155,7 +151,6 @@ void string_link(void(*rtSym)(const char*, void*)) {
 	rtSym("$String$string%repeat", bbString);
 	rtSym("$Left$string%count", bbLeft);
 	rtSym("$Right$string%count", bbRight);
-	rtSym("%Find$string$find", bbFind);
 	rtSym("$Replace$string$from$to", bbReplace);
 	rtSym("%Instr$string$find%from=1", bbInstr);
 	rtSym("$Substr$string%start%length", bbSubstr);

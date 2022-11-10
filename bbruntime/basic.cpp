@@ -603,5 +603,4 @@ void basic_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("_bbFMod", _bbFMod);
 	rtSym("_bbFPow", _bbFPow);
 	rtSym("RuntimeStats", bbRuntimeStats);
-	//rtSym("MAV", bbMav);
 }

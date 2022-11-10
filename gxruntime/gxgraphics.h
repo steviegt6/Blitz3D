@@ -38,7 +38,7 @@ public:
 	bool restore();
 
 	gxRuntime* runtime;
-	std::set<std::set<std::any>*> custom_set;
+	//std::set<std::set<std::any>*> custom_set;
 
 private:
 
