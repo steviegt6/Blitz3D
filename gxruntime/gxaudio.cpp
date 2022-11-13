@@ -40,8 +40,8 @@ struct CDChannel : public gxChannel {
 	void play(int track, int mode) {
 		stop();
 		int cd_mode = FSOUND_CD_PLAYONCE;
-		if(mode == gxAudio::CD_MODE_LOOP) cd_mode = FSOUND_CD_PLAYLOOPED;
-		else if(mode == gxAudio::CD_MODE_ALL) cd_mode = FSOUND_CD_PLAYCONTINUOUS;
+		if (mode == gxAudio::CD_MODE_LOOP) cd_mode = FSOUND_CD_PLAYLOOPED;
+		else if (mode == gxAudio::CD_MODE_ALL) cd_mode = FSOUND_CD_PLAYCONTINUOUS;
 		FSOUND_CD_SetPlayMode(0, cd_mode);
 		FSOUND_CD_Play(0, track);
 	}
@@ -145,23 +145,23 @@ static std::vector<SoundChannel*> soundChannels;
 static gxChannel* allocSoundChannel(int n) {
 
 	SoundChannel* chan = 0;
-	for(int k = 0; k < soundChannels.size(); ++k) {
+	for (int k = 0; k < soundChannels.size(); ++k) {
 		chan = soundChannels[next_chan];
-		if(!chan) {
+		if (!chan) {
 			chan = soundChannels[next_chan] = new SoundChannel();
 			channels.push_back(chan);
 		}
-		else if(chan->isPlaying()) {
+		else if (chan->isPlaying()) {
 			chan = 0;
 		}
-		if(++next_chan == soundChannels.size()) next_chan = 0;
-		if(chan) break;
+		if (++next_chan == soundChannels.size()) next_chan = 0;
+		if (chan) break;
 	}
 
-	if(!chan) {
+	if (!chan) {
 		next_chan = soundChannels.size();
 		soundChannels.resize(soundChannels.size() * 2);
-		for(int k = next_chan; k < soundChannels.size(); ++k) soundChannels[k] = 0;
+		for (int k = next_chan; k < soundChannels.size(); ++k) soundChannels[k] = 0;
 		chan = soundChannels[next_chan++] = new SoundChannel();
 		channels.push_back(chan);
 	}
@@ -174,7 +174,7 @@ gxAudio::gxAudio(gxRuntime* r) :
 	runtime(r) {
 	next_chan = 0;
 	soundChannels.resize(4096);
-	for(int k = 0; k < 4096; ++k) soundChannels[k] = 0;
+	for (int k = 0; k < 4096; ++k) soundChannels[k] = 0;
 
 	cdChannel = new CDChannel();
 	channels.push_back(cdChannel);
@@ -182,9 +182,9 @@ gxAudio::gxAudio(gxRuntime* r) :
 
 gxAudio::~gxAudio() {
 	//free all channels
-	for(; channels.size(); channels.pop_back()) delete channels.back();
+	for (; channels.size(); channels.pop_back()) delete channels.back();
 	//free all sound_set
-	while(sound_set.size()) freeSound(*sound_set.begin());
+	while (sound_set.size()) freeSound(*sound_set.begin());
 	soundChannels.clear();
 	songs.clear();
 
@@ -200,7 +200,7 @@ gxChannel* gxAudio::play(FSOUND_SAMPLE* sample) {
 gxChannel* gxAudio::play3d(FSOUND_SAMPLE* sample, const float pos[3], const float vel[3]) {
 
 	int n = FSOUND_PlaySoundEx(FSOUND_FREE, sample, 0, true);
-	if(n < 0) return 0;
+	if (n < 0) return 0;
 	FSOUND_3D_SetAttributes(n, (float*)pos, (float*)vel);
 	FSOUND_SetPaused(n, false);
 	return allocSoundChannel(n);
@@ -217,7 +217,7 @@ gxSound* gxAudio::loadSound(const std::string& f, bool use3d) {
 	int flags = FSOUND_NORMAL | (use3d ? FSOUND_FORCEMONO : FSOUND_2D);
 
 	FSOUND_SAMPLE* sample = FSOUND_Sample_Load(FSOUND_FREE, f.c_str(), flags, 0, 0);
-	if(!sample) return 0;
+	if (!sample) return 0;
 
 	gxSound* sound = new gxSound(this, sample);
 	sound_set.insert(sound);
@@ -229,7 +229,7 @@ gxSound* gxAudio::verifySound(gxSound* s) {
 }
 
 void gxAudio::freeSound(gxSound* s) {
-	if(sound_set.erase(s)) delete s;
+	if (sound_set.erase(s)) delete s;
 }
 
 void gxAudio::setPaused(bool paused) {
@@ -254,14 +254,14 @@ gxChannel* gxAudio::playFile(const std::string& t, bool use_3d, int mode) {
 	std::string f = tolower(t);
 	StaticChannel* chan = 0;
 	std::map<std::string, StaticChannel*>::iterator it = songs.find(f);
-	if(it != songs.end()) {
+	if (it != songs.end()) {
 		chan = it->second;
 		chan->play();
 		return chan;
 	}
 	else {
 		FSOUND_STREAM* stream = FSOUND_Stream_Open(f.c_str(), mode, 0, 0);
-		if(!stream) return 0;
+		if (!stream) return 0;
 		chan = new StreamChannel(stream);
 	}
 	channels.push_back(chan);

@@ -253,7 +253,7 @@ void Toker::nextline()
 			tokes.push_back(Toke(GE, from, k += 2));
 			continue;
 		}
-		//Modern logical operators: &, |, !, !=, ^
+		//Modern logical operators: &, |, !, !=
 		if (c == '&') {
 			if (n != ' ') line = line.insert(k, 1, ' ');
 			tokes.push_back(Toke(AND, from, k += 2));

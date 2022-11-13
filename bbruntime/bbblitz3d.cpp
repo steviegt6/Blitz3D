@@ -186,7 +186,7 @@ static void collapseMesh(MeshModel* mesh, Entity* e) {
 }
 
 static void insert(Entity* e) {
-	if (debug) entity_set.insert(e);
+	/*if (debug)*/ entity_set.insert(e);
 	e->setVisible(true);
 	e->setEnabled(true);
 	e->getObject()->reset();
@@ -206,7 +206,7 @@ static void erase(Entity* e) {
 		erase(p);
 	}
 	if (e->getListener()) listener = 0;
-	if (debug) entity_set.erase(e);
+	/*if (debug)*/ entity_set.erase(e);
 }
 
 static Entity* findChild(Entity* e, const std::string& t) {

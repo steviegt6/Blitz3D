@@ -35,7 +35,8 @@ BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
 }
 
 int bbInstr(BBStr* s, BBStr* t, int from) {
-	CHKOFF(from, "Instr"); --from;
+	CHKOFF(from, "Instr");
+	--from;
 	int n = UTF8::find(*s, *t, from);
 	delete s; delete t;
 	return n < 0 ? 0 : n + 1;

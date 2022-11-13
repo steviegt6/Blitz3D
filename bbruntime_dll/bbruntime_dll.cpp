@@ -320,7 +320,7 @@ int __stdcall bbWinMain() {
 
 #ifdef BETA
 	int ver = VERSION & 0x7fff;
-	string t = SFormat(MultiLang::created_with_beta, itoa(ver / 100), itoa(ver % 100));
+	string t = std::format(MultiLang::created_with_beta, itoa(ver / 100), itoa(ver % 100));
 	MessageBox(GetDesktopWindow(), t.c_str(), MultiLang::blitz3d_message, MB_OK);
 #endif
 
