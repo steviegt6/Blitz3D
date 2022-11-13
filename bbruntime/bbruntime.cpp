@@ -37,8 +37,8 @@ void bbRuntimeError(BBStr* str) {
 }
 
 void bbMemoryAccessViolation() {
-	extern void throwMAV();
-	throwMAV();
+	extern void throw_mav();
+	throw_mav();
 }
 
 void bbInitErrorMsgs(int number, bool hasMacro) {
@@ -326,6 +326,6 @@ const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg) {
 }
 
 void bbruntime_panic(const wchar_t* err) {
-	MessageBoxW(0, err, MultiLang::runtime_error, 0);
+	MessageBoxW(gx_runtime->hwnd, err, MultiLang::runtime_error, MB_APPLMODAL);
 	ExitProcess(-1);
 }

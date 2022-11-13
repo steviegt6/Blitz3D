@@ -37,7 +37,7 @@ namespace Installer
             LabelWarning.Show();
             if (BoxDirectoryPath.Text == "")
             {
-                LabelWarning.Text = "Path is empty.";
+                LabelWarning.Text = "The path is empty.";
                 return;
             }
             else if (Directory.GetDirectoryRoot(BoxDirectoryPath.Text) == BoxDirectoryPath.Text)

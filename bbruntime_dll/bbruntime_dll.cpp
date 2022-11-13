@@ -23,7 +23,9 @@ public:
 	virtual void debugLeave() {}
 	virtual void debugLog(const char* msg) {}
 	virtual void debugMsg(const char* e, bool serious) {
-		if(serious) MessageBoxW(0, UTF8::convertToUtf16(e).c_str(), MultiLang::runtime_error, MB_OK | MB_TOPMOST | MB_SETFOREGROUND);
+		if (serious) {
+			MessageBoxW(gx_runtime->hwnd, UTF8::convertToUtf16(e).c_str(), MultiLang::runtime_error, MB_APPLMODAL);
+		}
 	}
 	virtual void debugSys(void* msg) {}
 	virtual void internalLog(const char* msg) {}
@@ -53,7 +55,7 @@ inline std::string replace_all(const std::string& string, const std::string& pat
 	return str;
 }
 
-inline void throwMAV() {
+inline void throw_mav() {
 	if (ErrorMessagePool::memoryAccessViolation == 0) {
 		bbruntime_panic(MultiLang::memory_access_violation);
 	}
@@ -91,7 +93,7 @@ static void _cdecl seTranslator(unsigned int u, EXCEPTION_POINTERS* pExp) {
 			bbruntime_panic(MultiLang::integer_divide_zero);
 			break;
 		case EXCEPTION_ACCESS_VIOLATION:
-			throwMAV();
+			throw_mav();
 			break;
 		case EXCEPTION_ILLEGAL_INSTRUCTION:
 			bbruntime_panic(MultiLang::illegal_instruction);

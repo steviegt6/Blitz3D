@@ -175,7 +175,6 @@
   <ItemGroup>
     <Image Include="bbexe.ico" />
     <Image Include="icon1.ico" />
-    <Image Include="icon2.ico" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\blitz3d\minidx9\lib\d3dxof.lib" />
