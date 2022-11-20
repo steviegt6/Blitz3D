@@ -10,7 +10,7 @@ extern std::string&& errorlog;
 
 struct bbEx {
 	const char* err;
-	bbEx(const char* e) :err(e) {
+	bbEx(const char* e) : err(e) {
 		if (e) gx_runtime->debugError(e);
 	}
 };
