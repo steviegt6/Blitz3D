@@ -18,6 +18,10 @@ static gxChannel* playMusic(BBStr* f, bool use_3d, int mode) {
 	return gx_audio ? gx_audio->playFile(t, use_3d, mode) : 0;
 }
 
+int bbVerifySound(gxSound* sound) {
+	return (bool)gx_audio->verifySound(sound);
+}
+
 gxSound* bbLoadSound(BBStr* f) {
 	return loadSound(f, false);
 }
@@ -116,6 +120,7 @@ bool audio_destroy() {
 }
 
 void audio_link(void(*rtSym)(const char*, void*)) {
+	rtSym("%VerifySound%sound", bbVerifySound);
 	rtSym("%LoadSound$filename", bbLoadSound);
 	rtSym("FreeSound%sound", bbFreeSound);
 	rtSym("LoopSound%sound", bbLoopSound);

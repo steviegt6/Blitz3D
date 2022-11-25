@@ -123,10 +123,6 @@ void bbFreeTimer(gxTimer* t) {
 	delete t;
 }
 
-clock_t bbClock() {
-	return clock();
-}
-
 std::string utf16_to_utf8(std::u16string&& utf16_string) {
 	std::wstring_convert<std::codecvt_utf8_utf16<int16_t>, int16_t> convert;
 	auto p = reinterpret_cast<const int16_t*>(utf16_string.data());
@@ -159,6 +155,11 @@ void bbSetClipboardContents(BBStr* contents) {
 	EmptyClipboard();
 	SetClipboardData(CF_UNICODETEXT, hMem);
 	CloseClipboard();
+}
+
+void bbMessageBox(BBStr* title, BBStr* text) {
+	MessageBoxA(gx_runtime->hwnd, text->c_str(), title->c_str(), MB_APPLMODAL);
+	delete title, text;
 }
 
 void bbDebugLog(BBStr* t) {
@@ -241,9 +242,9 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("%CreateTimer%hertz", bbCreateTimer);
 	rtSym("%WaitTimer%timer", bbWaitTimer);
 	rtSym("FreeTimer%timer", bbFreeTimer);
-	rtSym("%Clock", bbClock);
 	rtSym("$GetClipboardContents", bbGetClipboardContents);
 	rtSym("SetClipboardContents$contents", bbSetClipboardContents);
+	rtSym("MessageBox$title$text", bbMessageBox);
 	rtSym("DebugLog$text", bbDebugLog);
 
 	rtSym("_bbDebugStmt", _bbDebugStmt);

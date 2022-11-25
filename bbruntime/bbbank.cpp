@@ -47,6 +47,10 @@ static inline void debugBank(bbBank* b, std::string function, int offset) {
 	}
 }
 
+int bbVerifyBank(bbBank* b) {
+	return (bool)bank_set.count(b);
+}
+
 bbBank* bbCreateBank(int size) {
 	bbBank* b = new bbBank(size);
 	bank_set.insert(b);
@@ -145,6 +149,7 @@ bool bank_destroy() {
 }
 
 void bank_link(void(*rtSym)(const char*, void*)) {
+	rtSym("%VerifyBank%bank", bbVerifyBank);
 	rtSym("%CreateBank%size=0", bbCreateBank);
 	rtSym("FreeBank%bank", bbFreeBank);
 	rtSym("%BankSize%bank", bbBankSize);
