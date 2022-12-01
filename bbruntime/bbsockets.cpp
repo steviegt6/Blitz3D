@@ -1,9 +1,12 @@
 #include "std.h"
 #include "bbsockets.h"
 #include <wininet.h>
+#include <WinDNS.h>
 #include "../MultiLang/MultiLang.h"
+#include "../gxruntime/gxutf8.h"
 
 #pragma comment (lib, "wininet.lib")
+#pragma comment (lib, "Dnsapi.lib")
 static bool socks_ok;
 static WSADATA wsadata;
 static int recv_timeout;
@@ -463,34 +466,6 @@ void bbTCPTimeouts(int rt, int at) {
 	accept_timeout = at;
 }
 
-inline std::string exec(const char* cmd) {
-	FILE* pipe = _popen(cmd, "r");
-	if (!pipe) return "";
-	char buffer[128];
-	std::string result = "";
-	while (!feof(pipe)) {
-		if (fgets(buffer, 128, pipe) != NULL)
-			result = buffer;
-	}
-	_pclose(pipe);
-	return result;
-}
-
-inline std::string clearTabLeft(std::string src) {
-	int pos = 0;
-	std::string result = src;
-	for (;;) {
-		if (src[pos] == '	') {
-			result = src.substr(pos + 1);
-			pos++;
-		}
-		else {
-			break;
-		}
-	}
-	return result;
-}
-
 BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 	std::string s1 = txt->c_str();
 	std::string s2 = name->c_str();
@@ -500,19 +475,17 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 		result = s1.substr(n);
 	if ((a = result.find(';')) != std::string::npos)
 		result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	*txt = result.c_str();
-	delete name;
-	return txt;
+	delete txt, name;
+	return new BBStr(result);
 }
 
 BBStr* bbGetDomainTXT(BBStr* domain) {
-	std::string result = exec(("nslookup -qt=TXT {0}"s + domain->c_str()).data());
-	result = clearTabLeft(result);
-	if (result[0] == '\"') result = result.substr(1);
-	if (result[result.length() - 2] == '\"') result = result.substr(0, result.length() - 2);
-	if (result[result.length() - 1] != ';')  result += ';';
-	*domain = result.c_str();
-	return domain;
+	PDNS_RECORD pResult = NULL;
+	DnsQuery_A(domain->c_str(), DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
+	std::string record = pResult->Data.TXT.pStringArray[0];
+	delete domain;
+	DnsRecordListFree(pResult, DnsFreeRecordListDeep);
+	return new BBStr(record);
 }
 
 bool sockets_create() {
@@ -531,8 +504,7 @@ bool sockets_destroy() {
 	return true;
 }
 
-bool bbDownloadFile(BBStr* url, BBStr* file)
-{
+void bbDownloadFile(BBStr* url, BBStr* file) {
 	/* https://blog.csdn.net/HW140701/article/details/78207490 */
 	byte Temp[1024];
 	ULONG Number = 1;
@@ -559,10 +531,7 @@ bool bbDownloadFile(BBStr* url, BBStr* file)
 		InternetCloseHandle(hSession);
 		hSession = NULL;
 	}
-
 	delete url, file;
-	std::ifstream fileStream(file->c_str(), std::ios::in);
-	return fileStream.is_open();
 }
 
 void sockets_link(void(*rtSym)(const char*, void*)) {
@@ -592,5 +561,5 @@ void sockets_link(void(*rtSym)(const char*, void*)) {
 	rtSym("$GetDomainTXT$domain", bbGetDomainTXT);
 	rtSym("$ParseDomainTXT$txt$name", bbParseDomainTXT);
 
-	rtSym("%DownloadFile$url$file", bbDownloadFile);
+	rtSym("DownloadFile$url$file", bbDownloadFile);
 }
