@@ -1,9 +1,5 @@
 # Blitz3D TSS
 
-***Stable. Easy. Friendly.***
-
-A fork of Blitz3D, with more functions, and easier to **localization**.
-
 This is a **fork** of [Blitz3D TSS](https://github.com/Saalvage/Blitz3D), made by [ZiYueCommentary](https://github.com/ZiYueCommentary/Blitz3D).
 
 English☑ 简体中文☑ 繁体中文☑
