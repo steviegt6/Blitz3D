@@ -158,7 +158,7 @@ void bbSetClipboardContents(BBStr* contents) {
 }
 
 void bbMessageBox(BBStr* title, BBStr* text) {
-	MessageBoxA(gx_runtime->hwnd, text->c_str(), title->c_str(), MB_APPLMODAL);
+	MessageBoxW(gx_runtime->hwnd, UTF8::convertToUtf16(text->c_str()).c_str(), UTF8::convertToUtf16(title->c_str()).c_str(), MB_APPLMODAL);
 	delete title, text;
 }
 
