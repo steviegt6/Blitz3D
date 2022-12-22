@@ -43,6 +43,10 @@ CodeSpan(codebase,depth,amask,rmask,gmask,bmask)
 #ifndef ASMCODER_H
 #define ASMCODER_H
 
+// fuck c++20
+#define or __or
+#define and __and
+
 class IA32
 {
 public:
@@ -314,5 +318,8 @@ if (amask)	or		(eax,edx);				//alph
 	}
 
 };
+
+#undef or
+#undef and
 
 #endif
