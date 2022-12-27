@@ -4,18 +4,7 @@ using System.Windows.Forms;
 using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using System.Diagnostics;
-
-/*
- * I don't like write comments because i need use translator to check me grammar   :((((
- * If you met incomprehensible words, they're chinese, because im chinese  :D
- * pls help me optimize codes, im not professional with c#
- * 
- * For best scroll page experience, all page are save in one window,
- * use ScroolPage method to change things its displaying
- * 
- * the only readable comment in codes, 
- * ZiYueCommentary
- */
+using System.Runtime;
 
 namespace Installer
 {
@@ -29,7 +18,15 @@ namespace Installer
 
         private void EventCancel(object sender, EventArgs e)
         {
-            new WindowCancel().ShowDialog();
+            DialogResult result = MessageBox.Show("Are you sure to cancel the installation?", "Cancel?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                Environment.Exit(0);
+            }
+            if (e is FormClosingEventArgs window)
+            {
+                window.Cancel = true;
+            }
         }
 
         private void ButtonNext_Click(object sender, EventArgs e)

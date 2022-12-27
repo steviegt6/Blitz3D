@@ -377,7 +377,7 @@
             this.PageDone.ResumeLayout(false);
             this.PageDone.PerformLayout();
             this.ResumeLayout(false);
-
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(EventCancel);
         }
 
         #endregion
