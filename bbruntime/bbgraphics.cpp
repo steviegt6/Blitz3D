@@ -750,16 +750,14 @@ gxFont* bbCurrentFont() {
 	return curr_font;
 }
 
-int bbStringWidth(BBStr* str, int encoding)
+int bbStringWidth(BBStr* str)
 {
-	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	std::string t = *str; delete str;
 	return curr_font->getWidth(t);
 }
 
-int bbStringHeight(BBStr* str, int encoding)
+int bbStringHeight(BBStr* str)
 {
-	if (encoding) *str = UTF8::convertToUTF8(str->c_str());
 	delete str;
 	return curr_font->getHeight() + curr_font->getRenderOffset();
 }
@@ -1501,8 +1499,8 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("FreeFont%font", bbFreeFont);
 	rtSym("%FontWidth", bbFontWidth);
 	rtSym("%FontHeight", bbFontHeight);
-	rtSym("%StringWidth$string%encoding=0", bbStringWidth);
-	rtSym("%StringHeight$string%encoding=0", bbStringHeight);
+	rtSym("%StringWidth$string", bbStringWidth);
+	rtSym("%StringHeight$string", bbStringHeight);
 
 	//movies
 	rtSym("%OpenMovie$file", bbOpenMovie);

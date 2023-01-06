@@ -76,8 +76,8 @@ void	 bbFreeFont(gxFont* f);
 void	 bbSetFont(gxFont* f);
 int		 bbFontWidth();
 int		 bbFontHeight();
-int		 bbStringWidth(BBStr* str, int encoding);
-int		 bbStringHeight(BBStr* str, int encoding);
+int		 bbStringWidth(BBStr* str);
+int		 bbStringHeight(BBStr* str);
 
 //image functions
 bbImage* bbLoadImage(BBStr* s);
