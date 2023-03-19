@@ -2,7 +2,11 @@
 
 This is a **fork** of [Blitz3D TSS](https://github.com/Saalvage/Blitz3D), made by [ZiYueCommentary](https://github.com/ZiYueCommentary/Blitz3D).
 
-English☑ 简体中文☑ 繁体中文☑
+## Join localization project
+
+Blitz3D TSS (ZiYueCommentary) is is being translated using [ZiYue Weblate](https://weblate.ziyuesinicization.site/engage/blitz3d-tss/).
+
+[![](https://weblate.ziyuesinicization.site/widgets/blitz3d-tss/-/multi-auto.svg)](https://weblate.ziyuesinicization.site/engage/blitz3d-tss/)
 
 ## Extending Blitz3D TSS
 Please read [this document](EXTENDING.md).

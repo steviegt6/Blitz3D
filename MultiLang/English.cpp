@@ -1,7 +1,5 @@
 #include "MultiLang.h"
 
-static constexpr MultiLang::string bb_err = "Blitz Error";
-static constexpr MultiLang::string init_err = "Error when creating BlitzIDE process. Please make sure ide.exe is inside the \"bin\" folder.";
 static constexpr MultiLang::string array_bounds_ex = "Blitz array index out of bounds.";
 static constexpr MultiLang::string null_obj_ex = "Object does not exist!";
 static constexpr MultiLang::string bad_data_type = "Bad data type! Type is not a float, string or an integer.";
@@ -55,7 +53,6 @@ static constexpr MultiLang::string unable_create_gxgraphics_instance = "Unable t
 static constexpr MultiLang::string illegal_graphics_mode = "Illegal Graphics mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.";
 static constexpr MultiLang::string illegal_graphics3d_mode = "Illegal Graphics3D mode. Graphics modes are 0, 1, 2, 3, 4, 6 and 7.";
 static constexpr MultiLang::string unable_close_gxgraphics_instance = "Unable to close gxGraphics instance.";
-static constexpr MultiLang::wstring opencc_configure_not_found = L"OpenCC configure not found!";
 static constexpr MultiLang::wstring runtime_error = L"Catactrophic Error!";
 static constexpr MultiLang::string illegal_frame_count = "Illegal frame count!";
 static constexpr MultiLang::string illegal_first_frame = "Illegal first frame!";
@@ -85,8 +82,11 @@ static constexpr MultiLang::wstring float_divide_zero = L"Float divide by zero."
 static constexpr MultiLang::wstring unknown_runtime_exception = L"Unknown runtime exception.";
 static constexpr MultiLang::string unable_run_module = "Unable to run Blitz Basic module.";
 static constexpr MultiLang::string cant_find_symbol = "Can't find symbol: {0}";
-static constexpr MultiLang::string blitz3d_message = "Blitz3D Message";
-static constexpr MultiLang::string created_with_beta = "Created with Blitz3D Beta V{0}.{1}";
+static constexpr MultiLang::string unknown_exception_thrown = "Unknown/non-standard exception thrown!";
+static constexpr MultiLang::string startup_error = "Startup Error: {0}";
+static constexpr MultiLang::string array_index_out_of_bounds = "Array index out of bounds.";
+static constexpr MultiLang::string unable_start_program = "Unable to start program! A required module could not be started.";
+
 static constexpr MultiLang::string expect_identifier = "expecting identifier after \".\"";
 static constexpr MultiLang::string expect_string_afrer_directive = "expecting string after lib directive";
 static constexpr MultiLang::string unknown_decl_directive = "unknown decl directive";
@@ -199,8 +199,9 @@ static constexpr MultiLang::string type_field_not_found = "Type field not found"
 static constexpr MultiLang::string variable_must_a_blitz_array = "Variable must be a Blitz array";
 static constexpr MultiLang::string incorrect_number_of_subscripts = "Incorrect number of subscripts";
 static constexpr MultiLang::string blitz_array_subscript_out_of_range = "Blitz array subscript out of range";
+
 static constexpr MultiLang::wstring runtime_message = L"Runtime Message";
-static constexpr MultiLang::string current_language = "Current Language: English\r\n\r\n";
+static constexpr MultiLang::string current_language = "Current Language: English";
 static constexpr MultiLang::string debugger_locals = "Locals";
 static constexpr MultiLang::string debugger_globals = "Globals";
 static constexpr MultiLang::string debugger_consts = "Consts";
@@ -214,10 +215,10 @@ static constexpr char credits[] =
 ".INI loading using a modified version of \"IniPP\", originally by Matthias C. M. Troffaes\r\n"
 "Documentation: Mark Sibly, Simon Harrison, Paul Gerfen, Shane Monroe and the Blitz Doc Team\r\n"
 "Testing and support: James Boyd, Simon Armstrong and the Blitz Dev Team\r\n"
-"Image loader courtesy of FreeImage by Floris van den berg\r\n";
-static constexpr MultiLang::string title_release = " - Release Version\n\n";
-static constexpr MultiLang::string unable_start_program = "Unable to start program! A required module could not be started.";
+"Image loader courtesy of FreeImage by Floris van den berg";
+static constexpr MultiLang::string title_release = " - Release Version";
 static constexpr MultiLang::string program_ended = "Program has ended.";
-static constexpr MultiLang::string unknown_exception_thrown = "Unknown/non-standard exception thrown!";
-static constexpr MultiLang::string startup_error = "Startup Error: {0}";
-static constexpr MultiLang::string array_index_out_of_bounds = "Array index out of bounds.";
+static constexpr MultiLang::string bb_err = "Blitz Error";
+static constexpr MultiLang::string init_err = "Error when creating BlitzIDE process. Please make sure ide.exe is inside the \"bin\" folder.";
+static constexpr MultiLang::string blitz3d_message = "Blitz3D Message";
+static constexpr MultiLang::string created_with_beta = "Created with Blitz3D Beta V{0}.{1}";

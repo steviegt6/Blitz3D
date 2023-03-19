@@ -56,16 +56,18 @@ void aboutBlitz() {
 	about.Create(IDD_ABOUT);
 
 	std::string credits = MultiLang::current_language;
+	credits += "\r\n\r\n";
 
 	credits += MultiLang::credits;
+	credits += "\r\n";
 
 	about.GetDlgItem(IDC_CREDITS)->SetWindowText(credits.c_str());
 
 	std::string t = "";
 
 	t += "Blitz3D";
-
 	t += MultiLang::title_release;
+	t += "\r\n";
 
 	about.GetDlgItem(IDC_PRODUCT)->SetWindowText(t.c_str());
 
