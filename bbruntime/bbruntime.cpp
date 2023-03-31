@@ -55,6 +55,14 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 	delete str;
 }
 
+BBStr* bbGetException() {
+	return new BBStr(errorlog);
+}
+
+void bbClearException() {
+	errorlog = "";
+}
+
 BBStr* bbGetUserLanguage() {
 	wchar_t buf[6]; // should enough
 	GetUserDefaultLocaleName(buf, 6);
@@ -228,6 +236,8 @@ void bbruntime_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("MemoryAccessViolation", bbMemoryAccessViolation);
 	rtSym("InitErrorMsgs%number%hasMacro=0", bbInitErrorMsgs);
 	rtSym("SetErrorMsg%pos$message", bbSetErrorMsg);
+	rtSym("$GetException", bbGetException);
+	rtSym("ClearException", bbClearException);
 	rtSym("ExecFile$command", bbExecFile);
 	rtSym("Delay%millisecs", bbDelay);
 	rtSym("%MilliSecs", bbMilliSecs);
