@@ -408,7 +408,7 @@ ExprNode* BinExprNode::semant(Environ* e) {
 				}
 				break;
 			case LOR:
-				if(lc->intValue()) { //Only evaluate right expression, if left expression is false
+				if(!lc->intValue()) { //Only evaluate right expression, if left expression is false
 					rc = rhs->constNode();
 					if(rc) {
 						ExprNode* expr;
