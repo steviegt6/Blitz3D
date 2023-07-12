@@ -18,7 +18,7 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 
 	FT_Init_FreeType(&ftLibrary);
 
-	def_font = nullptr;
+	def_font = new gxFont(ftLibrary, this, UTF8::GetSystemFontFile("Courier"), 12);
 
 	front_canvas->setFont(def_font);
 	back_canvas->setFont(def_font);

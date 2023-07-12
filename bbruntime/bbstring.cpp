@@ -26,12 +26,9 @@ BBStr* bbRight(BBStr* s, int n) {
 }
 
 BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
-	int n = 0, from_sz = from->size(), to_sz = to->size();
-	while (n < s->size() && (n = s->find(*from, n)) != std::string::npos) {
-		s->replace(n, from_sz, *to);
-		n += to_sz;
-	}
-	delete from; delete to; return s;
+	std::string str = UTF8::ReplaceAll(s->c_str(), from->c_str(), to->c_str());
+	delete s, from, to;
+	return new BBStr(str);
 }
 
 int bbInstr(BBStr* s, BBStr* t, int from) {

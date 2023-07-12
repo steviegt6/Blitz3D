@@ -1,6 +1,7 @@
 #include "std.h"
 #include "gxutf8.h"
 #include <sstream>
+#include <format>
 
 int UTF8::measureCodepoint(char chr) {
 	if ((chr & 0x80) == 0x00) {
@@ -196,4 +197,89 @@ std::wstring UTF8::convertToUtf16(const std::string& str) {
 	}
 
 	return result;
+}
+
+std::vector<std::string> UTF8::SpiltString(const std::string& str, const std::string& split) {
+	std::string string = str;
+	std::vector<std::string> vector;
+	int pos = string.find(split);
+	while (pos != -1) {
+		vector.push_back(string.substr(0, pos));
+		string = string.substr(pos + split.length());
+		pos = string.find(split);
+	}
+	vector.push_back(string);
+	return vector;
+}
+
+std::string UTF8::ReplaceAll(const std::string& string, const std::string& pattern, const std::string& newpat) {
+	std::string str = string;
+	const unsigned nsize = newpat.size();
+	const unsigned psize = pattern.size();
+
+	for (unsigned pos = str.find(pattern, 0); pos != std::string::npos; pos = str.find(pattern, pos + nsize))
+	{
+		str.replace(pos, psize, newpat);
+	}
+	return str;
+}
+
+std::string UTF8::GetSystemFontFile(const std::string& faceName) {
+	HKEY hKey;
+	LONG result;
+
+	// Open Windows font registry key
+	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hKey);
+	if (result != ERROR_SUCCESS) {
+		return "";
+	}
+
+	DWORD maxValueNameSize, maxValueDataSize;
+	result = RegQueryInfoKey(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0);
+	if (result != ERROR_SUCCESS) {
+		return "";
+	}
+
+	DWORD valueIndex = 0;
+	LPSTR valueName = new CHAR[maxValueNameSize];
+	LPBYTE valueData = new BYTE[maxValueDataSize];
+	DWORD valueNameSize, valueDataSize, valueType;
+	std::string sFontFile;
+
+	do {
+		sFontFile.clear();
+		valueDataSize = maxValueDataSize;
+		valueNameSize = maxValueNameSize;
+
+		result = RegEnumValue(hKey, valueIndex, valueName, &valueNameSize, 0, &valueType, valueData, &valueDataSize);
+
+		valueIndex++;
+
+		if (result != ERROR_SUCCESS || valueType != REG_SZ) {
+			continue;
+		}
+
+		std::vector<std::string> vFaceNames = UTF8::SpiltString(UTF8::ReplaceAll(valueName, " (TrueType)", ""), " & ");
+		for (std::string& str : vFaceNames) {
+			if (str == faceName) {
+				sFontFile.assign((LPSTR)valueData, valueDataSize);
+				goto found;
+			}
+		}
+	} while (result != ERROR_NO_MORE_ITEMS);
+
+	found:
+	delete[] valueName;
+	delete[] valueData;
+
+	RegCloseKey(hKey);
+
+	if (sFontFile.empty()) {
+		return "";
+	}
+
+	CHAR winDir[MAX_PATH];
+	GetWindowsDirectory(winDir, MAX_PATH);
+
+	return std::format("{0}\\Fonts\\{1}", winDir, sFontFile);
 }

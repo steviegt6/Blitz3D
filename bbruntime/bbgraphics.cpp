@@ -746,7 +746,7 @@ int bbFontHeight()
 	return curr_font->getHeight();
 }
 
-gxFont* bbCurrentFont() {
+gxFont* bbGetFont() {
 	return curr_font;
 }
 
@@ -760,6 +760,10 @@ int bbStringHeight(BBStr* str)
 {
 	delete str;
 	return curr_font->getHeight() + curr_font->getRenderOffset();
+}
+
+BBStr* bbFontPath(BBStr* facename) {
+	return new BBStr(UTF8::GetSystemFontFile(facename->c_str()));
 }
 
 gxMovie* bbOpenMovie(BBStr* s)
@@ -1495,12 +1499,13 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 
 	//fonts
 	rtSym("%LoadFont$fontname%height=12", bbLoadFont);
-	rtSym("%CurrentFont", bbCurrentFont);
+	rtSym("%CurrentFont", bbGetFont);
 	rtSym("FreeFont%font", bbFreeFont);
 	rtSym("%FontWidth", bbFontWidth);
 	rtSym("%FontHeight", bbFontHeight);
 	rtSym("%StringWidth$string", bbStringWidth);
 	rtSym("%StringHeight$string", bbStringHeight);
+	rtSym("$FontPath$facename", bbFontPath);
 
 	//movies
 	rtSym("%OpenMovie$file", bbOpenMovie);
