@@ -259,9 +259,14 @@ void Toker::nextline()
 			tokes.push_back(Toke(AND, from, k += 2));
 			continue;
 		}
-		if (c == '|') {
+		if (c == '|' && n != '|') {
 			if (n != ' ') line = line.insert(k, 1, ' ');
 			tokes.push_back(Toke(OR, from, k += 2));
+			continue;
+		}
+		if (c == '|' && n == '|') {
+			if (line[k + 2] != ' ') line = line.insert(k + 2, 1, ' ');
+			tokes.push_back(Toke(LOR, from, k += 2));
 			continue;
 		}
 		if (c == '!') {
