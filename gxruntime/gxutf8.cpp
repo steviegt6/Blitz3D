@@ -225,33 +225,37 @@ std::string UTF8::ReplaceAll(const std::string& string, const std::string& patte
 }
 
 std::string UTF8::GetSystemFontFile(const std::string& faceName) {
+	static LPCWSTR fontRegistryPath = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
 	HKEY hKey;
 	LONG result;
+	std::wstring wsFaceName(faceName.begin(), faceName.end());
 
 	// Open Windows font registry key
-	result = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts", 0, KEY_READ, &hKey);
+	result = RegOpenKeyExW(HKEY_LOCAL_MACHINE, fontRegistryPath, 0, KEY_READ, &hKey);
 	if (result != ERROR_SUCCESS) {
 		return "";
 	}
 
 	DWORD maxValueNameSize, maxValueDataSize;
-	result = RegQueryInfoKey(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0);
+	result = RegQueryInfoKeyW(hKey, 0, 0, 0, 0, 0, 0, 0, &maxValueNameSize, &maxValueDataSize, 0, 0);
 	if (result != ERROR_SUCCESS) {
 		return "";
 	}
 
 	DWORD valueIndex = 0;
-	LPSTR valueName = new CHAR[maxValueNameSize];
+	LPWSTR valueName = new WCHAR[maxValueNameSize];
 	LPBYTE valueData = new BYTE[maxValueDataSize];
 	DWORD valueNameSize, valueDataSize, valueType;
-	std::string sFontFile;
+	std::wstring wsFontFile;
 
+	// Look for a matching font name
 	do {
-		sFontFile.clear();
+
+		wsFontFile.clear();
 		valueDataSize = maxValueDataSize;
 		valueNameSize = maxValueNameSize;
 
-		result = RegEnumValue(hKey, valueIndex, valueName, &valueNameSize, 0, &valueType, valueData, &valueDataSize);
+		result = RegEnumValueW(hKey, valueIndex, valueName, &valueNameSize, 0, &valueType, valueData, &valueDataSize);
 
 		valueIndex++;
 
@@ -259,27 +263,32 @@ std::string UTF8::GetSystemFontFile(const std::string& faceName) {
 			continue;
 		}
 
-		std::vector<std::string> vFaceNames = UTF8::SpiltString(UTF8::ReplaceAll(valueName, " (TrueType)", ""), " & ");
-		for (std::string& str : vFaceNames) {
-			if (str == faceName) {
-				sFontFile.assign((LPSTR)valueData, valueDataSize);
-				goto found;
-			}
+		std::wstring wsValueName(valueName, valueNameSize);
+
+		// Found a match
+		if (_wcsnicmp(wsFaceName.c_str(), wsValueName.c_str(), wsFaceName.length()) == 0) {
+
+			wsFontFile.assign((LPWSTR)valueData, valueDataSize);
+			break;
 		}
 	} while (result != ERROR_NO_MORE_ITEMS);
 
-	found:
 	delete[] valueName;
 	delete[] valueData;
 
 	RegCloseKey(hKey);
 
-	if (sFontFile.empty()) {
+	if (wsFontFile.empty()) {
 		return "";
 	}
 
-	CHAR winDir[MAX_PATH];
-	GetWindowsDirectory(winDir, MAX_PATH);
+	// Build full font file path
+	WCHAR winDir[MAX_PATH];
+	GetWindowsDirectoryW(winDir, MAX_PATH);
 
-	return std::format("{0}\\Fonts\\{1}", winDir, sFontFile);
+	std::wstringstream ss;
+	ss << winDir << "\\Fonts\\" << wsFontFile;
+	wsFontFile = ss.str();
+
+	return std::string(wsFontFile.begin(), wsFontFile.end());
 }
