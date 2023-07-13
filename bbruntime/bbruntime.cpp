@@ -33,7 +33,7 @@ void bbRuntimeError(BBStr* str) {
 	if(t.size() > 255) t[255] = 0;
 	static char err[256];
 	strcpy(err, t.c_str());
-	RTEX(UTF8::convertToANSI(err));
+	RTEX(UTF8::convertToAnsi(err).c_str());
 }
 
 void bbMemoryAccessViolation() {
@@ -50,7 +50,7 @@ void bbInitErrorMsgs(int number, bool hasMacro) {
 
 void bbSetErrorMsg(int pos, BBStr* str) {
 	if(ErrorMessagePool::memoryAccessViolation != 0 && pos < ErrorMessagePool::size) {
-		ErrorMessagePool::memoryAccessViolation[pos] = UTF8::convertToANSI(str->c_str());
+		ErrorMessagePool::memoryAccessViolation[pos] = UTF8::convertToAnsi(str->c_str());
 	}
 	delete str;
 }

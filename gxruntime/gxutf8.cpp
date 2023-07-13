@@ -84,10 +84,10 @@ int UTF8::encodeCharacter(int chr, char* result) {
 	return len;
 }
 
-void UTF8::ANSItoUTF8(CString& strAnsi) {
-	UINT nLen = MultiByteToWideChar(GetACP(), NULL, strAnsi, -1, NULL, NULL);
+std::string UTF8::convertToUtf8(const std::string& str) {
+	UINT nLen = MultiByteToWideChar(GetACP(), NULL, str.c_str(), -1, NULL, NULL);
 	WCHAR* wszBuffer = new WCHAR[nLen + 1];
-	nLen = MultiByteToWideChar(GetACP(), NULL, strAnsi, -1, wszBuffer, nLen);
+	nLen = MultiByteToWideChar(GetACP(), NULL, str.c_str(), -1, wszBuffer, nLen);
 	wszBuffer[nLen] = 0;
 
 	nLen = WideCharToMultiByte(CP_UTF8, NULL, wszBuffer, -1, NULL, NULL, NULL, NULL);
@@ -95,15 +95,16 @@ void UTF8::ANSItoUTF8(CString& strAnsi) {
 	nLen = WideCharToMultiByte(CP_UTF8, NULL, wszBuffer, -1, szBuffer, nLen, NULL, NULL);
 	szBuffer[nLen] = 0;
 
-	strAnsi = szBuffer;
+	std::string converted = szBuffer;
 	delete[] wszBuffer;
 	delete[] szBuffer;
+	return converted;
 }
 
-void UTF8::UTF8toANSI(CString& strUTF8) {
-	UINT nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8, -1, NULL, NULL);
+std::string UTF8::convertToAnsi(const std::string& str) {
+	UINT nLen = MultiByteToWideChar(CP_UTF8, NULL, str.c_str(), -1, NULL, NULL);
 	WCHAR* wszBuffer = new WCHAR[nLen + 1];
-	nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8, -1, wszBuffer, nLen);
+	nLen = MultiByteToWideChar(CP_UTF8, NULL, str.c_str(), -1, wszBuffer, nLen);
 	wszBuffer[nLen] = 0;
 
 	nLen = WideCharToMultiByte(GetACP(), NULL, wszBuffer, -1, NULL, NULL, NULL, NULL);
@@ -111,19 +112,10 @@ void UTF8::UTF8toANSI(CString& strUTF8) {
 	nLen = WideCharToMultiByte(GetACP(), NULL, wszBuffer, -1, szBuffer, nLen, NULL, NULL);
 	szBuffer[nLen] = 0;
 
-	strUTF8 = szBuffer;
+	std::string converted = szBuffer;
 	delete[] szBuffer;
 	delete[] wszBuffer;
-}
-
-CString UTF8::convertToUTF8(CString str) {
-	UTF8::ANSItoUTF8(str); //change encoding...
-	return str; //return string after convert
-}
-
-CString UTF8::convertToANSI(CString str) {
-	UTF8::UTF8toANSI(str);
-	return str;
+	return converted;
 }
 
 int UTF8::length(const std::string& str) {
@@ -199,20 +191,7 @@ std::wstring UTF8::convertToUtf16(const std::string& str) {
 	return result;
 }
 
-std::vector<std::string> UTF8::SpiltString(const std::string& str, const std::string& split) {
-	std::string string = str;
-	std::vector<std::string> vector;
-	int pos = string.find(split);
-	while (pos != -1) {
-		vector.push_back(string.substr(0, pos));
-		string = string.substr(pos + split.length());
-		pos = string.find(split);
-	}
-	vector.push_back(string);
-	return vector;
-}
-
-std::string UTF8::ReplaceAll(const std::string& string, const std::string& pattern, const std::string& newpat) {
+std::string UTF8::replaceAll(const std::string& string, const std::string& pattern, const std::string& newpat) {
 	std::string str = string;
 	const unsigned nsize = newpat.size();
 	const unsigned psize = pattern.size();
@@ -224,7 +203,7 @@ std::string UTF8::ReplaceAll(const std::string& string, const std::string& patte
 	return str;
 }
 
-std::string UTF8::GetSystemFontFile(const std::string& faceName) {
+std::string UTF8::getSystemFontFile(const std::string& faceName) {
 	static LPCWSTR fontRegistryPath = L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts";
 	HKEY hKey;
 	LONG result;

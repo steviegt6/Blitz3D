@@ -582,7 +582,7 @@ void gxRuntime::debugError(const char* t) {
 	if(!suspended) {
 		forceSuspend();
 	}
-	d->debugMsg(UTF8::convertToUTF8(t), true);
+	d->debugMsg(UTF8::convertToUtf8(t).c_str(), true);
 }
 
 ///////////////
@@ -595,7 +595,7 @@ void gxRuntime::debugInfo(const char* t) {
 	if(!suspended) {
 		forceSuspend();
 	}
-	d->debugMsg(UTF8::convertToUTF8(t), false);
+	d->debugMsg(UTF8::convertToUtf8(t).c_str(), false);
 }
 
 //////////////

@@ -26,7 +26,7 @@ BBStr* bbRight(BBStr* s, int n) {
 }
 
 BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
-	std::string str = UTF8::ReplaceAll(s->c_str(), from->c_str(), to->c_str());
+	std::string str = UTF8::replaceAll(s->c_str(), from->c_str(), to->c_str());
 	delete s, from, to;
 	return new BBStr(str);
 }
