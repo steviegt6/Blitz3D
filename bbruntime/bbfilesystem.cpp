@@ -179,9 +179,10 @@ int	bbFileSize(BBStr* f) {
 }
 
 BBStr* bbFileExtension(BBStr* f) {
-	std::string t = *f; delete f;
+	std::string t = *f;
 	if (t.find_last_of(".") != std::string::npos) {
-		return new BBStr(t.substr(t.find_last_of(".") + 1));
+		*f = t.substr(t.find_last_of(".") + 1);
+		return f;
 	}
 	return new BBStr("");
 }
@@ -219,8 +220,8 @@ void bbUnzip(BBStr* src, BBStr* dst, BBStr* password) {
 
 BBStr* bbAbsolutePath(BBStr* path) {
 	std::string file = path->c_str();
-	delete path;
-	return new BBStr(std::filesystem::absolute(file).generic_string());
+	*path = std::filesystem::absolute(file).generic_string().c_str();
+	return path;
 }
 
 bool filesystem_create() {

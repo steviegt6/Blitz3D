@@ -694,16 +694,14 @@ void bbText(int x, int y, BBStr* str, int xPos, int yPos)
 
 BBStr* bbConvertToANSI(BBStr* str)
 {
-	BBStr* ret = new BBStr(UTF8::convertToAnsi(str->c_str()));
-	delete str;
-	return ret;
+	*str = UTF8::convertToAnsi(str->c_str());
+	return str;
 }
 
 BBStr* bbConvertToUTF8(BBStr* str)
 {
-	BBStr* ret = new BBStr(UTF8::convertToUtf8(str->c_str()));
-	delete str;
-	return ret;
+	*str = UTF8::convertToUtf8(str->c_str());
+	return str;
 }
 
 void bbCopyRect(int sx, int sy, int w, int h, int dx, int dy, gxCanvas* src, gxCanvas* dest)
@@ -765,7 +763,8 @@ int bbStringHeight(BBStr* str)
 }
 
 BBStr* bbFontPath(BBStr* facename) {
-	return new BBStr(UTF8::getSystemFontFile(facename->c_str()));
+	*facename = UTF8::getSystemFontFile(facename->c_str());
+	return facename;
 }
 
 gxMovie* bbOpenMovie(BBStr* s)

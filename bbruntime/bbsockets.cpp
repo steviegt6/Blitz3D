@@ -475,17 +475,18 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 		result = s1.substr(n);
 	if ((a = result.find(';')) != std::string::npos)
 		result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	delete txt, name;
-	return new BBStr(result);
+	delete name;
+	*txt = result;
+	return txt;
 }
 
 BBStr* bbGetDomainTXT(BBStr* domain) {
 	PDNS_RECORD pResult = NULL;
-	DnsQuery_A(domain->c_str(), DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
-	std::string record = pResult->Data.TXT.pStringArray[0];
-	delete domain;
+	DnsQuery(domain->c_str(), DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
+	std::string record = std::string(pResult->Data.TXT.pStringArray[0]);
 	DnsRecordListFree(pResult, DnsFreeRecordListDeep);
-	return new BBStr(record);
+	*domain = record;
+	return domain;
 }
 
 bool sockets_create() {
