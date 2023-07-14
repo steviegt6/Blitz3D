@@ -26,9 +26,9 @@ BBStr* bbRight(BBStr* s, int n) {
 }
 
 BBStr* bbReplace(BBStr* s, BBStr* from, BBStr* to) {
-	*s = UTF8::replaceAll(s->c_str(), from->c_str(), to->c_str());
-	delete from, to;
-	return s;
+	std::string str = UTF8::replaceAll(s->c_str(), from->c_str(), to->c_str());
+	delete s, from, to;
+	return new BBStr(str);
 }
 
 int bbInstr(BBStr* s, BBStr* t, int from) {
@@ -40,8 +40,7 @@ int bbInstr(BBStr* s, BBStr* t, int from) {
 }
 
 BBStr* bbSubstr(BBStr* string, int start, int length) {
-	*string = UTF8::substr(string->c_str(), start, length);
-	return string;
+	return new BBStr(UTF8::substr(string->c_str(), start, length));
 }
 
 BBStr* bbMid(BBStr* s, int o, int n) {
