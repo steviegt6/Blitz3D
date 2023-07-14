@@ -25,7 +25,7 @@ void bbDisableClose() {
 
 void bbAppTitle(BBStr* ti, BBStr* cp) {
 	gx_runtime->setTitle(*ti, *cp);
-	delete ti, cp;
+	delete ti; delete cp;
 }
 
 void bbRuntimeError(BBStr* str) {
@@ -167,7 +167,7 @@ void bbSetClipboardContents(BBStr* contents) {
 
 void bbMessageBox(BBStr* title, BBStr* text) {
 	MessageBoxW(gx_runtime->hwnd, UTF8::convertToUtf16(text->c_str()).c_str(), UTF8::convertToUtf16(title->c_str()).c_str(), MB_APPLMODAL | MB_ICONINFORMATION);
-	delete title, text;
+	delete title; delete text;
 }
 
 void bbDebugLog(BBStr* t) {

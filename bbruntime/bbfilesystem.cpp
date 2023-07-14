@@ -214,7 +214,7 @@ void bbUnzip(BBStr* src, BBStr* dst, BBStr* password) {
 		UnzipItem(hz, zi, ze.name);
 	}
 	CloseZip(hz);
-	delete src, dst, password;
+	delete src; delete dst; delete password;
 }
 
 BBStr* bbAbsolutePath(BBStr* path) {

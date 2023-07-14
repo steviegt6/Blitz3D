@@ -475,7 +475,7 @@ BBStr* bbParseDomainTXT(BBStr* txt, BBStr* name) {
 		result = s1.substr(n);
 	if ((a = result.find(';')) != std::string::npos)
 		result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	delete txt, name;
+	delete txt; delete name;
 	return new BBStr(result);
 }
 
@@ -531,7 +531,7 @@ void bbDownloadFile(BBStr* url, BBStr* file) {
 		InternetCloseHandle(hSession);
 		hSession = NULL;
 	}
-	delete url, file;
+	delete url; delete file;
 }
 
 void sockets_link(void(*rtSym)(const char*, void*)) {

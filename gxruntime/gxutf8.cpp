@@ -198,7 +198,7 @@ std::string UTF8::replaceAll(const std::string& string, const std::string& patte
 
 	for (unsigned pos = str.find(pattern, 0); pos != std::string::npos; pos = str.find(pattern, pos + nsize))
 	{
-		str.replace(pos, psize, newpat);
+		str = str.replace(pos, psize, newpat);
 	}
 	return str;
 }
