@@ -5,6 +5,7 @@
 
 #include "../config/config.h"
 #include "../stdutil/stdutil.h"
+#include "../bbruntime/constants.h"
 
 #pragma warning( disable:4786 )
 
@@ -22,6 +23,5 @@
 #include <Windows.h>
 #include <ddraw.h> // Why are we still here? Just to suffer?
 #include <d3d.h>
-
 
 #endif

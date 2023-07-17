@@ -3,6 +3,7 @@
 
 #include <Windows.h>
 
+#include "constants.h"
 #include "../config/config.h"
 #include "../stdutil/stdutil.h"
 

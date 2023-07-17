@@ -40,7 +40,9 @@ int bbInstr(BBStr* s, BBStr* t, int from) {
 }
 
 BBStr* bbSubstr(BBStr* string, int start, int length) {
-	return new BBStr(UTF8::substr(string->c_str(), start, length));
+	BBStr* ret = new BBStr(UTF8::substr(string->c_str(), start, length));
+	delete string;
+	return ret;
 }
 
 BBStr* bbMid(BBStr* s, int o, int n) {

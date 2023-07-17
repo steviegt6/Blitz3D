@@ -6,6 +6,7 @@
 #include "../config/config.h"
 #include "../stdutil/stdutil.h"
 #include "../gxruntime/gxruntime.h"
+#include "../bbruntime/constants.h"
 
 #include <set>
 #include <map>

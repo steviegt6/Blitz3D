@@ -1,5 +1,6 @@
 #include "std.h"
 #include "bbmath.h"
+#include "constants.h"
 #include <algorithm>
 
 static int rnd_state;
@@ -7,9 +8,6 @@ static const int RND_A = 48271;
 static const int RND_M = 2147483647;
 static const int RND_Q = 44488;
 static const int RND_R = 3399;
-
-static const float dtor = 0.01745329252f; //DEGREES TO RADIANS
-static const float rtod = 57.295779513f;  //RADIANS TO DEGREES
 
 float bbSin(float n) { return sin(n * dtor); }
 float bbCos(float n) { return cos(n * dtor); }

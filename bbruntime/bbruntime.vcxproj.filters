@@ -46,6 +46,7 @@
     <ClInclude Include="zip.h">
       <Filter>ZipUtils</Filter>
     </ClInclude>
+    <ClInclude Include="constants.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ZipUtils">

@@ -41,10 +41,6 @@ static bool stats_mode;
 //converts 0...255 color to 0...1
 static const float ctof = 1.0f / 255.0f;
 
-//degrees to radians and back
-static const float dtor = 0.01745329252f; //DEGREES TO RADIANS
-static const float rtod = 57.295779513f;  //RADIANS TO DEGREES
-
 static Vector projected, tformed;
 
 static ObjCollision picked;

@@ -36,9 +36,6 @@ private:
 	std::vector<gxCanvas*> frames;
 };
 
-//degrees to radians
-static const float dtor = 0.01745329252f;
-
 static int gx_driver;	//Current graphics driver index.
 
 static bool filter;

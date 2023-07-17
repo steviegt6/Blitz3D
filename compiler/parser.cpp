@@ -744,7 +744,7 @@ ExprNode* Parser::parsePrimary(bool opt) {
 		toker->next();
 		break;
 	case PI:
-		result = new FloatConstNode(3.1415926535897932384626433832795f);
+		result = new FloatConstNode(PI);
 		toker->next(); break;
 	case INFINITYCONST:
 		result = new FloatConstNode(INFINITY);
