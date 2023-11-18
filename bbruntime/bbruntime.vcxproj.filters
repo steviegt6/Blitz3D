@@ -16,9 +16,6 @@
     <ClCompile Include="bbsys.cpp" />
     <ClCompile Include="std.cpp" />
     <ClCompile Include="userlibs.cpp" />
-    <ClCompile Include="zip.cpp">
-      <Filter>ZipUtils</Filter>
-    </ClCompile>
     <ClCompile Include="unzip.cpp">
       <Filter>ZipUtils</Filter>
     </ClCompile>
@@ -41,9 +38,6 @@
     <ClInclude Include="std.h" />
     <ClInclude Include="userlibs.h" />
     <ClInclude Include="unzip.h">
-      <Filter>ZipUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="zip.h">
       <Filter>ZipUtils</Filter>
     </ClInclude>
     <ClInclude Include="constants.h" />
