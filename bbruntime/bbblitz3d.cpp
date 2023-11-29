@@ -1804,9 +1804,9 @@ int  bbGetEntityType(Object* o) {
 	return o->getCollisionType();
 }
 
-void  bbEntityRadius(Object* o, float x_radius, float y_radius) {
+void  bbEntityRadius(Object* o, float x_radius, float y_radius, float z_radius) {
 	debugObject(o, "EntityRadius");
-	Vector radii(x_radius, y_radius ? y_radius : x_radius, x_radius);
+	Vector radii(x_radius, y_radius ? y_radius : x_radius, z_radius ? z_radius : x_radius);
 	o->setCollisionRadii(radii);
 }
 
@@ -2284,7 +2284,7 @@ void blitz3d_link(void (*rtSym)(const char* sym, void* pc)) {
 	rtSym("EntityPickMode%entity%pick_geometry%obscurer=1", bbEntityPickMode);
 	rtSym("%GetParent%entity", bbGetParent);
 	rtSym("%GetEntityType%entity", bbGetEntityType);
-	rtSym("EntityRadius%entity#x_radius#y_radius=0", bbEntityRadius);
+	rtSym("EntityRadius%entity#x_radius#y_radius=0#z_radius=0", bbEntityRadius);
 	rtSym("EntityBox%entity#x#y#z#width#height#depth", bbEntityBox);
 	rtSym("#EntityDistance%source_entity%destination_entity", bbEntityDistance);
 	rtSym("#EntityDistanceSquared%source_entity%destination_entity", bbEntityDistanceSquared);
