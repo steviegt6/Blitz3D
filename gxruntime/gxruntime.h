@@ -26,6 +26,8 @@ public:
 	gxGraphics* graphics;
 	gxFileSystem* fileSystem;
 
+	float scale_x = .0f, scale_y = .0f;
+
 	void flip(bool vwait);
 	void moveMouse(int x, int y);
 
@@ -141,6 +143,8 @@ public:
 
 	gxTimer* createTimer(int hertz);
 	void freeTimer(gxTimer* timer);
+
+	void calculateDPI();
 
 	void enableDirectInput(bool use);
 	int  directInputEnabled() { return use_di; }

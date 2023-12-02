@@ -333,6 +333,16 @@ int  bbWindowed3D()
 	return (tc & gxRuntime::GFXMODECAPS_3D) ? 1 : 0;
 }
 
+float bbDPIScaleX() {
+	gx_runtime->calculateDPI();
+	return gx_runtime->scale_x;
+}
+
+float bbDPIScaleY() {
+	gx_runtime->calculateDPI();
+	return gx_runtime->scale_y;
+}
+
 int  bbTotalVidMem()
 {
 	return gx_graphics->getTotalVidmem();
@@ -1428,6 +1438,9 @@ void graphics_link(void (*rtSym)(const char* sym, void* pc))
 	rtSym("%GfxModeDepth%mode", bbGfxModeDepth);
 	rtSym("%AvailVidMem", bbAvailVidMem);
 	rtSym("%TotalVidMem", bbTotalVidMem);
+
+	rtSym("#DPIScaleX", bbDPIScaleX);
+	rtSym("#DPIScaleY", bbDPIScaleY);
 
 	rtSym("%GfxDriver3D%driver", bbGfxDriver3D);
 	rtSym("%CountGfxModes3D", bbCountGfxModes3D);

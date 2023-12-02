@@ -1297,6 +1297,15 @@ std::string gxRuntime::systemProperty(const std::string& p) {
 	return "";
 }
 
+void gxRuntime::calculateDPI() {
+	if ((this->scale_x == .0f) && (this->scale_y == .0f)) {
+		HDC hdc = GetDC(GetDesktopWindow());
+		this->scale_x = GetDeviceCaps(hdc, LOGPIXELSX) / 96.0f;
+		this->scale_y = GetDeviceCaps(hdc, LOGPIXELSY) / 96.0f;
+		ReleaseDC(GetDesktopWindow(), hdc);
+	}
+}
+
 void gxRuntime::enableDirectInput(bool enable) {
 	if(use_di = enable) {
 		acquireInput();
