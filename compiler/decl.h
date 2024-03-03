@@ -6,6 +6,9 @@ enum {
 	DECL_GLOBAL = 8, DECL_LOCAL = 16, DECL_PARAM = 32, DECL_FIELD = 64		//ARE vars
 };
 
+// [FuncName, [UniqueFuncOverName, ParamNoDefVal, ParamWithDefVal]]
+static std::map<std::string, std::vector<std::tuple<std::string, int, int>>> FuncOverrideMapper;
+
 struct Type;
 struct ConstType;
 
@@ -24,6 +27,7 @@ struct DeclSeq {
 	std::vector<Decl*> decls;
 	DeclSeq();
 	~DeclSeq();
+	Decl* findDecl(const std::string& s, int params);
 	Decl* findDecl(const std::string& s);
 	Decl* insertDecl(const std::string& s, Type* t, int kind, ConstType* d = 0);
 	int size() { return decls.size(); }
