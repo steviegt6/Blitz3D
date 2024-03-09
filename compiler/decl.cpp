@@ -30,7 +30,8 @@ Decl* DeclSeq::findDecl(const std::string& s) {
 Decl* DeclSeq::findDecl(const std::string& s, int params) {
     if (FuncOverrideMapper.contains(s)) {
         std::string d = "";
-        if (this->findDecl(s)->type->funcType()->params->size() == params) return d;
+        Decl* decl = this->findDecl(s);
+        if (decl->type->funcType()->params->size() == params) return decl;
         std::for_each(FuncOverrideMapper[s].begin(), FuncOverrideMapper[s].end(), [this, params, &d](std::tuple<std::string, int, int> func) {
             if (std::get<1>(func) == params) 
                 return this->findDecl(std::get<0>(func));
