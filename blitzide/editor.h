@@ -4,6 +4,8 @@
 #include "tabber.h"
 #include "funclist.h"
 
+#include <tom.h>
+
 #pragma comment(linker,"\"/manifestdependency:type='win32' \
 	name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
 	processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -96,14 +98,17 @@ private:
 	Tabber tabber;
 	FuncList funcList, typeList, labsList;
 	CRichEditCtrl editCtrl;
+	ITextDocument* tomDoc;
 
 	void funcSelected(int line);
 	void currentSet(Tabber* tabber, int index);
 
 	void resized();
 	void fixFmt(bool fmt);
-	void getSel() { editCtrl.GetSel(selStart, selEnd); }
-	void setSel() { editCtrl.SetSel(selStart, selEnd); }
+	void getSel();
+	void setSel();
+	void suspendUndo();
+	void resumeUndo();
 	void endFind();
 	void setFormat(int from, int to, int color, const std::string& s = "");
 	void formatLine(int line);
