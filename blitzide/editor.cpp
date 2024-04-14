@@ -261,7 +261,7 @@ bool Editor::setText(std::istream& in) {
 	funcList.clear();
 	typeList.clear();
 	labsList.clear();
-	editCtrl.StreamIn(SF_RTF, es);
+	editCtrl.StreamIn((CP_UTF8 << 16) | SF_USECODEPAGE | SF_RTF, es);
 	fmtBusy = false;
 	return es.dwError == 0;
 }
@@ -286,7 +286,7 @@ bool Editor::getText(std::ostream& out) {
 	es.dwCookie = (DWORD)&out;
 	es.dwError = 0;
 	es.pfnCallback = streamOut;
-	editCtrl.StreamOut(SF_TEXT, es);
+	editCtrl.StreamOut((CP_UTF8 << 16) | SF_USECODEPAGE | SF_TEXT, es);
 	return es.dwError == 0;
 }
 
