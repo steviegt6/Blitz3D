@@ -673,6 +673,7 @@ ExprNode* Parser::parseUniExpr(bool opt) {
 		result = new AfterNode(result);
 		break;
 	case '+':case '-':case '~':case ABS:case SGN:case POWTWO:
+		if (toker->lookAhead(-1) == c) { toker->next(); result = new IntConstNode(1); break; }
 		toker->next();
 		result = parseUniExpr(false);
 		if (c == '~') {
