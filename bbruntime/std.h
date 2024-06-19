@@ -17,6 +17,6 @@
 
 #include <cmath>
 
-#define ErrorLog(function, log) if (debug) { RTEX(log) } else { errorlog = std::format("{0}: {1}", function, log); }
+#define ErrorLog(function, log) if (debug) { RTEX(log) } else { errorfunc = function; errorlog = log; }
 
 #endif

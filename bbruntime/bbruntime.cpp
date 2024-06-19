@@ -56,10 +56,11 @@ void bbSetErrorMsg(int pos, BBStr* str) {
 }
 
 BBStr* bbGetException() {
-	return new BBStr(errorlog);
+	return new BBStr(std::format("{0}: {1}", errorfunc, errorlog));
 }
 
 void bbClearException() {
+	errorfunc = "";
 	errorlog = "";
 }
 

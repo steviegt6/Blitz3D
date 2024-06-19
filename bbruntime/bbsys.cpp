@@ -3,4 +3,5 @@
 
 bool debug;
 gxRuntime* gx_runtime;
-std::string&& errorlog = ""; // magic rvalue!
+std::string&& errorfunc = ""; // magic rvalue!
+std::string&& errorlog = "";

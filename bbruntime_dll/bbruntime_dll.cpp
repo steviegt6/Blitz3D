@@ -67,7 +67,7 @@ inline void throw_mav() {
 			}
 		}
 		if (ErrorMessagePool::hasMacro) {
-			s = replace_all(s, "_CaughtError_", errorlog);
+			s = replace_all(s, "_CaughtError_", std::format("{0}: {1}", errorfunc, errorlog));
 			s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
 			s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
 		}
