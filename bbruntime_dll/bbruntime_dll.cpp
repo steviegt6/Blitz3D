@@ -71,7 +71,7 @@ inline void throw_mav() {
 			s = replace_all(s, "_AvailPhys_", to_string(gx_runtime->getAvailPhys()));
 			s = replace_all(s, "_AvailVirtual_", to_string(gx_runtime->getAvailVirtual()));
 		}
-		RTEX(s.c_str());
+		RTEX(UTF8::convertToAnsi(s).c_str());
 	}
 }
 

@@ -50,7 +50,7 @@ void bbInitErrorMsgs(int number, bool hasMacro) {
 
 void bbSetErrorMsg(int pos, BBStr* str) {
 	if(ErrorMessagePool::memoryAccessViolation != 0 && pos < ErrorMessagePool::size) {
-		ErrorMessagePool::memoryAccessViolation[pos] = UTF8::convertToAnsi(str->c_str());
+		ErrorMessagePool::memoryAccessViolation[pos] = str->c_str();
 	}
 	delete str;
 }
