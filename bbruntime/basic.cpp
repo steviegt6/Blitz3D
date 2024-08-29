@@ -530,10 +530,6 @@ void bbRuntimeStats() {
 	gx_runtime->debugLog(std::format(MultiLang::stats_unreleased, unrelObjCnt).c_str());
 }
 
-void bbMav() {
-	bbruntime_panic(MultiLang::memory_access_violation);
-}
-
 bool basic_create() {
 	next_handle = 0;
 	handle_map.clear();

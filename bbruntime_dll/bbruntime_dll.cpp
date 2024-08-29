@@ -57,7 +57,7 @@ inline std::string replace_all(const std::string& string, const std::string& pat
 
 inline void throw_mav() {
 	if (ErrorMessagePool::memoryAccessViolation == 0) {
-		bbruntime_panic(MultiLang::memory_access_violation);
+		RTEX(MultiLang::memory_access_violation);
 	}
 	else {
 		std::string s = "";
