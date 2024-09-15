@@ -276,19 +276,19 @@ void TCPServer::remove(TCPStream* s) {
 	accepted_set.erase(s);
 }
 
-static inline void debugUDPStream(UDPStream* p, std::string function) {
+static inline void debugUDPStream(UDPStream* p, const char* function) {
 	if (!udp_set.count(p)) {
 		ErrorLog(function, MultiLang::udp_stream_not_exist);
 	}
 }
 
-static inline void debugTCPStream(TCPStream* p, std::string function) {
+static inline void debugTCPStream(TCPStream* p, const char* function) {
 	if (!tcp_set.count(p)) {
 		ErrorLog(function, MultiLang::tcp_stream_not_exist);
 	}
 }
 
-static inline void debugTCPServer(TCPServer* p, std::string function) {
+static inline void debugTCPServer(TCPServer* p, const char* function) {
 	if (!server_set.count(p)) {
 		ErrorLog(function, MultiLang::tcp_server_not_exist);
 	}

@@ -51,28 +51,28 @@ static unsigned curr_clsColor;
 
 static std::vector<GfxMode> gfx_modes;
 
-static inline void debugImage(bbImage* i, std::string function, int frame = 0)
+static inline void debugImage(bbImage* i, const char* function, int frame = 0)
 {
 	if (!image_set.count(i)) ErrorLog(function, MultiLang::image_not_exist);
 	if (frame >= i->getFrames().size()) ErrorLog(function, MultiLang::image_frame_out_of_range);
 }
 
-static inline void debugFont(gxFont* f, std::string function)
+static inline void debugFont(gxFont* f, const char* function)
 {
 	if (!gx_graphics->verifyFont(f)) ErrorLog(function, MultiLang::font_not_exist);
 }
 
-static inline void debugCanvas(gxCanvas* c, std::string function)
+static inline void debugCanvas(gxCanvas* c, const char* function)
 {
 	if (!gx_graphics->verifyCanvas(c)) ErrorLog(function, MultiLang::buffer_not_exist);
 }
 
-static inline void debugDriver(int n, std::string function)
+static inline void debugDriver(int n, const char* function)
 {
 	if (n < 1 || n > gx_runtime->numGraphicsDrivers()) ErrorLog(function, MultiLang::illegal_graphics_driver_index);
 }
 
-static inline void debugMode(int n, std::string function)
+static inline void debugMode(int n, const char* function)
 {
 	if (n<1 || n>gfx_modes.size()) ErrorLog(function, MultiLang::illegal_graphics_mode_index);
 }
