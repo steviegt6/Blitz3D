@@ -123,6 +123,12 @@ int bbLen(BBStr* s) {
 	delete s; return n;
 }
 
+BBStr* bbHighPrecisionFloatString(float f) {
+	std::ostringstream stream;
+	stream << std::setprecision(20) << f;
+	return new BBStr(stream.str());
+}
+
 BBStr* bbCurrentDate() {
 	time_t t;
 	time(&t);
@@ -165,6 +171,7 @@ void string_link(void(*rtSym)(const char*, void*)) {
 	rtSym("%Len$string", bbLen);
 	rtSym("$Hex%value", bbHex);
 	rtSym("$Bin%value", bbBin);
+	rtSym("$HighPrecisionFloatString#value", bbHighPrecisionFloatString);
 	rtSym("$CurrentDate", bbCurrentDate);
 	rtSym("$CurrentTime", bbCurrentTime);
 }
