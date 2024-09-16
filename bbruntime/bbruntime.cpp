@@ -319,15 +319,13 @@ inline void program(void (*pc)()) {
         pc();
         gx_runtime->debugInfo(MultiLang::program_ended);
     }
-    __except (GetExceptionCode() ?
-        EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+    __except (GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
         switch (GetExceptionCode()) {
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::integer_divide_zero);
             break;
         case EXCEPTION_ACCESS_VIOLATION:
-            extern void throw_mav();
-            throw_mav();
+            bbruntime_panic(L"Memory Access Violation!");
             break;
         case EXCEPTION_ILLEGAL_INSTRUCTION:
             bbruntime_panic(MultiLang::illegal_instruction);
