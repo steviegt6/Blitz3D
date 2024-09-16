@@ -342,6 +342,8 @@ inline void program(void (*pc)()) {
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::float_divide_zero);
             break;
+        default:
+            bbruntime_panic(MultiLang::unknown_runtime_exception);
         }
     }
 }
