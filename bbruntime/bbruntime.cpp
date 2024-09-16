@@ -311,30 +311,61 @@ bool bbruntime_destroy() {
 	math_destroy();
 	basic_destroy();
 	return true;
+inline void program(void (*pc)()) {
+    __try {
+        if (!gx_runtime->idle()) RTEX(0);
+        pc();
+        gx_runtime->debugInfo(MultiLang::program_ended);
+    }
+    __except (GetExceptionCode() ?
+        EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+        switch (GetExceptionCode()) {
+        case EXCEPTION_INT_DIVIDE_BY_ZERO:
+            bbruntime_panic(MultiLang::integer_divide_zero);
+            break;
+        case EXCEPTION_ACCESS_VIOLATION:
+            extern void throw_mav();
+            throw_mav();
+            break;
+        case EXCEPTION_ILLEGAL_INSTRUCTION:
+            bbruntime_panic(MultiLang::illegal_instruction);
+            break;
+        case EXCEPTION_STACK_OVERFLOW:
+            bbruntime_panic(MultiLang::stack_overflow);
+            break;
+        case EXCEPTION_INT_OVERFLOW:
+            bbruntime_panic(MultiLang::integer_overflow);
+            break;
+        case EXCEPTION_FLT_OVERFLOW:
+            bbruntime_panic(MultiLang::float_overflow);
+            break;
+        case EXCEPTION_FLT_DIVIDE_BY_ZERO:
+            bbruntime_panic(MultiLang::float_divide_zero);
+            break;
+        }
+    }
 }
 
 const char* bbruntime_run(gxRuntime* rt, void (*pc)(), bool dbg) {
-	debug = dbg;
-	gx_runtime = rt;
+    debug = dbg;
+    gx_runtime = rt;
 
-	if(!bbruntime_create()) return MultiLang::unable_start_program;
-	const char* t = 0;
-	try {
-		if(!gx_runtime->idle()) RTEX(0);
-		pc();
-		gx_runtime->debugInfo(MultiLang::program_ended);
-	}
-	catch(bbEx x) {
-		t = x.err;
-	}
-	catch(std::exception e) {
-		t = e.what();
-	}
-	catch(...) {
-		t = MultiLang::unknown_exception_thrown;
-	}
-	bbruntime_destroy();
-	return t;
+    if (!bbruntime_create()) return MultiLang::unable_start_program;
+    const char* t = 0;
+    try {
+        program(pc);
+    }
+    catch (bbEx x) {
+        t = x.err;
+    }
+    catch (std::exception e) {
+        t = e.what();
+    }
+    catch (...) {
+        t = MultiLang::unknown_exception_thrown;
+    }
+    bbruntime_destroy();
+    return t;
 }
 
 void bbruntime_panic(const wchar_t* err) {
