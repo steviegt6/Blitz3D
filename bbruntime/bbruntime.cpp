@@ -319,13 +319,18 @@ inline void program(void (*pc)()) {
         pc();
         gx_runtime->debugInfo(MultiLang::program_ended);
     }
-    __except (GetExceptionCode() ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+    __except (
+        GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO ||
+        GetExceptionCode() == EXCEPTION_ILLEGAL_INSTRUCTION ||
+        GetExceptionCode() == EXCEPTION_STACK_OVERFLOW ||
+        GetExceptionCode() == EXCEPTION_INT_OVERFLOW ||
+        GetExceptionCode() == EXCEPTION_FLT_OVERFLOW ||
+        GetExceptionCode() == EXCEPTION_FLT_DIVIDE_BY_ZERO
+        ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH
+        ) {
         switch (GetExceptionCode()) {
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::integer_divide_zero);
-            break;
-        case EXCEPTION_ACCESS_VIOLATION:
-            bbruntime_panic(L"Memory Access Violation!");
             break;
         case EXCEPTION_ILLEGAL_INSTRUCTION:
             bbruntime_panic(MultiLang::illegal_instruction);
@@ -342,8 +347,6 @@ inline void program(void (*pc)()) {
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::float_divide_zero);
             break;
-        default:
-            bbruntime_panic(MultiLang::unknown_runtime_exception);
         }
     }
 }
