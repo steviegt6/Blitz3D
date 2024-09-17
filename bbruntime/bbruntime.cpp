@@ -313,22 +313,49 @@ bool bbruntime_destroy() {
     return true;
 }
 
-inline void program(void (*pc)()) {
+inline static const wchar_t* CharToWchar(const char* ch) {
+    const size_t len = strlen(ch) + 1;
+    wchar_t* wch = new wchar_t[len];
+    mbstowcs(wch, ch, len);
+    return wch;
+}
+
+inline const char* getCharPtr(std::string str) {
+    char* cha = new char[str.size() + 1];
+    memcpy(cha, str.c_str(), str.size() + 1);
+    const char* p = cha;
+    return p;
+}
+
+inline static unsigned long ExceptionFilter(PEXCEPTION_POINTERS ex, PEXCEPTION_POINTERS& pex) {
+    if (
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_INT_DIVIDE_BY_ZERO ||
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_ILLEGAL_INSTRUCTION ||
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_STACK_OVERFLOW ||
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_INT_OVERFLOW ||
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_FLT_OVERFLOW ||
+        ex->ExceptionRecord->ExceptionCode == EXCEPTION_FLT_DIVIDE_BY_ZERO ||
+        ex->ExceptionRecord->ExceptionCode == 0xE0000001
+        ) {
+        pex = ex;
+        return EXCEPTION_EXECUTE_HANDLER;
+    } else if (ex->ExceptionRecord->ExceptionCode == 0xE0000002) {
+        errorfunc = getCharPtr(reinterpret_cast<const char*>(ex->ExceptionRecord->ExceptionInformation[0]));
+        errorlog = getCharPtr(reinterpret_cast<const char*>(ex->ExceptionRecord->ExceptionInformation[1]));
+        return EXCEPTION_CONTINUE_EXECUTION;
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+inline static void program(void (*pc)()) {
+    PEXCEPTION_POINTERS ex = NULL;
     __try {
         if (!gx_runtime->idle()) RTEX(0);
         pc();
         gx_runtime->debugInfo(MultiLang::program_ended);
     }
-    __except (
-        GetExceptionCode() == EXCEPTION_INT_DIVIDE_BY_ZERO ||
-        GetExceptionCode() == EXCEPTION_ILLEGAL_INSTRUCTION ||
-        GetExceptionCode() == EXCEPTION_STACK_OVERFLOW ||
-        GetExceptionCode() == EXCEPTION_INT_OVERFLOW ||
-        GetExceptionCode() == EXCEPTION_FLT_OVERFLOW ||
-        GetExceptionCode() == EXCEPTION_FLT_DIVIDE_BY_ZERO
-        ? EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH
-        ) {
-        switch (GetExceptionCode()) {
+    __except (ExceptionFilter(GetExceptionInformation(), ex)) {
+        switch (ex->ExceptionRecord->ExceptionCode) {
         case EXCEPTION_INT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::integer_divide_zero);
             break;
@@ -346,6 +373,9 @@ inline void program(void (*pc)()) {
             break;
         case EXCEPTION_FLT_DIVIDE_BY_ZERO:
             bbruntime_panic(MultiLang::float_divide_zero);
+            break;
+        case 0xE0000001:
+            bbruntime_panic(CharToWchar(reinterpret_cast<const char*>(ex->ExceptionRecord->ExceptionInformation[0])));
             break;
         }
     }
