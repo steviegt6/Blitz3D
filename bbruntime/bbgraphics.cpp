@@ -772,7 +772,7 @@ int bbStringHeight(BBStr* str)
 }
 
 BBStr* bbFontPath(BBStr* facename) {
-	return new BBStr(UTF8::getSystemFontFile(facename->c_str()));
+	return new BBStr(UTF8::getSystemFontFile(facename->c_str()).c_str());
 }
 
 gxMovie* bbOpenMovie(BBStr* s)
