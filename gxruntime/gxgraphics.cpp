@@ -18,7 +18,10 @@ gxGraphics::gxGraphics(gxRuntime* rt, IDirectDraw7* dd, IDirectDrawSurface7* fs,
 
 	FT_Init_FreeType(&ftLibrary);
 
-	def_font = this->loadFont(UTF8::getSystemFontFile("Courier"), 12);
+	HMODULE ntdllModule = GetModuleHandleW(L"ntdll.dll");
+	running_on_wine = ntdllModule && GetProcAddress(ntdllModule, "wine_get_version");
+
+	def_font = running_on_wine ? nullptr : this->loadFont(UTF8::getSystemFontFile("Courier"), 12);
 
 	front_canvas->setFont(def_font);
 	back_canvas->setFont(def_font);
