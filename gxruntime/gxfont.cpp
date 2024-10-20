@@ -4,6 +4,7 @@
 #include "gxcanvas.h"
 #include "gxgraphics.h"
 #include "gxutf8.h"
+#include "../bbruntime/bbsys.h"
 
 #include <inttypes.h>
 #include <stdlib.h>
@@ -14,10 +15,12 @@ gxFont::gxFont(FT_Library ftLibrary, gxGraphics* gfx, const std::string& fn, int
 	filename = fn;
 	height = h;
 
-	FT_New_Face(ftLibrary,
+	if (FT_New_Face(ftLibrary,
 		filename.c_str(),
 		0,
-		&freeTypeFace);
+		&freeTypeFace)) {
+		RTEX(std::format("Failed to load file: {}", fn).c_str());
+	}
 
 	FT_Set_Pixel_Sizes(freeTypeFace,
 		0,
