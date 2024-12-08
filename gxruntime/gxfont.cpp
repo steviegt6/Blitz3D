@@ -279,15 +279,15 @@ bool gxFont::isPrintable(int chr)const {
 
 float gxFont::getBaselinePosition() const
 {
-	return static_cast<float>(freeTypeFace->size->metrics.ascender) / float{1 << 6};
+	return static_cast<float>(freeTypeFace->size->metrics.ascender) / 64.0F;
 }
 
 float gxFont::getUnderlinePosition()const
 {
-	return -static_cast<float>(FT_MulFix(freeTypeFace->underline_position, freeTypeFace->size->metrics.y_scale)) / float{1 << 6};
+	return -static_cast<float>(FT_MulFix(freeTypeFace->underline_position, freeTypeFace->size->metrics.y_scale)) / 64.0F;
 }
 
 float gxFont::getUnderlineThickness()const
 {
-	return max(1.0f, static_cast<float>(FT_MulFix(freeTypeFace->underline_thickness, freeTypeFace->size->metrics.y_scale)) / float{1 << 6});
+	return std::max(1.0F, static_cast<float>(FT_MulFix(freeTypeFace->underline_thickness, freeTypeFace->size->metrics.y_scale)) / 64.0F);
 }
