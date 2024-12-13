@@ -31,4 +31,4 @@ Please read [this document](EXTENDING.md).
 
 ## In memory of Mark Sibly
 
-Mark Sibly, the author of Blitz3D, died on 13 December 2024. 🕯️
+[Mark Sibly](https://github.com/blitz-research), the author of Blitz3D, died on 12 December 2024. 🕯️
