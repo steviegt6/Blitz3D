@@ -56,7 +56,6 @@ static void makeKeywords()
 	alphaTokes["True"] = BBTRUE;
 	alphaTokes["False"] = BBFALSE;
 	alphaTokes["Int"] = BBINT;
-	alphaTokes["Interger"] = BBINT;
 	alphaTokes["Float"] = BBFLOAT;
 	alphaTokes["Str"] = BBSTR;
 	alphaTokes["Include"] = INCLUDE;
@@ -84,11 +83,11 @@ static void makeKeywords()
 	alphaTokes["Infinity"] = INFINITYCONST;
 	alphaTokes["PowTwo"] = POWTWO;
 
+#if BETA
 	alphaTokes["Switch"] = SELECT;
 	alphaTokes["End Switch"] = ENDSELECT;
 	alphaTokes["Array"] = DIM;
-
-#if BETA
+	alphaTokes["Interger"] = BBINT;
 	alphaTokes["Method"] = FUNCTION;
 	alphaTokes["Fun"] = FUNCTION;
 	alphaTokes["End Method"] = ENDFUNCTION;
