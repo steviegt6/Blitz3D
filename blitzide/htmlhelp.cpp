@@ -20,9 +20,8 @@ void HtmlHelp::OnBeforeNavigate2(LPCTSTR url, DWORD flags, LPCTSTR target, CByte
 	std::string t(url);
 	int attr = GetFileAttributes(url); if(attr == -1) attr = 0;
 
-	//Is the URL a special URL? If so, open it in the user's default web browser instead of IE.
-	if(specialUrls.find(url) != specialUrls.end()) {
-		ShellExecute(0, 0, url, 0, 0, SW_SHOW);
+	if(t.starts_with("http")) {
+		ShellExecute(0, "open", url, 0, 0, SW_SHOW);
 		*cancel = true;
 		return;
 	}

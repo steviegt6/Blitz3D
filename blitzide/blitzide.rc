@@ -313,7 +313,7 @@ BEGIN
     CONTROL         IDB_BITMAP2,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE,6,6,73,32
     CTEXT           "BlitzPlus - Demo Version",IDC_PRODUCT,84,6,133,8
     CTEXT           "IDE V1.1  Runtime V1.1  Linker V1.1",IDC_VERSION,84,36,133,8
-    CTEXT           "Copyright Blitz Research, Third Subdivision Studios",IDC_STATIC,84,18,133,15
+    CTEXT           "Copyright Blitz Research, ZiYueCommentary",IDC_STATIC,84,18,133,15
     CONTROL         "",IDC_CREDITS,"RICHEDIT",TCS_SCROLLOPPOSITE | TCS_RAGGEDRIGHT | TCS_MULTISELECT | WS_DISABLED | WS_BORDER | WS_TABSTOP,6,48,212,114
 END
 
