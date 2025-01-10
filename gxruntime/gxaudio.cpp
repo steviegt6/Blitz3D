@@ -30,7 +30,9 @@ void gxAudio::SoundChannel::setPitch(const float pitch) {
 void gxAudio::SoundChannel::setVolume(const float volume) {
     if (!SoundChannel::isPlaying()) return;
 
+    this->setPaused(true);
     gx_audio.soloud->setVolume(handle, volume);
+    this->setPaused(false);
 }
 
 void gxAudio::SoundChannel::setPan(const float pan) {
