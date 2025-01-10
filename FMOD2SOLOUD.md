@@ -1,7 +1,10 @@
 # FMod To SoLoud Tutorial
 
+> [!WARNING]
+> `PlayMusic` is being modified nad `PlayCDTrack` is being removed.
+
 ## I. API Change
-1. **BREAKING CHANGE!** ```PlayMusic%(File$, Mode% = 0)``` -> ```PlayMusic%(File$, Volume# = 1.0)```
+1. **```PlayMusic%(File$, Mode% = 0)``` -> ```PlayMusic%(File$, Volume# = 1.0)```**
 2. ```PlayCDTrack%(Track%, Mode% = 1)``` -> **Removed**
 3. ```Load3DSound%(File$)``` <=> ```LoadSound%(File$)```
 4. ```SoundLoop(sound_variable)``` -> ```SoundLoop(sound_variable, Loop% = True)```
