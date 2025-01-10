@@ -1,7 +1,7 @@
-# FMod To SoLoud Tutorial
+# Migrating instruction
 
 > [!WARNING]
-> `PlayMusic` is being modified nad `PlayCDTrack` is being removed.
+> `PlayMusic` is being modified and `PlayCDTrack` is being removed.
 
 ## I. API Change
 1. **```PlayMusic%(File$, Mode% = 0)``` -> ```PlayMusic%(File$, Volume# = 1.0)```**
