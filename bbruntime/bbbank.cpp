@@ -97,6 +97,12 @@ float  bbPeekFloat(bbBank* b, int offset) {
 	return *(float*)(b->data + offset);
 }
 
+BBStr* bbPeekString(bbBank* b, int offset) {
+	debugBank(b, "PeekString", offset);
+	int length = *(int*)(b->data + offset);
+	return new BBStr(b->data + offset + 4, length);
+}
+
 void  bbPokeByte(bbBank* b, int offset, int value) {
 	debugBank(b, "PokeByte", offset);
 	*(char*)(b->data + offset) = value;
@@ -115,6 +121,21 @@ void  bbPokeInt(bbBank* b, int offset, int value) {
 void  bbPokeFloat(bbBank* b, int offset, float value) {
 	debugBank(b, "PokeFloat", offset);
 	*(float*)(b->data + offset) = value;
+}
+
+int bbPokeString(bbBank* b, int offset, BBStr* str) {
+	debugBank(b, "PokeString", offset);
+	int length = str->length();
+	*(int*)(b->data + offset) = length;
+	memcpy_s(b->data + offset + 4, length, str->data(), length);
+	delete str;
+	return offset + 4 + length;
+}
+
+int bbBankStringSize(BBStr* str) {
+	int length = str->length() + 4;
+	delete str;
+	return length;
 }
 
 int   bbReadBytes(bbBank* b, bbStream* s, int offset, int count) {
@@ -159,10 +180,13 @@ void bank_link(void(*rtSym)(const char*, void*)) {
 	rtSym("%PeekShort%bank%offset", bbPeekShort);
 	rtSym("%PeekInt%bank%offset", bbPeekInt);
 	rtSym("#PeekFloat%bank%offset", bbPeekFloat);
+	rtSym("$PeekString%bank%offset", bbPeekString);
 	rtSym("PokeByte%bank%offset%value", bbPokeByte);
 	rtSym("PokeShort%bank%offset%value", bbPokeShort);
 	rtSym("PokeInt%bank%offset%value", bbPokeInt);
 	rtSym("PokeFloat%bank%offset#value", bbPokeFloat);
+	rtSym("%PokeString%bank%offset$value", bbPokeString);
+	rtSym("%BankStringSize$str", bbBankStringSize);
 	rtSym("%ReadBytes%bank%file%offset%count", bbReadBytes);
 	rtSym("%WriteBytes%bank%file%offset%count", bbWriteBytes);
 	rtSym("%CallDLL$dll_name$func_name%in_bank=0%out_bank=0", bbCallDLL);
