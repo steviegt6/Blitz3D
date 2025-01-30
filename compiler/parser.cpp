@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "../MultiLang/MultiLang.h"
 #include <format>
+#include "preprocessor.h"
 
 static const int TEXTLIMIT = 1024 * 1024 - 1;
 
@@ -99,7 +100,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 			std::ifstream i_stream(inc.c_str());
 			if (!i_stream.good()) ex(MultiLang::unable_open_include_file);
 
-			Toker i_toker(i_stream);
+			Toker i_toker(i_stream, debug);
 
 			std::string t_inc = incfile; incfile = inc;
 			Toker* t_toker = toker; toker = &i_toker;
