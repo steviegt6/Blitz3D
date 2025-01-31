@@ -117,7 +117,7 @@ static void makeKeywords()
 
 Toker::Toker(const std::string& file, std::istream& in, bool debug) :inc_file(file), in(in), curr_row(-1)
 {
-    MacroDefines["__DEBUG__"] = debug ? "true" : "false";
+    MacroDefines["__DEBUG__"] = debug ? "True" : "False";
     MacroDefines["__VERSION__"] = BASE_VER;
     makeKeywords();
     nextline();
@@ -178,7 +178,7 @@ void Toker::nextline()
         auto now = std::chrono::system_clock::now();
         auto in_time_t = std::chrono::system_clock::to_time_t(now);
         std::stringstream compilerDate;
-        compilerDate << '"' << std::put_time(std::localtime(&in_time_t), "%b %d %Y") << '"';
+        compilerDate << '"' << std::put_time(std::localtime(&in_time_t), "%d %b %Y") << '"';
 
         std::stringstream compilerTime;
         compilerTime << '"' << std::put_time(std::localtime(&in_time_t), "%H:%M:%S") << '"';
