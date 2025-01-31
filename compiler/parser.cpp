@@ -97,10 +97,10 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 
 			if (included.find(inc) != included.end()) break;
 
-			std::ifstream i_stream(inc.c_str());
+			std::ifstream i_stream(inc);
 			if (!i_stream.good()) ex(MultiLang::unable_open_include_file);
 
-			Toker i_toker(i_stream, debug);
+			Toker i_toker(inc, i_stream, debug);
 
 			std::string t_inc = incfile; incfile = inc;
 			Toker* t_toker = toker; toker = &i_toker;

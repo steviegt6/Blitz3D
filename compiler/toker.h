@@ -35,7 +35,7 @@ extern std::map<std::string, std::string> MacroDefines; // dangerous!
 
 class Toker {
 public:
-	Toker(std::istream& in, bool debug);
+	Toker(const std::string& inc_file, std::istream& in, bool debug);
 
 	int pos();
 	int curr();
@@ -58,6 +58,7 @@ private:
 		bool condition_state;
 	};
 
+	std::string inc_file;
 	std::istream& in;
 	std::string line;
 	std::vector<Toke> tokes;

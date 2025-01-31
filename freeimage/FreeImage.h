@@ -8,7 +8,7 @@
 // - Adam Gates (adam.gates@str.com.au)
 // - Alex Kwak
 // - Alexander Dymerets (sashad@te.net.ua)
-// - Hervé Drolon (drolon@iut.univ-lehavre.fr)
+// - Herv?Drolon (drolon@iut.univ-lehavre.fr)
 // - Jan L. Nauta (jln@magentammt.com)
 // - Jani Kajala (janik@remedy.fi)
 // - Luca Piergentili (l.pierge@terra.es)

@@ -651,6 +651,8 @@ void MainFrame::compile(const std::string& cmd) {
 			err = line;
 			break;
 		}
+		else if (line.starts_with("[Message] ")) {
+		}
 		else if (line.find("...") != line.size() - 3) {
 			err = line; break;
 		}

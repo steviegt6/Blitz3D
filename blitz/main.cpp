@@ -32,7 +32,7 @@ static std::string verstr(int ver) {
 static void showInfo() {
 	std::cout << std::endl;
 	std::cout << "BlitzCC v" << verstr(VERSION) << std::endl;
-	std::cout << "(C)opyright 2000-2003 Blitz Research Ltd, 2022-2024 ZiYueCommentary" << std::endl;
+	std::cout << "(C)opyright 2000-2003 Blitz Research Ltd, 2022-2025 ZiYueCommentary" << std::endl;
 	std::cout << "------------------------------------------------------------------------" << std::endl;
 }
 
@@ -50,7 +50,7 @@ static void showHelp() {
 	std::cout << "-k         : dump keywords" << std::endl;
 	std::cout << "+k         : dump keywords and syntax" << std::endl;
 	std::cout << "-v		 : version info" << std::endl;
-	std::cout << "-nlaa      : disables large address awareness for the output executable." << std::endl;
+	std::cout << "-nlaa      : disables large address awareness for the output executable" << std::endl;
 	std::cout << "-o exefile : generate executable" << std::endl;
 }
 
@@ -225,7 +225,7 @@ int _cdecl main(int argc, char* argv[]) {
 		in_file = in_file.substr(1, in_file.size() - 2);
 	}
 
-	std::ifstream in(in_file.c_str());
+	std::ifstream in(in_file);
 	if (!in) err("Unable to open input file.");
 	if (!quiet) {
 		showInfo();
@@ -246,7 +246,7 @@ int _cdecl main(int argc, char* argv[]) {
 	try {
 		//parse
 		if (!veryquiet) std::cout << "Parsing..." << std::endl;
-		Toker toker(in, debug);
+		Toker toker(in_file, in, debug);
 		Parser parser(toker);
 		prog = parser.parse(in_file, debug);
 
