@@ -234,3 +234,4 @@ static constexpr const char* else_without_if_macro = "#else_缺少#if_";
 static constexpr const char* macro_exceeded = "宏深度達到限制";
 static constexpr const char* unsupported_operator = "無效運算子：{0}";
 static constexpr const char* expression_evaluation_resulted_in_no_value = "表示式沒有結果";
+static constexpr const char* invalid_macro_string = "不是字符串";
