@@ -20,8 +20,6 @@ public:
     virtual float getPan() = 0;
     virtual bool getLooping() = 0;
 
-    virtual int getSampleRate() = 0;
-
     virtual bool isPlaying() = 0;
 };
 

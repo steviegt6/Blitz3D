@@ -23,10 +23,10 @@ public:
 
     struct SoundChannel : gxChannel
     {
-        const gxAudio& gx_audio;
+        const gxAudio* gx_audio;
         channel_handle handle;
 
-        SoundChannel(const gxAudio& gx_audio, const channel_handle handle) : gx_audio(gx_audio), handle(handle) { }
+        SoundChannel(const gxAudio& gx_audio, const channel_handle handle) : gx_audio(&gx_audio), handle(handle) { }
 
         ~SoundChannel() override;
 
@@ -44,8 +44,6 @@ public:
         float getVolume() override;
         float getPan() override;
         bool getLooping() override;
-
-        int getSampleRate() override;
 
         bool isPlaying() override;
     };

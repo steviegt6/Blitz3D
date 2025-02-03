@@ -12,86 +12,80 @@ gxAudio::SoundChannel::~SoundChannel() {
 void gxAudio::SoundChannel::stop() {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->stop(handle);
+    gx_audio->soloud->stop(handle);
 }
 
 void gxAudio::SoundChannel::setPaused(const bool paused) {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->setPause(handle, paused);
+    gx_audio->soloud->setPause(handle, paused);
 }
 
 void gxAudio::SoundChannel::setPitch(const float pitch) {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->setRelativePlaySpeed(handle, pitch);
+    gx_audio->soloud->setSamplerate(handle, pitch);
 }
 
 void gxAudio::SoundChannel::setVolume(const float volume) {
     if (!SoundChannel::isPlaying()) return;
 
     this->setPaused(true);
-    gx_audio.soloud->setVolume(handle, volume);
+    gx_audio->soloud->setVolume(handle, volume);
     this->setPaused(false);
 }
 
 void gxAudio::SoundChannel::setPan(const float pan) {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->setPan(handle, pan);
+    gx_audio->soloud->setPan(handle, pan);
 }
 
 void gxAudio::SoundChannel::setLooping(const bool looping) {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->setLooping(handle, looping);
+    gx_audio->soloud->setLooping(handle, looping);
 }
 
 void gxAudio::SoundChannel::set3d(const float x, const float y, const float z, const float vx, const float vy, const float vz) {
     if (!SoundChannel::isPlaying()) return;
 
-    gx_audio.soloud->set3dSourceParameters(handle, x * gx_audio.distance_factor, y * gx_audio.distance_factor, z * gx_audio.distance_factor,
-                                  vx * gx_audio.distance_factor, vy * gx_audio.distance_factor, vz * gx_audio.distance_factor);
+    gx_audio->soloud->set3dSourceParameters(handle, x * gx_audio->distance_factor, y * gx_audio->distance_factor, z * gx_audio->distance_factor,
+                                  vx * gx_audio->distance_factor, vy * gx_audio->distance_factor, vz * gx_audio->distance_factor);
 }
 
 bool gxAudio::SoundChannel::getPaused() {
     if (!SoundChannel::isPlaying()) return true;
 
-    return gx_audio.soloud->getPause(handle);
+    return gx_audio->soloud->getPause(handle);
 }
 
 float gxAudio::SoundChannel::getPitch() {
     if (!SoundChannel::isPlaying()) return 0.0f;
 
-    return gx_audio.soloud->getRelativePlaySpeed(handle);
+    return gx_audio->soloud->getSamplerate(handle);
 }
 
 float gxAudio::SoundChannel::getVolume() {
     if (!SoundChannel::isPlaying()) return 0.0f;
 
-    return gx_audio.soloud->getVolume(handle);
+    return gx_audio->soloud->getVolume(handle);
 }
 
 float gxAudio::SoundChannel::getPan() {
     if (!SoundChannel::isPlaying()) return 0.0f;
 
-    return gx_audio.soloud->getPan(handle);
+    return gx_audio->soloud->getPan(handle);
 }
 
 bool gxAudio::SoundChannel::getLooping() {
     if (!SoundChannel::isPlaying()) return false;
 
-    return gx_audio.soloud->getLooping(handle);
-}
-
-int gxAudio::SoundChannel::getSampleRate() {
-    if (!SoundChannel::isPlaying()) return 0;
-
-    return static_cast<int>(gx_audio.soloud->getSamplerate(handle));
+    return gx_audio->soloud->getLooping(handle);
 }
 
 bool gxAudio::SoundChannel::isPlaying() {
-    return gx_audio.soloud->isValidVoiceHandle(handle);
+    return gx_audio->soloud->isValidVoiceHandle(handle);
 }
 
 gxAudio::StreamChannel::~StreamChannel() {
@@ -104,6 +98,7 @@ gxAudio::StreamChannel::~StreamChannel() {
 
 gxAudio::gxAudio() {
     soloud = new SoLoud::Soloud();
+    soloud->setMaxActiveVoiceCount(128);
 
     if (soloud->init(SOLOUD_LEFT_HANDED_3D) != SoLoud::SO_NO_ERROR) {
         delete soloud;

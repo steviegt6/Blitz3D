@@ -34,15 +34,10 @@ float bbGetChannelVolume(gxChannel* channel);
 float bbGetChannelPan(gxChannel* channel);
 int bbGetChannelLoop(gxChannel* channel);
 
-int bbGetChannelSampleRate(gxChannel* channel);
-
 int bbCountSounds();
 int bbCountChannels();
 gxAudio::Sound* bbGetSound(int index);
 gxChannel* bbGetChannel(int index);
-void bbFreeAllSounds();
-void bbStopAllChannels();
-void bbFreeAllStoppedChannels();
 
 // ***** INTERNAL *****
 gxChannel* bbPlay3dSound(gxAudio::Sound* sound, float x, float y, float z, float vx, float vy, float vz);

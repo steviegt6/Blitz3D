@@ -68,11 +68,12 @@ void bbSoundVolume(gxAudio::Sound* sound, float volume) {
     sound->volume = volume;
 }
 
-void bbSoundPan(gxAudio::Sound* sound, const float pan) {
+void bbSoundPan(gxAudio::Sound* sound, float pan) {
     if (!sound) return;
 
     debugSound(sound, "SoundPan");
 
+    pan = std::clamp(pan, -1.0f, 1.0f);
     sound->pan = pan;
 }
 
@@ -144,11 +145,12 @@ void bbChannelVolume(gxChannel* channel, float volume) {
     channel->setVolume(volume);
 }
 
-void bbChannelPan(gxChannel* channel, const float pan) {
+void bbChannelPan(gxChannel* channel, float pan) {
     if (!channel) return;
 
     debugChannel(channel, "ChannelPan");
 
+    pan = std::clamp(pan, -1.0f, 1.0f);
     channel->setPan(pan);
 }
 
@@ -202,12 +204,6 @@ int bbGetChannelLoop(gxChannel* channel) {
     return channel->getLooping();
 }
 
-int bbGetChannelSampleRate(gxChannel* channel) {
-    debugChannel(channel, "GetChannelSampleRate");
-
-    return channel->getSampleRate();
-}
-
 int bbCountSounds() {
     return static_cast<int>(sounds.size());
 }
@@ -232,22 +228,6 @@ gxChannel* bbGetChannel(const int index) {
     std::advance(channel, index);
 
     return *channel;
-}
-
-void bbFreeAllSounds() {
-    for (const auto sound : sounds) {
-        delete sound;
-    }
-
-    sounds.clear();
-}
-
-void bbStopAllChannels() {
-    for (const auto channel : channels) {
-        delete channel;
-    }
-
-    channels.clear();
 }
 
 gxChannel* bbPlay3dSound(gxAudio::Sound* sound, const float x, const float y, const float z, const float vx, const float vy, const float vz) {
@@ -337,7 +317,6 @@ void audio_link(void(*rtSym)(const char*, void*)) {
     rtSym("#GetChannelVolume%channel", bbGetChannelVolume);
     rtSym("#GetChannelPan%channel", bbGetChannelPan);
     rtSym("%GetChannelLoop%channel", bbGetChannelLoop);
-    rtSym("%GetChannelSampleRate%channel", bbGetChannelSampleRate);
     rtSym("%Load3DSound$filename", bbLoadSound);
 
     //Misc
@@ -345,6 +324,4 @@ void audio_link(void(*rtSym)(const char*, void*)) {
     rtSym("%CountChannels", bbCountChannels);
     rtSym("%GetSound%index", bbGetSound);
     rtSym("%GetChannel%index", bbGetChannel);
-    rtSym("FreeAllSounds", bbFreeAllSounds);
-    rtSym("StopAllChannels", bbStopAllChannels);
 }
