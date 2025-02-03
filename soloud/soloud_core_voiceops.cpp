@@ -150,13 +150,9 @@ namespace SoLoud
 		SOLOUD_ASSERT(aVoice < VOICE_COUNT);
 		SOLOUD_ASSERT(mInsideAudioThreadMutex);
 		mVoice[aVoice]->mOverallVolume = mVoice[aVoice]->mSetVolume * m3dData[aVoice].m3dVolume;
-		if (mVoice[aVoice]->mFlags & AudioSourceInstance::PAUSED)
+		for (int i = 0; i < MAX_CHANNELS; i++)
 		{
-			int i;
-			for (i = 0; i < MAX_CHANNELS; i++)
-			{
-				mVoice[aVoice]->mCurrentChannelVolume[i] = mVoice[aVoice]->mChannelVolume[i] * mVoice[aVoice]->mOverallVolume;
-			}
+			mVoice[aVoice]->mCurrentChannelVolume[i] = mVoice[aVoice]->mChannelVolume[i] * mVoice[aVoice]->mOverallVolume;
 		}
 	}
 }
