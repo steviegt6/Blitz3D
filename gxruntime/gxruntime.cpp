@@ -428,6 +428,16 @@ LRESULT gxRuntime::windowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 			input->wm_mousedown(3);
 			SetCapture(hwnd);
 			break;
+		case WM_XBUTTONDOWN:
+			if (HIWORD(wparam) == XBUTTON1) input->wm_mousedown(5); // don't ask me why
+			else if (HIWORD(wparam) == XBUTTON2) input->wm_mousedown(4);
+			SetCapture(hwnd);
+			break;
+		case WM_XBUTTONUP:
+			if (HIWORD(wparam) == XBUTTON1) input->wm_mouseup(5);
+			else if (HIWORD(wparam) == XBUTTON2) input->wm_mouseup(4);
+			if (!(wparam & MK_ALLBUTTONS)) ReleaseCapture();
+			break;
 		case WM_MBUTTONUP:
 			input->wm_mouseup(3);
 			if(!(wparam & MK_ALLBUTTONS)) ReleaseCapture();
