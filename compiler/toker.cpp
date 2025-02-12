@@ -115,10 +115,12 @@ static void makeKeywords()
     made = true;
 }
 
-Toker::Toker(const std::string& file, std::istream& in, bool debug) :inc_file(file), in(in), curr_row(-1)
+Toker::Toker(const std::string& file, std::istream& in, bool debug, bool preprocess) :inc_file(file), in(in), curr_row(-1), preprocess(preprocess)
 {
-    MacroDefines["__DEBUG__"] = debug ? "True" : "False";
-    MacroDefines["__VERSION__"] = BASE_VER;
+    if (preprocess) {
+        MacroDefines["__DEBUG__"] = debug ? "True" : "False";
+        MacroDefines["__VERSION__"] = BASE_VER;
+    }
     makeKeywords();
     nextline();
 }
@@ -174,7 +176,7 @@ void Toker::nextline()
     getline(in, line); line += '\n';
     chars_toked += line.size();
 
-    if (!noMacro) {
+    if (preprocess && !noMacro) {
         auto now = std::chrono::system_clock::now();
         auto in_time_t = std::chrono::system_clock::to_time_t(now);
         std::stringstream compilerDate;

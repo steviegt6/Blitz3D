@@ -48,6 +48,7 @@ public:
 	afx_msg void programCompile();
 	afx_msg void programPublish();
 	afx_msg void programCommandLine();
+	afx_msg void programPreprocess();
 	afx_msg void programDebug();
 	afx_msg void programNoLAA();
 

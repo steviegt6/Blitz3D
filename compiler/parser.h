@@ -13,7 +13,7 @@ public:
 
 	Parser(Toker& t);
 
-	ProgNode* parse(const std::string& main, bool debug);
+	ProgNode* parse(const std::string& main, bool debug, bool preprocess);
 
 private:
 	std::string incfile;
@@ -26,8 +26,8 @@ private:
 	DeclSeqNode* funcs;
 	DeclSeqNode* datas;
 
-	StmtSeqNode* parseStmtSeq(int scope, bool debug);
-	void parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug);
+	StmtSeqNode* parseStmtSeq(int scope, bool debug, bool preprocess);
+	void parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug, bool preprocess);
 
 	void ex(const std::string& s);
 	void exp(const std::string& s);
@@ -38,11 +38,11 @@ private:
 
 	VarNode* parseVar();
 	VarNode* parseVar(const std::string& ident, const std::string& tag);
-	IfNode* parseIf(bool debug);
+	IfNode* parseIf(bool debug, bool preprocess);
 
 	DeclNode* parseVarDecl(int kind, bool constant);
 	DimNode* parseArrayDecl();
-	DeclNode* parseFuncDecl(bool debug);
+	DeclNode* parseFuncDecl(bool debug, bool preprocess);
 	DeclNode* parseStructDecl();
 
 	ExprSeqNode* parseExprSeq();

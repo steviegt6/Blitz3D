@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_COMMAND(ID_COMPILE, programCompile)
 	ON_COMMAND(ID_PUBLISH, programPublish)
 	ON_COMMAND(ID_COMMANDLINE, programCommandLine)
+	ON_COMMAND(ID_PROGRAM_PREPROCESSOR, programPreprocess)
 	ON_COMMAND(ID_DEBUG, programDebug)
 	ON_COMMAND(ID_NLAA, programNoLAA)
 
@@ -76,6 +77,7 @@ BEGIN_MESSAGE_MAP(MainFrame, CFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_COMPILE, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_PUBLISH, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_COMMANDLINE, updateCmdUI)
+	ON_UPDATE_COMMAND_UI(ID_PROGRAM_PREPROCESSOR, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_DEBUG, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_NLAA, updateCmdUI)
 	ON_UPDATE_COMMAND_UI(ID_HOME, updateCmdUI)
@@ -692,6 +694,7 @@ void MainFrame::build(bool exec, bool publish) {
 
 	std::string opts = " ";
 
+	if (prefs.prg_preprocess) opts += "-p ";
 	if (prefs.prg_debug) opts += "-d ";
 	if (prefs.prg_nolaa) opts += "-nlaa ";
 
@@ -795,6 +798,10 @@ void MainFrame::programCommandLine() {
 	d.DoModal();
 }
 
+void MainFrame::programPreprocess() {
+	prefs.prg_preprocess = !prefs.prg_preprocess;
+}
+
 void MainFrame::programDebug() {
 	prefs.prg_debug = !prefs.prg_debug;
 }
@@ -878,6 +885,9 @@ void MainFrame::updateCmdUI(CCmdUI* ui) {
 	switch (ui->m_nID) {
 	case ID_NEW:case ID_OPEN:case ID_HOME:
 		ui->Enable(true);
+		break;
+	case ID_PROGRAM_PREPROCESSOR:
+		ui->SetCheck(prefs.prg_preprocess); ui->Enable(true);
 		break;
 	case ID_DEBUG:
 		ui->SetCheck(prefs.prg_debug); ui->Enable(true);

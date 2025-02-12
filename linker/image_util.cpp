@@ -315,7 +315,7 @@ bool makeExe(int entry, bool nolaa) {
 	if(!img_file) return false;
 
 	head->chars |= 0x0002;		//executable
-	if(nolaa == false) head->chars |= 0x0020;		//Large Address Aware
+	if(!nolaa) head->chars |= 0x0020;		//Large Address Aware
 	head->chars &= ~0x2000;		//not Dll
 	opts->entry = entry;
 	return true;

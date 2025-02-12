@@ -36,6 +36,7 @@ void Prefs::open()
 	inipp::Ini<char> ini;
 	ini.parse(in);
 
+	inipp::get_value(ini.sections["COMPILER"], "Preprocess", prg_preprocess);
 	inipp::get_value(ini.sections["COMPILER"], "Debug", prg_debug);
 	inipp::get_value(ini.sections["COMPILER"], "NoLAA", prg_nolaa);
 	inipp::get_value(ini.sections["COMPILER"], "LastBuild", prg_lastbuild);
@@ -108,6 +109,7 @@ void Prefs::close()
 	inipp::Ini<char> ini;
 
 	auto& compilerSection = ini.sections["COMPILER"];
+	compilerSection.insert(std::make_pair("Preprocess", boolToString(prg_preprocess)));
 	compilerSection.insert(std::make_pair("Debug", boolToString(prg_debug)));
 	compilerSection.insert(std::make_pair("NoLAA", boolToString(prg_nolaa)));
 	compilerSection.insert(std::make_pair("LastBuild", prg_lastbuild));
@@ -152,6 +154,7 @@ void Prefs::close()
 
 void Prefs::setDefault()
 {
+	prg_preprocess = false;
 	prg_debug = true;
 	prg_nolaa = false;
 

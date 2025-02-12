@@ -16,7 +16,7 @@ static bool isTerm(int c) { return c == ':' || c == '\n'; }
 Parser::Parser(Toker& t) :toker(&t), main_toker(&t) {
 }
 
-ProgNode* Parser::parse(const std::string& main, bool debug) {
+ProgNode* Parser::parse(const std::string& main, bool debug, bool preprocess) {
 
 	incfile = main;
 
@@ -27,7 +27,7 @@ ProgNode* Parser::parse(const std::string& main, bool debug) {
 	StmtSeqNode* stmts = 0;
 
 	try {
-		stmts = parseStmtSeq(STMTS_PROG, debug);
+		stmts = parseStmtSeq(STMTS_PROG, debug, preprocess);
 		if (toker->curr() != EOF) exp("end-of-file");
 	}
 	catch (Ex) {
@@ -69,13 +69,13 @@ void Parser::parseChar(int c) {
 	toker->next();
 }
 
-StmtSeqNode* Parser::parseStmtSeq(int scope, bool debug) {
+StmtSeqNode* Parser::parseStmtSeq(int scope, bool debug, bool preprocess) {
 	std::unique_ptr<StmtSeqNode> stmts(new StmtSeqNode(incfile));
-	parseStmtSeq(stmts.get(), scope, debug);
+	parseStmtSeq(stmts.get(), scope, debug, preprocess);
 	return stmts.release();
 }
 
-void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
+void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug, bool preprocess) {
 
 	for (;;) {
 		while (toker->curr() == ':' || (scope != STMTS_LINE && toker->curr() == '\n')) toker->next();
@@ -100,14 +100,14 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 			std::ifstream i_stream(inc);
 			if (!i_stream.good()) ex(MultiLang::unable_open_include_file);
 
-			Toker i_toker(inc, i_stream, debug);
+			Toker i_toker(inc, i_stream, debug, preprocess);
 
 			std::string t_inc = incfile; incfile = inc;
 			Toker* t_toker = toker; toker = &i_toker;
 
 			included.insert(incfile);
 
-			std::unique_ptr<StmtSeqNode> ss(parseStmtSeq(scope, debug));
+			std::unique_ptr<StmtSeqNode> ss(parseStmtSeq(scope, debug, preprocess));
 			if (toker->curr() != EOF) exp(MultiLang::end_of_file);
 
 			result = new IncludeNode(incfile, ss.release());
@@ -159,7 +159,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 		break;
 		case IF:
 		{
-			toker->next(); result = parseIf(debug);
+			toker->next(); result = parseIf(debug, preprocess);
 			if (toker->curr() == ENDIF) toker->next();
 		}
 		break;
@@ -167,7 +167,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 		{
 			toker->next();
 			std::unique_ptr<ExprNode> expr(parseExpr(false));
-			std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
+			std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 			int pos = toker->pos();
 			if (toker->curr() != WEND) exp("'Wend'");
 			toker->next();
@@ -177,7 +177,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 		case REPEAT:
 		{
 			toker->next(); ExprNode* expr = 0;
-			std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
+			std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 			int curr = toker->curr();
 			int pos = toker->pos();
 			if (curr != UNTIL && curr != FOREVER) exp(MultiLang::until_or_forever);
@@ -195,13 +195,13 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 					toker->next();
 					std::unique_ptr<ExprSeqNode> exprs(parseExprSeq());
 					if (!exprs->size()) exp(MultiLang::expression_sequence);
-					std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
+					std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 					selNode->push_back(new CaseNode(exprs.release(), stmts.release()));
 					continue;
 				}
 				else if (toker->curr() == DEFAULT) {
 					toker->next();
-					std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
+					std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 					if (toker->curr() != ENDSELECT) exp("'End Select'");
 					selNode->defStmts = stmts.release();
 					break;
@@ -225,7 +225,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 			if (toker->next() == EACH) {
 				toker->next();
 				std::string ident = parseIdent();
-				stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(STMTS_BLOCK, debug));
+				stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 				int pos = toker->pos();
 				if (toker->curr() != NEXT) exp("'Next'");
 				toker->next();
@@ -241,7 +241,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 					toker->next(); step = std::unique_ptr<ExprNode>(parseExpr(false));
 				}
 				else step = std::unique_ptr<IntConstNode>(new IntConstNode(1));
-				stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(STMTS_BLOCK, debug));
+				stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 				int pos = toker->pos();
 				if (toker->curr() != NEXT) exp("'Next'");
 				toker->next();
@@ -325,7 +325,7 @@ void Parser::parseStmtSeq(StmtSeqNode* stmts, int scope, bool debug) {
 			break;
 		case FUNCTION:
 			if (scope != STMTS_PROG) ex(MultiLang::function_can_only_appear_in_main);
-			toker->next(); funcs->push_back(parseFuncDecl(debug));
+			toker->next(); funcs->push_back(parseFuncDecl(debug, preprocess));
 			break;
 		case DIM:
 			do {
@@ -461,7 +461,7 @@ DimNode* Parser::parseArrayDecl() {
 	return d;
 }
 
-DeclNode* Parser::parseFuncDecl(bool debug) {
+DeclNode* Parser::parseFuncDecl(bool debug, bool preprocess) {
 	int pos = toker->pos();
 	std::string ident = parseIdent();
 	std::string tag = parseTypeTag();
@@ -476,7 +476,7 @@ DeclNode* Parser::parseFuncDecl(bool debug) {
 		if (toker->curr() != ')') exp("')'");
 	}
 	toker->next();
-	std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug));
+	std::unique_ptr<StmtSeqNode> stmts(parseStmtSeq(STMTS_BLOCK, debug, preprocess));
 	if (toker->curr() != ENDFUNCTION) exp("'End Function'");
 	StmtNode* ret = new ReturnNode(0); ret->pos = toker->pos();
 	stmts->push_back(ret); toker->next();
@@ -504,7 +504,7 @@ DeclNode* Parser::parseStructDecl() {
 	return d;
 }
 
-IfNode* Parser::parseIf(bool debug) {
+IfNode* Parser::parseIf(bool debug, bool preprocess) {
 	std::unique_ptr<ExprNode> expr;
 	std::unique_ptr<StmtSeqNode> stmts, elseOpt;
 
@@ -512,19 +512,19 @@ IfNode* Parser::parseIf(bool debug) {
 	if (toker->curr() == THEN) toker->next();
 
 	bool blkif = isTerm(toker->curr());
-	stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(blkif ? STMTS_BLOCK : STMTS_LINE, debug));
+	stmts = std::unique_ptr<StmtSeqNode>(parseStmtSeq(blkif ? STMTS_BLOCK : STMTS_LINE, debug, preprocess));
 
 	if (toker->curr() == ELSEIF) {
 		int pos = toker->pos();
 		toker->next();
-		IfNode* ifnode = parseIf(debug);
+		IfNode* ifnode = parseIf(debug, preprocess);
 		ifnode->pos = pos;
 		elseOpt = std::unique_ptr<StmtSeqNode>(new StmtSeqNode(incfile));
 		elseOpt->push_back(ifnode);
 	}
 	else if (toker->curr() == ELSE) {
 		toker->next();
-		elseOpt = std::unique_ptr<StmtSeqNode>(parseStmtSeq(blkif ? STMTS_BLOCK : STMTS_LINE, debug));
+		elseOpt = std::unique_ptr<StmtSeqNode>(parseStmtSeq(blkif ? STMTS_BLOCK : STMTS_LINE, debug, preprocess));
 	}
 	if (blkif) {
 		if (toker->curr() != ENDIF) exp("'EndIf'");

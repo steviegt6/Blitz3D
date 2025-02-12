@@ -71,13 +71,14 @@
 #define ID_NLAA                         40132
 #define ID_BACKUP                       40133
 #define ID_OPENINI                      40134
+#define ID_PROGRAM_PREPROCESSOR         40137
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        144
-#define _APS_NEXT_COMMAND_VALUE         40137
+#define _APS_NEXT_COMMAND_VALUE         40138
 #define _APS_NEXT_CONTROL_VALUE         1026
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
