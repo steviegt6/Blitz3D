@@ -1,3 +1,4 @@
+#include "std.h"
 #include "gxaudio.h"
 #include "../bbruntime/bbsys.h"
 #include "../soloud/soloud_c.h"

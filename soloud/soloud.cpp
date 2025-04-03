@@ -2075,7 +2075,8 @@ namespace SoLoud
 				once = true;
 				if (!(mFlags & NO_FPU_REGISTER_CHANGE))
 				{
-					_controlfp(_DN_FLUSH, _MCW_DN);
+					unsigned int discard = 0;
+					_controlfp_s(&discard, _DN_FLUSH, _MCW_DN);
 				}
 			}
 		}

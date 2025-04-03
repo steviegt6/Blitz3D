@@ -53,6 +53,8 @@ Decl* DeclSeq::findDecl(const std::string& s, int params) {
 }
 
 Decl* DeclSeq::insertDecl(const std::string& s, Type* t, int kind, ConstType* d) {
+    using namespace std::string_literals;
+
     if (kind & DECL_FUNC) {
         FuncType* func = t->funcType();
         if (Decl* d1 = findDecl(s)) { // found duplicate!
