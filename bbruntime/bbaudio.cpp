@@ -5,8 +5,8 @@
 
 gxAudio* gx_audio;
 
-set<gxAudio::Sound*> sounds;
-set<gxChannel*> channels;
+std::set<gxAudio::Sound*> sounds;
+std::set<gxChannel*> channels;
 
 int bbVerifySound(gxAudio::Sound* sound) {
     return sounds.contains(sound);

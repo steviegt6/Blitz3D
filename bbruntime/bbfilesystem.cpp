@@ -136,6 +136,8 @@ inline bool IsDirectory(const char* pDir)
 }
 
 void bbDeleteFolder(BBStr* d) {
+	using namespace std::string_literals;
+
 	char szCurPath[MAX_PATH];
 	_snprintf(szCurPath, MAX_PATH, "%s//*.*", d->c_str());
 	WIN32_FIND_DATAA FindFileData;

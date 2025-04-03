@@ -8,7 +8,8 @@
 #include <string>
 #include <iostream>
 
-using namespace std;
+// Causes immense conflicts with C++ 17.
+// using namespace std;
 
 #ifdef MEMDEBUG
 
@@ -67,7 +68,7 @@ public:
 	const_pointer address(const_reference q)const { return &q; }
 	pool() :free(0) {}
 	pointer allocate(size_type n, const void*) {
-		clog << "Allocating " << n << endl;
+		std::clog << "Allocating " << n << std::endl;
 		if(n > 1) return new T[n];
 		if(!free) {
 			free = (T*)new char[sizeof(T) * N];
@@ -79,7 +80,7 @@ public:
 		return t;
 	}
 	void deallocate(pointer q, size_type n) {
-		clog << "Deallocating " << n << endl;
+		std::clog << "Deallocating " << n << std::endl;
 		while(n-- > 0) {
 			*(T**)q = free;
 			*(T**)free = q;
